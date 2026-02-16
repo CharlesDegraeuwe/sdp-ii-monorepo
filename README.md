@@ -53,7 +53,7 @@ sdp2-2526-g01-webapp/
 ## Git conventies
 
 - **main**: productie-klare code
-- **develop**: integratie branch
+- **dev**: integratie branch
 - **feature/xxx**: nieuwe features (bv. `feature/login`)
 - **bugfix/xxx**: bugfixes
 
