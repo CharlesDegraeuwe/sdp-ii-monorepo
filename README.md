@@ -60,15 +60,15 @@ sdp2-2526-g01-webapp/
 Nieuwe feature starten:
 
 ```bash
-git checkout develop
+git checkout dev
 git pull
 git checkout -b feature/jouw-feature
 ```
 
 ## Gerelateerde repo's
 
-- **Backend (Java)**: `<link naar backend repo>`
-- **Desktop app (JavaFX)**: `<link naar desktop repo>`
+- **Backend (Java)**: `https://github.com/HoGentProjectenII/2026-backend-g01`
+- **Desktop app (JavaFX)**: `https://github.com/HoGentProjectenII/2026-java-g01`
 
 ## Team
 
