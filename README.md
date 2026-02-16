@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SDP2-2526-G01 — Web App
 
-## Getting Started
+Next.js frontend voor de SDP2 webapp. Communiceert met de gedeelde Java backend API.
 
-First, run the development server:
+## Vereisten
+
+- Node.js 18+
+- npm
+- WebStorm (of andere IDE)
+- Git
+- De Java backend moet lokaal draaien (zie backend repo)
+
+## Snel starten
+
+### 1. Repository clonen
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/HoGentProjectenII/2026-react-g01.git
+cd sdp2-2526-g01-webapp
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment variabelen
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Maak een `.env.local` bestand aan in de root van het project (staat in `.gitignore`):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_API_URL=http://localhost:8080/api
+```
 
-## Learn More
+### 3. Development server starten
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+De app draait nu op `http://localhost:3000`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Projectstructuur
 
-## Deploy on Vercel
+```
+sdp2-2526-g01-webapp/
+├── src/
+│   ├── app/           # Pages en routing
+│   ├── components/    # Herbruikbare componenten
+│   └── lib/           # API calls en utilities
+├── public/            # Statische bestanden
+├── .env.local         # Env variabelen (niet in git)
+├── package.json
+└── README.md
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Git conventies
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **main**: productie-klare code
+- **develop**: integratie branch
+- **feature/xxx**: nieuwe features (bv. `feature/login`)
+- **bugfix/xxx**: bugfixes
+
+Nieuwe feature starten:
+
+```bash
+git checkout develop
+git pull
+git checkout -b feature/jouw-feature
+```
+
+## Gerelateerde repo's
+
+- **Backend (Java)**: `<link naar backend repo>`
+- **Desktop app (JavaFX)**: `<link naar desktop repo>`
+
+## Team
+
+Groep 01 — SDP2 2526
