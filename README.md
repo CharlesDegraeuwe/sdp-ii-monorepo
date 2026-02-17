@@ -1,4 +1,4 @@
-# SDP2-2526-G01 — Web App
+# SDP II G01 — Web App
 
 Next.js frontend voor de SDP2 webapp. Communiceert met de gedeelde Java backend API.
 
@@ -16,7 +16,7 @@ Next.js frontend voor de SDP2 webapp. Communiceert met de gedeelde Java backend 
 
 ```bash
 git clone https://github.com/HoGentProjectenII/2026-react-g01.git
-cd sdp2-2526-g01-webapp
+cd 2026-react-g01
 pnpm install
 ```
 
