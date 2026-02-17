@@ -39,7 +39,7 @@ De app draait nu op `http://localhost:3000`.
 ## Projectstructuur
 
 ```
-sdp2-2526-g01-webapp/
+2026-react-g01/
 ├── src/
 │   ├── app/           # Pages en routing
 │   ├── components/    # Herbruikbare componenten
