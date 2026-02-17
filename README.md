@@ -1,4 +1,4 @@
-# SDP2-2526-G01 — Desktop App
+# SDP II G01 — Desktop App
 
 JavaFX desktop applicatie voor SDP2. Communiceert met de gedeelde Java backend API.
 
@@ -15,7 +15,7 @@ JavaFX desktop applicatie voor SDP2. Communiceert met de gedeelde Java backend A
 ### 1. Repository clonen
 
 ```bash
-git clone [<repo-url>](https://github.com/HoGentProjectenII/2026-java-g01)
+git clone https://github.com/HoGentProjectenII/2026-java-g01
 cd 2026-java-g01
 ```
 
