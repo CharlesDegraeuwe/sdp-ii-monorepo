@@ -2,17 +2,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-
-
 <?import javafx.scene.control.Label?>
+
 <fx:root type="VBox" styleClass="sidebar" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml">
     <children>
 
-    <VBox alignment="CENTER" styleClass="sidebar-item" fx:id="burger">
+    <VBox alignment="CENTER" styleClass="burger-menu" fx:id="burger">
         <children>
             <Button styleClass="burger-menu">
                 <graphic>
-                    <FontIcon iconLiteral="mdmz-menu" iconSize="30"/>
+                    <FontIcon iconLiteral="mdmz-menu" iconSize="30" />
                 </graphic>
             </Button>
         </children>
@@ -20,67 +19,67 @@
 
         <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="dashboard">
             <children>
-                <Button styleClass="sidebar-button">
+                <Button styleClass="sidebar-button" mouseTransparent="true">
                     <graphic>
                         <FontIcon iconLiteral="mdoal-dashboard" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Dashboard" />
+                <Label text="Dashboard" styleClass="label"/>
             </children>
         </VBox>
 
         <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="planning">
             <children>
-                <Button styleClass="sidebar-button">
+                <Button styleClass="sidebar-button" mouseTransparent="true">
                     <graphic>
                         <FontIcon iconLiteral="mdoal-format_list_bulleted" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Planning" />
+                <Label text="Planning" styleClass="label"/>
             </children>
         </VBox>
 
         <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="tasks">
             <children>
-                <Button styleClass="sidebar-button">
+                <Button styleClass="sidebar-button" mouseTransparent="true">
                     <graphic>
                         <FontIcon iconLiteral="mdral-check" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Tasks" />
+                <Label text="Tasks" styleClass="label"/>
             </children>
         </VBox>
 
         <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="plants">
             <children>
-                <Button styleClass="sidebar-button">
+                <Button styleClass="sidebar-button" mouseTransparent="true">
                     <graphic>
                         <FontIcon iconLiteral="mdomz-map" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Plants" />
+                <Label text="Plants" styleClass="label"/>
             </children>
         </VBox>
 
         <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="absense">
             <children>
-                <Button styleClass="sidebar-button">
+                <Button styleClass="sidebar-button" mouseTransparent="true">
                     <graphic>
                         <FontIcon iconLiteral="mdoal-cancel" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Absense" />
+                <Label text="Absense" styleClass="label"/>
             </children>
         </VBox>
 
         <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="teams">
             <children>
-                <Button styleClass="sidebar-button">
+                <Button styleClass="sidebar-button" mouseTransparent="true">
                     <graphic>
                         <FontIcon iconLiteral="mdoal-groups" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Teams" />
+                <Label text="Teams" styleClass="label"/>
             </children>
         </VBox>
 

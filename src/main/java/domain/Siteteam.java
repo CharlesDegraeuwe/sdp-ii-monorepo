@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.domein;
+package domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

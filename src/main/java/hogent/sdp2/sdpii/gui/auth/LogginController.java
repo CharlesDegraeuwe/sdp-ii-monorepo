@@ -1,4 +1,6 @@
 package hogent.sdp2.sdpii.gui.auth;
 
-public class LogginController {
+import javafx.scene.layout.BorderPane;
+
+public class LogginController extends BorderPane {
 }
