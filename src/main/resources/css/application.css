@@ -3,14 +3,16 @@
     -fx-font-family: "SF Pro Display Regular";
 }
 
+
 .body {
     -fx-background-color: #F6F6F6;
+    -fx-overflow:hidden;
 }
 
 .sidebar {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 0 25 25 0;
-    -fx-padding: 40 0 0 0;
+    -fx-padding: 12 0 0 0;
 }
 
 .burger-menu {
@@ -46,8 +48,44 @@
 }
 
 .header {
-    -fx-padding: 25 30 10 30;
+    -fx-padding: 40 30 0 0;
     -fx-spacing: 30;
+}
+#outer_controls {
+    -fx-padding: 0 0 15 0;
+}
+
+#controls {
+    /*
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 50;*/
+    -fx-padding: 5 10 5 10;
+    -fx-font-weight: bold;
+    -fx-spacing: 8;
+}
+
+.controls_button {
+    -fx-background-radius: 100;
+    -fx-pref-height: 14;
+    -fx-max-height: 14;
+    -fx-min-height: 14;
+    -fx-pref-width: 14;
+    -fx-max-width: 14;
+    -fx-min-width: 14;
+    -fx-cursor: hand;
+    -fx-background-color: #dddddd;
+}
+
+#closeBtn {
+    -fx-background-color: #e4342b;
+}
+
+#maximizeBtn {
+    -fx-background-color: #5bc75a;
+}
+
+#minimizeBtn {
+    -fx-background-color: #f0c643;
 }
 
 .left_header {

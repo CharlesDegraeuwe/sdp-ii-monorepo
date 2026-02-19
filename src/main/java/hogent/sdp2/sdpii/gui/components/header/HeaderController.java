@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.components;
+package hogent.sdp2.sdpii.gui.components.header;
 
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.*;
@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-import org.eclipse.persistence.tools.profiler.Profile;
 
 import java.io.IOException;
 
@@ -18,7 +17,7 @@ public class HeaderController extends HBox {
     @FXML private HBox dropdown;
 
     public HeaderController(MainFrameController mainframe) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/Header.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/header/Header.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }

@@ -2,6 +2,7 @@ package hogent.sdp2.sdpii.gui.components;
 
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.*;
+import hogent.sdp2.sdpii.gui.components.header.StageHeaderController;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +22,7 @@ public class SidebarController extends VBox {
     private Node activeItem;
     private Boolean small;
     private MainFrameController mf;
+    private StageHeaderController sh;
     @Getter
     @Setter
     @FXML private ImageView burger_button;
@@ -32,7 +35,7 @@ public class SidebarController extends VBox {
     @FXML private VBox teams;
 
     //construtor
-    public SidebarController(MainFrameController mainFrame) {
+    public SidebarController(MainFrameController mainFrame, Stage stage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/Sidebar.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -43,6 +46,8 @@ public class SidebarController extends VBox {
         }
 
         this.mf = mainFrame;
+        this.sh = new StageHeaderController(stage);
+        this.getChildren().add(0, sh);
         this.burger_button.setImage(new Image(getClass().getResourceAsStream("/icons/sidebar_collapse.png")));
         this.Router();
     }
