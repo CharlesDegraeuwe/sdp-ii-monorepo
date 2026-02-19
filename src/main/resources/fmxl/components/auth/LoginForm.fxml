@@ -6,9 +6,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="VBox" fx:id="LoginForm" xmlns:fx="http://javafx.com/fxml">
-    <children>
-        <Label text="Log In" styleClass="subtitle"/>
-        <TextField promptText="Enkele lijn tekst" styleClass="inputfield"/>
-    </children>
+<fx:root type="VBox" styleClass="login-page" xmlns:fx="http://javafx.com/fxml">
+    <VBox styleClass="login-card">
+        <Label text="Log In" styleClass="login-title"/>
+        <TextField fx:id="txtEmail" promptText="email"/>
+        <PasswordField fx:id="txtWachtwoord" promptText="password"/>
+        <Button text="login" maxWidth="Infinity" styleClass="login-btn"/>
+    </VBox>
 </fx:root>
+
+
+

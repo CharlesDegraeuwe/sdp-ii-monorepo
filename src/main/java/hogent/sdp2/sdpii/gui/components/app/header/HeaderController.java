@@ -1,6 +1,6 @@
-package hogent.sdp2.sdpii.gui.components.header;
+package hogent.sdp2.sdpii.gui.components.app.header;
 
-import hogent.sdp2.sdpii.gui.MainFrameController;
+import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
 import javafx.fxml.FXML;
@@ -17,26 +17,26 @@ public class HeaderController extends HBox {
     @FXML private Button account;
     @FXML private HBox dropdown;
 
-    public HeaderController(MainFrameController mainframe) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/header/Header.fxml"));
+    public HeaderController(AppController app) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/header/Header.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 
-        Router(mainframe);
+        Router(app);
     }
 
-    private void Router(MainFrameController mainFrame) {
+    private void Router(AppController app) {
         notifications.setOnMouseClicked(e -> {
             NotificationsController nc = new NotificationsController();
-            mainFrame.getSidebar().setActive(nc);
-            mainFrame.navigateTo(nc, mainFrame.getBody());
+            app.getSidebar().setActive(nc);
+            app.navigateTo(nc, app.getBody());
         });
 
         account.setOnMouseClicked(e -> {
             AccountController ac = new AccountController();
-            mainFrame.getSidebar().setActive(ac);
-            mainFrame.navigateTo(ac, mainFrame.getBody());
+            app.getSidebar().setActive(ac);
+            app.navigateTo(ac, app.getBody());
         });
 
     }

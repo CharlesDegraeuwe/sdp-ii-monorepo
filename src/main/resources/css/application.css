@@ -6,7 +6,11 @@
 
 .body {
     -fx-background-color: #F6F6F6;
-    -fx-overflow:hidden;
+}
+
+.login_body {
+    -fx-background-color: #F6F6F6;
+    -fx-padding: 12 0 0 0;
 }
 
 .sidebar {
@@ -161,4 +165,53 @@
     -fx-background-color: "";
     -fx-background-radius:"";
     -fx-padding:"";
+}
+
+.login-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20;
+    -fx-padding: 40;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 5);
+    -fx-max-width: 300;
+    -fx-max-height: 400;
+}
+
+.login-page {
+    -fx-background-color: #F0F0F0;
+    -fx-alignment: CENTER;
+}
+
+.login-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222222;
+    -fx-padding: 0 0 10 0;
+}
+
+.text-field, .password-field {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 50;
+    -fx-border-color: transparent;
+    -fx-padding: 12 20 12 20;
+    -fx-font-size: 14px;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-background-color: #EBEBEB;
+}
+
+.login-btn {
+    -fx-background-color: #3D3D3D;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50;
+    -fx-padding: 14 0 14 0;
+    -fx-cursor: hand;
+}
+
+.login-btn:hover {
+    -fx-background-color: #2D2D2D;
 }

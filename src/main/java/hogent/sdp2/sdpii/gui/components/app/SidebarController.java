@@ -1,13 +1,13 @@
-package hogent.sdp2.sdpii.gui.components;
+package hogent.sdp2.sdpii.gui.components.app;
 
-import hogent.sdp2.sdpii.gui.MainFrameController;
+import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.absense.AbsenseController;
 import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.app.planning.PlanningController;
 import hogent.sdp2.sdpii.gui.app.plants.PlantsController;
 import hogent.sdp2.sdpii.gui.app.tasks.TasksController;
 import hogent.sdp2.sdpii.gui.app.teams.TeamsController;
-import hogent.sdp2.sdpii.gui.components.header.StageHeaderController;
+import hogent.sdp2.sdpii.gui.components.app.header.StageHeaderController;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +26,7 @@ public class SidebarController extends VBox {
     //variables
     private Node activeItem;
     private Boolean small;
-    private MainFrameController mf;
+    private AppController app;
     private StageHeaderController sh;
     @Getter
     @Setter
@@ -40,8 +40,8 @@ public class SidebarController extends VBox {
     @FXML private VBox teams;
 
     //construtor
-    public SidebarController(MainFrameController mainFrame, Stage stage) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/Sidebar.fxml"));
+    public SidebarController(AppController app, Stage stage) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/Sidebar.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -50,7 +50,7 @@ public class SidebarController extends VBox {
             throw new RuntimeException(e);
         }
 
-        this.mf = mainFrame;
+        this.app = app;
         this.sh = new StageHeaderController(stage);
         this.getChildren().add(0, sh);
         this.burger_button.setImage(new Image(getClass().getResourceAsStream("/icons/sidebar_collapse.png")));
@@ -68,13 +68,13 @@ public class SidebarController extends VBox {
     }
 
     private void Router() {
-        burger.setOnMouseClicked(e -> {this.mf.resize();});
-        dashboard.setOnMouseClicked(e -> { this.mf.navigateTo(new DashboardController(), this.mf.getBody()); setActive(dashboard); });
-        planning.setOnMouseClicked(e -> { this.mf.navigateTo(new PlanningController(), this.mf.getBody()); setActive(planning); });
-        tasks.setOnMouseClicked(e -> { this.mf.navigateTo(new TasksController(), this.mf.getBody()); setActive(tasks); });
-        plants.setOnMouseClicked(e -> { this.mf.navigateTo(new PlantsController(), this.mf.getBody()); setActive(plants); });
-        absense.setOnMouseClicked(e -> { this.mf.navigateTo(new AbsenseController(), this.mf.getBody()); setActive(absense); });
-        teams.setOnMouseClicked(e -> { this.mf.navigateTo(new TeamsController(), this.mf.getBody()); setActive(teams); });
+        burger.setOnMouseClicked(e -> {this.app.resize();});
+        dashboard.setOnMouseClicked(e -> { this.app.navigateTo(new DashboardController(), this.app.getBody()); setActive(dashboard); });
+        planning.setOnMouseClicked(e -> { this.app.navigateTo(new PlanningController(), this.app.getBody()); setActive(planning); });
+        tasks.setOnMouseClicked(e -> { this.app.navigateTo(new TasksController(), this.app.getBody()); setActive(tasks); });
+        plants.setOnMouseClicked(e -> { this.app.navigateTo(new PlantsController(), this.app.getBody()); setActive(plants); });
+        absense.setOnMouseClicked(e -> { this.app.navigateTo(new AbsenseController(), this.app.getBody()); setActive(absense); });
+        teams.setOnMouseClicked(e -> { this.app.navigateTo(new TeamsController(), this.app.getBody()); setActive(teams); });
         setActive(dashboard);
     }
 
