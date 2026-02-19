@@ -1,6 +1,6 @@
 package hogent.sdp2.sdpii.gui;
 
-import hogent.sdp2.sdpii.gui.app.DashboardController;
+import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.components.BodyController;
 import hogent.sdp2.sdpii.gui.components.SidebarController;
 import hogent.sdp2.sdpii.gui.components.header.HeaderController;
@@ -10,7 +10,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -67,7 +66,7 @@ public class MainFrameController extends BorderPane {
     public void resize() {
         sidebar.prefWidthProperty().unbind();
 
-        double targetWidth = this.sidebarSmall ? 0.1 : 0.05;
+        double targetWidth = this.sidebarSmall ? 0.1 : 0.06;
         double startwidth = sidebar.getWidth();
         double endWidth = getWidth() * targetWidth;
 

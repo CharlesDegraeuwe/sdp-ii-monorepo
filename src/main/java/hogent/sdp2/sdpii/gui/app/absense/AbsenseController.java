@@ -1,8 +1,6 @@
-package hogent.sdp2.sdpii.gui.app;
+package hogent.sdp2.sdpii.gui.app.absense;
 
-import hogent.sdp2.sdpii.gui.MainFrameController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;

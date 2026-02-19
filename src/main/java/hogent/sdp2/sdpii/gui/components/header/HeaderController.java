@@ -1,7 +1,8 @@
 package hogent.sdp2.sdpii.gui.components.header;
 
 import hogent.sdp2.sdpii.gui.MainFrameController;
-import hogent.sdp2.sdpii.gui.app.*;
+import hogent.sdp2.sdpii.gui.app.account.AccountController;
+import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;

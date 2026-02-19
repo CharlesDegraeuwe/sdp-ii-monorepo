@@ -1,7 +1,12 @@
 package hogent.sdp2.sdpii.gui.components;
 
 import hogent.sdp2.sdpii.gui.MainFrameController;
-import hogent.sdp2.sdpii.gui.app.*;
+import hogent.sdp2.sdpii.gui.app.absense.AbsenseController;
+import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
+import hogent.sdp2.sdpii.gui.app.planning.PlanningController;
+import hogent.sdp2.sdpii.gui.app.plants.PlantsController;
+import hogent.sdp2.sdpii.gui.app.tasks.TasksController;
+import hogent.sdp2.sdpii.gui.app.teams.TeamsController;
 import hogent.sdp2.sdpii.gui.components.header.StageHeaderController;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
