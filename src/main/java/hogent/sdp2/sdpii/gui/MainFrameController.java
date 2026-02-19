@@ -28,7 +28,7 @@ public class MainFrameController extends BorderPane {
 
         // layout instellen
         app = new AppController(mf, this);
-        login = new LoginController(mf);
+        login = new LoginController(mf, this);
 
         setCenter(login);
         windowFunctionality(mf);        //custom window functionality//routing methode
