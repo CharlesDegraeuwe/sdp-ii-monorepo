@@ -1,6 +1,6 @@
 package hogent.sdp2.sdpii;
 
-import hogent.sdp2.sdpii.domein.Werknemer;
+import domain.Werknemer;
 import hogent.sdp2.sdpii.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
