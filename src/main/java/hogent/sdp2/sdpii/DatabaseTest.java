@@ -14,15 +14,16 @@ public class DatabaseTest {
             em.getTransaction().begin();
 
             Werknemer wn = new Werknemer();
-            wn.setNaam("Test");
+            wn.setNaam("Admin");
             wn.setVoornaam("Gebruiker");
-            wn.setEmail("gebruiker@email.com");
+            wn.setEmail("werknemer@email.com");
+            wn.setWachtwoord("werknemer123");
             wn.setTelefoonnummer("0412345678");
 
             // Gebruik LocalDate.of of LocalDate.now()
             wn.setGeboortedatum(LocalDate.of(1995, 5, 15));
 
-            wn.setRol("Manager");
+            wn.setRol("Werknemer");
             wn.setStatus("Actief");
 
             em.persist(wn);

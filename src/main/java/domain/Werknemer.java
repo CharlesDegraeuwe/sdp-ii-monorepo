@@ -25,6 +25,9 @@ public class Werknemer {
     @Column(name = "Email", nullable = false, length = 90)
     private String email;
 
+    @Column(name = "Wachtwoord", nullable = false, length = 45)
+    private String wachtwoord;
+
     @Column(name = "Telefoonnummer", nullable = false, length = 20)
     private String telefoonnummer;
 
