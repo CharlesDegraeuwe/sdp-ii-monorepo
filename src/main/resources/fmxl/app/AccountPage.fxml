@@ -6,8 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="GridPane" styleClass="" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="GridPane" xmlns:fx="http://javafx.com/fxml" styleClass="page">
     <children>
-        <Label text="profile page"/>
+        <Label text="account page"/>
     </children>
 </fx:root>

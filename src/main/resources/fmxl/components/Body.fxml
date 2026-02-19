@@ -6,8 +6,4 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="GridPane" xmlns:fx="http://javafx.com/fxml" styleClass="page">
-    <children>
-        <Label text="planning page"/>
-    </children>
-</fx:root>
+<fx:root type="BorderPane" styleClass="body" fx:id="body" xmlns:fx="http://javafx.com/fxml"/>

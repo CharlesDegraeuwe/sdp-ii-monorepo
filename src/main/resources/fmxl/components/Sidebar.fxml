@@ -4,27 +4,26 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.scene.control.Label?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <fx:root type="VBox" styleClass="sidebar" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml">
     <children>
 
     <VBox alignment="CENTER" styleClass="burger-menu" fx:id="burger">
         <children>
-            <Button styleClass="burger-menu">
-                <graphic>
-                    <FontIcon iconLiteral="mdmz-menu" iconSize="30" />
-                </graphic>
-            </Button>
+            <ImageView fitWidth="25" fitHeight="25" fx:id="burger_button">
+            </ImageView>
         </children>
     </VBox>
 
         <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="dashboard">
             <children>
-                <Button styleClass="sidebar-button" mouseTransparent="true">
-                    <graphic>
-                        <FontIcon iconLiteral="mdoal-dashboard" iconSize="25"/>
-                    </graphic>
-                </Button>
-                <Label text="Dashboard" styleClass="label"/>
+                <ImageView fitWidth="25" fitHeight="25">
+                    <image>
+                        <Image url="/icons/dashboard.png"/>
+                    </image>
+                </ImageView>
+                <Label text="Dashboard" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
@@ -35,7 +34,7 @@
                         <FontIcon iconLiteral="mdoal-format_list_bulleted" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Planning" styleClass="label"/>
+                <Label text="Planning" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
@@ -46,7 +45,7 @@
                         <FontIcon iconLiteral="mdral-check" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Tasks" styleClass="label"/>
+                <Label text="Tasks" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
@@ -57,7 +56,7 @@
                         <FontIcon iconLiteral="mdomz-map" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Plants" styleClass="label"/>
+                <Label text="Plants" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
@@ -68,7 +67,7 @@
                         <FontIcon iconLiteral="mdoal-cancel" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Absense" styleClass="label"/>
+                <Label text="Absense" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
@@ -79,7 +78,7 @@
                         <FontIcon iconLiteral="mdoal-groups" iconSize="25"/>
                     </graphic>
                 </Button>
-                <Label text="Teams" styleClass="label"/>
+                <Label text="Teams" styleClass="sidebar_label"/>
             </children>
         </VBox>
 

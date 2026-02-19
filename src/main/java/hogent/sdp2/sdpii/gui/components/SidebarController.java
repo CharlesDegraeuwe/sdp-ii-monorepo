@@ -1,17 +1,28 @@
-package hogent.sdp2.sdpii.gui;
+package hogent.sdp2.sdpii.gui.components;
 
+import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.*;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 
 public class SidebarController extends VBox {
     //variables
-    private VBox activeItem;
+    private Node activeItem;
+    private Boolean small;
+    private MainFrameController mf;
+    @Getter
+    @Setter
+    @FXML private ImageView burger_button;
     @FXML private VBox burger;
     @FXML private VBox dashboard;
     @FXML private VBox planning;
@@ -22,7 +33,7 @@ public class SidebarController extends VBox {
 
     //construtor
     public SidebarController(MainFrameController mainFrame) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/Sidebar.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/Sidebar.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -31,29 +42,36 @@ public class SidebarController extends VBox {
             throw new RuntimeException(e);
         }
 
-        this.Router(mainFrame);
+        this.mf = mainFrame;
+        this.burger_button.setImage(new Image(getClass().getResourceAsStream("/icons/sidebar_collapse.png")));
+        this.Router();
     }
 
     //hele routing
-    private void setActive(VBox item) {
+    public void setActive(Node item) {
         if (activeItem != null) {
             activeItem.getStyleClass().remove("active");
         }
+
         item.getStyleClass().add("active");
         activeItem = item;
     }
 
-    private void Router(MainFrameController mainFrame) {
-        dashboard.setOnMouseClicked(e -> { mainFrame.navigateTo(new DashboardController()); setActive(dashboard); });
-        planning.setOnMouseClicked(e -> { mainFrame.navigateTo(new PlanningController()); setActive(planning); });
-        tasks.setOnMouseClicked(e -> { mainFrame.navigateTo(new TasksController()); setActive(tasks); });
-        plants.setOnMouseClicked(e -> { mainFrame.navigateTo(new PlantsController()); setActive(plants); });
-        absense.setOnMouseClicked(e -> { mainFrame.navigateTo(new AbsenseController()); setActive(absense); });
-        teams.setOnMouseClicked(e -> { mainFrame.navigateTo(new TeamsController()); setActive(teams); });
+    private void Router() {
+        burger.setOnMouseClicked(e -> {this.mf.resize();});
+        dashboard.setOnMouseClicked(e -> { this.mf.navigateTo(new DashboardController(), this.mf.getBody()); setActive(dashboard); });
+        planning.setOnMouseClicked(e -> { this.mf.navigateTo(new PlanningController(), this.mf.getBody()); setActive(planning); });
+        tasks.setOnMouseClicked(e -> { this.mf.navigateTo(new TasksController(), this.mf.getBody()); setActive(tasks); });
+        plants.setOnMouseClicked(e -> { this.mf.navigateTo(new PlantsController(), this.mf.getBody()); setActive(plants); });
+        absense.setOnMouseClicked(e -> { this.mf.navigateTo(new AbsenseController(), this.mf.getBody()); setActive(absense); });
+        teams.setOnMouseClicked(e -> { this.mf.navigateTo(new TeamsController(), this.mf.getBody()); setActive(teams); });
         setActive(dashboard);
     }
 
-    //is transition animatietje, we kunnen nog zien of we t gebruiken kvin t nie zo smooth fz
+
+    //is transition animatietje
+    // we kunnen nog zien of we t gebruiken
+    // kvin t nie zo smooth fz
     private void addHoverAnimation(VBox vbox) {
         vbox.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), vbox);
