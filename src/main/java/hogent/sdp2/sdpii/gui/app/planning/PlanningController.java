@@ -1,13 +1,13 @@
-package hogent.sdp2.sdpii.gui.app;
+package hogent.sdp2.sdpii.gui.app.planning;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class NotificationsController extends GridPane {
-    public NotificationsController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/NotificationsPage.fxml"));
+public class PlanningController extends GridPane {
+    public PlanningController() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/PlanningPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -17,4 +17,3 @@ public class NotificationsController extends GridPane {
         }
     }
 }
-

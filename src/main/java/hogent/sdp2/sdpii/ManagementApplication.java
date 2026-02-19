@@ -3,7 +3,9 @@ package hogent.sdp2.sdpii;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import java.awt.Taskbar;
 import java.awt.Toolkit;
@@ -14,7 +16,7 @@ public class ManagementApplication extends javafx.application.Application {
     @Override
 
     public void start(Stage primaryStage) throws IOException {
-        Scene scene = new Scene(new MainFrameController(), 1280, 900);
+        Scene scene = new Scene(new MainFrameController(primaryStage), 1280, 900);
         scene.getStylesheets().add("css/application.css");
 
         //primary stage initialiseren
@@ -23,6 +25,10 @@ public class ManagementApplication extends javafx.application.Application {
             primaryStage.setMinHeight(primaryStage.getHeight());
         });
         primaryStage.setTitle("Welcome");
+        //onze eigen stijl toevoege
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
 
         //app icon instellen

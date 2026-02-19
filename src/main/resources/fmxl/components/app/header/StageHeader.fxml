@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="HBox" alignment="BASELINE_LEFT" fx:id="outer_controls" xmlns:fx="http://javafx.com/fxml">
+    <children>
+        <HBox fx:id="controls" alignment="CENTER">
+            <Button fx:id="closeBtn" styleClass="controls_button"></Button>
+            <Button fx:id="minimizeBtn" styleClass="controls_button"></Button>
+            <Button fx:id="maximizeBtn" styleClass="controls_button"></Button>
+        </HBox>
+    </children>
+</fx:root>

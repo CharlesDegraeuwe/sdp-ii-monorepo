@@ -1,14 +1,13 @@
-package hogent.sdp2.sdpii.gui.app;
+package hogent.sdp2.sdpii.gui.app.notifications;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class TeamsController extends GridPane {
-    public TeamsController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/TeamsPage.fxml"));
+public class NotificationsController extends GridPane {
+    public NotificationsController() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/NotificationsPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -18,3 +17,4 @@ public class TeamsController extends GridPane {
         }
     }
 }
+
