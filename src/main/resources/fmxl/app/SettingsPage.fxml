@@ -8,6 +8,6 @@
 
 <fx:root type="GridPane" xmlns:fx="http://javafx.com/fxml" styleClass="page">
     <children>
-        <Label text="planning page"/>
+        <Label text="settings page"/>
     </children>
 </fx:root>

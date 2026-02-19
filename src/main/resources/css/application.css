@@ -16,7 +16,7 @@
 .burger-menu {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-padding: 0 0 20 0;
+    -fx-padding: 0 0 10 0;
     -fx-cursor: hand;
 }
 
@@ -30,13 +30,10 @@
     -fx-opacity: 1;
 }
 
-.active .label {
+.active .sidebar_label {
     -fx-font-weight: bold;
 }
 
-.active.label {
-    -fx-font-family: "SF Pro Display Bold"
-}
 
 .sidebar-button {
     -fx-background-color: transparent;
@@ -47,3 +44,65 @@
 .sidebar-button:hover {
     -fx-background-color: transparent;
 }
+
+.header {
+    -fx-padding: 25 30 10 30;
+    -fx-spacing: 30;
+}
+
+.left_header {
+    -fx-spacing: 10;
+}
+
+.right_header {
+    -fx-spacing: 10;
+}
+
+.profile_header {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 50;
+    -fx-padding: 4 20 4 20;
+    -fx-font-weight: bold;
+    -fx-spacing: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
+}
+
+.profile_header .label {
+    -fx-font-weight: bold;
+}
+
+.header_button {
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 100;
+    -fx-min-height: 30;
+    -fx-max-height: 30;
+    -fx-min-width: 30;
+    -fx-max-width: 30;
+    -fx-pref-height: 30;
+    -fx-pref-width: 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
+}
+
+.profile_button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-pref-height: 30;
+    -fx-pref-width: 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
+}
+
+.dropdown_button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.page {
+    -fx-padding: 30;
+}
+
