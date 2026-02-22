@@ -20,11 +20,11 @@ public class AccountFormController extends VBox {
     @FXML private TextField txtEmail;
     @FXML private PasswordField txtWachtwoord;
     @FXML private Label lblFout;
-    private MainFrameController mf;
+    private AppController app;
     private Stage stage;
     private final WerknemerService service = new WerknemerService();
 
-    public AccountFormController(MainFrameController mf, Stage stage) {
+    public AccountFormController(AppController app, Stage stage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/AccountForm.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -34,7 +34,7 @@ public class AccountFormController extends VBox {
             throw new RuntimeException(e);
         }
 
-        this.mf = mf;
+        this.app = app;
         this.stage = stage;
 
     }

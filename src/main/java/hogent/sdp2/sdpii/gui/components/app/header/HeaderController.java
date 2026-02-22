@@ -18,7 +18,6 @@ public class HeaderController extends HBox {
     @FXML private Button account;
     @FXML private HBox dropdown;
 
-    private final MainFrameController mf;
 
     public HeaderController(AppController app) {
 
