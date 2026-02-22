@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 
+import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
@@ -17,7 +18,10 @@ public class HeaderController extends HBox {
     @FXML private Button account;
     @FXML private HBox dropdown;
 
+    private final MainFrameController mf;
+
     public HeaderController(AppController app) {
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/header/Header.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -34,7 +38,7 @@ public class HeaderController extends HBox {
         });
 
         account.setOnMouseClicked(e -> {
-            AccountController ac = new AccountController();
+            AccountController ac = new AccountController(app.getStage(), app);
             app.getSidebar().setActive(ac);
             app.navigateTo(ac, app.getBody());
         });
