@@ -22,7 +22,6 @@ public class AccountFormController extends VBox {
     @FXML private TextField telefoonnummerField;
     @FXML private TextField geboortedatumField;
     private AppController app;
-    private Stage stage;
     private final WerknemerService service;
 
     private Werknemer huidigeWerknemer;
@@ -32,13 +31,12 @@ public class AccountFormController extends VBox {
 
     private boolean editing = false;
 
-    public AccountFormController(AppController app, Stage stage) {
+    public AccountFormController(AppController app) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/AccountForm.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
         this.app = app;
-        this.stage = stage;
         this.service = new WerknemerService();
 
         try {

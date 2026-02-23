@@ -6,8 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="GridPane" xmlns:fx="http://javafx.com/fxml" styleClass="page">
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page">
     <children>
-        <Label text="admin page"/>
+        <Label text="absense page"/>
     </children>
 </fx:root>

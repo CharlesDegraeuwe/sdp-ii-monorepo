@@ -15,11 +15,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import lombok.Getter;
 
 import java.io.IOException;
 
 public class LoginController extends BorderPane {
-
+    @Getter
+    LoginFormController form;
 
     public LoginController(Stage stage, MainFrameController mf) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/auth/Login.fxml"));
@@ -30,7 +32,7 @@ public class LoginController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        LoginFormController form = new LoginFormController(mf, stage);
+        form = new LoginFormController(mf, stage);
         StageHeaderController controls = new StageHeaderController(stage);
         setCenter(form);
         setTop(controls);

@@ -1,14 +1,13 @@
-package hogent.sdp2.sdpii.gui.app.admin;
+package hogent.sdp2.sdpii.gui.components.admin;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class AdminHomeController extends GridPane {
-    public AdminHomeController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/AdminDashboard.fxml"));
+public class RegisterEmployeeForm extends VBox {
+    public RegisterEmployeeForm() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/admin/CreateEmployeeForm.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -16,5 +15,6 @@ public class AdminHomeController extends GridPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 }

@@ -82,6 +82,17 @@
             </children>
         </VBox>
 
+        <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="admin">
+            <children>
+                <Button styleClass="sidebar-button" mouseTransparent="true">
+                    <graphic>
+                        <FontIcon iconLiteral="mdoal-admin_panel_settings" iconSize="25"/>
+                    </graphic>
+                </Button>
+                <Label text="Admin" styleClass="sidebar_label"/>
+            </children>
+        </VBox>
+
 
     </children>
 </fx:root>

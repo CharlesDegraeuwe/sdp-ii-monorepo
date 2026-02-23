@@ -8,6 +8,6 @@
 
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page">
     <children>
-        <Label text="absense page"/>
+        <Label text="create manager page"/>
     </children>
 </fx:root>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="VBox" fx:id="admin_landingbox" alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+    <HBox fx:id="admin_landing_title">
+        <Label mouseTransparent="true" fx:id="welcome_msg"/>
+    </HBox>
+    <HBox styleClass="popup-item" fx:id="rgstr_mngr">
+        <Label text="Register a manager" mouseTransparent="true"/>
+        <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
+        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
+    </HBox>
+    <HBox styleClass="popup-item" fx:id="rgstr_emp">
+        <Label text="Register an employee" mouseTransparent="true"/>
+        <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
+        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
+    </HBox>
+    <HBox styleClass="popup-item" fx:id="mng_usr">
+        <Label text="Manage users" mouseTransparent="true"/>
+        <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
+        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
+    </HBox>
+</fx:root>
