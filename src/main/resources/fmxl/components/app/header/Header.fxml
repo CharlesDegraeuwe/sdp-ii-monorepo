@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="HBox" alignment="CENTER_RIGHT" styleClass="header" fx:id="header" xmlns:fx="http://javafx.com/fxml">
+    <children>
+
+        <HBox styleClass="left_header" alignment="CENTER">
+            <children>
+                <Button styleClass="header_button" fx:id="search">
+                    <graphic>
+                        <FontIcon iconLiteral="mdmz-search" iconSize="20" />
+                    </graphic>
+                </Button>
+
+                <Button styleClass="header_button" fx:id="notifications">
+                    <graphic>
+                        <FontIcon iconLiteral="mdmz-notifications_none" iconSize="20" />
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+
+        <HBox styleClass="right_header" alignment="CENTER">
+            <children>
+                <Button styleClass="profile_button" fx:id="account">
+                    <graphic>
+                        <FontIcon iconLiteral="mdoal-account_circle" iconSize="25" />
+                    </graphic>
+                </Button>
+
+                <HBox styleClass="profile_header" alignment="CENTER" fx:id="trigger_button">
+                    <children>
+                        <Label mouseTransparent="true" styleClass="label" fx:id="lblUsername"/>
+                        <Button mouseTransparent="true" styleClass="dropdown_button" fx:id="dropdown_button">
+                            <graphic>
+                                <FontIcon mouseTransparent="true" iconLiteral="mdoal-keyboard_arrow_down" iconSize="20" fx:id="button_icon" />
+                            </graphic>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+
+
+    </children>
+</fx:root>
+
