@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui;
 
+import domain.Sessie;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.auth.login.LoginController;
 import javafx.fxml.FXML;
@@ -30,7 +31,11 @@ public class MainFrameController extends BorderPane {
         app = new AppController(mf, this);
         login = new LoginController(mf, this);
 
-        setCenter(login);
+        if(Sessie.getIngelogdeWerknemer() != null) {
+            setCenter(app);
+        } else {
+            setCenter(login);
+        }
         windowFunctionality(mf);        //custom window functionality//routing methode
     }
 

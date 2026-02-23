@@ -7,19 +7,19 @@
 <?import javafx.scene.layout.*?>
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<fx:root type="VBox" fx:id="profile_popup" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="VBox" fx:id="profile_popup" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx">
     <children>
-        <HBox fx:id="" styleClass="">
-            <FontIcon iconLiteral="ion4-ios-settings" iconSize="25"/>
-            <Label text="settings"/>
+        <HBox styleClass="popup-item" fx:id="settings_trigger">
+            <FontIcon mouseTransparent="true" iconLiteral="ion4-ios-settings" iconSize="16"/>
+            <Label mouseTransparent="true" text="Settings"/>
         </HBox>
-        <HBox fx:id="" styleClass="">
-            <FontIcon iconLiteral="mdoal-admin_panel_settings" iconSize="25"/>
-            <Label text="admin"/>
+        <HBox styleClass="popup-item" fx:id="admin_trigger">
+            <FontIcon mouseTransparent="true" iconLiteral="mdoal-admin_panel_settings" iconSize="16"/>
+            <Label mouseTransparent="true" text="Admin"/>
         </HBox>
-        <HBox fx:id="" styleClass="">
-            <FontIcon iconLiteral="ion4-ios-exit" iconSize="25"/>
-            <Label text="log out"/>
+        <HBox styleClass="popup-item" fx:id="logout_trigger">
+            <FontIcon mouseTransparent="true" iconLiteral="ion4-ios-exit" iconSize="16"/>
+            <Label mouseTransparent="true" text="Log out"/>
         </HBox>
     </children>
 </fx:root>

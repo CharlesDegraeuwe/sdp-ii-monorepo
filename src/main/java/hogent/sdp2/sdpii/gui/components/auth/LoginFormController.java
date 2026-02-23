@@ -5,11 +5,14 @@ import domain.Werknemer;
 import domain.WerknemerService;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -18,6 +21,8 @@ public class LoginFormController extends VBox {
     @FXML private TextField txtEmail;
     @FXML private PasswordField txtWachtwoord;
     @FXML private Label lblFout;
+    @FXML private Button loginBtn;
+
     private MainFrameController mf;
     private Stage stage;
     private final WerknemerService service = new WerknemerService();
@@ -34,24 +39,92 @@ public class LoginFormController extends VBox {
 
         this.mf = mf;
         this.stage = stage;
+        this.init();
+
+
+    }
+
+    private void init() {
+        loginBtn.setText("Log in");
+        this.txtWachtwoord.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                login();
+            }
+        });
 
     }
 
     @FXML
     private void login(javafx.event.ActionEvent event) {
-        String email = txtEmail.getText();
-        String wachtwoord = txtWachtwoord.getText();
+        this.loginBtn.setText("loading...");
+        this.loginBtn.setDisable(true);
 
-        Werknemer werknemer = service.zoekOpEmailEnWachtwoord(email, wachtwoord);
+        Task<Werknemer> task = new Task<>() {
+            @Override
+            protected Werknemer call() {
+                return service.zoekOpEmailEnWachtwoord(
+                        txtEmail.getText(),
+                        txtWachtwoord.getText()
+                );
+            }
+        };
 
-        if (werknemer == null) {
-            lblFout.setText("Ongeldig email of wachtwoord!");
-            return;
-        }
+        task.setOnSucceeded(e -> {
+            Werknemer werknemer = task.getValue();
+            if (werknemer == null) {
+                lblFout.setText("Ongeldig email of wachtwoord!");
+                loginBtn.setText("Log in");
+                loginBtn.setDisable(false);
+                return;
+            }
+            Sessie.setIngelogdeWerknemer(werknemer);
+            navigeerNaarActivatie();
+        });
 
-        Sessie.setIngelogdeWerknemer(werknemer);
-        navigeerNaarActivatie();
+        task.setOnFailed(e -> {
+            lblFout.setText("Er ging iets mis!");
+            loginBtn.setText("Log in");
+            loginBtn.setDisable(false);
+        });
+
+        new Thread(task).start();
     }
+
+    private void login() {
+        this.loginBtn.setText("loading...");
+        this.loginBtn.setDisable(true);
+
+        Task<Werknemer> task = new Task<>() {
+            @Override
+            protected Werknemer call() {
+                return service.zoekOpEmailEnWachtwoord(
+                        txtEmail.getText(),
+                        txtWachtwoord.getText()
+                );
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            Werknemer werknemer = task.getValue();
+            if (werknemer == null) {
+                lblFout.setText("Ongeldig email of wachtwoord!");
+                loginBtn.setText("Log in");
+                loginBtn.setDisable(false);
+                return;
+            }
+            Sessie.setIngelogdeWerknemer(werknemer);
+            navigeerNaarActivatie();
+        });
+
+        task.setOnFailed(e -> {
+            lblFout.setText("Er ging iets mis!");
+            loginBtn.setText("Log in");
+            loginBtn.setDisable(false);
+        });
+
+        new Thread(task).start();
+    }
+
     private void navigeerNaarActivatie() {
         this.mf.setCenter(new AppController(stage, mf));
     }

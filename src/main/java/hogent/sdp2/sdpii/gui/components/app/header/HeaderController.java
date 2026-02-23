@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -20,6 +21,7 @@ public class HeaderController extends HBox {
     @FXML private Button account;
     @FXML private Button dropdown_button;
     @FXML private FontIcon button_icon;
+    @FXML private HBox trigger_button;
     private ProfilePopupController pfc;
     private Popup popup;
 
@@ -38,21 +40,20 @@ public class HeaderController extends HBox {
         popup.getContent().add(pfc);
 
         // Trigger op dropdown button
-        dropdown_button.setOnMouseClicked(e -> togglePopup(dropdown_button));
+        trigger_button.setOnMouseClicked(e -> togglePopup(trigger_button));
 
         Router(app);
     }
 
-    private void togglePopup(Button trigger) {
+    private void togglePopup(HBox trigger) {
         if (popup.isShowing()) {
             popup.hide();
         } else {
-            // Bounds van de button ophalen relatief aan het scherm
             var bounds = trigger.localToScreen(trigger.getBoundsInLocal());
             popup.show(
                     trigger,
-                    bounds.getMinX(),           // x: links uitgelijnd met button
-                    bounds.getMaxY() + 5        // y: net onder de button
+                    bounds.getMaxX() -190,
+                    bounds.getMaxY() -10
             );
         }
     }

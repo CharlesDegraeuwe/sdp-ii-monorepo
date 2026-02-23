@@ -55,6 +55,7 @@
     -fx-padding: 40 30 0 0;
     -fx-spacing: 30;
 }
+
 #outer_controls {
     -fx-padding: 0 0 15 0;
 }
@@ -228,10 +229,27 @@
 
 #profile_popup {
     -fx-background-color: #F0F0F0;
-    -fx-height: 100px;
-    -fx-width: 100px;
-    -fx-background-radius: 25px;
-    -fx-border-radius: 25px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 5);
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 10;
+    -fx-spacing: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 5);
+    -fx-min-width: 160;
+}
 
+.popup-item {
+    -fx-padding: 10 15 10 15;
+    -fx-spacing: 12;
+    -fx-alignment: CENTER-LEFT;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.popup-item:hover {
+    -fx-background-color: #E4E4E4;
+}
+
+.popup-item .label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
 }
