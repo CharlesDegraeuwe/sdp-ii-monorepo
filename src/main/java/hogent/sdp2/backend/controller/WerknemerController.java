@@ -1,7 +1,6 @@
 package hogent.sdp2.backend.controller;
 
-import hogent.sdp2.backend.dto.request.LoginRequestDTO;
-import hogent.sdp2.backend.dto.request.WerknemerAanmakenDTO;
+import hogent.sdp2.backend.dto.request.*;
 import hogent.sdp2.backend.service.WerknemerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +25,21 @@ public class WerknemerController {
     @PostMapping("/login")
     public String login(@RequestBody LoginRequestDTO dto) {
         return werknemerService.login(dto);
+    }
+
+    @PutMapping("/wachtwoord")
+    public String wijzigWachtwoord(@RequestBody WachtwoordWijzigenDTO dto) {
+        return werknemerService.wijzigWachtwoord(dto);
+    }
+
+    @PostMapping("/wachtwoord-vergeten")
+    public String wachtwoordVergeten(@RequestBody WachtwoordVergetenDTO dto) {
+        return werknemerService.wachtwoordVergetenAanvragen(dto);
+    }
+
+    @PostMapping("/wachtwoord-resetten")
+    public String resetWachtwoord(@RequestBody WachtwoordResetDTO dto) {
+        return werknemerService.resetWachtwoord(dto);
     }
 }
 
