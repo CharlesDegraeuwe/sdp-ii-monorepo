@@ -225,3 +225,13 @@
 .login-btn:hover {
     -fx-background-color: #2D2D2D;
 }
+
+#profile_popup {
+    -fx-background-color: #F0F0F0;
+    -fx-height: 100px;
+    -fx-width: 100px;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 5);
+
+}
