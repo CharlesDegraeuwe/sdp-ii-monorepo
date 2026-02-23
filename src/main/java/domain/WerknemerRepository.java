@@ -63,6 +63,7 @@ public class WerknemerRepository {
         EntityManager em = JPAUtil.getENTITY_MANAGER_FACTORY().createEntityManager();
         try {
             em.getTransaction().begin();
+            em.merge(werknemer);
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
