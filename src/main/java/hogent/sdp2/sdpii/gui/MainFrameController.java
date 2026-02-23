@@ -8,13 +8,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import lombok.Getter;
 
 import java.io.IOException;
 
 public class MainFrameController extends BorderPane {
     //variables
-    @FXML private AppController app;
-    @FXML private LoginController login;
+    @Getter
+    @FXML
+    private AppController app;
+
+    @Getter
+    @FXML
+    private LoginController login;
     private Boolean sidebarSmall;
     private double xOffset;
     private double yOffset;
@@ -28,21 +34,16 @@ public class MainFrameController extends BorderPane {
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 
         // layout instellen
-        app = new AppController(mf, this);
         login = new LoginController(mf, this);
 
         if(Sessie.getIngelogdeWerknemer() != null) {
+            app = new AppController(mf, this);
             setCenter(app);
         } else {
             setCenter(login);
         }
         windowFunctionality(mf);        //custom window functionality//routing methode
     }
-
-    //routing
-
-
-    //sidebar resizing
 
 
     private void windowFunctionality(Stage mf) {

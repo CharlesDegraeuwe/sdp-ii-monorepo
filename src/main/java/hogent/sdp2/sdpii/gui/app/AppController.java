@@ -1,6 +1,8 @@
 package hogent.sdp2.sdpii.gui.app;
 
+import domain.Sessie;
 import hogent.sdp2.sdpii.gui.MainFrameController;
+import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.components.app.BodyController;
 import hogent.sdp2.sdpii.gui.components.app.SidebarController;
@@ -52,7 +54,12 @@ public class AppController extends BorderPane {
         setCenter(body);
         body.setTop(header);
         //custom window functionality
-        navigateTo(new DashboardController(), body);        //routing methode
+        if (Sessie.isAdmin()){
+            navigateTo(new AdminHomeController(this), body);
+        }else {
+            navigateTo(new DashboardController(), body);
+        }
+
     }
 
     public void resize() {

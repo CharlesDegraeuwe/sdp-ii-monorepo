@@ -14,8 +14,18 @@ public class Sessie {
     public static void uitloggen() {
         ingelogdeWerknemer = null;
     }
+
     public static boolean isAdmin() {
-        return ingelogdeWerknemer != null && ingelogdeWerknemer.getRol().equals("Admin");
+        return ingelogdeWerknemer != null && userRole().equals("Admin");
+    }
+
+    public static String userRole() {
+            if (ingelogdeWerknemer == null){
+                throw new IllegalArgumentException("geen gebruiker gevonden");
+            }
+
+            return ingelogdeWerknemer.getRol();
+
     }
 
 }
