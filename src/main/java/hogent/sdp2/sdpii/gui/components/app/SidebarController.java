@@ -3,7 +3,7 @@ package hogent.sdp2.sdpii.gui.components.app;
 import domain.Sessie;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.absense.AbsenseController;
-import hogent.sdp2.sdpii.gui.app.admin.AdminHomeController;
+import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.app.planning.PlanningController;
 import hogent.sdp2.sdpii.gui.app.plants.PlantsController;
@@ -50,11 +50,13 @@ public class SidebarController extends VBox {
         loader.setController(this);
         try {
             loader.load();
-            if (Sessie.isAdmin()) {
-                showAdminOnly();
-            } else {
-                showUserMenu();
+            switch(Sessie.userRole()) {
+                case "Admin" -> showAdminOnly();
+                case "Supervisor" -> showSupervisorOnly();
+                case "Employee" -> showEmployeeOnly();
+                case "Manager" -> showManagerOnly();
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -75,20 +77,6 @@ public class SidebarController extends VBox {
         item.getStyleClass().add("active");
         activeItem = item;
     }
-
-    public void setAdmin(){
-        admin.setVisible(true);
-        dashboard.setVisible(false);
-        planning.setVisible(false);
-        plants.setVisible(false);
-        teams.setVisible(false);
-        tasks.setVisible(false);
-    }
-
-    private void showUserMenu() {
-        admin.setVisible(false);
-        admin.setManaged(false);
-    }
     private void Router() {
         burger.setOnMouseClicked(e -> {this.app.resize();});
         dashboard.setOnMouseClicked(e -> { this.app.navigateTo(new DashboardController(), this.app.getBody()); setActive(dashboard); });
@@ -102,14 +90,62 @@ public class SidebarController extends VBox {
         if (admin != null) {
             admin.setOnMouseClicked(e -> {
                 if (Sessie.isAdmin()) {
-                    this.app.navigateTo(new AdminHomeController(), this.app.getBody());
+                    this.app.navigateTo(new AdminHomeController(this.app), this.app.getBody());
                 }
                 setActive(admin);
-                setAdmin();
             });
         }
     }
 
+    //views
+    private void showEmployeeOnly() {
+        admin.setVisible(false);
+        admin.setManaged(false);
+
+        dashboard.setVisible(true);
+        dashboard.setManaged(true);
+
+        planning.setVisible(true);
+        planning.setManaged(true);
+
+        plants.setVisible(false);
+        plants.setManaged(false);
+
+        teams.setVisible(false);
+        teams.setManaged(false);
+
+        tasks.setVisible(true);
+        tasks.setManaged(true);
+
+        absense.setVisible(true);
+        absense.setManaged(true);
+        setActive(dashboard);
+    }
+    private void showSupervisorOnly() {
+        admin.setVisible(false);
+        admin.setManaged(false);
+
+        dashboard.setVisible(true);
+        dashboard.setManaged(true);
+
+        planning.setVisible(true);
+        planning.setManaged(true);
+
+        plants.setVisible(false);
+        plants.setManaged(false);
+
+        teams.setVisible(true);
+        teams.setManaged(true);
+
+        tasks.setVisible(true);
+        tasks.setManaged(true);
+
+        absense.setVisible(true);
+        absense.setManaged(true);
+        setActive(dashboard);
+    }
+    private void showManagerOnly() {
+    }
     private void showAdminOnly() {
         admin.setVisible(true);
         admin.setManaged(true);
@@ -131,6 +167,7 @@ public class SidebarController extends VBox {
 
         absense.setVisible(false);
         absense.setManaged(false);
+        setActive(admin);
     }
 
 

@@ -56,38 +56,7 @@ public class LoginFormController extends VBox {
 
     @FXML
     private void login(javafx.event.ActionEvent event) {
-        this.loginBtn.setText("loading...");
-        this.loginBtn.setDisable(true);
-
-        Task<Werknemer> task = new Task<>() {
-            @Override
-            protected Werknemer call() {
-                return service.zoekOpEmailEnWachtwoord(
-                        txtEmail.getText(),
-                        txtWachtwoord.getText()
-                );
-            }
-        };
-
-        task.setOnSucceeded(e -> {
-            Werknemer werknemer = task.getValue();
-            if (werknemer == null) {
-                lblFout.setText("Ongeldig email of wachtwoord!");
-                loginBtn.setText("Log in");
-                loginBtn.setDisable(false);
-                return;
-            }
-            Sessie.setIngelogdeWerknemer(werknemer);
-            navigeerNaarActivatie();
-        });
-
-        task.setOnFailed(e -> {
-            lblFout.setText("Er ging iets mis!");
-            loginBtn.setText("Log in");
-            loginBtn.setDisable(false);
-        });
-
-        new Thread(task).start();
+       this.login();
     }
 
     private void login() {
@@ -106,6 +75,7 @@ public class LoginFormController extends VBox {
 
         task.setOnSucceeded(e -> {
             Werknemer werknemer = task.getValue();
+            System.out.println("Werknemer: " + werknemer);
             if (werknemer == null) {
                 lblFout.setText("Ongeldig email of wachtwoord!");
                 loginBtn.setText("Log in");
@@ -117,12 +87,20 @@ public class LoginFormController extends VBox {
         });
 
         task.setOnFailed(e -> {
+            System.out.println("Task failed: " + task.getException());
             lblFout.setText("Er ging iets mis!");
             loginBtn.setText("Log in");
             loginBtn.setDisable(false);
         });
 
         new Thread(task).start();
+    }
+
+    public void reset() {
+        this.loginBtn.setText("Log in");
+        this.loginBtn.setDisable(false);
+        txtEmail.setText("");
+        txtWachtwoord.setText("");
     }
 
     private void navigeerNaarActivatie() {
