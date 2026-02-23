@@ -5,9 +5,9 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class RegisterManagerForm extends VBox {
-    public RegisterManagerForm() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/admin/CreateManagerForm.fxml"));
+public class RegisterEmployeeForm extends VBox {
+    public RegisterEmployeeForm() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/admin/CreateEmployeeForm.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
