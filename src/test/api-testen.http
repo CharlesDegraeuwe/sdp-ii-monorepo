@@ -1,0 +1,52 @@
+### Maak een nieuwe werknemer aan in de database
+POST http://localhost:8080/api/werknemers
+Content-Type: application/json
+
+{
+  "naam": "Peeters",
+  "voornaam": "Jan",
+  "email": "jan.peeters@email.com",
+  "wachtwoord": "Wachtwoord123",
+  "telefoonnummer": "042345689",
+  "geboortedatum": "2000-05-15",
+  "rol": "Admin"
+}
+
+### Activeer het account
+POST http://localhost:8080/api/werknemers/activeer?code=code_van_console
+
+### Test het inloggen
+POST http://localhost:8080/api/werknemers/login
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com",
+  "wachtwoord": "Wachtwoord123"
+}
+
+### Wijzig het wachtwoord
+PUT http://localhost:8080/api/werknemers/wachtwoord
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com",
+  "oudWachtwoord": "Wachtwoord123",
+  "nieuwWachtwoord": "NieuwWachtwoord123"
+}
+
+### Wachtwoord vergeten aanvragen
+POST http://localhost:8080/api/werknemers/wachtwoord-vergeten
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com"
+}
+
+### Het wachtwoord resetten
+POST http://localhost:8080/api/werknemers/wachtwoord-resetten
+Content-Type: application/json
+
+{
+  "resetCode": "9fdcb086-57e4-45d0-bc07-ff0ae2fe8cbe",
+  "nieuwWachtwoord": "GeresetWachtwoord123"
+}
