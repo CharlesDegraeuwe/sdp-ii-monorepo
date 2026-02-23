@@ -1,10 +1,14 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 
+import com.sun.scenario.Settings;
+import domain.Sessie;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.admin.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
+import hogent.sdp2.sdpii.gui.app.settings.SettingsController;
+import hogent.sdp2.sdpii.gui.auth.login.LoginController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
@@ -27,15 +31,9 @@ public class ProfilePopupController extends VBox {
         Router(app);
     }
 
-    //wsss iets van styleclass toevoegen fz
-    public void triggerPopup() {
-        if(isOpen) {
-
-        }
-    }
     private void Router(AppController app) {
         settings_trigger.setOnMouseClicked(e -> {
-            NotificationsController nc = new NotificationsController();
+            SettingsController nc = new SettingsController();
             app.getSidebar().setActive(nc);
             app.navigateTo(nc, app.getBody());
         });
@@ -46,9 +44,8 @@ public class ProfilePopupController extends VBox {
         });
 
         logout_trigger.setOnMouseClicked(e -> {
-            AccountController ac = new AccountController(app.getStage(), app);
-            app.getSidebar().setActive(ac);
-            app.navigateTo(ac, app.getBody());
+            Sessie.uitloggen();
+            app.getMainframe().setCenter(new LoginController(app.getStage(), app.getMainframe() ));
         });
 
     }
