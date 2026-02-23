@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.account;
 
+import domain.Werknemer;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.components.app.AccountFormController;

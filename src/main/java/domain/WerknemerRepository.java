@@ -58,4 +58,17 @@ public class WerknemerRepository {
             em.close();
         }
     }
+
+    public void update(Werknemer werknemer) {
+        EntityManager em = JPAUtil.getENTITY_MANAGER_FACTORY().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
 }

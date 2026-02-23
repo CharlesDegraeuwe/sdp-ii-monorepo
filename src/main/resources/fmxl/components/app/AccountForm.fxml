@@ -8,14 +8,49 @@
 
 <fx:root type="VBox" styleClass="account-page" xmlns:fx="http://javafx.com/fxml">
 <VBox styleClass="account-card">
+
     <Label text="Account informatie" styleClass="account-title"/>
-    <TextField fx:id="txtNaam" promptText="naam"/>
-    <TextField fx:id="txtVoornaam" promptText="voornaam"/>
-    <TextField fx:id="txtEmail" promptText="email"/>
-    <PasswordField fx:id="txtWachtwoord" promptText="password"/>
-    <TextField fx:id="txtTelefoonnummer" promptText="telefoonnummer"/>
-    <TextField fx:id="txtGeboortedatum" promptText="geboortedatum" />
-    <Button text="wijzig accountgegevens" onAction="#veranderAccount" maxWidth="Infinity" styleClass="account-btn"/>
+    <GridPane hgap="20" vgap="20" styleClass="account-card">
+
+        <Label text="Naam" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="naamField"
+                   promptText="naam"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="0"/>
+
+        <Label text="Voornaam" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="voornaamField"
+                   promptText="voornaam"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"/>
+
+        <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="emailField"
+                   promptText="email"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="2"/>
+
+        <Label text="Wachtwoord" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="wachtwoordField"
+                   promptText="password"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="3"/>
+
+        <Label text="Telefoonnummer" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <TextField fx:id="telefoonnummerField"
+                   promptText="telefoonnnummer"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="4"/>
+
+        <Label text="Geboortedatum" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <TextField fx:id="geboortedatumField"
+                   promptText="geboortedatum"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="5"/>
+    </GridPane>
+    <Button fx:id="editButton"
+            text="Wijzig"
+            onAction="#toggleEdit"/>
 </VBox>
 </fx:root>
 

@@ -25,4 +25,8 @@ public class WerknemerService {
     public Werknemer zoekOpId(int id) {
         return repo.zoekOpId(id);
     }
+
+    public void update(Werknemer werknemer) {
+        repo.update(werknemer);
+    }
 }

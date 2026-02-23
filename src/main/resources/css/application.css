@@ -177,7 +177,17 @@
     -fx-max-height: 400;
 }
 
-.login-page {
+.account-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20;
+    -fx-padding: 40;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 5);
+    -fx-max-width: 600;
+    -fx-max-height: 500;
+}
+
+.login-page, .account-page {
     -fx-background-color: #F0F0F0;
     -fx-alignment: CENTER;
 }
