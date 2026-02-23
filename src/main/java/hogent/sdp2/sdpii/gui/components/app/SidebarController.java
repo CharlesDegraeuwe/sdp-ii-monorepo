@@ -23,6 +23,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 public class SidebarController extends VBox {
     //variables
@@ -50,10 +52,11 @@ public class SidebarController extends VBox {
         loader.setController(this);
         try {
             loader.load();
+            System.out.println(Sessie.userRole());
             switch(Sessie.userRole()) {
                 case "Admin" -> showAdminOnly();
                 case "Supervisor" -> showSupervisorOnly();
-                case "Employee" -> showEmployeeOnly();
+                case "Werknemer" -> showEmployeeOnly();
                 case "Manager" -> showManagerOnly();
             }
 
@@ -98,78 +101,35 @@ public class SidebarController extends VBox {
     }
 
     //views
-    private void showEmployeeOnly() {
-        admin.setVisible(false);
-        admin.setManaged(false);
-
-        dashboard.setVisible(true);
-        dashboard.setManaged(true);
-
-        planning.setVisible(true);
-        planning.setManaged(true);
-
-        plants.setVisible(false);
-        plants.setManaged(false);
-
-        teams.setVisible(false);
-        teams.setManaged(false);
-
-        tasks.setVisible(true);
-        tasks.setManaged(true);
-
-        absense.setVisible(true);
-        absense.setManaged(true);
-        setActive(dashboard);
+    private void configureVisibility(Set<VBox> visible) {
+        List<VBox> all = List.of(dashboard, planning, tasks, plants, absense, teams, admin);
+        all.forEach(v -> {
+            if (v == null) return;
+            boolean show = visible.contains(v);
+            v.setVisible(show);
+            v.setManaged(show);
+        });
     }
-    private void showSupervisorOnly() {
-        admin.setVisible(false);
-        admin.setManaged(false);
 
-        dashboard.setVisible(true);
-        dashboard.setManaged(true);
-
-        planning.setVisible(true);
-        planning.setManaged(true);
-
-        plants.setVisible(false);
-        plants.setManaged(false);
-
-        teams.setVisible(true);
-        teams.setManaged(true);
-
-        tasks.setVisible(true);
-        tasks.setManaged(true);
-
-        absense.setVisible(true);
-        absense.setManaged(true);
-        setActive(dashboard);
-    }
-    private void showManagerOnly() {
-    }
     private void showAdminOnly() {
-        admin.setVisible(true);
-        admin.setManaged(true);
-
-        dashboard.setVisible(false);
-        dashboard.setManaged(false);
-
-        planning.setVisible(false);
-        planning.setManaged(false);
-
-        plants.setVisible(false);
-        plants.setManaged(false);
-
-        teams.setVisible(false);
-        teams.setManaged(false);
-
-        tasks.setVisible(false);
-        tasks.setManaged(false);
-
-        absense.setVisible(false);
-        absense.setManaged(false);
+        configureVisibility(Set.of(admin));
         setActive(admin);
     }
 
+    private void showEmployeeOnly() {
+        configureVisibility(Set.of(dashboard, planning, tasks, absense));
+        setActive(dashboard);
+    }
+
+    private void showSupervisorOnly() {
+        configureVisibility(Set.of(dashboard, planning, tasks, teams, absense));
+        setActive(dashboard);
+    }
+
+    private void showManagerOnly() {
+        configureVisibility(Set.of(dashboard, planning, tasks, plants, teams, absense));
+        setActive(dashboard);
+    }
 
     //is transition animatietje
     // we kunnen nog zien of we t gebruiken
