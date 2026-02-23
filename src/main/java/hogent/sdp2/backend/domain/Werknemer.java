@@ -40,4 +40,7 @@ public class Werknemer {
     @Column(name = "Status", nullable = false, length = 45)
     private String status;
 
+    @Column(name = "Activatiecode", length = 100)
+    private String activatieCode;
+
 }
