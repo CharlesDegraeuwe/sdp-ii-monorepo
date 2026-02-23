@@ -88,7 +88,6 @@ public class SidebarController extends VBox {
         plants.setOnMouseClicked(e -> { this.app.navigateTo(new PlantsController(), this.app.getBody()); setActive(plants); });
         absense.setOnMouseClicked(e -> { this.app.navigateTo(new AbsenseController(), this.app.getBody()); setActive(absense); });
         teams.setOnMouseClicked(e -> { this.app.navigateTo(new TeamsController(), this.app.getBody()); setActive(teams); });
-        setActive(dashboard);
 
         if (admin != null) {
             admin.setOnMouseClicked(e -> {
