@@ -26,9 +26,9 @@ public class AppController extends BorderPane {
     @Getter private HeaderController header;
     @Getter private BodyController body;
     @Getter private StageHeaderController controls;
+    @Getter private MainFrameController mainframe;
     private Boolean sidebarSmall;
-    @Getter
-    private Stage stage;
+    @Getter private Stage stage;
 
     public AppController(Stage st, MainFrameController mf) {
         this.stage = st;
@@ -38,6 +38,7 @@ public class AppController extends BorderPane {
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 
         //sidebar config
+        mainframe = mf;
         sidebar = new SidebarController(this, st);
         header = new HeaderController(this);
         body = new BodyController(mf);

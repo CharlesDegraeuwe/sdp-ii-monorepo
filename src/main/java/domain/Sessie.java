@@ -11,7 +11,11 @@ public class Sessie {
         ingelogdeWerknemer = werknemer;
     }
 
+    public static void uitloggen() {
+        ingelogdeWerknemer = null;
+    }
     public static boolean isAdmin() {
         return ingelogdeWerknemer != null && ingelogdeWerknemer.getRol().equals("Admin");
     }
+
 }
