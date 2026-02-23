@@ -37,9 +37,9 @@
                 <HBox styleClass="profile_header" alignment="CENTER">
                     <children>
                         <Label text="username" styleClass="label"/>
-                        <Button styleClass="dropdown_button">
+                        <Button styleClass="dropdown_button" fx:id="dropdown_button">
                             <graphic>
-                                <FontIcon iconLiteral="mdoal-keyboard_arrow_down" iconSize="20" />
+                                <FontIcon iconLiteral="mdoal-keyboard_arrow_down" iconSize="20" fx:id="button_icon" />
                             </graphic>
                         </Button>
                     </children>

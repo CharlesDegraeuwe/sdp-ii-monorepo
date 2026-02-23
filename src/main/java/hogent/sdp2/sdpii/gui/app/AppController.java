@@ -27,8 +27,11 @@ public class AppController extends BorderPane {
     @Getter private BodyController body;
     @Getter private StageHeaderController controls;
     private Boolean sidebarSmall;
+    @Getter
+    private Stage stage;
 
     public AppController(Stage st, MainFrameController mf) {
+        this.stage = st;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/MainFrame.fxml"));
         loader.setRoot(this);
         loader.setController(this);
