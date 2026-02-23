@@ -1,0 +1,14 @@
+### Maak een nieuwe werknemer aan in de database
+POST http://localhost:8080/api/werknemers
+Content-Type: application/json
+
+{
+  "naam": "Peeters",
+  "voornaam": "Jan",
+  "email": "jan.peeters@email.com",
+  "wachtwoord": "Wachtwoord123",
+  "telefoonnummer": "042345689",
+  "geboortedatum": "2000-05-15",
+  "rol": "Admin",
+  "status": "Inactief"
+}
