@@ -38,7 +38,7 @@ public class AdminHomeMenuController extends VBox {
     private void Router() {
         rgstr_mngr.setOnMouseClicked(e -> { this.app.navigateTo(new CreateManagerController(this.app), this.app.getBody());  System.out.println("manager aanmaken geklikt");});
         rgstr_emp.setOnMouseClicked(e -> { this.app.navigateTo(new CreateEmployeeController(this.app), this.app.getBody());System.out.println("employee aanmaken geklikt");});
-        mng_usr.setOnMouseClicked(e -> { this.app.navigateTo(new ManageUsersController(this.app), this.app.getBody());System.out.println("users beheren geklikt");});
+        mng_usr.setOnMouseClicked(e -> { this.app.navigateTo(new ManageUsersController(), this.app.getBody());System.out.println("users beheren geklikt");});
 
     }
 }
