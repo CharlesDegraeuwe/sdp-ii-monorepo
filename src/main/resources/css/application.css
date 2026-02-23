@@ -282,7 +282,7 @@
 }
 
 .popup-item {
-    -fx-pref-width: 300; /* pas aan indien nodig */
+    -fx-pref-width: 160; /
 }
 
 .popup-item:hover {

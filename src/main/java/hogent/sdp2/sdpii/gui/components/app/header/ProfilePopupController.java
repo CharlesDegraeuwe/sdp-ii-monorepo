@@ -26,15 +26,13 @@ public class ProfilePopupController extends VBox {
         loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 
+        if(!Sessie.isAdmin()) {
+            admin_trigger.setVisible(false);
+            admin_trigger.setManaged(false);
+        }
         Router(app);
     }
 
-    //wsss iets van styleclass toevoegen fz
-    public void triggerPopup() {
-        if(isOpen) {
-
-        }
-    }
     private void Router(AppController app) {
         settings_trigger.setOnMouseClicked(e -> {
             SettingsController nc = new SettingsController();
