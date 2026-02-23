@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="VBox" styleClass="login-page" xmlns:fx="http://javafx.com/fxml">
+    <VBox styleClass="login-card">
+        <Label text="Log In" styleClass="login-title"/>
+        <TextField fx:id="txtEmail" promptText="email"/>
+        <PasswordField fx:id="txtWachtwoord" promptText="password"/>
+        <Button onAction="#register" maxWidth="Infinity" styleClass="login-btn" fx:id="loginBtn"/>
+    </VBox>
+</fx:root>
