@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ### Activeer het account
-POST http://localhost:8080/api/werknemers/activeer?code=f10068f9-d246-403e-9fe7-ca9e633706c4
+POST http://localhost:8080/api/werknemers/activeer?code=code_van_console
 
 ### Test het inloggen
 POST http://localhost:8080/api/werknemers/login
@@ -22,4 +22,31 @@ Content-Type: application/json
 {
   "email": "jan.peeters@email.com",
   "wachtwoord": "Wachtwoord123"
+}
+
+### Wijzig het wachtwoord
+PUT http://localhost:8080/api/werknemers/wachtwoord
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com",
+  "oudWachtwoord": "Wachtwoord123",
+  "nieuwWachtwoord": "NieuwWachtwoord123"
+}
+
+### Wachtwoord vergeten aanvragen
+POST http://localhost:8080/api/werknemers/wachtwoord-vergeten
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com"
+}
+
+### Het wachtwoord resetten
+POST http://localhost:8080/api/werknemers/wachtwoord-resetten
+Content-Type: application/json
+
+{
+  "resetCode": "9fdcb086-57e4-45d0-bc07-ff0ae2fe8cbe",
+  "nieuwWachtwoord": "GeresetWachtwoord123"
 }
