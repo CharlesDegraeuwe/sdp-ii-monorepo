@@ -1,5 +1,6 @@
 package hogent.sdp2.backend.controller;
 
+import hogent.sdp2.backend.dto.request.LoginRequestDTO;
 import hogent.sdp2.backend.dto.request.WerknemerAanmakenDTO;
 import hogent.sdp2.backend.service.WerknemerService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,11 @@ public class WerknemerController {
     @PostMapping("/activeer")
     public String activeerWerknemer(@RequestParam String code) {
         return werknemerService.activeerAccount(code);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequestDTO dto) {
+        return werknemerService.login(dto);
     }
 }
 

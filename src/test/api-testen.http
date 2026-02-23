@@ -14,3 +14,12 @@ Content-Type: application/json
 
 ### Activeer het account
 POST http://localhost:8080/api/werknemers/activeer?code=f10068f9-d246-403e-9fe7-ca9e633706c4
+
+### Test het inloggen
+POST http://localhost:8080/api/werknemers/login
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com",
+  "wachtwoord": "Wachtwoord123"
+}

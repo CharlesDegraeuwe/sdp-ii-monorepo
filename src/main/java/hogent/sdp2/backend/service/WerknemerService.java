@@ -2,6 +2,7 @@ package hogent.sdp2.backend.service;
 
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.WerknemerAanmakenDTO;
+import hogent.sdp2.backend.dto.request.LoginRequestDTO;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,24 @@ public class WerknemerService {
 
         werknemerRepository.save(werknemer);
         return "Account succesvol geactiveerd! Je kunt nu inloggen.";
+    }
+
+    public String login(LoginRequestDTO dto) {
+        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(dto.email());
+
+        if (werknemerOpt.isEmpty()) {
+            return "Fout: Ongeldige inloggegevens.";
+        }
+
+        Werknemer werknemer = werknemerOpt.get();
+
+        if (!werknemer.getWachtwoord().equals(dto.wachtwoord())) {
+            return "Fout: Ongeldige inloggegevens.";
+        }
+
+        if ("Inactief".equalsIgnoreCase(werknemer.getStatus())) {
+            return "Fout: Je account is nog niet geactiveerd. Controleer je activatiecode of e-mail.";
+        }
+        return "Succesvol ingelogd! Welkom terug, " + werknemer.getVoornaam() + ".";
     }
 }
