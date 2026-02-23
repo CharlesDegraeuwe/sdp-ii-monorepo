@@ -16,4 +16,10 @@ public class WerknemerController {
     public String createWerknemer(@RequestBody WerknemerAanmakenDTO dto) {
         return werknemerService.maakWerknemer(dto);
     }
+
+    @PostMapping("/activeer")
+    public String activeerWerknemer(@RequestParam String code) {
+        return werknemerService.activeerAccount(code);
+    }
 }
+

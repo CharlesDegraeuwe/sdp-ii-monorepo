@@ -9,6 +9,8 @@ Content-Type: application/json
   "wachtwoord": "Wachtwoord123",
   "telefoonnummer": "042345689",
   "geboortedatum": "2000-05-15",
-  "rol": "Admin",
-  "status": "Inactief"
+  "rol": "Admin"
 }
+
+### Activeer het account
+POST http://localhost:8080/api/werknemers/activeer?code=f10068f9-d246-403e-9fe7-ca9e633706c4
