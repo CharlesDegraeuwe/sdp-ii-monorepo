@@ -50,3 +50,40 @@ Content-Type: application/json
   "resetCode": "9fdcb086-57e4-45d0-bc07-ff0ae2fe8cbe",
   "nieuwWachtwoord": "GeresetWachtwoord123"
 }
+
+### Maak een nieuwe site aan
+POST http://localhost:8080/api/sites
+Content-Type: application/json
+
+{
+  "naam": "HOGENT Campus Schoonmeersen",
+  "stad": "Gent",
+  "land": "België",
+  "latitude": 51.03191,
+  "longitude": 3.70278
+}
+
+### Wijzig een bestaande site (vervang de '1' aan het eind door een geldig ID)
+PUT http://localhost:8080/api/sites/1
+Content-Type: application/json
+
+{
+  "naam": "HOGENT Campus Schoonmeersen (Geüpdatet)",
+  "stad": "Gent",
+  "land": "België",
+  "latitude": 51.03195,
+  "longitude": 3.70280
+}
+
+### Verwijder een site (vervang de '1' door het ID dat je wilt verwijderen)
+DELETE http://localhost:8080/api/sites/1
+
+### Maak een nieuwe machine aan op een bestaande site
+POST http://localhost:8080/api/machines
+Content-Type: application/json
+
+{
+  "naam": "Graafmachine CAT-320",
+  "status": "Actief",
+  "siteId": 2
+}
