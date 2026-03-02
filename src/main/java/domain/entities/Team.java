@@ -1,4 +1,4 @@
-package domain;
+package domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

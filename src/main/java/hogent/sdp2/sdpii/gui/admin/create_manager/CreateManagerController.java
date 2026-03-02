@@ -1,7 +1,6 @@
 package hogent.sdp2.sdpii.gui.admin.create_manager;
 
 import hogent.sdp2.sdpii.gui.app.AppController;
-import hogent.sdp2.sdpii.gui.components.admin.AdminHomeMenuController;
 import hogent.sdp2.sdpii.gui.components.admin.RegisterManagerForm;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;

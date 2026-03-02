@@ -1,19 +1,13 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
-import domain.Sessie;
-import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-import javax.swing.text.DateFormatter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class PageTitleController extends HBox {
     @FXML Label page_title_title;

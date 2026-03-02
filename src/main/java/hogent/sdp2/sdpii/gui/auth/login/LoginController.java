@@ -1,18 +1,9 @@
 package hogent.sdp2.sdpii.gui.auth.login;
 
-import domain.Sessie;
-import domain.Werknemer;
-import domain.WerknemerService;
 import hogent.sdp2.sdpii.gui.MainFrameController;
-import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.components.app.header.StageHeaderController;
 import hogent.sdp2.sdpii.gui.components.auth.LoginFormController;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import lombok.Getter;

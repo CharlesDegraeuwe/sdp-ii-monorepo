@@ -1,8 +1,9 @@
 package hogent.sdp2.sdpii.gui.app.settings;
-
+import javafx.fxml.FXMLLoader;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
+
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
@@ -18,6 +19,8 @@ public class SettingsController extends BorderPane {
             throw new RuntimeException(e);
         }
 
+
         setTop(new PageTitleController("Instellingen"));
+
     }
 }

@@ -1,11 +1,10 @@
 package hogent.sdp2.sdpii.gui.components.admin;
 
-import domain.Sessie;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.admin.create_employee.CreateEmployeeController;
 import hogent.sdp2.sdpii.gui.admin.create_manager.CreateManagerController;
 import hogent.sdp2.sdpii.gui.admin.manage_users.ManageUsersController;
 import hogent.sdp2.sdpii.gui.app.AppController;
-import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;

@@ -4,12 +4,14 @@ import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.components.admin.AdminHomeMenuController;
 import hogent.sdp2.sdpii.gui.components.admin.RegisterEmployeeForm;
 import hogent.sdp2.sdpii.gui.components.admin.RegisterManagerForm;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
 public class CreateEmployeeController extends BorderPane {
+
     private RegisterEmployeeForm form;
 
     public CreateEmployeeController(AppController app) {
@@ -21,6 +23,7 @@ public class CreateEmployeeController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
 
         form = new RegisterEmployeeForm();
         setCenter(form);

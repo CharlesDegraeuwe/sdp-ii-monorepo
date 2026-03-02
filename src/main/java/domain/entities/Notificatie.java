@@ -1,5 +1,6 @@
-package domain;
+package domain.entities;
 
+import domain.werknemer.Werknemer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "notificaties")
-public class Notificaty {
+public class Notificatie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Notificatie_ID", nullable = false)

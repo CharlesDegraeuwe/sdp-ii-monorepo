@@ -1,8 +1,8 @@
 package hogent.sdp2.sdpii.gui.components.auth;
 
-import domain.Sessie;
-import domain.Werknemer;
-import domain.WerknemerService;
+import domain.auth.Sessie;
+import domain.werknemer.Werknemer;
+import domain.werknemer.WerknemerService;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.concurrent.Task;
@@ -95,6 +95,8 @@ public class LoginFormController extends VBox {
 
         new Thread(task).start();
     }
+
+
 
     public void reset() {
         this.loginBtn.setText("Log in");

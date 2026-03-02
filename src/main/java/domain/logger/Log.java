@@ -1,10 +1,11 @@
-package domain;
+package domain.logger;
 
+import domain.werknemer.Werknemer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,9 +21,11 @@ public class Log {
     @JoinColumn(name = "Werknemer_ID", nullable = false)
     private Werknemer werknemer;
 
+    //is het create/update/delete
     @Column(name = "Type", nullable = false, length = 45)
     private String type;
 
+    //in welke tabel
     @Column(name = "Tabel", nullable = false, length = 45)
     private String tabel;
 
@@ -30,8 +33,9 @@ public class Log {
     private Integer recordId;
 
     @Column(name = "Timestamp", nullable = false)
-    private LocalDate timestamp;
+    private LocalDateTime timestamp;
 
+    //de details?
     @Column(name = "test", nullable = false, length = 45)
     private String test;
 

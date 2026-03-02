@@ -1,5 +1,6 @@
-package domain;
+package domain.entities;
 
+import domain.werknemer.Werknemer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

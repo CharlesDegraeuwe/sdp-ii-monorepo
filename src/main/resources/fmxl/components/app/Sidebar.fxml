@@ -86,6 +86,7 @@
             <children>
                 <Button styleClass="sidebar-button" mouseTransparent="true">
                     <graphic>
+
                         <FontIcon iconLiteral="mdoal-admin_panel_settings" iconSize="25" iconColor="white"/>
                     </graphic>
                 </Button>
