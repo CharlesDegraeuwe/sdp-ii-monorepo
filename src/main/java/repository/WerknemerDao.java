@@ -1,6 +1,6 @@
 package repository;
 
-import domain.Werknemer;
+import domain.werknemer.Werknemer;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;

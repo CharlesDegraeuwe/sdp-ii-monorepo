@@ -1,10 +1,10 @@
-package domain;
+package domain.logger;
 
+import domain.werknemer.Werknemer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter

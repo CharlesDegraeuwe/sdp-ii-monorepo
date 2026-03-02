@@ -1,8 +1,8 @@
 package hogent.sdp2.sdpii.gui.admin.manage_users;
-import domain.LogService;
-import domain.Sessie;
-import domain.Werknemer;
-import domain.WerknemerService;
+import domain.logger.LogService;
+import domain.auth.Sessie;
+import domain.werknemer.Werknemer;
+import domain.werknemer.WerknemerService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;

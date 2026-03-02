@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Afwezigheid.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Chathistorie.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Log.java
@@ -54,3 +55,60 @@ C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\repositor
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\repository\GenericDaoJpa.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\repository\WerknemerDao.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\repository\WerknemerDaoJpa.java
+=======
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Afwezigheid.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Chathistorie.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Log.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/LogRepository.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/LogService.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Machine.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Notificaty.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Sessie.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Shift.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Shifttaak.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/ShifttaakId.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Site.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Siteteam.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/SiteteamId.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Taken.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Team.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Teamkpi.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Teamwerknemer.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/TeamwerknemerId.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Verlof.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Werknemer.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/WerknemerRepository.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/WerknemerService.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/domain/Werknemerstatistieken.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/DatabaseTest.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/Launcher.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/ManagementApplication.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/MainFrameController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/admin/create_employee/CreateEmployeeController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/admin/create_manager/CreateManagerController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/admin/home/AdminHomeController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/admin/manage_users/ManageUsersController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/AppController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/absense/AbsenseController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/account/AccountController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/dashboard/DashboardController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/notifications/NotificationsController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/planning/PlanningController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/plants/PlantsController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/settings/SettingsController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/tasks/TasksController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/app/teams/TeamsController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/auth/login/LoginController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/admin/AdminHomeMenuController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/admin/RegisterEmployeeForm.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/admin/RegisterManagerForm.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/app/AccountFormController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/app/BodyController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/app/DropdownController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/app/SidebarController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/app/header/HeaderController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/app/header/ProfilePopupController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/app/header/StageHeaderController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/gui/components/auth/LoginFormController.java
+/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-java-g01/src/main/java/hogent/sdp2/sdpii/util/JPAUtil.java
+>>>>>>> dev

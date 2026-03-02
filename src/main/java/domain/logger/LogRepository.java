@@ -1,4 +1,4 @@
-package domain;
+package domain.logger;
 
 import hogent.sdp2.sdpii.util.JPAUtil;
 import jakarta.persistence.EntityManager;

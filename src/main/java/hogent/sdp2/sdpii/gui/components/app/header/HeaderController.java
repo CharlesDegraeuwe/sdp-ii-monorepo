@@ -1,8 +1,7 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 
-import domain.Sessie;
-import domain.Werknemer;
-import hogent.sdp2.sdpii.gui.MainFrameController;
+import domain.auth.Sessie;
+import domain.werknemer.Werknemer;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
@@ -11,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import org.kordamp.ikonli.javafx.FontIcon;
 

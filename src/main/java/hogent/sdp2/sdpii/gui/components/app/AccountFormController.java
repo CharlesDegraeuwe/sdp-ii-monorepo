@@ -1,15 +1,14 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
-import domain.Sessie;
-import domain.Werknemer;
-import domain.WerknemerService;
+import domain.auth.Sessie;
+import domain.werknemer.Werknemer;
+import domain.werknemer.WerknemerService;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 

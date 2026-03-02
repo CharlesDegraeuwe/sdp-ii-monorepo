@@ -1,6 +1,6 @@
 package repository;
 
-import domain.Werknemer;
+import domain.werknemer.Werknemer;
 import hogent.sdp2.sdpii.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 

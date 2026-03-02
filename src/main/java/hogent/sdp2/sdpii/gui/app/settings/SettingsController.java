@@ -1,11 +1,14 @@
 package hogent.sdp2.sdpii.gui.app.settings;
-
 import javafx.fxml.FXMLLoader;
+import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
+
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class SettingsController extends GridPane {
+public class SettingsController extends BorderPane {
     public SettingsController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/SettingsPage.fxml"));
         loader.setRoot(this);
@@ -15,5 +18,9 @@ public class SettingsController extends GridPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+        setTop(new PageTitleController("Instellingen"));
+
     }
 }

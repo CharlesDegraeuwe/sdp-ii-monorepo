@@ -1,4 +1,4 @@
-package domain;
+package domain.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,24 +9,21 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "afwezigheid")
-public class Afwezigheid {
+@Table(name = "shift")
+public class Shift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Afwezigheid_ID", nullable = false)
+    @Column(name = "Shift_ID", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Werknemer_ID", nullable = false)
-    private Werknemer werknemer;
+    @JoinColumn(name = "Team_ID", nullable = false)
+    private Team team;
 
     @Column(name = "Start_datum", nullable = false)
     private LocalDate startDatum;
 
     @Column(name = "Eind_datum", nullable = false)
     private LocalDate eindDatum;
-
-    @Column(name = "Reden", nullable = false, length = 90)
-    private String reden;
 
 }

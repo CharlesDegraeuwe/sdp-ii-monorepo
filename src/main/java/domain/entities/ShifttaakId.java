@@ -1,4 +1,4 @@
-package domain;
+package domain.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

@@ -1,11 +1,8 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 
-import domain.Sessie;
-import hogent.sdp2.sdpii.gui.MainFrameController;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.AppController;
-import hogent.sdp2.sdpii.gui.app.account.AccountController;
-import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
 import hogent.sdp2.sdpii.gui.app.settings.SettingsController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,10 +23,12 @@ public class ProfilePopupController extends VBox {
         loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 
-        if(!Sessie.isAdmin()) {
+
+        if(!Sessie.userRole().equals("Manager") && !Sessie.isAdmin()) {
             admin_trigger.setVisible(false);
             admin_trigger.setManaged(false);
         }
+
         Router(app);
     }
 

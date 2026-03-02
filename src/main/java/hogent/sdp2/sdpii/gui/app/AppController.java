@@ -1,6 +1,6 @@
 package hogent.sdp2.sdpii.gui.app;
 
-import domain.Sessie;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;

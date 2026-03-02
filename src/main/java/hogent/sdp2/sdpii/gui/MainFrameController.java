@@ -1,6 +1,6 @@
 package hogent.sdp2.sdpii.gui;
 
-import domain.Sessie;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.auth.login.LoginController;
 import javafx.fxml.FXML;

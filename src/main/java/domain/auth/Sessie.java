@@ -1,4 +1,6 @@
-package domain;
+package domain.auth;
+
+import domain.werknemer.Werknemer;
 
 public class Sessie {
     private static Werknemer ingelogdeWerknemer;

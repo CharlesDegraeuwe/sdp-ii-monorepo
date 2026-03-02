@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 domain\Sessie.class
 repository\GenericDaoJpa.class
 hogent\sdp2\sdpii\gui\components\app\AccountFormController.class
@@ -6,3 +7,9 @@ repository\WerknemerDao.class
 repository\GenericDao.class
 repository\WerknemerDaoJpa.class
 hogent\sdp2\sdpii\gui\components\auth\LoginFormController$1.class
+=======
+domain/Afwezigheid.class
+domain/Werknemer.class
+domain/Log.class
+domain/Chathistorie.class
+>>>>>>> dev

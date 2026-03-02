@@ -1,6 +1,6 @@
-package domain;
+package domain.werknemer;
 
-import repository.GenericDao;
+import domain.logger.LogService;
 import repository.WerknemerDao;
 import repository.WerknemerDaoJpa;
 
