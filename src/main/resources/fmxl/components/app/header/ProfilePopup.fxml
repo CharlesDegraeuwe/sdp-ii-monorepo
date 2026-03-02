@@ -11,15 +11,15 @@
     <children>
         <HBox styleClass="popup-item" fx:id="settings_trigger">
             <FontIcon mouseTransparent="true" iconLiteral="ion4-ios-settings" iconSize="16"/>
-            <Label mouseTransparent="true" text="Settings"/>
+            <Label mouseTransparent="true" text="Instellingen"/>
         </HBox>
         <HBox styleClass="popup-item" fx:id="admin_trigger">
             <FontIcon mouseTransparent="true" iconLiteral="mdoal-admin_panel_settings" iconSize="16"/>
-            <Label mouseTransparent="true" text="Admin"/>
+            <Label mouseTransparent="true" text="Admin paneel"/>
         </HBox>
         <HBox styleClass="popup-item" fx:id="logout_trigger">
             <FontIcon mouseTransparent="true" iconLiteral="ion4-ios-exit" iconSize="16"/>
-            <Label mouseTransparent="true" text="Log out"/>
+            <Label mouseTransparent="true" text="Log uit"/>
         </HBox>
     </children>
 </fx:root>

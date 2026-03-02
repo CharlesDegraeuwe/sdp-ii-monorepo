@@ -1,6 +1,4 @@
-domain\WerknemerRepository.class
-domain\Sessie.class
-hogent\sdp2\sdpii\gui\components\app\AccountFormController.class
-domain\WerknemerService.class
-hogent\sdp2\sdpii\gui\components\auth\LoginFormController$2.class
-hogent\sdp2\sdpii\gui\components\auth\LoginFormController$1.class
+domain/Afwezigheid.class
+domain/Werknemer.class
+domain/Log.class
+domain/Chathistorie.class
