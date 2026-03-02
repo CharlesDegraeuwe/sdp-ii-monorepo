@@ -1,10 +1,15 @@
 package domain;
 
+import repository.GenericDao;
+import repository.WerknemerDao;
+import repository.WerknemerDaoJpa;
+
 import java.util.List;
 
 public class WerknemerService {
 
-    private final WerknemerRepository repo = new WerknemerRepository();
+    private WerknemerDao repo = new WerknemerDaoJpa();
+    private final LogService logService = new LogService();
 
     public List<Werknemer> geefAlleWerknemers() {
         return repo.geefAlleWerknemers();
@@ -12,10 +17,27 @@ public class WerknemerService {
 
     public void activeerWerknemer(int werknemerId) {
         repo.updateStatus(werknemerId, "Actief");
+        Werknemer werknemer = zoekOpId(werknemerId);
+        logService.logActie(
+                werknemer,
+                "CREATE",
+                "Werknemer",
+                werknemerId,
+                "Werknemer is geactiveerd"
+        );
     }
 
     public void deactiveerWerknemer(int werknemerId) {
         repo.updateStatus(werknemerId, "Inactief");
+        Werknemer werknemer = zoekOpId(werknemerId);
+        logService.logActie(
+                werknemer,
+                "DELETE",
+                "Werknemer",
+                werknemerId,
+                "Werknemer is gedeactiveerd"
+        );
+
     }
 
     public Werknemer zoekOpEmailEnWachtwoord(String email, String wachtwoord) {
@@ -28,5 +50,12 @@ public class WerknemerService {
 
     public void update(Werknemer werknemer) {
         repo.update(werknemer);
+        logService.logActie(
+                werknemer,
+                "UPDATE",
+                "Werknemer",
+                werknemer.getId(),
+                "Werknemer is geupdate"
+        );
     }
 }

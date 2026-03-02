@@ -1,11 +1,18 @@
-package domain;
+package repository;
 
+import domain.Werknemer;
 import hogent.sdp2.sdpii.util.JPAUtil;
 import jakarta.persistence.EntityManager;
+
 import java.util.List;
 
-public class WerknemerRepository {
+public class WerknemerDaoJpa extends GenericDaoJpa<Werknemer> implements WerknemerDao{
 
+    public WerknemerDaoJpa(){
+        super(Werknemer.class);
+    }
+
+    @Override
     public List<Werknemer> geefAlleWerknemers() {
         EntityManager em = JPAUtil.getENTITY_MANAGER_FACTORY().createEntityManager();
         try {
@@ -17,6 +24,7 @@ public class WerknemerRepository {
         }
     }
 
+    @Override
     public void updateStatus(int werknemerId, String nieuweStatus) {
         EntityManager em = JPAUtil.getENTITY_MANAGER_FACTORY().createEntityManager();
         try {
@@ -34,6 +42,7 @@ public class WerknemerRepository {
         }
     }
 
+    @Override
     public Werknemer zoekOpEmailEnWachtwoord(String email, String wachtwoord) {
         EntityManager em = JPAUtil.getENTITY_MANAGER_FACTORY().createEntityManager();
         try {
@@ -50,6 +59,7 @@ public class WerknemerRepository {
         }
     }
 
+    @Override
     public Werknemer zoekOpId(int id) {
         EntityManager em = JPAUtil.getENTITY_MANAGER_FACTORY().createEntityManager();
         try {
@@ -59,7 +69,8 @@ public class WerknemerRepository {
         }
     }
 
-    public void update(Werknemer werknemer) {
+    @Override
+    public Werknemer update(Werknemer werknemer) {
         EntityManager em = JPAUtil.getENTITY_MANAGER_FACTORY().createEntityManager();
         try {
             em.getTransaction().begin();
@@ -71,5 +82,6 @@ public class WerknemerRepository {
         } finally {
             em.close();
         }
+        return werknemer;
     }
 }

@@ -1,19 +1,41 @@
 package domain;
 
-import java.time.LocalDate;
+import hogent.sdp2.sdpii.util.JPAUtil;
+import jakarta.persistence.EntityManager;
+
+import java.time.LocalDateTime;
 
 public class LogService {
 
-    private final LogRepository repo = new LogRepository();
+    public void logActie(Werknemer werknemer,
+                         String type,
+                         String tabel,
+                         Integer recordId,
+                         String details) {
 
-    public void logActie(Werknemer werknemer, String type, String tabel, Integer recordId) {
-        Log log = new Log();
-        log.setWerknemer(werknemer);
-        log.setType(type);
-        log.setTabel(tabel);
-        log.setRecordId(recordId != null ? recordId : 0);
-        log.setTimestamp(LocalDate.now());
-        log.setTest("");
-        repo.slaLogOp(log);
+        EntityManager em = JPAUtil.getENTITY_MANAGER_FACTORY().createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            Log log = new Log();
+            log.setWerknemer(werknemer);
+            log.setType(type);
+            log.setTabel(tabel);
+            log.setRecordId(recordId);
+            log.setTimestamp(LocalDateTime.now());
+            log.setTest(details);
+
+            em.persist(log);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
     }
 }

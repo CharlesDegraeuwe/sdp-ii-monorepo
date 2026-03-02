@@ -1,6 +1,8 @@
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Afwezigheid.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Chathistorie.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Log.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\LogRepository.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\LogService.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Machine.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Notificaty.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Sessie.java
@@ -17,14 +19,15 @@ C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Te
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\TeamwerknemerId.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Verlof.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Werknemer.java
-C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\WerknemerRepository.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\WerknemerService.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\domain\Werknemerstatistieken.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\DatabaseTest.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\admin\create_employee\CreateEmployeeController.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\admin\create_manager\CreateManagerController.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\admin\home\AdminHomeController.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\admin\manage_users\ManageUsersController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\absense\AbsenseController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\account\AccountController.java
-C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\admin\AdminHomeController.java
-C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\admin\CreateUserController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\AppController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\dashboard\DashboardController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\notifications\NotificationsController.java
@@ -34,6 +37,7 @@ C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sd
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\tasks\TasksController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\app\teams\TeamsController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\auth\login\LoginController.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\components\admin\AdminHomeMenuController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\components\app\AccountFormController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\components\app\BodyController.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\gui\components\app\DropdownController.java
@@ -46,3 +50,7 @@ C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sd
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\Launcher.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\ManagementApplication.java
 C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\hogent\sdp2\sdpii\util\JPAUtil.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\repository\GenericDao.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\repository\GenericDaoJpa.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\repository\WerknemerDao.java
+C:\Users\joeri\Documents\WorkspaceIntelliJ\2026-java-g01\src\main\java\repository\WerknemerDaoJpa.java

@@ -76,8 +76,6 @@ public class ManageUsersController extends VBox {
         laadWerknemers();
         zoekField.textProperty().addListener((obs, oud, nieuw) -> filterWerknemers(nieuw));
 
-        // Log het raadplegen van de gebruikerslijst
-        logService.logActie(Sessie.getIngelogdeWerknemer(), "RAADPLEGEN", "werknemers", null);
     }
 
     private void laadWerknemers() {
