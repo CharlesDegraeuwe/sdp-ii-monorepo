@@ -14,11 +14,11 @@
 }
 
 .sidebar {
-    -fx-background-color: #F1F1F1;
+    -fx-background-color: #E31B35;
     -fx-background-radius: 0 23 23 0;
     -fx-padding: 12 0 0 0;
     -fx-border-width: 1;
-    -fx-border-color: #FFFFFF;
+    -fx-border-color: #E31B35;
     -fx-border-radius: 0 23 23 0;
 }
 
@@ -32,11 +32,14 @@
 .sidebar-item {
     -fx-padding: 0;
     -fx-cursor: hand;
-    -fx-opacity: 0.5;
+    -fx-opacity: 0.75;
 }
 
 .active {
     -fx-opacity: 1;
+}
+.sidebar_label {
+    -fx-text-fill: white;
 }
 
 
