@@ -1,11 +1,13 @@
 package hogent.sdp2.sdpii.gui.app.notifications;
 
+import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class NotificationsController extends GridPane {
+public class NotificationsController extends BorderPane {
     public NotificationsController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/NotificationsPage.fxml"));
         loader.setRoot(this);
@@ -15,6 +17,7 @@ public class NotificationsController extends GridPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        setTop(new PageTitleController("Notificaties"));
     }
 }
 

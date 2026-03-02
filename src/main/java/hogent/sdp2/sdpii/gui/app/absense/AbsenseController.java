@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.absense;
 
+import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -16,5 +17,6 @@ public class AbsenseController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        setTop(new PageTitleController("Afwezigheden"));
     }
 }

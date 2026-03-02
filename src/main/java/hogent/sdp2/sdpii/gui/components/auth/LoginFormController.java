@@ -60,7 +60,7 @@ public class LoginFormController extends VBox {
     }
 
     private void login() {
-        this.loginBtn.setText("loading...");
+        this.loginBtn.setText("laden...");
         this.loginBtn.setDisable(true);
 
         Task<Werknemer> task = new Task<>() {

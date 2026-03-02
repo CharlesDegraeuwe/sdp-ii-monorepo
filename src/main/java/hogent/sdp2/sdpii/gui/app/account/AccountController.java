@@ -4,6 +4,7 @@ import domain.Werknemer;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.components.app.AccountFormController;
+import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import hogent.sdp2.sdpii.gui.components.app.header.StageHeaderController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -29,6 +30,7 @@ public class AccountController extends BorderPane {
             throw new RuntimeException(e);
         }
         AccountFormController form = new AccountFormController(app);
+        setTop(new PageTitleController("Account"));
         setCenter(form);
     }
 }

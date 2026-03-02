@@ -23,7 +23,7 @@
                         <Image url="/icons/dashboard.png"/>
                     </image>
                 </ImageView>
-                <Label text="Dashboard" styleClass="sidebar_label"/>
+                <Label text="Overzicht" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
@@ -45,7 +45,7 @@
                         <FontIcon iconLiteral="mdral-check" iconSize="25" iconColor="white"/>
                     </graphic>
                 </Button>
-                <Label text="Tasks" styleClass="sidebar_label"/>
+                <Label text="Taken" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
@@ -56,7 +56,7 @@
                         <FontIcon iconLiteral="mdomz-map" iconSize="25" iconColor="white"/>
                     </graphic>
                 </Button>
-                <Label text="Plants" styleClass="sidebar_label"/>
+                <Label text="Locaties" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
@@ -67,7 +67,7 @@
                         <FontIcon iconLiteral="mdoal-cancel" iconSize="25" iconColor="white"/>
                     </graphic>
                 </Button>
-                <Label text="Absense" styleClass="sidebar_label"/>
+                <Label text="Afwezigheid" styleClass="sidebar_label"/>
             </children>
         </VBox>
 
