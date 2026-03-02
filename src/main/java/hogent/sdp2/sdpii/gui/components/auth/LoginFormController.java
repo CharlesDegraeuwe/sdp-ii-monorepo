@@ -1,8 +1,8 @@
 package hogent.sdp2.sdpii.gui.components.auth;
 
-import domain.auth.Sessie;
-import domain.werknemer.Werknemer;
-import domain.werknemer.WerknemerService;
+import domain.oud.auth.Sessie;
+import domain.facades.entities.Werknemer;
+import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.concurrent.Task;
@@ -25,7 +25,7 @@ public class LoginFormController extends VBox {
 
     private MainFrameController mf;
     private Stage stage;
-    private final WerknemerService service = new WerknemerService();
+    private final WerknemersFacade service = new WerknemersFacade();
 
     public LoginFormController(MainFrameController mf, Stage stage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/auth/LoginForm.fxml"));

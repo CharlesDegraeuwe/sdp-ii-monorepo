@@ -1,8 +1,8 @@
 package hogent.sdp2.sdpii.gui.admin.manage_users;
-import domain.logger.LogService;
-import domain.auth.Sessie;
-import domain.werknemer.Werknemer;
-import domain.werknemer.WerknemerService;
+import domain.oud.logger.LogService;
+import domain.oud.auth.Sessie;
+import domain.facades.entities.Werknemer;
+import domain.facades.WerknemersFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -25,7 +25,7 @@ public class ManageUsersController extends VBox {
     @FXML private TextField zoekField;
     @FXML private Label foutLabel;
 
-    private final WerknemerService service = new WerknemerService();
+    private final WerknemersFacade service = new WerknemersFacade();
     private final LogService logService = new LogService();
     private List<Werknemer> alleWerknemers;
 

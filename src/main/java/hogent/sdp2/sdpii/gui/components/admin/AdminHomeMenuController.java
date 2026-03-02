@@ -1,6 +1,6 @@
 package hogent.sdp2.sdpii.gui.components.admin;
 
-import domain.auth.Sessie;
+import domain.oud.auth.Sessie;
 import hogent.sdp2.sdpii.gui.admin.create_employee.CreateEmployeeController;
 import hogent.sdp2.sdpii.gui.admin.create_manager.CreateManagerController;
 import hogent.sdp2.sdpii.gui.admin.manage_users.ManageUsersController;

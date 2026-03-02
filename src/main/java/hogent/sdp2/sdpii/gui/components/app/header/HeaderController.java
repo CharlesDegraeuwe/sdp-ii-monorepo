@@ -1,7 +1,7 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 
-import domain.auth.Sessie;
-import domain.werknemer.Werknemer;
+import domain.oud.auth.Sessie;
+import domain.facades.entities.Werknemer;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
