@@ -1,8 +1,8 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
-import domain.auth.Sessie;
-import domain.werknemer.Werknemer;
-import domain.werknemer.WerknemerService;
+import domain.oud.auth.Sessie;
+import domain.facades.entities.Werknemer;
+import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ public class AccountFormController extends VBox {
     @FXML private TextField telefoonnummerField;
     @FXML private TextField geboortedatumField;
     private AppController app;
-    private final WerknemerService service;
+    private final WerknemersFacade service;
 
     private Werknemer huidigeWerknemer;
 
@@ -36,7 +36,7 @@ public class AccountFormController extends VBox {
         loader.setController(this);
 
         this.app = app;
-        this.service = new WerknemerService();
+        this.service = new WerknemersFacade();
 
         try {
             loader.load();

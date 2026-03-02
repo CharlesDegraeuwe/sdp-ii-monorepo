@@ -1,6 +1,6 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
-import domain.auth.Sessie;
+import domain.oud.auth.Sessie;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.absense.AbsenseController;
 import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
