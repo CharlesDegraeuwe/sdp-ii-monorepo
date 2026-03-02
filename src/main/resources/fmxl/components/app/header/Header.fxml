@@ -34,12 +34,12 @@
                     </graphic>
                 </Button>
 
-                <HBox styleClass="profile_header" alignment="CENTER">
+                <HBox styleClass="profile_header" alignment="CENTER" fx:id="trigger_button">
                     <children>
-                        <Label text="username" styleClass="label"/>
-                        <Button styleClass="dropdown_button">
+                        <Label mouseTransparent="true" styleClass="label" fx:id="lblUsername"/>
+                        <Button mouseTransparent="true" styleClass="dropdown_button" fx:id="dropdown_button">
                             <graphic>
-                                <FontIcon iconLiteral="mdoal-keyboard_arrow_down" iconSize="20" />
+                                <FontIcon mouseTransparent="true" iconLiteral="mdoal-keyboard_arrow_down" iconSize="20" fx:id="button_icon" />
                             </graphic>
                         </Button>
                     </children>

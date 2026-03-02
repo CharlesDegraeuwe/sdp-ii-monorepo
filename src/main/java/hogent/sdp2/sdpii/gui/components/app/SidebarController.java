@@ -1,7 +1,9 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.absense.AbsenseController;
+import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.app.planning.PlanningController;
 import hogent.sdp2.sdpii.gui.app.plants.PlantsController;
@@ -21,6 +23,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 public class SidebarController extends VBox {
     //variables
@@ -39,6 +43,8 @@ public class SidebarController extends VBox {
     @FXML private VBox absense;
     @FXML private VBox teams;
 
+    @FXML private VBox admin;
+
     //construtor
     public SidebarController(AppController app, Stage stage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/Sidebar.fxml"));
@@ -46,6 +52,14 @@ public class SidebarController extends VBox {
         loader.setController(this);
         try {
             loader.load();
+            System.out.println(Sessie.userRole());
+            switch(Sessie.userRole()) {
+                case "Admin" -> showAdminOnly();
+                case "Supervisor" -> showSupervisorOnly();
+                case "Werknemer" -> showEmployeeOnly();
+                case "Manager" -> showManagerOnly();
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,7 +80,6 @@ public class SidebarController extends VBox {
         item.getStyleClass().add("active");
         activeItem = item;
     }
-
     private void Router() {
         burger.setOnMouseClicked(e -> {this.app.resize();});
         dashboard.setOnMouseClicked(e -> { this.app.navigateTo(new DashboardController(), this.app.getBody()); setActive(dashboard); });
@@ -75,9 +88,47 @@ public class SidebarController extends VBox {
         plants.setOnMouseClicked(e -> { this.app.navigateTo(new PlantsController(), this.app.getBody()); setActive(plants); });
         absense.setOnMouseClicked(e -> { this.app.navigateTo(new AbsenseController(), this.app.getBody()); setActive(absense); });
         teams.setOnMouseClicked(e -> { this.app.navigateTo(new TeamsController(), this.app.getBody()); setActive(teams); });
+
+        if (admin != null) {
+            admin.setOnMouseClicked(e -> {
+                if (Sessie.isAdmin()) {
+                    this.app.navigateTo(new AdminHomeController(this.app), this.app.getBody());
+                }
+                setActive(admin);
+            });
+        }
+    }
+
+    //views
+    private void configureVisibility(Set<VBox> visible) {
+        List<VBox> all = List.of(dashboard, planning, tasks, plants, absense, teams, admin);
+        all.forEach(v -> {
+            if (v == null) return;
+            boolean show = visible.contains(v);
+            v.setVisible(show);
+            v.setManaged(show);
+        });
+    }
+
+    private void showAdminOnly() {
+        configureVisibility(Set.of(admin));
+        setActive(admin);
+    }
+
+    private void showEmployeeOnly() {
+        configureVisibility(Set.of(dashboard, planning, tasks, absense));
         setActive(dashboard);
     }
 
+    private void showSupervisorOnly() {
+        configureVisibility(Set.of(dashboard, planning, tasks, teams, absense));
+        setActive(dashboard);
+    }
+
+    private void showManagerOnly() {
+        configureVisibility(Set.of(dashboard, planning, tasks, plants, teams, absense));
+        setActive(dashboard);
+    }
 
     //is transition animatietje
     // we kunnen nog zien of we t gebruiken

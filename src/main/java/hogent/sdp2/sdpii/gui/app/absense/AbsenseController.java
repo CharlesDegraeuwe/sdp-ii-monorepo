@@ -1,11 +1,13 @@
 package hogent.sdp2.sdpii.gui.app.absense;
 
+import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class AbsenseController extends GridPane {
+public class AbsenseController extends BorderPane {
     public AbsenseController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/AbsensePage.fxml"));
         loader.setRoot(this);
@@ -15,5 +17,6 @@ public class AbsenseController extends GridPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        setTop(new PageTitleController("Afwezigheden"));
     }
 }

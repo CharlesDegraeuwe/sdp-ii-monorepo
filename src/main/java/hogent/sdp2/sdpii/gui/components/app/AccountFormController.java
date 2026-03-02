@@ -1,15 +1,14 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
-import domain.Sessie;
-import domain.Werknemer;
-import domain.WerknemerService;
+import domain.auth.Sessie;
+import domain.werknemer.Werknemer;
+import domain.werknemer.WerknemerService;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -22,7 +21,6 @@ public class AccountFormController extends VBox {
     @FXML private TextField telefoonnummerField;
     @FXML private TextField geboortedatumField;
     private AppController app;
-    private Stage stage;
     private final WerknemerService service;
 
     private Werknemer huidigeWerknemer;
@@ -32,13 +30,12 @@ public class AccountFormController extends VBox {
 
     private boolean editing = false;
 
-    public AccountFormController(AppController app, Stage stage) {
+    public AccountFormController(AppController app) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/AccountForm.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
         this.app = app;
-        this.stage = stage;
         this.service = new WerknemerService();
 
         try {
