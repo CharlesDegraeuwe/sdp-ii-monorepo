@@ -63,7 +63,7 @@ Content-Type: application/json
   "longitude": 3.70278
 }
 
-### Wijzig een bestaande site (vervang de '1' aan het eind door een geldig ID)
+### Wijzig een bestaande site
 PUT http://localhost:8080/api/sites/1
 Content-Type: application/json
 
@@ -75,7 +75,7 @@ Content-Type: application/json
   "longitude": 3.70280
 }
 
-### Verwijder een site (vervang de '1' door het ID dat je wilt verwijderen)
+### Verwijder een site
 DELETE http://localhost:8080/api/sites/1
 
 ### Maak een nieuwe machine aan op een bestaande site
@@ -87,3 +87,19 @@ Content-Type: application/json
   "status": "Actief",
   "siteId": 2
 }
+
+### Wijzig een bestaande machine
+PUT http://localhost:8080/api/machines/1
+Content-Type: application/json
+
+{
+  "naam": "Graafmachine CAT-320",
+  "status": "Onderhoud",
+  "siteId": 2
+}
+
+### Verwijder een machine
+DELETE http://localhost:8080/api/machines/1
+
+### Haal de status van een specifieke machine op
+GET http://localhost:8080/api/machines/1/status
