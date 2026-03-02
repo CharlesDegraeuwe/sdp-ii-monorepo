@@ -1,15 +1,13 @@
 package hogent.sdp2.backend.service;
 
 import hogent.sdp2.backend.domain.Werknemer;
-import hogent.sdp2.backend.dto.request.WachtwoordResetDTO;
-import hogent.sdp2.backend.dto.request.WachtwoordVergetenDTO;
-import hogent.sdp2.backend.dto.request.WerknemerAanmakenDTO;
-import hogent.sdp2.backend.dto.request.LoginRequestDTO;
-import hogent.sdp2.backend.dto.request.WachtwoordWijzigenDTO;
+import hogent.sdp2.backend.dto.request.*;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,23 +55,29 @@ public class WerknemerService {
         return "Account succesvol geactiveerd! Je kunt nu inloggen.";
     }
 
-    public String login(LoginRequestDTO dto) {
+    public WerknemerResponseDTO login(LoginRequestDTO dto) {
         Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(dto.email());
 
-        if (werknemerOpt.isEmpty()) {
-            return "Fout: Ongeldige inloggegevens.";
-        }
+        if (werknemerOpt.isEmpty()) throw new RuntimeException("Ongeldige inloggegevens");
 
         Werknemer werknemer = werknemerOpt.get();
 
-        if (!werknemer.getWachtwoord().equals(dto.wachtwoord())) {
-            return "Fout: Ongeldige inloggegevens.";
-        }
+        if (!werknemer.getWachtwoord().equals(dto.wachtwoord()))
+            throw new RuntimeException("Ongeldige inloggegevens");
 
-        if ("Inactief".equalsIgnoreCase(werknemer.getStatus())) {
-            return "Fout: Je account is nog niet geactiveerd. Controleer je activatiecode of e-mail.";
-        }
-        return "Succesvol ingelogd! Welkom terug, " + werknemer.getVoornaam() + ".";
+        if ("Inactief".equalsIgnoreCase(werknemer.getStatus()))
+            throw new RuntimeException("Account nog niet geactiveerd");
+
+        return new WerknemerResponseDTO(
+                werknemer.getId(),
+                werknemer.getNaam(),
+                werknemer.getVoornaam(),
+                werknemer.getEmail(),
+                werknemer.getTelefoonnummer(),
+                werknemer.getGeboortedatum(),
+                werknemer.getRol(),
+                werknemer.getStatus()
+        );
     }
 
     public String wijzigWachtwoord(WachtwoordWijzigenDTO dto) {
@@ -121,5 +125,20 @@ public class WerknemerService {
         werknemer.setActivatieCode(null);
         werknemerRepository.save(werknemer);
         return "Je wachtwoord is succesvol gereset! Je kunt nu inloggen.";
+    }
+
+    public List<WerknemerResponseDTO> getAlleUsers() {
+        return werknemerRepository.findAll().stream()
+                .map(w -> new WerknemerResponseDTO(
+                        w.getId(),
+                        w.getNaam(),
+                        w.getVoornaam(),
+                        w.getEmail(),
+                        w.getTelefoonnummer(),
+                        w.getGeboortedatum(),
+                        w.getRol(),
+                        w.getStatus()
+                ))
+                .toList();
     }
 }

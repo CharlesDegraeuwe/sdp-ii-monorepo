@@ -5,6 +5,9 @@ import hogent.sdp2.backend.service.WerknemerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/werknemers")
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class WerknemerController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequestDTO dto) {
+    public WerknemerResponseDTO login(@RequestBody LoginRequestDTO dto) {
         return werknemerService.login(dto);
     }
 
@@ -40,6 +43,12 @@ public class WerknemerController {
     @PostMapping("/wachtwoord-resetten")
     public String resetWachtwoord(@RequestBody WachtwoordResetDTO dto) {
         return werknemerService.resetWachtwoord(dto);
+    }
+
+
+    @GetMapping("/users")
+    public List<WerknemerResponseDTO> getAlleUsers() {
+        return werknemerService.getAlleUsers();
     }
 }
 
