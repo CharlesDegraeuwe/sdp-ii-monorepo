@@ -1,7 +1,7 @@
 package hogent.sdp2.sdpii.gui.components.auth;
 
-import domain.oud.auth.Sessie;
-import domain.facades.entities.Werknemer;
+import domain.auth.Sessie;
+import repository.entities.Werknemer;
 import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
@@ -82,7 +82,7 @@ public class LoginFormController extends VBox {
                 loginBtn.setDisable(false);
                 return;
             }
-            Sessie.setIngelogdeWerknemer(werknemer);
+            Sessie.getInstance().setIngelogdeWerknemer(werknemer);
             navigeerNaarActivatie();
         });
 

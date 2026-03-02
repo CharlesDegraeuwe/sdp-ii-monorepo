@@ -1,6 +1,6 @@
 package hogent.sdp2.sdpii.gui.app;
 
-import domain.oud.auth.Sessie;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
@@ -54,7 +54,7 @@ public class AppController extends BorderPane {
         setCenter(body);
         body.setTop(header);
         //custom window functionality
-        if (Sessie.isAdmin()){
+        if (Sessie.getInstance().isAdmin()){
             navigateTo(new AdminHomeController(this), body);
         }else {
             navigateTo(new DashboardController(), body);

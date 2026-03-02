@@ -1,16 +1,15 @@
 package domain.facades;
 
-import domain.facades.entities.Werknemer;
-import domain.oud.logger.LogService;
-import repository.WerknemerDao;
-import repository.WerknemerDaoJpa;
+import repository.entities.Werknemer;
+import repository.martes_foutje.WerknemerDao;
+import repository.martes_foutje.WerknemerDaoJpa;
 
 import java.util.List;
 
 public class WerknemersFacade {
 
     private WerknemerDao repo = new WerknemerDaoJpa();
-    private final LogService logService = new LogService();
+    private final LogFacade logFacade = new LogFacade();
 
     public List<Werknemer> geefAlleWerknemers() {
         return repo.geefAlleWerknemers();
@@ -19,7 +18,7 @@ public class WerknemersFacade {
     public void activeerWerknemer(int werknemerId) {
         repo.updateStatus(werknemerId, "Actief");
         Werknemer werknemer = zoekOpId(werknemerId);
-        logService.logActie(
+        logFacade.logActie(
                 werknemer,
                 "CREATE",
                 "Werknemer",
@@ -31,7 +30,7 @@ public class WerknemersFacade {
     public void deactiveerWerknemer(int werknemerId) {
         repo.updateStatus(werknemerId, "Inactief");
         Werknemer werknemer = zoekOpId(werknemerId);
-        logService.logActie(
+        logFacade.logActie(
                 werknemer,
                 "DELETE",
                 "Werknemer",
@@ -51,7 +50,7 @@ public class WerknemersFacade {
 
     public void update(Werknemer werknemer) {
         repo.update(werknemer);
-        logService.logActie(
+        logFacade.logActie(
                 werknemer,
                 "UPDATE",
                 "Werknemer",

@@ -1,6 +1,6 @@
 package hogent.sdp2.sdpii.gui.components.admin;
 
-import domain.oud.auth.Sessie;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.admin.create_employee.CreateEmployeeController;
 import hogent.sdp2.sdpii.gui.admin.create_manager.CreateManagerController;
 import hogent.sdp2.sdpii.gui.admin.manage_users.ManageUsersController;
@@ -30,7 +30,7 @@ public class AdminHomeMenuController extends VBox {
             throw new RuntimeException(e);
         }
         this.app = app;
-        welcome_msg.setText("Welcome, " + Sessie.getIngelogdeWerknemer().getNaam());
+        welcome_msg.setText("Welcome, " + Sessie.getInstance().getIngelogdeWerknemer().getNaam());
         this.Router();
     }
 

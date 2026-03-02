@@ -1,13 +1,13 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
-import domain.oud.auth.Sessie;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.app.AppController;
-import hogent.sdp2.sdpii.gui.app.absense.AbsenseController;
+import hogent.sdp2.sdpii.gui.app.afwezigheid.AfwezigheidsController;
 import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.app.planning.PlanningController;
-import hogent.sdp2.sdpii.gui.app.plants.PlantsController;
-import hogent.sdp2.sdpii.gui.app.tasks.TasksController;
+import hogent.sdp2.sdpii.gui.app.locaties.LocatiesController;
+import hogent.sdp2.sdpii.gui.app.taken.TakenController;
 import hogent.sdp2.sdpii.gui.app.teams.TeamsController;
 import hogent.sdp2.sdpii.gui.components.app.header.StageHeaderController;
 import javafx.animation.ScaleTransition;
@@ -52,8 +52,8 @@ public class SidebarController extends VBox {
         loader.setController(this);
         try {
             loader.load();
-            System.out.println(Sessie.userRole());
-            switch(Sessie.userRole()) {
+            System.out.println(Sessie.getInstance().userRole());
+            switch(Sessie.getInstance().userRole()) {
                 case "Admin" -> showAdminOnly();
                 case "Supervisor" -> showSupervisorOnly();
                 case "Werknemer" -> showEmployeeOnly();
@@ -84,14 +84,14 @@ public class SidebarController extends VBox {
         burger.setOnMouseClicked(e -> {this.app.resize();});
         dashboard.setOnMouseClicked(e -> { this.app.navigateTo(new DashboardController(), this.app.getBody()); setActive(dashboard); });
         planning.setOnMouseClicked(e -> { this.app.navigateTo(new PlanningController(), this.app.getBody()); setActive(planning); });
-        tasks.setOnMouseClicked(e -> { this.app.navigateTo(new TasksController(), this.app.getBody()); setActive(tasks); });
-        plants.setOnMouseClicked(e -> { this.app.navigateTo(new PlantsController(), this.app.getBody()); setActive(plants); });
-        absense.setOnMouseClicked(e -> { this.app.navigateTo(new AbsenseController(), this.app.getBody()); setActive(absense); });
+        tasks.setOnMouseClicked(e -> { this.app.navigateTo(new TakenController(), this.app.getBody()); setActive(tasks); });
+        plants.setOnMouseClicked(e -> { this.app.navigateTo(new LocatiesController(), this.app.getBody()); setActive(plants); });
+        absense.setOnMouseClicked(e -> { this.app.navigateTo(new AfwezigheidsController(), this.app.getBody()); setActive(absense); });
         teams.setOnMouseClicked(e -> { this.app.navigateTo(new TeamsController(), this.app.getBody()); setActive(teams); });
 
         if (admin != null) {
             admin.setOnMouseClicked(e -> {
-                if (Sessie.isAdmin()) {
+                if (Sessie.getInstance().isAdmin()) {
                     this.app.navigateTo(new AdminHomeController(this.app), this.app.getBody());
                 }
                 setActive(admin);

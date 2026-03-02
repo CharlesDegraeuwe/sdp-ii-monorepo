@@ -1,7 +1,7 @@
 package hogent.sdp2.sdpii.gui.admin.manage_users;
-import domain.oud.logger.LogService;
-import domain.oud.auth.Sessie;
-import domain.facades.entities.Werknemer;
+import domain.auth.Sessie;
+import domain.facades.LogFacade;
+import repository.entities.Werknemer;
 import domain.facades.WerknemersFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -26,7 +26,7 @@ public class ManageUsersController extends VBox {
     @FXML private Label foutLabel;
 
     private final WerknemersFacade service = new WerknemersFacade();
-    private final LogService logService = new LogService();
+    private final LogFacade logFacade = new LogFacade();
     private List<Werknemer> alleWerknemers;
 
     public ManageUsersController() {
@@ -43,7 +43,7 @@ public class ManageUsersController extends VBox {
     @FXML
     public void initialize() {
         // Controleer of de ingelogde gebruiker admin is
-        if (!Sessie.isAdmin()) {
+        if (!Sessie.getInstance().isAdmin()) {
             foutLabel.setText("Toegang geweigerd: alleen admins kunnen deze pagina bekijken.");
             foutLabel.setVisible(true);
             gebruikersTable.setVisible(false);

@@ -1,10 +1,10 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 
-import domain.oud.auth.Sessie;
-import domain.facades.entities.Werknemer;
+import domain.auth.Sessie;
+import domain.interfaces.IWerknemer;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
-import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
+import hogent.sdp2.sdpii.gui.app.notificaties.NotificatiesController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -43,7 +43,7 @@ public class HeaderController extends HBox {
 
         // Trigger op dropdown button
         trigger_button.setOnMouseClicked(e -> togglePopup(trigger_button));
-        Werknemer ingelogd = Sessie.getIngelogdeWerknemer();
+        IWerknemer ingelogd = Sessie.getInstance().getIngelogdeWerknemer();
         if (ingelogd != null) {
             lblUsername.setText(ingelogd.getNaam());
         } else {
@@ -66,7 +66,7 @@ public class HeaderController extends HBox {
     }
     private void Router(AppController app) {
         notifications.setOnMouseClicked(e -> {
-            NotificationsController nc = new NotificationsController();
+            NotificatiesController nc = new NotificatiesController();
             app.getSidebar().setActive(nc);
             app.navigateTo(nc, app.getBody());
         });

@@ -1,9 +1,9 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 
-import domain.oud.auth.Sessie;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.AppController;
-import hogent.sdp2.sdpii.gui.app.settings.SettingsController;
+import hogent.sdp2.sdpii.gui.app.instellingen.InstellingenController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
@@ -24,7 +24,7 @@ public class ProfilePopupController extends VBox {
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 
 
-        if(!Sessie.userRole().equals("Manager") && !Sessie.isAdmin()) {
+        if(!Sessie.getInstance().userRole().equals("Manager") && !Sessie.getInstance().isAdmin()) {
             admin_trigger.setVisible(false);
             admin_trigger.setManaged(false);
         }
@@ -34,7 +34,7 @@ public class ProfilePopupController extends VBox {
 
     private void Router(AppController app) {
         settings_trigger.setOnMouseClicked(e -> {
-            SettingsController nc = new SettingsController();
+            InstellingenController nc = new InstellingenController();
             app.getSidebar().setActive(nc);
             app.navigateTo(nc, app.getBody());
         });
@@ -45,7 +45,7 @@ public class ProfilePopupController extends VBox {
         });
 
         logout_trigger.setOnMouseClicked(e -> {
-            Sessie.uitloggen();
+            Sessie.getInstance().uitloggen();
             app.getMainframe().getLogin().getForm().reset();
             app.getMainframe().setCenter(app.getMainframe().getLogin());
         });

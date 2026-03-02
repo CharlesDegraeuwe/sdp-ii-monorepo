@@ -1,7 +1,8 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
-import domain.oud.auth.Sessie;
-import domain.facades.entities.Werknemer;
+import domain.auth.Sessie;
+import domain.interfaces.IWerknemer;
+import repository.entities.Werknemer;
 import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.fxml.FXML;
@@ -23,7 +24,7 @@ public class AccountFormController extends VBox {
     private AppController app;
     private final WerknemersFacade service;
 
-    private Werknemer huidigeWerknemer;
+    private IWerknemer huidigeWerknemer;
 
     @FXML private Button editButton;
 
@@ -62,7 +63,7 @@ public class AccountFormController extends VBox {
     }
 
     private void loadUserData() {
-        huidigeWerknemer = Sessie.getIngelogdeWerknemer();
+        huidigeWerknemer = Sessie.getInstance().getIngelogdeWerknemer();
 
         if (huidigeWerknemer != null) {
             naamField.setText(huidigeWerknemer.getNaam());
