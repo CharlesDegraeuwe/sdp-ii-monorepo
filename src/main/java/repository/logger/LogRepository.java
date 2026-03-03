@@ -1,8 +1,8 @@
-package domain.oud.logger;
+package repository.logger;
 
-import repository.entities.Log;
 import hogent.sdp2.sdpii.util.JPAUtil;
 import jakarta.persistence.EntityManager;
+import repository.entities.Log;
 
 public class LogRepository {
 

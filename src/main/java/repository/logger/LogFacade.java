@@ -1,8 +1,9 @@
 package domain.facades;
 
-import domain.oud.logger.LogRepository;
 import repository.entities.Log;
+import repository.logger.LogRepository;
 import repository.entities.Werknemer;
+
 
 import java.time.LocalDateTime;
 

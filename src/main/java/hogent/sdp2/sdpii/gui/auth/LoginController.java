@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.auth.login;
+package hogent.sdp2.sdpii.gui.auth;
 
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.components.app.header.StageHeaderController;

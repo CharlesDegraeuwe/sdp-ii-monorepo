@@ -1,20 +1,18 @@
 package domain.auth;
 
-import domain.interfaces.IWerknemer;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import domain.dto.WerknemerDTO;
 
 public class Sessie {
     private static Sessie instance;
-    private static IWerknemer ingelogdeWerknemer;
+    private static WerknemerDTO ingelogdeWerknemer;
 
 
-    public IWerknemer getIngelogdeWerknemer() {
+    public WerknemerDTO getIngelogdeWerknemer() {
         return ingelogdeWerknemer;
     }
 
-    public void setIngelogdeWerknemer(IWerknemer werknemer) {
+    public void setIngelogdeWerknemer(WerknemerDTO werknemer) {
+
         this.ingelogdeWerknemer = werknemer;
     }
 
@@ -31,7 +29,10 @@ public class Sessie {
                 throw new IllegalArgumentException("geen gebruiker gevonden");
             }
 
-            return ingelogdeWerknemer.getRol();
+
+
+            return ingelogdeWerknemer.rol();
+
 
     }
 

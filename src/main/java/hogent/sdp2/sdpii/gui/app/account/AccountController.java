@@ -24,7 +24,7 @@ public class AccountController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        AccountFormController form = new AccountFormController(app);
+        AccountFormController form = new AccountFormController();
 
         setTop(new PageTitleController("Account"));
 

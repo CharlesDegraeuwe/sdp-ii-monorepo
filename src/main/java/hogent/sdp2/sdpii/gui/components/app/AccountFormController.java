@@ -1,8 +1,8 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
 import domain.auth.Sessie;
-import domain.interfaces.IWerknemer;
-import repository.entities.Werknemer;
+import domain.dto.UpdateWerknemerDTO;
+import domain.dto.WerknemerDTO;
 import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.fxml.FXML;
@@ -18,68 +18,50 @@ public class AccountFormController extends VBox {
     @FXML private TextField naamField;
     @FXML private TextField voornaamField;
     @FXML private TextField emailField;
-    @FXML private TextField wachtwoordField;
     @FXML private TextField telefoonnummerField;
     @FXML private TextField geboortedatumField;
-    private AppController app;
-    private final WerknemersFacade service;
-
-    private IWerknemer huidigeWerknemer;
-
     @FXML private Button editButton;
 
-
+    private final WerknemersFacade facade;
+    private WerknemerDTO huidigeWerknemer;
     private boolean editing = false;
 
-    public AccountFormController(AppController app) {
+    public AccountFormController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/AccountForm.fxml"));
         loader.setRoot(this);
         loader.setController(this);
-
-        this.app = app;
-        this.service = new WerknemersFacade();
-
-        try {
-            loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        this.facade = new WerknemersFacade();
+        try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
         initializeForm();
-
     }
+
     private void initializeForm() {
         loadUserData();
         setEditable(false);
+    }
+
+    private void loadUserData() {
+        huidigeWerknemer = Sessie.getInstance().getIngelogdeWerknemer();
+        if (huidigeWerknemer != null) {
+            naamField.setText(huidigeWerknemer.naam());
+            voornaamField.setText(huidigeWerknemer.voornaam());
+            emailField.setText(huidigeWerknemer.email());
+            telefoonnummerField.setText(huidigeWerknemer.telefoonnummer());
+            geboortedatumField.setText(huidigeWerknemer.geboortedatum().toString());
+        }
     }
 
     private void setEditable(boolean value) {
         naamField.setEditable(value);
         voornaamField.setEditable(value);
         emailField.setEditable(value);
-        wachtwoordField.setEditable(value);
         telefoonnummerField.setEditable(value);
         geboortedatumField.setEditable(value);
     }
 
-    private void loadUserData() {
-        huidigeWerknemer = Sessie.getInstance().getIngelogdeWerknemer();
-
-        if (huidigeWerknemer != null) {
-            naamField.setText(huidigeWerknemer.getNaam());
-            voornaamField.setText(huidigeWerknemer.getVoornaam());
-            emailField.setText(huidigeWerknemer.getEmail());
-            wachtwoordField.setText(huidigeWerknemer.getWachtwoord());
-            telefoonnummerField.setText(huidigeWerknemer.getTelefoonnummer());
-            geboortedatumField.setText(huidigeWerknemer.getGeboortedatum().toString());
-        }
-    }
-
     @FXML
     private void toggleEdit() {
-
         editing = !editing;
-
         if (editing) {
             setEditable(true);
             editButton.setText("Opslaan");
@@ -88,25 +70,17 @@ public class AccountFormController extends VBox {
             setEditable(false);
             editButton.setText("Wijzig");
         }
-
-
     }
-
 
     private void saveUser() {
-
         if (huidigeWerknemer == null) return;
-
-        huidigeWerknemer.setNaam(naamField.getText());
-        huidigeWerknemer.setVoornaam(voornaamField.getText());
-        huidigeWerknemer.setEmail(emailField.getText());
-        huidigeWerknemer.setWachtwoord(wachtwoordField.getText());
-        huidigeWerknemer.setTelefoonnummer(telefoonnummerField.getText());
-        huidigeWerknemer.setGeboortedatum(java.time.LocalDate.parse(geboortedatumField.getText()));
-
-        service.update(huidigeWerknemer);
+        UpdateWerknemerDTO update = new UpdateWerknemerDTO(
+                naamField.getText(),
+                voornaamField.getText(),
+                emailField.getText(),
+                telefoonnummerField.getText(),
+                java.time.LocalDate.parse(geboortedatumField.getText())
+        );
+        facade.update(update);
     }
-
-
-
 }

@@ -8,6 +8,9 @@ import hogent.sdp2.sdpii.gui.components.app.BodyController;
 import hogent.sdp2.sdpii.gui.components.app.SidebarController;
 import hogent.sdp2.sdpii.gui.components.app.header.HeaderController;
 import hogent.sdp2.sdpii.gui.components.app.header.StageHeaderController;
+import hogent.sdp2.sdpii.gui.router.Router;
+import hogent.sdp2.sdpii.gui.router.Scherm;
+import hogent.sdp2.sdpii.gui.router.SchermFactory;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -37,28 +40,34 @@ public class AppController extends BorderPane {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/MainFrame.fxml"));
         loader.setRoot(this);
         loader.setController(this);
-        try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 
+        try {
+            loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        Router router = Router.getInstance();
+        router.init(mf, this);
+        
         //sidebar config
         mainframe = mf;
-        sidebar = new SidebarController(this, st);
-        header = new HeaderController(this);
+        sidebar = new SidebarController(st);
+        header = new HeaderController();
         body = new BodyController(mf);
-
-
-        // layout instellen
         setLeft(sidebar);
         sidebar.prefWidthProperty().bind(widthProperty().multiply(0.1));
         sidebar.prefHeightProperty().bind(prefHeightProperty().multiply(1));
+        sidebar.getBurger().setOnMouseClicked(e -> resize());
         this.sidebarSmall = false;
         setCenter(body);
         body.setTop(header);
+
+
         //custom window functionality
-        if (Sessie.getInstance().isAdmin()){
-            navigateTo(new AdminHomeController(this), body);
-        }else {
-            navigateTo(new DashboardController(), body);
-        }
+        Router.getInstance().navigeerNaar(Sessie.getInstance().isAdmin() ? Scherm.ADMIN_HOME : Scherm.DASHBOARD);
+
 
     }
 
@@ -91,8 +100,8 @@ public class AppController extends BorderPane {
     }
 
     //routing
-    public void navigateTo(Node view, BodyController body) {
-        body.setCenter(view);
+    public void navigateTo(Node view) {
+        this.body.setCenter(view);
 
     }
 }

@@ -1,61 +1,39 @@
 package domain.facades;
 
+import domain.dto.UpdateWerknemerDTO;
+import domain.dto.WerknemerDTO;
+import domain.services.WerknemersApiService;
 import repository.entities.Werknemer;
-import repository.martes_foutje.WerknemerDao;
-import repository.martes_foutje.WerknemerDaoJpa;
 
 import java.util.List;
 
 public class WerknemersFacade {
+    private final WerknemersApiService api = new WerknemersApiService();
 
-    private WerknemerDao repo = new WerknemerDaoJpa();
-    private final LogFacade logFacade = new LogFacade();
-
-    public List<Werknemer> geefAlleWerknemers() {
-        return repo.geefAlleWerknemers();
+    public List<WerknemerDTO> geefAlleWerknemers() {
+        return api.getAlleWerknemers();
     }
 
-    public void activeerWerknemer(int werknemerId) {
-        repo.updateStatus(werknemerId, "Actief");
-        Werknemer werknemer = zoekOpId(werknemerId);
-        logFacade.logActie(
-                werknemer,
-                "CREATE",
-                "Werknemer",
-                werknemerId,
-                "Werknemer is geactiveerd"
-        );
+    public void activeerWerknemer(String code) {
+       api.activeerWerknemer(code);
     }
+
 
     public void deactiveerWerknemer(int werknemerId) {
-        repo.updateStatus(werknemerId, "Inactief");
-        Werknemer werknemer = zoekOpId(werknemerId);
-        logFacade.logActie(
-                werknemer,
-                "DELETE",
-                "Werknemer",
-                werknemerId,
-                "Werknemer is gedeactiveerd"
-        );
 
     }
 
-    public Werknemer zoekOpEmailEnWachtwoord(String email, String wachtwoord) {
-        return repo.zoekOpEmailEnWachtwoord(email, wachtwoord);
+    public WerknemerDTO zoekOpEmail(String email) {
+        return api.zoekOpEmail(email);
     }
 
-    public Werknemer zoekOpId(int id) {
-        return repo.zoekOpId(id);
+    public WerknemerDTO zoekOpId(int id) {
+        return api.zoekOpId(id);
     }
 
-    public void update(Werknemer werknemer) {
-        repo.update(werknemer);
-        logFacade.logActie(
-                werknemer,
-                "UPDATE",
-                "Werknemer",
-                werknemer.getId(),
-                "Werknemer is geupdate"
-        );
+
+    public void update(UpdateWerknemerDTO werknemer) {
+        api.update(werknemer);
+
     }
 }

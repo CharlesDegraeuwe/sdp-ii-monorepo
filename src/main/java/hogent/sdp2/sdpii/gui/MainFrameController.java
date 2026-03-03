@@ -2,7 +2,8 @@ package hogent.sdp2.sdpii.gui;
 
 import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.app.AppController;
-import hogent.sdp2.sdpii.gui.auth.login.LoginController;
+import hogent.sdp2.sdpii.gui.auth.LoginController;
+import hogent.sdp2.sdpii.gui.router.Router;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -24,6 +25,7 @@ public class MainFrameController extends BorderPane {
     private Boolean sidebarSmall;
     private double xOffset;
     private double yOffset;
+    private Router router;
 
 
     //constructor

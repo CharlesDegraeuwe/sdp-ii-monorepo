@@ -1,7 +1,7 @@
-package hogent.sdp2.sdpii.gui.admin.manage_users;
+
+package hogent.sdp2.sdpii.gui.admin.beheerGebruikers;
 import domain.auth.Sessie;
-import domain.facades.LogFacade;
-import repository.entities.Werknemer;
+import domain.dto.WerknemerDTO;
 import domain.facades.WerknemersFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,23 +13,25 @@ import javafx.scene.control.*;
 import java.io.IOException;
 import java.util.List;
 
-public class ManageUsersController extends VBox {
+public class BeheerGebruikersController extends VBox {
 
-    @FXML private TableView<Werknemer> gebruikersTable;
-    @FXML private TableColumn<Werknemer, String> naamCol;
-    @FXML private TableColumn<Werknemer, String> voornaamCol;
-    @FXML private TableColumn<Werknemer, String> emailCol;
-    @FXML private TableColumn<Werknemer, String> rolCol;
-    @FXML private TableColumn<Werknemer, String> statusCol;
-    @FXML private TableColumn<Werknemer, String> telefoonCol;
+    @FXML private TableView<WerknemerDTO> gebruikersTable;
+    @FXML private TableColumn<WerknemerDTO, String> naamCol;
+    @FXML private TableColumn<WerknemerDTO, String> voornaamCol;
+    @FXML private TableColumn<WerknemerDTO, String> emailCol;
+    @FXML private TableColumn<WerknemerDTO, String> rolCol;
+    @FXML private TableColumn<WerknemerDTO, String> statusCol;
+    @FXML private TableColumn<WerknemerDTO, String> telefoonCol;
     @FXML private TextField zoekField;
     @FXML private Label foutLabel;
 
     private final WerknemersFacade service = new WerknemersFacade();
-    private final LogFacade logFacade = new LogFacade();
-    private List<Werknemer> alleWerknemers;
 
-    public ManageUsersController() {
+
+    private List<WerknemerDTO> alleWerknemers;
+
+
+    public BeheerGebruikersController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/admin/manage_users/ManageUsers.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -51,21 +53,21 @@ public class ManageUsersController extends VBox {
         }
 
         // Kolommen instellen
-        naamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNaam()));
-        voornaamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVoornaam()));
-        emailCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
-        rolCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRol()));
-        statusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
-        telefoonCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTelefoonnummer()));
+        naamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().naam()));
+        voornaamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().voornaam()));
+        emailCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().voornaam()));
+        rolCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().rol()));
+        statusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().status()));
+        telefoonCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().telefoonnummer()));
 
         // Kleur actieve/inactieve rijen
         gebruikersTable.setRowFactory(tv -> new TableRow<>() {
             @Override
-            protected void updateItem(Werknemer werknemer, boolean empty) {
+            protected void updateItem(WerknemerDTO werknemer, boolean empty) {
                 super.updateItem(werknemer, empty);
                 if (werknemer == null || empty) {
                     setStyle("");
-                } else if ("Inactief".equalsIgnoreCase(werknemer.getStatus())) {
+                } else if ("Inactief".equalsIgnoreCase(werknemer.status())) {
                     setStyle("-fx-opacity: 0.5;");
                 } else {
                     setStyle("");
@@ -89,11 +91,11 @@ public class ManageUsersController extends VBox {
             return;
         }
         String lower = zoekterm.toLowerCase();
-        List<Werknemer> gefilterd = alleWerknemers.stream()
-                .filter(w -> w.getNaam().toLowerCase().contains(lower)
-                        || w.getVoornaam().toLowerCase().contains(lower)
-                        || w.getEmail().toLowerCase().contains(lower)
-                        || w.getRol().toLowerCase().contains(lower))
+        List<WerknemerDTO> gefilterd = alleWerknemers.stream()
+                .filter(w -> w.naam().toLowerCase().contains(lower)
+                        || w.voornaam().toLowerCase().contains(lower)
+                        || w.email().toLowerCase().contains(lower)
+                        || w.rol().toLowerCase().contains(lower))
                 .toList();
         gebruikersTable.setItems(FXCollections.observableArrayList(gefilterd));
     }

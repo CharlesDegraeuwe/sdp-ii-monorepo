@@ -1,9 +1,9 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 
 import domain.auth.Sessie;
-import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
-import hogent.sdp2.sdpii.gui.app.AppController;
-import hogent.sdp2.sdpii.gui.app.instellingen.InstellingenController;
+
+import hogent.sdp2.sdpii.gui.router.Router;
+import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
@@ -17,7 +17,7 @@ public class ProfilePopupController extends VBox {
     @FXML HBox admin_trigger;
     @FXML HBox logout_trigger;
 
-    public ProfilePopupController(AppController app) {
+    public ProfilePopupController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/header/ProfilePopup.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -29,25 +29,21 @@ public class ProfilePopupController extends VBox {
             admin_trigger.setManaged(false);
         }
 
-        Router(app);
+        Router();
     }
 
-    private void Router(AppController app) {
+    private void Router() {
         settings_trigger.setOnMouseClicked(e -> {
-            InstellingenController nc = new InstellingenController();
-            app.getSidebar().setActive(nc);
-            app.navigateTo(nc, app.getBody());
+            Router.getInstance().navigeerNaar(Scherm.INSTELLINGEN);
+
         });
 
         admin_trigger.setOnMouseClicked(e -> {
-            AdminHomeController ac = new AdminHomeController(app);
-            app.navigateTo(ac, app.getBody());
+            Router.getInstance().navigeerNaar(Scherm.INSTELLINGEN);
         });
 
         logout_trigger.setOnMouseClicked(e -> {
-            Sessie.getInstance().uitloggen();
-            app.getMainframe().getLogin().getForm().reset();
-            app.getMainframe().setCenter(app.getMainframe().getLogin());
+            Router.getInstance().navigeerNaar(Scherm.LOGOUT);
         });
 
     }

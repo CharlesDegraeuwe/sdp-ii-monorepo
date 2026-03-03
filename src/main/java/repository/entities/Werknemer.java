@@ -1,6 +1,4 @@
 package repository.entities;
-
-import domain.interfaces.IWerknemer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +9,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "werknemers")
-public class Werknemer implements IWerknemer {
+public class Werknemer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Werknemer_ID", nullable = false)
