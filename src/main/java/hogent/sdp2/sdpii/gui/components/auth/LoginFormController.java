@@ -1,8 +1,11 @@
 package hogent.sdp2.sdpii.gui.components.auth;
 
-import domain.Sessie;
-import domain.Werknemer;
-import domain.WerknemerService;
+import domain.auth.Sessie;
+import domain.dto.WerknemerDTO;
+import domain.facades.AuthFacade;
+import repository.entities.Werknemer;
+
+import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.concurrent.Task;
@@ -25,7 +28,7 @@ public class LoginFormController extends VBox {
 
     private MainFrameController mf;
     private Stage stage;
-    private final WerknemerService service = new WerknemerService();
+    private final AuthFacade service = new AuthFacade();
 
     public LoginFormController(MainFrameController mf, Stage stage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/auth/LoginForm.fxml"));
@@ -60,13 +63,13 @@ public class LoginFormController extends VBox {
     }
 
     private void login() {
-        this.loginBtn.setText("loading...");
+        this.loginBtn.setText("laden...");
         this.loginBtn.setDisable(true);
 
-        Task<Werknemer> task = new Task<>() {
+        Task<WerknemerDTO> task = new Task<>() {
             @Override
-            protected Werknemer call() {
-                return service.zoekOpEmailEnWachtwoord(
+            protected WerknemerDTO call() {
+                return service.login(
                         txtEmail.getText(),
                         txtWachtwoord.getText()
                 );
@@ -74,7 +77,7 @@ public class LoginFormController extends VBox {
         };
 
         task.setOnSucceeded(e -> {
-            Werknemer werknemer = task.getValue();
+            WerknemerDTO werknemer = task.getValue();
             System.out.println("Werknemer: " + werknemer);
             if (werknemer == null) {
                 lblFout.setText("Ongeldig email of wachtwoord!");
@@ -82,7 +85,7 @@ public class LoginFormController extends VBox {
                 loginBtn.setDisable(false);
                 return;
             }
-            Sessie.setIngelogdeWerknemer(werknemer);
+            Sessie.getInstance().setIngelogdeWerknemer(werknemer);
             navigeerNaarActivatie();
         });
 
@@ -95,6 +98,8 @@ public class LoginFormController extends VBox {
 
         new Thread(task).start();
     }
+
+
 
     public void reset() {
         this.loginBtn.setText("Log in");

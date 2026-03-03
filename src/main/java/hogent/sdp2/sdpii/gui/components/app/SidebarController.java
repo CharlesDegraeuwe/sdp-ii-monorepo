@@ -1,15 +1,9 @@
 package hogent.sdp2.sdpii.gui.components.app;
 
-import domain.Sessie;
-import hogent.sdp2.sdpii.gui.app.AppController;
-import hogent.sdp2.sdpii.gui.app.absense.AbsenseController;
-import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
-import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
-import hogent.sdp2.sdpii.gui.app.planning.PlanningController;
-import hogent.sdp2.sdpii.gui.app.plants.PlantsController;
-import hogent.sdp2.sdpii.gui.app.tasks.TasksController;
-import hogent.sdp2.sdpii.gui.app.teams.TeamsController;
+import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.components.app.header.StageHeaderController;
+import hogent.sdp2.sdpii.gui.router.Router;
+import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,37 +17,39 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class SidebarController extends VBox {
     //variables
     private Node activeItem;
-    private Boolean small;
-    private AppController app;
     private StageHeaderController sh;
-    @Getter
-    @Setter
-    @FXML private ImageView burger_button;
-    @FXML private VBox burger;
+    private Map<Scherm, VBox> schermItems;
+
+    @Getter @Setter @FXML private ImageView burger_button;
+    @FXML @Getter private VBox burger;
     @FXML private VBox dashboard;
     @FXML private VBox planning;
     @FXML private VBox tasks;
     @FXML private VBox plants;
     @FXML private VBox absense;
     @FXML private VBox teams;
-
     @FXML private VBox admin;
 
     //construtor
-    public SidebarController(AppController app, Stage stage) {
+    public SidebarController(Stage stage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/Sidebar.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
             loader.load();
-            System.out.println(Sessie.userRole());
-            switch(Sessie.userRole()) {
+
+            initSchermItems();
+            System.out.println(Sessie.getInstance().userRole());
+            switch(Sessie.getInstance().userRole()) {
+
                 case "Admin" -> showAdminOnly();
                 case "Supervisor" -> showSupervisorOnly();
                 case "Werknemer" -> showEmployeeOnly();
@@ -64,14 +60,29 @@ public class SidebarController extends VBox {
             throw new RuntimeException(e);
         }
 
-        this.app = app;
         this.sh = new StageHeaderController(stage);
         this.getChildren().add(0, sh);
         this.burger_button.setImage(new Image(getClass().getResourceAsStream("/icons/sidebar_collapse.png")));
-        this.Router();
+        this.initNavigatie();
     }
 
     //hele routing
+    private void initSchermItems() {
+        schermItems = new EnumMap<>(Scherm.class);
+        schermItems.put(Scherm.DASHBOARD, dashboard);
+        schermItems.put(Scherm.PLANNING, planning);
+        schermItems.put(Scherm.TAKEN, tasks);
+        schermItems.put(Scherm.LOCATIES, plants);
+        schermItems.put(Scherm.AFWEZIGHEID, absense);
+        schermItems.put(Scherm.TEAMS, teams);
+        schermItems.put(Scherm.ADMIN_HOME, admin);
+    }
+
+    public void setActiveScherm(Scherm scherm) {
+        VBox item = schermItems.get(scherm);
+        if (item != null) setActive(item);
+    }
+
     public void setActive(Node item) {
         if (activeItem != null) {
             activeItem.getStyleClass().remove("active");
@@ -80,22 +91,19 @@ public class SidebarController extends VBox {
         item.getStyleClass().add("active");
         activeItem = item;
     }
-    private void Router() {
-        burger.setOnMouseClicked(e -> {this.app.resize();});
-        dashboard.setOnMouseClicked(e -> { this.app.navigateTo(new DashboardController(), this.app.getBody()); setActive(dashboard); });
-        planning.setOnMouseClicked(e -> { this.app.navigateTo(new PlanningController(), this.app.getBody()); setActive(planning); });
-        tasks.setOnMouseClicked(e -> { this.app.navigateTo(new TasksController(), this.app.getBody()); setActive(tasks); });
-        plants.setOnMouseClicked(e -> { this.app.navigateTo(new PlantsController(), this.app.getBody()); setActive(plants); });
-        absense.setOnMouseClicked(e -> { this.app.navigateTo(new AbsenseController(), this.app.getBody()); setActive(absense); });
-        teams.setOnMouseClicked(e -> { this.app.navigateTo(new TeamsController(), this.app.getBody()); setActive(teams); });
+
+
+
+    private void initNavigatie() {
+        dashboard.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.DASHBOARD));
+        planning.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.PLANNING));
+        tasks.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
+        plants.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.LOCATIES));
+        absense.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
+        teams.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TEAMS));
 
         if (admin != null) {
-            admin.setOnMouseClicked(e -> {
-                if (Sessie.isAdmin()) {
-                    this.app.navigateTo(new AdminHomeController(this.app), this.app.getBody());
-                }
-                setActive(admin);
-            });
+            admin.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.ADMIN_HOME));
         }
     }
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="HBox" styleClass="page_title" alignment="CENTER_LEFT" xmlns:fx="http://javafx.com/fxml">
+    <Label styleClass="page_title_title" fx:id="page_title_title" HBox.hgrow="ALWAYS"/>
+    <HBox styleClass="date_container">
+        <Label styleClass="page_date" fx:id="page_date"/>
+        <FontIcon iconLiteral="ion4-md-calendar" iconSize="12" styleClass="date_icon" />
+    </HBox>
+</fx:root>

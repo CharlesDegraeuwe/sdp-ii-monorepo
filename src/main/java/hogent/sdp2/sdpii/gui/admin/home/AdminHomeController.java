@@ -8,7 +8,7 @@ import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 
 public class AdminHomeController extends BorderPane {
-    public AdminHomeController(AppController app) {
+    public AdminHomeController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/admin/home/AdminHomePage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -17,7 +17,7 @@ public class AdminHomeController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        AdminHomeMenuController ac = new AdminHomeMenuController(app);
+        AdminHomeMenuController ac = new AdminHomeMenuController();
         setCenter(ac);
     }
 }

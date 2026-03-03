@@ -1,17 +1,16 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
-
-import domain.Sessie;
-import domain.Werknemer;
-import hogent.sdp2.sdpii.gui.MainFrameController;
+import domain.auth.Sessie;
+import domain.dto.WerknemerDTO;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
-import hogent.sdp2.sdpii.gui.app.notifications.NotificationsController;
+import hogent.sdp2.sdpii.gui.app.notificaties.NotificatiesController;
+import hogent.sdp2.sdpii.gui.router.Router;
+import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -30,28 +29,30 @@ public class HeaderController extends HBox {
     private Popup popup;
 
 
-    public HeaderController(AppController app) {
+    public HeaderController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/app/header/Header.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 
-        pfc = new ProfilePopupController(app);
 
         // Popup aanmaken
         popup = new Popup();
         popup.setAutoHide(true); // sluit als je ergens anders klikt
+        pfc = new ProfilePopupController();
         popup.getContent().add(pfc);
 
         // Trigger op dropdown button
         trigger_button.setOnMouseClicked(e -> togglePopup(trigger_button));
-        Werknemer ingelogd = Sessie.getIngelogdeWerknemer();
+
+        WerknemerDTO ingelogd = Sessie.getInstance().getIngelogdeWerknemer();
+
         if (ingelogd != null) {
-            lblUsername.setText(ingelogd.getNaam());
+            lblUsername.setText(ingelogd.voornaam() + " " + ingelogd.naam());
         } else {
             lblUsername.setText("Gast");
         }
-        Router(app);
+        Router();
     }
 
     private void togglePopup(HBox trigger) {
@@ -66,18 +67,12 @@ public class HeaderController extends HBox {
             );
         }
     }
-    private void Router(AppController app) {
-        notifications.setOnMouseClicked(e -> {
-            NotificationsController nc = new NotificationsController();
-            app.getSidebar().setActive(nc);
-            app.navigateTo(nc, app.getBody());
-        });
 
-        account.setOnMouseClicked(e -> {
-            AccountController ac = new AccountController(app.getStage(), app);
-            app.getSidebar().setActive(ac);
-            app.navigateTo(ac, app.getBody());
-        });
+
+    private void Router() {
+        notifications.setOnMouseClicked(e -> {Router.getInstance().navigeerNaar(Scherm.NOTIFICATIES);});
+        account.setOnMouseClicked(e ->  {Router.getInstance().navigeerNaar(Scherm.ACCOUNT);});
+
 
     }
 }

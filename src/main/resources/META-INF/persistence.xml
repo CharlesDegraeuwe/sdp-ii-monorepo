@@ -8,10 +8,10 @@
 
     <persistence-unit name="sdpii" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>domain.Werknemer</class>
-        <class>domain.Teamwerknemer</class>
-        <class>domain.Team</class>
-        <class>domain.Log</class>
+        <class>repository.entities.Werknemer</class>
+        <class>repository.entities.Teamwerknemer</class>
+        <class>repository.entities.Team</class>
+        <class>repository.entities.Log</class>
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://vichogent.be:41219/SDP2_2526_DB_G01?serverTimezone=UTC"/>
 
