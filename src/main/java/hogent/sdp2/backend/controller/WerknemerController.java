@@ -58,6 +58,11 @@ public class WerknemerController {
         return werknemerService.getByEmail(email);
     }
 
+    @GetMapping("/byid")
+    public WerknemerResponseDTO getById(@RequestParam Integer id) {
+        return werknemerService.getByID(id);
+    }
+
 
     //TODO
     // nog toe te voegen:

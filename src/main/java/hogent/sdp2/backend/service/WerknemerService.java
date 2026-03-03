@@ -188,4 +188,19 @@ public class WerknemerService {
                 werknemer.getRol()
         );
     }
+
+    public WerknemerResponseDTO getByID(Integer id) {
+        return werknemerRepository.findById(id)
+                .map(w -> new WerknemerResponseDTO(
+                        w.getId(),
+                        w.getNaam(),
+                        w.getVoornaam(),
+                        w.getEmail(),
+                        w.getTelefoonnummer(),
+                        w.getGeboortedatum(),
+                        w.getRol(),
+                        w.getStatus()
+                ))
+                .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
+    }
 }
