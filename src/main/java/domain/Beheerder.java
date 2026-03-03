@@ -23,6 +23,7 @@ public class Beheerder {
     @Getter private TeamKpiFacade teamKpiFacade;
     @Getter private VerlofFacade verlofFacade;
     @Getter private WerknemersFacade werknemersFacade;
+    @Getter private AuthFacade authFacade;
 
 
     private Beheerder() {
@@ -37,6 +38,7 @@ public class Beheerder {
         this.teamKpiFacade = new TeamKpiFacade();
         this.verlofFacade = new VerlofFacade();
         this.werknemersFacade = new WerknemersFacade();
+        this.authFacade = new AuthFacade();
     }
 
     public static Beheerder getInstance() {

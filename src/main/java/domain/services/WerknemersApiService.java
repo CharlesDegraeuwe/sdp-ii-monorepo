@@ -5,7 +5,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import domain.dto.UpdateWerknemerDTO;
 import domain.dto.WerknemerDTO;
 import io.github.cdimascio.dotenv.Dotenv;
-import repository.entities.Werknemer;
 
 import java.net.URI;
 import java.net.http.HttpClient;
