@@ -29,4 +29,6 @@ public class Afwezigheid {
     @Column(name = "Reden", nullable = false, length = 90)
     private String reden;
 
+    @Column(name = "Certificaat", nullable = false)
+    private byte[] certificaat;
 }
