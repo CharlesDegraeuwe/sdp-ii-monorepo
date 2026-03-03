@@ -141,4 +141,51 @@ public class WerknemerService {
                 ))
                 .toList();
     }
+
+    public WerknemerResponseDTO updateUser(UpdateUserDTO dto) {
+        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(dto.email());
+
+        if (werknemerOpt.isEmpty()) {
+            throw new RuntimeException("Fout: Gebruiker niet gevonden.");
+        }
+        Werknemer werknemer = werknemerOpt.get();
+
+        werknemer.setNaam(dto.naam());
+        werknemer.setVoornaam(dto.voornaam());
+        werknemer.setEmail(dto.email());
+        werknemer.setStatus(dto.status());
+        werknemer.setTelefoonnummer(dto.telefoonnummer());
+        werknemer.setGeboortedatum(dto.geboortedatum());
+
+        werknemerRepository.save(werknemer);
+        return new WerknemerResponseDTO(
+                werknemer.getId(),
+                werknemer.getNaam(),
+                werknemer.getVoornaam(),
+                werknemer.getEmail(),
+                werknemer.getStatus(),
+                werknemer.getGeboortedatum(),
+                werknemer.getTelefoonnummer(),
+                werknemer.getRol()
+        );
+    }
+
+    public WerknemerResponseDTO getByEmail(String email) {
+        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(email);
+        if (werknemerOpt.isEmpty()) {
+            throw new RuntimeException("Fout: Gebruiker niet gevonden.");
+        }
+        Werknemer werknemer = werknemerOpt.get();
+
+        return new WerknemerResponseDTO(
+                werknemer.getId(),
+                werknemer.getNaam(),
+                werknemer.getVoornaam(),
+                werknemer.getEmail(),
+                werknemer.getStatus(),
+                werknemer.getGeboortedatum(),
+                werknemer.getTelefoonnummer(),
+                werknemer.getRol()
+        );
+    }
 }
