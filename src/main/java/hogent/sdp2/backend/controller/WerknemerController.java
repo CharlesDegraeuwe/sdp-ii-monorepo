@@ -5,6 +5,9 @@ import hogent.sdp2.backend.service.WerknemerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/werknemers")
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class WerknemerController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequestDTO dto) {
+    public WerknemerResponseDTO login(@RequestBody LoginRequestDTO dto) {
         return werknemerService.login(dto);
     }
 
@@ -41,5 +44,32 @@ public class WerknemerController {
     public String resetWachtwoord(@RequestBody WachtwoordResetDTO dto) {
         return werknemerService.resetWachtwoord(dto);
     }
+
+    @PutMapping("/update")
+    public WerknemerResponseDTO update(@RequestBody UpdateUserDTO dto) {return werknemerService.updateUser(dto);}
+
+    @GetMapping("/users")
+    public List<WerknemerResponseDTO> getAlleUsers() {
+        return werknemerService.getAlleUsers();
+    }
+
+    @GetMapping("/email")
+    public WerknemerResponseDTO getByEmail(@RequestParam String email) {
+        return werknemerService.getByEmail(email);
+    }
+
+    @GetMapping("/byid")
+    public WerknemerResponseDTO getById(@RequestParam Integer id) {
+        return werknemerService.getByID(id);
+    }
+
+
+    //TODO
+    // nog toe te voegen:
+    // 1. Activeren van activeren, deactiveren, blokkeren, deblokkeren voor admins (zonder code dus)
+    // 2. aanmaken en returnen JWT Tokens toevoegen bij inloggen
+    // 3. Verficiatie pipeline van de data
+    // 4. Authenticatie en authorisatie pipeline zodat niet iedereen alle endpoints kan raadplegen
+    // komt goed
 }
 
