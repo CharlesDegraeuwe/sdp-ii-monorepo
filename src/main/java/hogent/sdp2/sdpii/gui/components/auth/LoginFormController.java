@@ -3,9 +3,6 @@ package hogent.sdp2.sdpii.gui.components.auth;
 import domain.auth.Sessie;
 import domain.dto.WerknemerDTO;
 import domain.facades.AuthFacade;
-import repository.entities.Werknemer;
-
-import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.concurrent.Task;
