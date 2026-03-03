@@ -1,0 +1,142 @@
+/* ===== DASHBOARD ===== */
+
+.dashboard_root {
+    -fx-background-color: #F6F6F6;
+}
+
+.dashboard_outer {
+    -fx-background-color: transparent;
+}
+
+.dashboard_left, .dashboard_right {
+    -fx-background-color: transparent;
+}
+
+/* Cards */
+.card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 15, 0, 0, 4);
+}
+
+.card_title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.card_subtitle {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888888;
+}
+
+/* Action Buttons */
+.action_btn {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 10 14 10 14;
+    -fx-cursor: hand;
+}
+
+.action_btn:hover {
+    -fx-background-color: #D9D9D9;
+}
+
+.action_label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.action_icon {
+    -fx-icon-color: #2c3e50;
+}
+
+.action_icon_red {
+    -fx-icon-color: #E31B35;
+}
+
+/* Tab buttons */
+.tab_active {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 4 12 4 12;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.tab {
+    -fx-background-color: #F0F0F0;
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 4 12 4 12;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.tab:hover {
+    -fx-background-color: #E4E4E4;
+}
+
+/* Icon button (kalender nav) */
+.btn_icon {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 999px;
+    -fx-border-color: transparent;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10 4 10;
+    -fx-cursor: hand;
+}
+
+.btn_icon:hover {
+    -fx-background-color: #E4E4E4;
+}
+
+/* TableView */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #F6F6F6;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: #888888;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #F0F0F0 transparent;
+    -fx-font-size: 13px;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #F6F6F6;
+    -fx-text-fill: #2c3e50;
+}
+
+/* ScrollPane */
+.scroll_pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll_pane > .viewport {
+    -fx-background-color: transparent;
+}

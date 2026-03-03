@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.dashboard;
+package hogent.sdp2.sdpii.gui.app.locaties;
 
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
@@ -6,9 +6,9 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
-public class DashboardController extends BorderPane {
-    public DashboardController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/DashboardPage.fxml"));
+public class LocatiesController extends BorderPane {
+    public LocatiesController() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/PlanningPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -16,7 +16,7 @@ public class DashboardController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        setTop(new PageTitleController("Overzicht"));
-        setCenter(new DashboardLayoutController());
+
+        setTop(new PageTitleController("Locaties"));
     }
 }

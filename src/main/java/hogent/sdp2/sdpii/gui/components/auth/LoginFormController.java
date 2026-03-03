@@ -1,8 +1,9 @@
 package hogent.sdp2.sdpii.gui.components.auth;
 
-import domain.oud.auth.Sessie;
-import domain.facades.entities.Werknemer;
-import domain.facades.WerknemersFacade;
+import domain.Beheerder;
+import domain.auth.Sessie;
+import domain.dto.WerknemerDTO;
+import domain.facades.AuthFacade;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.concurrent.Task;
@@ -25,7 +26,6 @@ public class LoginFormController extends VBox {
 
     private MainFrameController mf;
     private Stage stage;
-    private final WerknemersFacade service = new WerknemersFacade();
 
     public LoginFormController(MainFrameController mf, Stage stage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/auth/LoginForm.fxml"));
@@ -63,10 +63,10 @@ public class LoginFormController extends VBox {
         this.loginBtn.setText("laden...");
         this.loginBtn.setDisable(true);
 
-        Task<Werknemer> task = new Task<>() {
+        Task<WerknemerDTO> task = new Task<>() {
             @Override
-            protected Werknemer call() {
-                return service.zoekOpEmailEnWachtwoord(
+            protected WerknemerDTO call() {
+                return Beheerder.getInstance().getAuthFacade().login(
                         txtEmail.getText(),
                         txtWachtwoord.getText()
                 );
@@ -74,7 +74,7 @@ public class LoginFormController extends VBox {
         };
 
         task.setOnSucceeded(e -> {
-            Werknemer werknemer = task.getValue();
+            WerknemerDTO werknemer = task.getValue();
             System.out.println("Werknemer: " + werknemer);
             if (werknemer == null) {
                 lblFout.setText("Ongeldig email of wachtwoord!");
@@ -82,7 +82,7 @@ public class LoginFormController extends VBox {
                 loginBtn.setDisable(false);
                 return;
             }
-            Sessie.setIngelogdeWerknemer(werknemer);
+            Sessie.getInstance().setIngelogdeWerknemer(werknemer);
             navigeerNaarActivatie();
         });
 

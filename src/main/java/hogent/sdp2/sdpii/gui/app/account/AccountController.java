@@ -12,11 +12,10 @@ import java.io.IOException;
 public class AccountController extends BorderPane {
 
     private final AppController app;
-    private final Stage stage;
 
-    public AccountController(Stage stage, AppController app) {
+    public AccountController(AppController app) {
         this.app = app;
-        this.stage = stage;
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/AccountPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -25,7 +24,7 @@ public class AccountController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        AccountFormController form = new AccountFormController(app);
+        AccountFormController form = new AccountFormController();
 
         setTop(new PageTitleController("Account"));
 
