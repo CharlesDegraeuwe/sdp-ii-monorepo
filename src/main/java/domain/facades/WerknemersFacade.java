@@ -17,7 +17,6 @@ public class WerknemersFacade {
        api.activeerWerknemer(code);
     }
 
-
     public void deactiveerWerknemer(int werknemerId) {
 
     }
