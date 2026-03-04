@@ -4,20 +4,24 @@
     -fx-background-color: #F6F6F6;
 }
 
-.dashboard_outer {
+.dashboard_outer, .dashboard_left, .dashboard_right {
     -fx-background-color: transparent;
 }
 
-.dashboard_left, .dashboard_right {
-    -fx-background-color: transparent;
+/* Section titles — boven de cards */
+.section_title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888888;
+    -fx-padding: 0 0 0 4;
 }
 
 /* Cards */
 .card {
     -fx-background-color: #FFFFFF;
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 15, 0, 0, 4);
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 4);
 }
 
 .card_title {
@@ -34,7 +38,7 @@
 
 /* Action Buttons */
 .action_btn {
-    -fx-background-color: #d6d6d6;
+    -fx-background-color: #F0F0F0;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-padding: 10 14 10 14;
@@ -42,7 +46,7 @@
 }
 
 .action_btn:hover {
-    -fx-background-color: #D9D9D9;
+    -fx-background-color: #E4E4E4;
 }
 
 .action_label {
@@ -86,7 +90,7 @@
     -fx-background-color: #E4E4E4;
 }
 
-/* Icon button (kalender nav) */
+/* Kalender nav buttons */
 .btn_icon {
     -fx-background-color: #F0F0F0;
     -fx-background-radius: 999px;
@@ -99,6 +103,40 @@
 
 .btn_icon:hover {
     -fx-background-color: #E4E4E4;
+}
+
+/* Kalender dag headers */
+.cal_header {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888888;
+    -fx-min-width: 28;
+    -fx-alignment: CENTER;
+}
+
+/* Kalender dag cellen */
+.cal_day {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2c3e50;
+    -fx-min-width: 28;
+    -fx-min-height: 28;
+    -fx-alignment: CENTER;
+    -fx-background-radius: 999px;
+    -fx-cursor: hand;
+}
+
+.cal_day:hover {
+    -fx-background-color: #F0F0F0;
+}
+
+.cal_day_today {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-min-width: 28;
+    -fx-min-height: 28;
+    -fx-alignment: CENTER;
 }
 
 /* TableView */
@@ -129,14 +167,4 @@
 .table-row-cell:selected {
     -fx-background-color: #F6F6F6;
     -fx-text-fill: #2c3e50;
-}
-
-/* ScrollPane */
-.scroll_pane {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.scroll_pane > .viewport {
-    -fx-background-color: transparent;
 }

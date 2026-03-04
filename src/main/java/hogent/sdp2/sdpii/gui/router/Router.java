@@ -12,7 +12,7 @@ public class Router {
     private static Router instance;
     private AppController app;
     private MainFrameController mf;
-    private final Beheerder beheerder = Beheerder.getInstance();
+
 
     private Router() {}
 

@@ -1,0 +1,261 @@
+/* ===== PLANNING ===== */
+
+.planning_root {
+    -fx-background-color: #F6F6F6;
+}
+
+/* View tabs (Month/Week/Day) */
+.view_tab_active {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 5 16 5 16;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.view_tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: #888888;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 5 16 5 16;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.view_tab:hover {
+    -fx-background-color: #E4E4E4;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Navigatie pijlen */
+.nav_btn {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 999px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 999px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 12 4 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 2);
+}
+
+.nav_btn:hover {
+    -fx-background-color: #F0F0F0;
+}
+
+.nav_btn_sm {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8 2 8;
+    -fx-cursor: hand;
+    -fx-text-fill: #888888;
+}
+
+/* Periode titel */
+.period_title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Plan Holiday knop */
+.plan_holiday_btn {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 999px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 999px;
+    -fx-padding: 8 20 8 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 2);
+}
+
+.plan_holiday_btn:hover {
+    -fx-background-color: #F6F6F6;
+}
+
+.plan_icon {
+    -fx-icon-color: #2c3e50;
+}
+
+.plan_label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Kalender container */
+.calendar_container {
+    -fx-background-color: transparent;
+}
+
+/* Dag headers (Mon/Tue/...) */
+.cal_header_row {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 8 0;
+}
+
+.day_header {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888888;
+    -fx-alignment: CENTER;
+    -fx-padding: 8 0 8 0;
+}
+
+/* Kalender dag cel */
+.cal_cell {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #EEEEEE;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+    -fx-min-height: 80;
+}
+
+.cal_cell:hover {
+    -fx-border-color: #cccccc;
+}
+
+.cal_cell_today {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 2;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+    -fx-min-height: 80;
+}
+
+.cal_cell_other_month {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #F0F0F0;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+    -fx-min-height: 80;
+    -fx-opacity: 0.5;
+}
+
+.cal_day_number {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.cal_day_number_today {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E31B35;
+}
+
+/* Shift tags in cel */
+.shift_tag_blue {
+    -fx-background-color: #dbeafe;
+    -fx-background-radius: 6;
+    -fx-padding: 2 6 2 6;
+    -fx-font-size: 10px;
+    -fx-text-fill: #1e40af;
+}
+
+.shift_tag_red {
+    -fx-background-color: #fee2e2;
+    -fx-background-radius: 6;
+    -fx-padding: 2 6 2 6;
+    -fx-font-size: 10px;
+    -fx-text-fill: #991b1b;
+}
+
+.shift_tag_green {
+    -fx-background-color: #dcfce7;
+    -fx-background-radius: 6;
+    -fx-padding: 2 6 2 6;
+    -fx-font-size: 10px;
+    -fx-text-fill: #166534;
+}
+
+/* Vakantie tag */
+.vacation_tag {
+    -fx-background-color: #d1fae5;
+    -fx-background-radius: 6;
+    -fx-padding: 2 6 2 6;
+    -fx-font-size: 10px;
+    -fx-text-fill: #065f46;
+}
+
+/* Rechter paneel */
+.card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 15, 0, 0, 4);
+}
+
+.detail_date {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.detail_title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.tasks_subtitle {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888888;
+    -fx-padding: 4 0 0 0;
+}
+
+/* Shift item in rechter paneel */
+.shift_item {
+    -fx-background-color: #F6F6F6;
+    -fx-background-radius: 10;
+    -fx-padding: 8 12 8 12;
+    -fx-spacing: 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.shift_time {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2c3e50;
+}
+
+.shift_plant {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888888;
+}
+
+/* Task item */
+.task_item {
+    -fx-background-color: transparent;
+    -fx-spacing: 8;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 4 0 4 0;
+    -fx-border-color: transparent transparent #F0F0F0 transparent;
+    -fx-border-width: 1;
+}
+
+.task_name {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2c3e50;
+}
+
+.task_due {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888888;
+}
