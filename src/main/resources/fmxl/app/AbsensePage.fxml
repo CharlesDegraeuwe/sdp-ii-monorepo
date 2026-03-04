@@ -12,13 +12,43 @@
             <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false"/>
             <Label fx:id="succesLabel" styleClass="success-label" visible="false" managed="false"/>
 
-            <VBox styleClass="absense-card" spacing="15">
+            <!-- Keuze knoppen -->
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="verlofKnop" text="Verlof aanvragen" onAction="#toonVerlof" styleClass="keuze-knop-actief"/>
+                <Button fx:id="ziekteKnop" text="Ziekte melden" onAction="#toonZiekte" styleClass="keuze-knop"/>
+            </HBox>
+
+            <!-- Verlof formulier -->
+            <VBox fx:id="verlofBox" styleClass="absense-card" spacing="15">
+                <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+
+                <Label text="Verlof aanvragen" styleClass="absense-label"/>
+
+                <HBox spacing="15">
+                    <VBox spacing="4">
+                        <Label text="Startdatum" styleClass="absense-sublabel"/>
+                        <DatePicker fx:id="verlofStartDatum" prefWidth="150"/>
+                    </VBox>
+                    <VBox spacing="4">
+                        <Label text="Einddatum" styleClass="absense-sublabel"/>
+                        <DatePicker fx:id="verlofEindDatum" prefWidth="150"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="4">
+                    <Label text="Type verlof" styleClass="absense-sublabel"/>
+                    <ComboBox fx:id="verlofTypeCombo" prefWidth="200"/>
+                </VBox>
+
+            </VBox>
+
+            <!-- Ziekte formulier -->
+            <VBox fx:id="ziekteBox" styleClass="absense-card" spacing="15" visible="false" managed="false">
                 <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
 
                 <TextField fx:id="redenField" promptText="Reden voor afwezigheid..." styleClass="text-field"/>
 
                 <HBox spacing="30">
-
                     <VBox spacing="12" HBox.hgrow="ALWAYS">
                         <Label text="Duur:" styleClass="absense-label"/>
 
@@ -69,14 +99,13 @@
                         </VBox>
                         <Label fx:id="certificaatLabel" text="" styleClass="absense-sublabel"/>
                     </VBox>
-
                 </HBox>
 
             </VBox>
 
             <TextArea fx:id="extraUitlegArea" promptText="Extra toelichting (optioneel)..." prefHeight="80" styleClass="absense-textarea"/>
 
-            <Button text="Meld afwezigheid" onAction="#meldAfwezigheid" styleClass="absense-report-btn"/>
+            <Button fx:id="indienKnop" text="Verlof aanvragen" onAction="#indienen" styleClass="absense-report-btn"/>
 
         </VBox>
     </center>

@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -18,6 +19,16 @@ import java.time.LocalDate;
 
 public class AfwezigheidsController extends BorderPane {
 
+    @FXML private Button verlofKnop;
+    @FXML private Button ziekteKnop;
+    @FXML private Button indienKnop;
+
+    @FXML private VBox verlofBox;
+    @FXML private DatePicker verlofStartDatum;
+    @FXML private DatePicker verlofEindDatum;
+    @FXML private ComboBox<String> verlofTypeCombo;
+
+    @FXML private VBox ziekteBox;
     @FXML private TextField redenField;
     @FXML private DatePicker startDatumPicker;
     @FXML private DatePicker eindDatumPicker;
@@ -27,12 +38,14 @@ public class AfwezigheidsController extends BorderPane {
     @FXML private Spinner<Integer> startMinuutSpinner;
     @FXML private Spinner<Integer> eindUurSpinner;
     @FXML private Spinner<Integer> eindMinuutSpinner;
+    @FXML private Label certificaatLabel;
+
     @FXML private TextArea extraUitlegArea;
     @FXML private Label foutLabel;
     @FXML private Label succesLabel;
-    @FXML private Label certificaatLabel;
 
     private byte[] certificaatBytes;
+    private boolean isVerlof = true;
 
     public AfwezigheidsController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/AbsensePage.fxml"));
@@ -48,9 +61,11 @@ public class AfwezigheidsController extends BorderPane {
 
     @FXML
     public void initialize() {
+        verlofTypeCombo.getItems().addAll("Jaarlijks verlof", "Onbetaald verlof", "Bijzonder verlof");
+        verlofTypeCombo.setValue("Jaarlijks verlof");
+
         tijdBox.setVisible(false);
         tijdBox.setManaged(false);
-
         heleDagToggle.selectedProperty().addListener((obs, oud, nieuw) -> {
             tijdBox.setVisible(!nieuw);
             tijdBox.setManaged(!nieuw);
@@ -68,9 +83,33 @@ public class AfwezigheidsController extends BorderPane {
     }
 
     @FXML
+    private void toonVerlof() {
+        isVerlof = true;
+        verlofBox.setVisible(true);
+        verlofBox.setManaged(true);
+        ziekteBox.setVisible(false);
+        ziekteBox.setManaged(false);
+        verlofKnop.getStyleClass().setAll("keuze-knop-actief");
+        ziekteKnop.getStyleClass().setAll("keuze-knop");
+        indienKnop.setText("Verlof aanvragen");
+    }
+
+    @FXML
+    private void toonZiekte() {
+        isVerlof = false;
+        verlofBox.setVisible(false);
+        verlofBox.setManaged(false);
+        ziekteBox.setVisible(true);
+        ziekteBox.setManaged(true);
+        ziekteKnop.getStyleClass().setAll("keuze-knop-actief");
+        verlofKnop.getStyleClass().setAll("keuze-knop");
+        indienKnop.setText("Ziekte melden");
+    }
+
+    @FXML
     private void uploadCertificaat() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Kies certificaat");
+        fileChooser.setTitle("Kies ziektebriefje");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Afbeeldingen", "*.png", "*.jpg", "*.jpeg"),
                 new FileChooser.ExtensionFilter("PDF", "*.pdf")
@@ -88,7 +127,7 @@ public class AfwezigheidsController extends BorderPane {
     }
 
     @FXML
-    private void meldAfwezigheid() {
+    private void indienen() {
         foutLabel.setVisible(false);
         foutLabel.setManaged(false);
         succesLabel.setVisible(false);
@@ -100,14 +139,25 @@ public class AfwezigheidsController extends BorderPane {
             return;
         }
 
-        String reden = redenField.getText();
-        LocalDate startDatum = startDatumPicker.getValue();
-        LocalDate eindDatum = eindDatumPicker.getValue();
-
         try {
-            Beheerder.getInstance().getAfwezigheidFacade()
-                    .meldAfwezigheid(werknemer.id(), startDatum, eindDatum, reden, certificaatBytes);
-            toonSucces("Ziekte succesvol gemeld!");
+            if (isVerlof) {
+                Beheerder.getInstance().getVerlofFacade().vraagVerlofAan(
+                        werknemer.id(),
+                        verlofStartDatum.getValue(),
+                        verlofEindDatum.getValue(),
+                        verlofTypeCombo.getValue()
+                );
+                toonSucces("Verlofaanvraag succesvol ingediend!");
+            } else {
+                Beheerder.getInstance().getAfwezigheidFacade().meldAfwezigheid(
+                        werknemer.id(),
+                        startDatumPicker.getValue(),
+                        eindDatumPicker.getValue(),
+                        redenField.getText(),
+                        certificaatBytes
+                );
+                toonSucces("Ziekte succesvol gemeld!");
+            }
             resetForm();
         } catch (IllegalArgumentException e) {
             toonFout(e.getMessage());
@@ -129,12 +179,15 @@ public class AfwezigheidsController extends BorderPane {
     }
 
     private void resetForm() {
+        verlofStartDatum.setValue(null);
+        verlofEindDatum.setValue(null);
+        verlofTypeCombo.setValue("Jaarlijks verlof");
         redenField.clear();
         startDatumPicker.setValue(null);
         eindDatumPicker.setValue(null);
         extraUitlegArea.clear();
         heleDagToggle.setSelected(false);
         certificaatBytes = null;
-        certificaatLabel.setText("Geen bestand gekozen");
+        certificaatLabel.setText("");
     }
 }
