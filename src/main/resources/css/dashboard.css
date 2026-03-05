@@ -181,3 +181,58 @@
 .see_more_button:hover {
     -fx-underline: true;
 }
+
+
+.notification_icon {
+    -fx-background-color: #00ff7f;
+}
+.notification_item {
+    -fx-background-color: rgba(240, 240, 240, 0.5);
+    -fx-background-radius: 50;
+    -fx-border-radius: 12;
+    -fx-padding: 10 14 10 14;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar {
+    -fx-opacity: 0;
+    -fx-padding: -10;
+}
+
+#item_container {
+    -fx-padding: 0 0 20 0;
+}
+
+.taakItem {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 1);
+}
+
+.taak_title {
+    -fx-font-size: 13px;
+    -fx-text-fill: #2c3e50;
+}
+
+.taak_datum {
+    -fx-font-size: 11px;
+    -fx-text-fill: #aaaaaa;
+}
+
+.taak_checkbox .box {
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-border-color: #cccccc;
+    -fx-background-color: white;
+}

@@ -21,19 +21,19 @@
                     </columnConstraints>
                     <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="add_shift" GridPane.columnIndex="0" GridPane.rowIndex="0">
                         <FontIcon iconLiteral="ion4-md-add-circle-outline" iconSize="16" styleClass="action_icon"/>
-                        <Label text="Shift toevoegen" styleClass="action_label"/>
+                        <Label fx:id="meld_afwezig" text="Shift toevoegen" styleClass="action_label"/>
                     </HBox>
                     <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="assign_task" GridPane.columnIndex="1" GridPane.rowIndex="0">
                         <FontIcon iconLiteral="ion4-md-checkmark-circle-outline" iconSize="16" styleClass="action_icon"/>
-                        <Label text="Taak Toekennen" styleClass="action_label"/>
+                        <Label fx:id="meld_afwezig" text="Taak Toekennen" styleClass="action_label"/>
                     </HBox>
                     <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="report_absence" GridPane.columnIndex="0" GridPane.rowIndex="1">
                         <FontIcon iconLiteral="ion4-md-alert" iconSize="16" styleClass="action_icon_red"/>
-                        <Label text="Meld Afwezigheid" styleClass="action_label"/>
+                        <Label fx:id="meld_afwezig" text="Meld Afwezigheid" styleClass="action_label"/>
                     </HBox>
                     <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="plan_holiday" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <FontIcon iconLiteral="ion4-md-calendar" iconSize="16" styleClass="action_icon"/>
-                        <Label text="Plan Vakantie" styleClass="action_label"/>
+                        <Label fx:id="meld_afwezig" text="Plan Vakantie" styleClass="action_label"/>
                     </HBox>
                 </GridPane>
 
@@ -56,64 +56,74 @@
             <!-- RECHTER KOLOM -->
             <VBox styleClass="dashboard_right" HBox.hgrow="ALWAYS" spacing="16" prefWidth="500">
 
-                <!-- Kalender + Notificaties naast elkaar -->
-                <HBox spacing="16">
+                <GridPane hgap="16">
+
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
 
                     <!-- Kalender -->
-                    <VBox spacing="16" HBox.hgrow="ALWAYS">
+                    <VBox spacing="16"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity">
                         <Label text="Kalender" styleClass="section_title"/>
-                        <VBox styleClass="card" fx:id="kalender_container" minHeight="230" maxHeight="230"/>
+                        <VBox styleClass="card" fx:id="kalender_container"
+                              minHeight="230" maxHeight="230"
+                              maxWidth="Infinity"/>
                     </VBox>
 
                     <!-- Notificaties -->
-                    <VBox spacing="16" HBox.hgrow="ALWAYS">
+                    <VBox spacing="16"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity">
                         <Label text="Notificaties" styleClass="section_title"/>
-                        <VBox styleClass="card" fx:id="notifications_container" minHeight="230" maxHeight="230"/>
+                        <VBox styleClass="card" fx:id="notifications_container"
+                              minHeight="230" maxHeight="230"
+                              maxWidth="Infinity"/>
+                    </VBox>
+
+                </GridPane>
+
+                <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"> <Label text="Statistieken" styleClass="section_title"/></HBox>
+                <GridPane hgap="16">
+
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <!-- Statistieken links -->
+                    <VBox styleClass="card"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity"
+                          spacing="10">
+                        <padding>
+                            <Insets top="16" right="16" bottom="16" left="16"/>
+                        </padding>
+                        <VBox fx:id="taken_container"></VBox>
+                    </VBox>
+
+                    <!-- Statistieken rechts -->
+                    <VBox styleClass="card"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity"
+                          spacing="10">
+                        <padding>
+                            <Insets top="16" right="16" bottom="16" left="16"/>
+                        </padding>
+
+                        <VBox fx:id="uren_container"></VBox>
 
                     </VBox>
 
-                </HBox>
+                </GridPane>
 
-                <HBox>
-
-                    <!-- statistieken -->
-                    <VBox spacing="16" HBox.hgrow="ALWAYS">
-                        <Label text="Statistieken" styleClass="section_title"/>
-                        <HBox spacing="16">
-                            <VBox styleClass="card" alignment="CENTER" fx:id="statistics">
-                                <padding>
-                                    <Insets top="10" right="10" bottom="10" left="10"/>
-                                </padding>
-                                <HBox spacing="16">
-
-                                    <!-- Open Taken -->
-                                    <VBox spacing="10" HBox.hgrow="ALWAYS">
-                                        <HBox spacing="6">
-                                            <Button text="Your Tasks" styleClass="tab_active"/>
-                                            <Button text="Team Tasks" styleClass="tab"/>
-                                        </HBox>
-                                        <VBox fx:id="takenList" spacing="8"/>
-                                    </VBox>
-
-                                </HBox>
-                            </VBox>
-                            <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
-                                <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                                <HBox spacing="6">
-                                    <Button text="All" styleClass="tab_active"/>
-                                    <Button text="Tasks" styleClass="tab"/>
-                                    <Button text="Absence" styleClass="tab"/>
-                                </HBox>
-                                <VBox fx:id="absense" spacing="8"/>
-                            </VBox>
-                        </HBox>
-
-                    </VBox>
-
-
-                </HBox>
-
-                <!-- Statistieken -->
+                <!-- locatie info -->
                 <Label text="Locatie info" styleClass="section_title"/>
                 <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
 

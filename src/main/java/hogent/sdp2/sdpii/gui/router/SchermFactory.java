@@ -36,7 +36,8 @@ public class SchermFactory {
     }
 
     public DashboardController dashboardScherm() {
-        return new DashboardController();
+
+        return new DashboardController(Beheerder.getInstance().getOverzichtFacade());
     }
 
     public NotificatiesController notificatieScherm() {

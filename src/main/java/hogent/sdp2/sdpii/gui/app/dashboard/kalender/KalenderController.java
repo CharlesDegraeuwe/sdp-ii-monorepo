@@ -20,7 +20,7 @@ public class KalenderController extends VBox {
     @FXML GridPane day_grid;
 
     public KalenderController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/Kalender.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/kalender/Kalender.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -29,8 +29,11 @@ public class KalenderController extends VBox {
             throw new RuntimeException(e);
         }
 
-        this.NavigateCalendar();
+        // Dit is de fix
+        this.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(this, javafx.scene.layout.Priority.ALWAYS);
 
+        this.NavigateCalendar();
     }
 
     public void NavigateCalendar() {

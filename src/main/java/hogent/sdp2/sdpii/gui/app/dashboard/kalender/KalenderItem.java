@@ -14,7 +14,7 @@ public class KalenderItem extends HBox {
     @FXML HBox container;
 
     public KalenderItem(int dag){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/KalenderItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/kalender/KalenderItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

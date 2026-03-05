@@ -13,8 +13,9 @@ import java.io.IOException;
 public class NotificatieController extends VBox {
     @FXML Button see_more;
     @FXML VBox item_container;
+
     public NotificatieController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/Notifications.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/notificaties/Notifications.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -23,12 +24,18 @@ public class NotificatieController extends VBox {
             throw new RuntimeException(e);
         }
 
+        this.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(this, javafx.scene.layout.Priority.ALWAYS);
         this.init();
 
 
     }
 
     private void init() {
+        for(int i = 0; i < 4; i++) {
+            item_container.getChildren().add(new NotificatieItemController());
+        }
+
         see_more.setOnMouseClicked(e -> {
             Router.getInstance().navigeerNaar(Scherm.NOTIFICATIES);});
     }

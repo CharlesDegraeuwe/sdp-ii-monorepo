@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="HBox" fx:id="container" spacing="10" alignment="CENTER_LEFT"
+         styleClass="taakItem" xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+    <CheckBox fx:id="checkBox" styleClass="taak_checkbox"/>
+    <Label fx:id="title" text="Task B" styleClass="taak_title" HBox.hgrow="ALWAYS"/>
+    <Label fx:id="datum" text="13/12/25" styleClass="taak_datum"/>
+</fx:root>

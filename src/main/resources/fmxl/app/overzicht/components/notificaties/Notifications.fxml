@@ -11,10 +11,15 @@
         <Button text="Tasks" styleClass="tab"/>
         <Button text="Absence" styleClass="tab"/>
     </HBox>
+    <ScrollPane fitToWidth="true"
+                prefWidth="Infinity"
+                hbarPolicy="NEVER"
+                maxHeight="150"
+                vbarPolicy="AS_NEEDED">
+        <VBox fx:id="item_container" styleClass="item_container" minHeight="150" maxHeight="150" VBox.vgrow="ALWAYS" spacing="7">
 
-    <VBox fx:id="item_container" minHeight="110" maxHeight="110">
-
-    </VBox>
+        </VBox>
+    </ScrollPane>
 
     <HBox alignment="CENTER_RIGHT">
         <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
