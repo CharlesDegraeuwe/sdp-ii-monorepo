@@ -168,3 +168,16 @@
     -fx-background-color: #F6F6F6;
     -fx-text-fill: #2c3e50;
 }
+
+.see_more_button {
+    -fx-text-fill: #888888;
+    -fx-underline: solid;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.see_more_button:hover {
+    -fx-underline: true;
+}

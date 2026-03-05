@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="VBox" fx:id="notificatieGrid" spacing="10" stylesheets="@/css/dashboard.css" alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+    <HBox spacing="6" alignment="CENTER">
+        <Button text="All" styleClass="tab_active"/>
+        <Button text="Tasks" styleClass="tab"/>
+        <Button text="Absence" styleClass="tab"/>
+    </HBox>
+
+    <VBox fx:id="item_container" minHeight="110" maxHeight="110">
+
+    </VBox>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
+    </HBox>
+    <VBox fx:id="notificatiesList" spacing="8"/>
+</fx:root>

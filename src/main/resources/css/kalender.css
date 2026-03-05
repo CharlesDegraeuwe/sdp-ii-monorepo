@@ -1,0 +1,14 @@
+.kalender_item {
+    -fx-pref-width: 20px;
+    -fx-min-width: 30px;
+    -fx-pref-height: 20px;
+    -fx-min-height: 20px;
+    -fx-background-radius: 999px;
+    -fx-alignment: CENTER;
+    -fx-cursor: hand;
+    -fx-font-size: 10;
+}
+
+.kalender_item:hover {
+    -fx-background-color: rgba(203, 213, 225, 0.25);
+}
