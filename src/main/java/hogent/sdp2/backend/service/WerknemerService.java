@@ -2,11 +2,11 @@ package hogent.sdp2.backend.service;
 
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.*;
+import hogent.sdp2.backend.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -153,7 +153,6 @@ public class WerknemerService {
         werknemer.setNaam(dto.naam());
         werknemer.setVoornaam(dto.voornaam());
         werknemer.setEmail(dto.email());
-        werknemer.setStatus(dto.status());
         werknemer.setTelefoonnummer(dto.telefoonnummer());
         werknemer.setGeboortedatum(dto.geboortedatum());
 

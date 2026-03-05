@@ -7,6 +7,5 @@ public record UpdateUserDTO(
     String voornaam,
     String email,
     String telefoonnummer,
-    LocalDate geboortedatum,
-    String status
+    LocalDate geboortedatum
 ) {}

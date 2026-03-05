@@ -1,13 +1,14 @@
-package hogent.sdp2.backend.dto.request;
+package hogent.sdp2.backend.dto.response;
 
 import java.time.LocalDate;
 
-public record WerknemerAanmakenDTO(
+public record WerknemerResponseDTO(
+        int id,
         String naam,
         String voornaam,
         String email,
-        String wachtwoord,
         String telefoonnummer,
         LocalDate geboortedatum,
-        String rol
+        String rol,
+        String status
 ) {}
