@@ -4,34 +4,33 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ComboBox?>
 <fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="task_root" stylesheets="@/css/tasks.css">
-        <HBox alignment="CENTER">
-            <HBox>
-                <Button>
-                    <Label text="Checken"/>
-                </Button>
-                <Button>
-                    <Label text="Creëren"/>
-                </Button>
-                <Button>
-                    <Label text="Toewijzen"/>
-                </Button>
-            </HBox>
-            <Region HBox.hgrow="ALWAYS"/>
-            <HBox>
-                <Button>
-                    <Label text="Jouw Taken"/>
-                </Button>
-                <Button>
-                    <Label text="Team Taken"/>
-                </Button>
-                <Button>
-                    <Label text="Toewijzen"/>
-                </Button>
-            </HBox>
-            <HBox></HBox>
-        </HBox>
-        <HBox alignment="CENTER_RIGHT">
+    <ScrollPane fitToWidth="true" maxWidth="600" hbarPolicy="NEVER" styleClass="scroll-pane">
+        <content>
+            <VBox spacing="30" alignment="TOP_CENTER">
+                <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
+                    <HBox alignment="CENTER">
+                            <HBox styleClass="filter-container" alignment="CENTER" maxWidth="400">
+                                <Button fx:id="checkKnop"  text="Alles" styleClass="filter-knop-actief"/>
+                                <Button fx:id="creeerKnop" text="Werk" styleClass="filter-knop"/>
+                                <Button fx:id="toewijzenKnop" text="Afwezigheid" styleClass="filter-knop"/>
+                            </HBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <HBox styleClass="filter-container" alignment="CENTER" maxWidth="400">
+                            <Button fx:id="jouwTaken"  text="Jouw Taken" styleClass="filter-knop-actief"/>
+                            <Button fx:id="teamTaken" text="Team Taken" styleClass="filter-knop"/>
+                        </HBox>
+                        <HBox></HBox>
+                    </HBox>
+                    <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <ComboBox fx:id="Locatie" value="LocatieA" styleClass="picker"/>
+                        <ComboBox fx:id="Team" value="Team B" styleClass="picker"/>
+                        <ComboBox fx:id="Werknemer" value="Milan" styleClass="picker"/>
+                    </HBox>
 
-        </HBox>
+            </VBox>
+        </content>
+    </ScrollPane>
 </fx:root>

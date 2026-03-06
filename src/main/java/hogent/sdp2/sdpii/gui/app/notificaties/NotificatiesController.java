@@ -4,6 +4,7 @@ import domain.Beheerder;
 import domain.auth.Sessie;
 import domain.dto.NotificatieDTO;
 import domain.dto.WerknemerDTO;
+import domain.facades.NotificatieFacade;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -30,9 +31,9 @@ public class NotificatiesController extends BorderPane {
 
     private List<NotificatieDTO> alleNotificaties;
     private String actieveFilter = "Alles";
-
-    public NotificatiesController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/NotificationsPage.fxml"));
+    private NotificatieFacade nf;
+    public NotificatiesController(NotificatieFacade nf) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/notificaties/NotificationsPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -40,6 +41,7 @@ public class NotificatiesController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        this.nf = nf;
         setTop(new PageTitleController("Notificaties"));
     }
 
@@ -53,9 +55,7 @@ public class NotificatiesController extends BorderPane {
         if (werknemer == null) return;
 
         new Thread(() -> {
-            List<NotificatieDTO> notificaties = Beheerder.getInstance()
-                    .getNotificatieFacade()
-                    .geefNotificaties(werknemer.id());
+            List<NotificatieDTO> notificaties = nf.geefNotificaties(werknemer.id());
 
             Platform.runLater(() -> {
                 this.alleNotificaties = notificaties;
@@ -195,9 +195,9 @@ public class NotificatiesController extends BorderPane {
         actieveFilter = filter;
 
         allesKnop.getStyleClass().setAll(filter.equals("Alles") ? "filter-knop-actief" : "filter-knop");
-        werkKnop.getStyleClass().setAll(filter.equals("Werk") ? "filter-knop-actief" : "filter-knop");
-        afwezigheidKnop.getStyleClass().setAll(filter.equals("Afwezigheid") ? "filter-knop-actief" : "filter-knop");
-        verlofKnop.getStyleClass().setAll(filter.equals("Verlof") ? "filter-knop-actief" : "filter-knop");
+        werkKnop.getStyleClass().setAll(filter.equals("Werk") ? "filter-knop-actief" : "filter-knop", "filter-knop-werk");
+        afwezigheidKnop.getStyleClass().setAll(filter.equals("Afwezigheid") ? "filter-knop-actief" : "filter-knop", "filter-knop-afwezigheid");
+        verlofKnop.getStyleClass().setAll(filter.equals("Verlof") ? "filter-knop-actief" : "filter-knop", "filter-knop-verlof");
 
         if (alleNotificaties == null) return;
 

@@ -41,7 +41,7 @@ public class SchermFactory {
     }
 
     public NotificatiesController notificatieScherm() {
-        return new NotificatiesController();
+        return new NotificatiesController(Beheerder.getInstance().getNotificatieFacade());
     }
 
     public PlanningController planningScherm() { return new PlanningController();}
