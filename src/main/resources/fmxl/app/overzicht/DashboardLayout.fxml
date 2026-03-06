@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/dashboard.css" styleClass="dashboard_root">
+    <center>
+        <HBox styleClass="dashboard_outer" spacing="16">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+
+            <!-- LINKER KOLOM -->
+            <VBox styleClass="dashboard_left" spacing="16" HBox.hgrow="ALWAYS" prefWidth="500">
+
+                <Label text="Snelle Acties" styleClass="section_title"/>
+                <GridPane styleClass="card" hgap="10" vgap="10" fx:id="quick_actions">
+                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="add_shift" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <FontIcon iconLiteral="ion4-md-add-circle-outline" iconSize="16" styleClass="action_icon"/>
+                        <Label fx:id="meld_afwezig" text="Shift toevoegen" styleClass="action_label"/>
+                    </HBox>
+                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="assign_task" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <FontIcon iconLiteral="ion4-md-checkmark-circle-outline" iconSize="16" styleClass="action_icon"/>
+                        <Label fx:id="meld_afwezig" text="Taak Toekennen" styleClass="action_label"/>
+                    </HBox>
+                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="report_absence" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <FontIcon iconLiteral="ion4-md-alert" iconSize="16" styleClass="action_icon_red"/>
+                        <Label fx:id="meld_afwezig" text="Meld Afwezigheid" styleClass="action_label"/>
+                    </HBox>
+                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="plan_holiday" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <FontIcon iconLiteral="ion4-md-calendar" iconSize="16" styleClass="action_icon"/>
+                        <Label fx:id="meld_afwezig" text="Plan Vakantie" styleClass="action_label"/>
+                    </HBox>
+                </GridPane>
+
+                <!-- Geplande Uren -->
+                <Label text="Geplande Uren" styleClass="section_title"/>
+                <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
+                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                    <TableView fx:id="shiftsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colDag" text="Dag" prefWidth="80"/>
+                            <TableColumn fx:id="colNaam" text="Naam" prefWidth="150"/>
+                            <TableColumn fx:id="colUren" text="Uren" prefWidth="120"/>
+                            <TableColumn fx:id="colSite" text="Site" prefWidth="80"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+            </VBox>
+
+            <!-- RECHTER KOLOM -->
+            <VBox styleClass="dashboard_right" HBox.hgrow="ALWAYS" spacing="16" prefWidth="500">
+
+                <GridPane hgap="16">
+
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <!-- Kalender -->
+                    <VBox spacing="16"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity">
+                        <Label text="Kalender" styleClass="section_title"/>
+                        <VBox styleClass="card" fx:id="kalender_container"
+                              minHeight="230" maxHeight="230"
+                              maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Notificaties -->
+                    <VBox spacing="16"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity">
+                        <Label text="Notificaties" styleClass="section_title"/>
+                        <VBox styleClass="card" fx:id="notifications_container"
+                              minHeight="230" maxHeight="230"
+                              maxWidth="Infinity"/>
+                    </VBox>
+
+                </GridPane>
+
+                <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"> <Label text="Statistieken" styleClass="section_title"/></HBox>
+                <GridPane hgap="16">
+
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <!-- Statistieken links -->
+                    <VBox styleClass="card"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity"
+                          spacing="10">
+                        <padding>
+                            <Insets top="16" right="16" bottom="16" left="16"/>
+                        </padding>
+                        <VBox fx:id="taken_container"></VBox>
+                    </VBox>
+
+                    <!-- Statistieken rechts -->
+                    <VBox styleClass="card"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity"
+                          spacing="10">
+                        <padding>
+                            <Insets top="16" right="16" bottom="16" left="16"/>
+                        </padding>
+
+                        <VBox fx:id="uren_container"></VBox>
+
+                    </VBox>
+
+                </GridPane>
+
+                <!-- locatie info -->
+                <Label text="Locatie info" styleClass="section_title"/>
+                <VBox styleClass="card" fx:id="locatie_info" spacing="12" VBox.vgrow="ALWAYS">
+
+
+                </VBox>
+
+            </VBox>
+
+        </HBox>
+    </center>
+</fx:root>

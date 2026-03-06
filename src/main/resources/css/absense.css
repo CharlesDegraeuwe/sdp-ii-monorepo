@@ -1,0 +1,76 @@
+.absense-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 5);
+    -fx-max-width: 800;
+}
+
+.absense-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: #2c3e50;
+}
+
+.absense-sublabel {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+}
+
+.absense-toggle {
+    -fx-background-radius: 20px;
+    -fx-pref-width: 45px;
+    -fx-pref-height: 22px;
+}
+
+.upload-area {
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 8px;
+    -fx-border-style: dashed;
+    -fx-background-color: #fafafa;
+    -fx-background-radius: 8px;
+}
+
+.upload-icon {
+    -fx-font-size: 22px;
+    -fx-text-fill: #999999;
+}
+
+.browse-btn {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 4px;
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.absense-textarea {
+    -fx-background-radius: 8px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8px;
+    -fx-max-width: 800;
+}
+
+.absense-report-btn {
+    -fx-background-color: #3D3D3D;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50;
+    -fx-padding: 12 30 12 30;
+    -fx-cursor: hand;
+}
+
+.absense-report-btn:hover {
+    -fx-background-color: #2D2D2D;
+}
+
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 12px;
+}
+
+.success-label {
+    -fx-text-fill: green;
+    -fx-font-size: 12px;
+}

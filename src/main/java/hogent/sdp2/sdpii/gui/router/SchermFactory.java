@@ -36,16 +36,15 @@ public class SchermFactory {
     }
 
     public DashboardController dashboardScherm() {
-        return new DashboardController();
+
+        return new DashboardController(Beheerder.getInstance().getOverzichtFacade());
     }
 
     public NotificatiesController notificatieScherm() {
         return new NotificatiesController();
     }
 
-    public PlanningController planningScherm() {
-        return new PlanningController();
-    }
+    public PlanningController planningScherm() { return new PlanningController();}
 
     public LocatiesController locatieScherm() {
         return new LocatiesController();
@@ -62,6 +61,7 @@ public class SchermFactory {
     public TeamsController teamsScherm() {
         return new TeamsController();
     }
+
 
     //auth
     public CreeerMedewerkerController creeerMedewerkerScherm() {

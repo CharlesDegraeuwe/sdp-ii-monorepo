@@ -29,7 +29,8 @@ public class BeheerGebruikersController extends VBox {
 
 
     private List<WerknemerDTO> alleWerknemers;
-
+    // TODO filtered list, observable sorted list toevoegen
+    // lijstje via decorators omringen wrappers
 
     public BeheerGebruikersController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/admin/manage_users/ManageUsers.fxml"));

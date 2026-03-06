@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="page">
+    <children>
+        <HBox alignment="CENTER_RIGHT">
+            <HBox>
+                <Button>
+                    <Label text="teams"/>
+                </Button>
+                <Button>
+                    <Label text="gebruikers"/>
+                </Button>
+            </HBox>
+        </HBox>
+        <GridPane fx:id="child_container"/>
+    </children>
+</fx:root>

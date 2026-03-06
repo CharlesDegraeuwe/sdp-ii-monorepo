@@ -1,11 +1,9 @@
 package hogent.sdp2.sdpii.gui.components.auth;
 
+import domain.Beheerder;
 import domain.auth.Sessie;
 import domain.dto.WerknemerDTO;
 import domain.facades.AuthFacade;
-import repository.entities.Werknemer;
-
-import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import javafx.concurrent.Task;
@@ -28,7 +26,6 @@ public class LoginFormController extends VBox {
 
     private MainFrameController mf;
     private Stage stage;
-    private final AuthFacade service = new AuthFacade();
 
     public LoginFormController(MainFrameController mf, Stage stage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/auth/LoginForm.fxml"));
@@ -69,7 +66,7 @@ public class LoginFormController extends VBox {
         Task<WerknemerDTO> task = new Task<>() {
             @Override
             protected WerknemerDTO call() {
-                return service.login(
+                return Beheerder.getInstance().getAuthFacade().login(
                         txtEmail.getText(),
                         txtWachtwoord.getText()
                 );

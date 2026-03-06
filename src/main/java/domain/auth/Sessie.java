@@ -1,11 +1,21 @@
 package domain.auth;
 
 import domain.dto.WerknemerDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Sessie {
-    private static Sessie instance;
-    private static WerknemerDTO ingelogdeWerknemer;
 
+    private WerknemerDTO ingelogdeWerknemer;
+    @Setter
+    @Getter
+    private String sessionId; 
+
+    private static class SessieHolder {
+        private static final Sessie INSTANCE = new Sessie();
+    }
+
+    private Sessie() {}
 
     public WerknemerDTO getIngelogdeWerknemer() {
         return ingelogdeWerknemer;
@@ -37,9 +47,6 @@ public class Sessie {
     }
 
     public static Sessie getInstance() {
-        if (instance == null) {
-            instance = new Sessie();
-        }
-        return instance;
+        return SessieHolder.INSTANCE;
     }
 }

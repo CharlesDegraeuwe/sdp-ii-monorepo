@@ -3,7 +3,6 @@ package domain.facades;
 import domain.dto.UpdateWerknemerDTO;
 import domain.dto.WerknemerDTO;
 import domain.services.WerknemersApiService;
-import repository.entities.Werknemer;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ public class WerknemersFacade {
     public void activeerWerknemer(String code) {
        api.activeerWerknemer(code);
     }
-
 
     public void deactiveerWerknemer(int werknemerId) {
 

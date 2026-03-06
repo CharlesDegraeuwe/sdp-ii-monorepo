@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page" stylesheets="@/css/absense.css">
+
+    <center>
+        <VBox spacing="20" alignment="TOP_CENTER">
+            <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
+
+            <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false"/>
+            <Label fx:id="succesLabel" styleClass="success-label" visible="false" managed="false"/>
+
+            <VBox styleClass="absense-card" spacing="15">
+                <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+
+                <TextField fx:id="redenField" promptText="Reden voor afwezigheid..." styleClass="text-field"/>
+
+                <HBox spacing="30">
+
+                    <VBox spacing="12" HBox.hgrow="ALWAYS">
+                        <Label text="Duur:" styleClass="absense-label"/>
+
+                        <HBox spacing="15">
+                            <VBox spacing="4">
+                                <Label text="Startdatum" styleClass="absense-sublabel"/>
+                                <DatePicker fx:id="startDatumPicker" prefWidth="130"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Einddatum" styleClass="absense-sublabel"/>
+                                <DatePicker fx:id="eindDatumPicker" prefWidth="130"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Hele dag" styleClass="absense-sublabel"/>
+                            <ToggleButton fx:id="heleDagToggle" styleClass="absense-toggle" selected="false"/>
+                        </HBox>
+
+                        <HBox fx:id="tijdBox" spacing="15" alignment="CENTER_LEFT">
+                            <VBox spacing="4">
+                                <Label text="Starttijd" styleClass="absense-sublabel"/>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Spinner fx:id="startUurSpinner" prefWidth="55"/>
+                                    <Label text=":" styleClass="absense-sublabel"/>
+                                    <Spinner fx:id="startMinuutSpinner" prefWidth="55"/>
+                                </HBox>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Eindtijd" styleClass="absense-sublabel"/>
+                                <HBox spacing="5" alignment="CENTER">
+                                    <Spinner fx:id="eindUurSpinner" prefWidth="55"/>
+                                    <Label text=":" styleClass="absense-sublabel"/>
+                                    <Spinner fx:id="eindMinuutSpinner" prefWidth="55"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <VBox spacing="10" alignment="TOP_LEFT" minWidth="220">
+                        <Label text="Upload ziektebriefje:" styleClass="absense-label"/>
+                        <VBox styleClass="upload-area" alignment="CENTER" spacing="8" minHeight="130">
+                            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                            <Label text="⬆" styleClass="upload-icon"/>
+                            <Label text="sleep bestanden hierheen" styleClass="absense-sublabel"/>
+                            <Label text="of" styleClass="absense-sublabel"/>
+                            <Button text="bladeren" onAction="#uploadCertificaat" styleClass="browse-btn"/>
+                        </VBox>
+                        <Label fx:id="certificaatLabel" text="" styleClass="absense-sublabel"/>
+                    </VBox>
+
+                </HBox>
+
+            </VBox>
+
+            <TextArea fx:id="extraUitlegArea" promptText="Extra toelichting (optioneel)..." prefHeight="80" styleClass="absense-textarea"/>
+
+            <Button text="Meld afwezigheid" onAction="#meldAfwezigheid" styleClass="absense-report-btn"/>
+
+        </VBox>
+    </center>
+
+</fx:root>
