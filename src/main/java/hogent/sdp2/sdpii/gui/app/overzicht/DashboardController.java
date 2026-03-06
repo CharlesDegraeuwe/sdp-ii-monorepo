@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.dashboard;
+package hogent.sdp2.sdpii.gui.app.overzicht;
 
 import domain.facades.OverzichtsFacade;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;

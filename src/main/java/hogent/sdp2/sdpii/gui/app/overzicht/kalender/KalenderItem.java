@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.dashboard.kalender;
+package hogent.sdp2.sdpii.gui.app.overzicht.kalender;
 
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;

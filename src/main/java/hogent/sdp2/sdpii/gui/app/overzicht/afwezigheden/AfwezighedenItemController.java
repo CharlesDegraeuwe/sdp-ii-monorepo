@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.dashboard.afwezigheden;
+package hogent.sdp2.sdpii.gui.app.overzicht.afwezigheden;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

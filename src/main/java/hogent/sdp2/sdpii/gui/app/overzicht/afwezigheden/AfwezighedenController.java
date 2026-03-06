@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.dashboard.open_taken;
+package hogent.sdp2.sdpii.gui.app.overzicht.afwezigheden;
 
 import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.router.Router;
@@ -11,12 +11,12 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class OpenTakenController extends VBox {
+public class AfwezighedenController extends VBox {
     @FXML VBox itemContainer;
     @FXML ComboBox teamPicker;
     @FXML Button see_more;
-    public OpenTakenController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/open_taken/OpenTaken.fxml"));
+    public AfwezighedenController() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/afwezigheden/Afwezigheden.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -25,13 +25,13 @@ public class OpenTakenController extends VBox {
             throw new RuntimeException(e);
         }
 
-        itemContainer.getChildren().add(new OpenTakenItemController("Taak 1", "13/04/26"));
-        itemContainer.getChildren().add(new OpenTakenItemController("Taak 2", "13/04/26"));
+        itemContainer.getChildren().add(new AfwezighedenItemController("Milan Van Bellingen", "ziekte"));
+        itemContainer.getChildren().add(new AfwezighedenItemController("Marte De Backer", "vakantie"));
         String role = Sessie.getInstance().userRole();
         if (role.equals("manager") || role.equals("admin")) {
             teamPicker.setVisible(false);
             teamPicker.setManaged(false);
         }
-        see_more.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
+        see_more.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
     }
 }

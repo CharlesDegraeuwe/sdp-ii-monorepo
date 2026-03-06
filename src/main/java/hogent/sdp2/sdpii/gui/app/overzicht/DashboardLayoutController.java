@@ -1,10 +1,10 @@
-package hogent.sdp2.sdpii.gui.app.dashboard;
+package hogent.sdp2.sdpii.gui.app.overzicht;
 
-import hogent.sdp2.sdpii.gui.app.dashboard.afwezigheden.AfwezighedenController;
-import hogent.sdp2.sdpii.gui.app.dashboard.kalender.KalenderController;
-import hogent.sdp2.sdpii.gui.app.dashboard.locatie_info.LocatieInfoController;
-import hogent.sdp2.sdpii.gui.app.dashboard.notificaties.NotificatieController;
-import hogent.sdp2.sdpii.gui.app.dashboard.open_taken.OpenTakenController;
+import hogent.sdp2.sdpii.gui.app.overzicht.afwezigheden.AfwezighedenController;
+import hogent.sdp2.sdpii.gui.app.overzicht.kalender.KalenderController;
+import hogent.sdp2.sdpii.gui.app.overzicht.locatie_info.LocatieInfoController;
+import hogent.sdp2.sdpii.gui.app.overzicht.notificaties.NotificatieController;
+import hogent.sdp2.sdpii.gui.app.overzicht.open_taken.OpenTakenController;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.fxml.FXML;

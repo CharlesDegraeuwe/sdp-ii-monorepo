@@ -8,7 +8,7 @@ import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.afwezigheid.AfwezigheidsController;
-import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
+import hogent.sdp2.sdpii.gui.app.overzicht.DashboardController;
 import hogent.sdp2.sdpii.gui.app.instellingen.InstellingenController;
 import hogent.sdp2.sdpii.gui.app.locaties.LocatiesController;
 import hogent.sdp2.sdpii.gui.app.notificaties.NotificatiesController;

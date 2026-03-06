@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.dashboard.kalender;
+package hogent.sdp2.sdpii.gui.app.overzicht.kalender;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

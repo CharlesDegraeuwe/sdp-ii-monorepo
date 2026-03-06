@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.dashboard.open_taken;
+package hogent.sdp2.sdpii.gui.app.overzicht.open_taken;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

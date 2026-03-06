@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="task_root" stylesheets="@/css/tasks.css">
+        <HBox alignment="CENTER">
+            <HBox>
+                <Button>
+                    <Label text="Checken"/>
+                </Button>
+                <Button>
+                    <Label text="Creëren"/>
+                </Button>
+                <Button>
+                    <Label text="Toewijzen"/>
+                </Button>
+            </HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox>
+                <Button>
+                    <Label text="Jouw Taken"/>
+                </Button>
+                <Button>
+                    <Label text="Team Taken"/>
+                </Button>
+                <Button>
+                    <Label text="Toewijzen"/>
+                </Button>
+            </HBox>
+            <HBox></HBox>
+        </HBox>
+        <HBox alignment="CENTER_RIGHT">
+
+        </HBox>
+</fx:root>

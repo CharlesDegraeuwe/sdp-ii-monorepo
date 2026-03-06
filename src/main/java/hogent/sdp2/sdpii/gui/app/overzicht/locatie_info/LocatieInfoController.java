@@ -1,8 +1,6 @@
-package hogent.sdp2.sdpii.gui.app.dashboard.locatie_info;
+package hogent.sdp2.sdpii.gui.app.overzicht.locatie_info;
 
-import domain.auth.Sessie;
 import domain.dto.LocatieInfoDTO;
-import hogent.sdp2.sdpii.gui.app.dashboard.open_taken.OpenTakenItemController;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.fxml.FXML;
