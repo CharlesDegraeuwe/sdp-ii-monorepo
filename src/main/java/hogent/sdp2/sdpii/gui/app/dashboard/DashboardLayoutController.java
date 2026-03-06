@@ -1,12 +1,19 @@
 package hogent.sdp2.sdpii.gui.app.dashboard;
 
-import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
+import hogent.sdp2.sdpii.gui.app.dashboard.afwezigheden.AfwezighedenController;
+import hogent.sdp2.sdpii.gui.app.dashboard.kalender.KalenderController;
+import hogent.sdp2.sdpii.gui.app.dashboard.locatie_info.LocatieInfoController;
+import hogent.sdp2.sdpii.gui.app.dashboard.notificaties.NotificatieController;
+import hogent.sdp2.sdpii.gui.app.dashboard.open_taken.OpenTakenController;
+import hogent.sdp2.sdpii.gui.router.Router;
+import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -14,10 +21,19 @@ import java.io.IOException;
 public class DashboardLayoutController extends BorderPane {
 
     // Quick Actions
-    @FXML private javafx.scene.control.Button btnAddShift;
-    @FXML private javafx.scene.control.Button btnAssignTask;
-    @FXML private javafx.scene.control.Button btnReportAbsence;
-    @FXML private javafx.scene.control.Button btnPlanHoliday;
+    @FXML private HBox add_shift;
+    @FXML private HBox assign_task;
+    @FXML private HBox report_absence;
+    @FXML private HBox plan_holiday;
+
+
+    //containers
+    @FXML private GridPane calendarGrid;
+    @FXML private VBox kalender_container;
+    @FXML private VBox notifications_container;
+    @FXML private VBox uren_container;
+    @FXML private VBox taken_container;
+    @FXML private VBox locatie_info;
 
     // Scheduled Hours
     @FXML private TableView<?> shiftsTable;
@@ -26,9 +42,10 @@ public class DashboardLayoutController extends BorderPane {
     @FXML private TableColumn<?, ?> colUren;
     @FXML private TableColumn<?, ?> colSite;
 
+
     // Calendar
     @FXML private javafx.scene.control.Label lblMonth;
-    @FXML private GridPane calendarGrid;
+
 
     // Notifications
     @FXML private VBox notificatiesList;
@@ -47,10 +64,20 @@ public class DashboardLayoutController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        //toevoegen van velden
+        kalender_container.getChildren().add(new KalenderController());
+        notifications_container.getChildren().add(new NotificatieController());
+        uren_container.getChildren().add(new AfwezighedenController());
+        taken_container.getChildren().add(new OpenTakenController());
+        locatie_info.getChildren().add(new LocatieInfoController());
     }
 
     @FXML
     private void initialize() {
-        // TODO: facades injecteren en data laden
+       add_shift.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.PLANNING));
+       assign_task.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
+       report_absence.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
+       plan_holiday.setOnMouseClicked(e-> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
     }
 }

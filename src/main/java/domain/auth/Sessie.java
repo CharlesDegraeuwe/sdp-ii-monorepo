@@ -1,10 +1,15 @@
 package domain.auth;
 
 import domain.dto.WerknemerDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Sessie {
 
     private WerknemerDTO ingelogdeWerknemer;
+    @Setter
+    @Getter
+    private String sessionId; 
 
     private static class SessieHolder {
         private static final Sessie INSTANCE = new Sessie();
