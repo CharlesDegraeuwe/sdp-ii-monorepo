@@ -38,16 +38,19 @@
 .browse-btn {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #cccccc;
-    -fx-border-radius: 4px;
-    -fx-padding: 4 12 4 12;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 6 20 6 20;
     -fx-font-size: 12px;
     -fx-cursor: hand;
 }
 
 .absense-textarea {
-    -fx-background-radius: 8px;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
     -fx-border-color: #e0e0e0;
-    -fx-border-radius: 8px;
+    -fx-border-radius: 12;
+    -fx-padding: 10;
     -fx-max-width: 800;
 }
 
@@ -65,6 +68,35 @@
     -fx-background-color: #2D2D2D;
 }
 
+.keuze-knop {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 10 25 10 25;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-text-fill: #666666;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 5, 0, 0, 2);
+}
+
+.keuze-knop:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.keuze-knop-actief {
+    -fx-background-color: #3D3D3D;
+    -fx-border-color: #3D3D3D;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 10 25 10 25;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 3);
+}
+
 .error-label {
     -fx-text-fill: red;
     -fx-font-size: 12px;
@@ -73,4 +105,47 @@
 .success-label {
     -fx-text-fill: green;
     -fx-font-size: 12px;
+}
+
+.date-picker {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.date-picker .text-field {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 20;
+    -fx-border-color: transparent;
+    -fx-padding: 8 15 8 15;
+    -fx-pref-width: 120px;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 0 20 20 0;
+    -fx-border-color: transparent;
+}
+
+.date-picker:focused .text-field {
+    -fx-background-color: #e8e8e8;
+}
+
+.spinner .text-field {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 20;
+    -fx-border-color: transparent;
+    -fx-padding: 6 10 6 10;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: #f0f0f0;
+}
+
+.absense-card .text-field {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 20;
+    -fx-border-color: transparent;
+    -fx-padding: 12 20 12 20;
+    -fx-font-size: 14px;
 }
