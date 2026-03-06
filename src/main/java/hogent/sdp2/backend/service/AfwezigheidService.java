@@ -4,6 +4,7 @@ import hogent.sdp2.backend.domain.Afwezigheid;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.AfwezigheidAanmakenDTO;
 import hogent.sdp2.backend.repository.AfwezigheidRepository;
+import hogent.sdp2.backend.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ public class AfwezigheidService {
 
     private final AfwezigheidRepository afwezigheidRepository;
     private final WerknemerRepository werknemerRepository;
+    private final TeamwerknemerRepository teamwerknemerRepository;
+    private final NotificatieService notificatieService;
 
     public String meldAfwezigheid(AfwezigheidAanmakenDTO dto) {
         Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
@@ -31,6 +34,25 @@ public class AfwezigheidService {
         afwezigheid.setCertificaat(dto.certificaat());
 
         afwezigheidRepository.save(afwezigheid);
+
+        // Notificatie naar alle teamleden
+        teamwerknemerRepository.findByWerknemerId(dto.werknemerId())
+                .stream()
+                .findFirst()
+                .ifPresent(tw -> {
+                    teamwerknemerRepository.findByTeamId(tw.getTeam().getId())
+                            .forEach(teamlid -> {
+                                if (!teamlid.getWerknemer().getId().equals(dto.werknemerId())) {
+                                    notificatieService.maakNotificatie(
+                                            teamlid.getWerknemer().getId(),
+                                            "Teamlid afwezig",
+                                            werknemer.getVoornaam() + " " + werknemer.getNaam() +
+                                                    " is ziek van " + dto.startDatum() + " tot " + dto.eindDatum() + "."
+                                    );
+                                }
+                            });
+                });
+
         return "Afwezigheid succesvol gemeld.";
     }
 }

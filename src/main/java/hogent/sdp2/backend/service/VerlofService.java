@@ -16,6 +16,7 @@ public class VerlofService {
     private final VerlofRepository verlofRepository;
     private final WerknemerRepository werknemerRepository;
     private final TeamwerknemerRepository teamwerknemerRepository;
+    private final NotificatieService notificatieService;
 
     public String vraagVerlofAan(VerlofAanvragenDTO dto) {
         Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
@@ -25,7 +26,6 @@ public class VerlofService {
             throw new RuntimeException("Einddatum mag niet voor startdatum liggen.");
         }
 
-        // Zoek manager of supervisor van het team
         Integer goedkeurderId = teamwerknemerRepository
                 .findByWerknemerId(dto.werknemerId())
                 .stream()
@@ -35,7 +35,7 @@ public class VerlofService {
                 .orElse(null);
 
         if (goedkeurderId == null) {
-            throw new RuntimeException("Geen manager of supervisor gevonden voor deze werknemer.");
+            throw new RuntimeException("Geen manager gevonden voor deze werknemer.");
         }
 
         Verlof verlof = new Verlof();
@@ -47,6 +47,47 @@ public class VerlofService {
         verlof.setGoedkeurderId(goedkeurderId);
 
         verlofRepository.save(verlof);
+
+        notificatieService.maakNotificatie(
+                goedkeurderId,
+                "Nieuwe verlofaanvraag",
+                werknemer.getVoornaam() + " " + werknemer.getNaam() + " heeft verlof aangevraagd van " +
+                        dto.startDatum() + " tot " + dto.eindDatum() + ".",
+                verlof.getId()
+        );
+
         return "Verlofaanvraag succesvol ingediend.";
+    }
+
+    public String keurVerlofGoed(Integer verlofId) {
+        Verlof verlof = verlofRepository.findById(verlofId)
+                .orElseThrow(() -> new RuntimeException("Verlof niet gevonden"));
+
+        verlof.setStatus("Goedgekeurd");
+        verlofRepository.save(verlof);
+
+        notificatieService.maakNotificatie(
+                verlof.getWerknemer().getId(),
+                "Verlof goedgekeurd",
+                "Jouw verlofaanvraag van " + verlof.getStartDatum() + " tot " + verlof.getEindDatum() + " is goedgekeurd."
+        );
+
+        return "Verlof goedgekeurd.";
+    }
+
+    public String wijsVerlofAf(Integer verlofId) {
+        Verlof verlof = verlofRepository.findById(verlofId)
+                .orElseThrow(() -> new RuntimeException("Verlof niet gevonden"));
+
+        verlof.setStatus("Afgewezen");
+        verlofRepository.save(verlof);
+
+        notificatieService.maakNotificatie(
+                verlof.getWerknemer().getId(),
+                "Verlof afgewezen",
+                "Jouw verlofaanvraag van " + verlof.getStartDatum() + " tot " + verlof.getEindDatum() + " is afgewezen."
+        );
+
+        return "Verlof afgewezen.";
     }
 }
