@@ -125,7 +125,7 @@
 
                 <!-- locatie info -->
                 <Label text="Locatie info" styleClass="section_title"/>
-                <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
+                <VBox styleClass="card" fx:id="locatie_info" spacing="12" VBox.vgrow="ALWAYS">
 
 
                 </VBox>

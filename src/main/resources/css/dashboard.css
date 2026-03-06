@@ -215,9 +215,9 @@
 
 .taakItem {
     -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 1);
+    -fx-background-radius: 999px;
+    -fx-border-radius: 999px;
+    -fx-background-color: rgba(228, 228, 228, 0.75);
 }
 
 .taak_title {
@@ -228,6 +228,7 @@
 .taak_datum {
     -fx-font-size: 11px;
     -fx-text-fill: #aaaaaa;
+    -fx-alignment: CENTER_RIGHT;
 }
 
 .taak_checkbox .box {
@@ -235,4 +236,127 @@
     -fx-border-radius: 50%;
     -fx-border-color: #cccccc;
     -fx-background-color: white;
+}
+
+.team_picker {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: transparent;
+    -fx-font-size: 12px;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 4 10 4 10;
+}
+
+.team_picker .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.team_picker .arrow {
+    -fx-background-color: #000000;
+}
+
+.team_picker:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+/* dropdown lijst */
+.team_picker .list-view {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.team_picker .list-cell {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 6 12 6 12;
+    -fx-background-color: transparent;
+}
+
+.team_picker .list-cell:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.team_picker .list-cell:selected {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
+
+/* Locatie */
+.locatie_table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.locatie_table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 11px;
+    -fx-text-fill: #aaaaaa;
+    -fx-font-weight: normal;
+    -fx-alignment: "CENTER_LEFT";
+}
+
+.locatie_table .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.locatie_table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
+    -fx-text-fill: #2c3e50;
+}
+
+.locatie_table .table-row-cell:selected {
+    -fx-background-color: #f5f5f5;
+}
+
+.locatie_table .table-cell {
+    -fx-border-color: transparent;
+    -fx-padding: 8 4 8 4;
+    -fx-alignment: "CENTER";
+    -fx-font-size: 13px;
+}
+
+
+/* kalender */
+.kalender_item {
+    -fx-pref-width: 30px;
+    -fx-min-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-min-height: 20px;
+    -fx-background-radius: 999px;
+    -fx-alignment: CENTER;
+    -fx-cursor: hand;
+    -fx-font-size: 10;
+}
+
+.kalender_item:hover {
+    -fx-background-color: rgba(203, 213, 225, 0.25);
+}
+
+.notification_item {
+    -fx-pref-height: 30px;
+    -fx-min-height: 30px;
+    -fx-background-radius: 999px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-font-size: 10;
+    -fx-background-color: rgba(228, 228, 228, 0.75);
+
+}
+
+.notification_icon {
+    -fx-pref-width: 5px;
+    -fx-min-width: 5px;
+    -fx-max-width: 5px;
+    -fx-pref-height: 5px;
+    -fx-min-height: 5px;
+    -fx-max-height: 5px;
+    -fx-background-radius: 999px;
+    -fx-background-color: green;
 }

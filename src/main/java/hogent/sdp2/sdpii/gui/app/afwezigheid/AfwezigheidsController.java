@@ -35,7 +35,7 @@ public class AfwezigheidsController extends BorderPane {
     private byte[] certificaatBytes;
 
     public AfwezigheidsController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/AbsensePage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/afwezigheden/AbsensePage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

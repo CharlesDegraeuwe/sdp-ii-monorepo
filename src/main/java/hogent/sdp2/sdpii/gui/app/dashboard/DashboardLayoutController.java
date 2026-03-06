@@ -1,7 +1,8 @@
 package hogent.sdp2.sdpii.gui.app.dashboard;
 
-import hogent.sdp2.sdpii.gui.app.dashboard.geplande_uren.GeplandeUrenController;
+import hogent.sdp2.sdpii.gui.app.dashboard.afwezigheden.AfwezighedenController;
 import hogent.sdp2.sdpii.gui.app.dashboard.kalender.KalenderController;
+import hogent.sdp2.sdpii.gui.app.dashboard.locatie_info.LocatieInfoController;
 import hogent.sdp2.sdpii.gui.app.dashboard.notificaties.NotificatieController;
 import hogent.sdp2.sdpii.gui.app.dashboard.open_taken.OpenTakenController;
 import hogent.sdp2.sdpii.gui.router.Router;
@@ -32,6 +33,7 @@ public class DashboardLayoutController extends BorderPane {
     @FXML private VBox notifications_container;
     @FXML private VBox uren_container;
     @FXML private VBox taken_container;
+    @FXML private VBox locatie_info;
 
     // Scheduled Hours
     @FXML private TableView<?> shiftsTable;
@@ -66,8 +68,9 @@ public class DashboardLayoutController extends BorderPane {
         //toevoegen van velden
         kalender_container.getChildren().add(new KalenderController());
         notifications_container.getChildren().add(new NotificatieController());
-        uren_container.getChildren().add(new GeplandeUrenController());
+        uren_container.getChildren().add(new AfwezighedenController());
         taken_container.getChildren().add(new OpenTakenController());
+        locatie_info.getChildren().add(new LocatieInfoController());
     }
 
     @FXML
