@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.planning;
 
+import hogent.sdp2.sdpii.gui.app.planning.components.PlanningLayoutController;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -17,5 +18,6 @@ public class PlanningController extends BorderPane {
             throw new RuntimeException(e);
         }
         setTop(new PageTitleController("Planning"));
+        setCenter(new PlanningLayoutController());
     }
 }

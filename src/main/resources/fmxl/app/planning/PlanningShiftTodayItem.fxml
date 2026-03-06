@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<fx:root type="HBox" alignment="CENTER_LEFT" spacing="8" xmlns:fx="http://javafx.com/fxml">
+    <FontIcon fx:id="icon" iconLiteral="ion4-md-time" iconSize="14" styleClass="shift_time_icon"/>
+    <Label fx:id="lblTijd" text="08:30 - 12:30" styleClass="shift_time_label" HBox.hgrow="ALWAYS"/>
+    <Label fx:id="lblLocatie" text="Locatie B" styleClass="shift_locatie_label"/>
+</fx:root>
