@@ -20,17 +20,42 @@ public class VerlofApiService {
     public String vraagVerlofAan(VerlofAanvragenDTO dto) {
         try {
             String json = mapper.writeValueAsString(dto);
-
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL))
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .header("Content-Type", "application/json")
                     .build();
-
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Verlof response: " + response.statusCode() + " - " + response.body());
             return response.body();
         } catch (Exception e) {
             throw new RuntimeException("Fout bij indienen verlofaanvraag", e);
+        }
+    }
+
+    public String keurVerlofGoed(int verlofId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + verlofId + "/goedkeuren"))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij goedkeuren verlof", e);
+        }
+    }
+
+    public String wijsVerlofAf(int verlofId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + verlofId + "/afwijzen"))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij afwijzen verlof", e);
         }
     }
 }

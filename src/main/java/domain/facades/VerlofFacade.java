@@ -12,4 +12,12 @@ public class VerlofFacade {
         VerlofAanvragenDTO dto = new VerlofAanvragenDTO(werknemerId, startDatum, eindDatum, type);
         return api.vraagVerlofAan(dto);
     }
+
+    public String keurVerlofGoed(int verlofId) {
+        return api.keurVerlofGoed(verlofId);
+    }
+
+    public String wijsVerlofAf(int verlofId) {
+        return api.wijsVerlofAf(verlofId);
+    }
 }
