@@ -66,4 +66,8 @@ public class Beheerder {
         return new AuthFacade();
     }
 
+    public OverzichtsFacade getOverzichtFacade() {
+        return new OverzichtsFacade();
+    }
+
 }

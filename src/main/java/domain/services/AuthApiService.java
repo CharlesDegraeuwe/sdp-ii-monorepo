@@ -11,30 +11,34 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class AuthApiService {
+public class AuthApiService extends ApiService {
     Dotenv dotenv = Dotenv.load();
     private final String BASE_URL = dotenv.get("BASE_URL")+"/werknemers";
-    private final HttpClient client = HttpClient.newHttpClient();
-    private final ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
+
 
     public WerknemerDTO login(String email, String wachtwoord) {
-        System.out.println(BASE_URL + "/login");
         try {
             String json = """
                 {"email": "%s", "wachtwoord": "%s"}
                 """.formatted(email, wachtwoord);
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/login"))
+            HttpRequest request = authenticatedRequest(BASE_URL + "/login")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
-                    .header("Content-Type", "application/json")
                     .build();
+
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            WerknemerDTO werknemer = mapper.readValue(response.body(), WerknemerDTO.class);
-            return werknemer;
+            response.headers().firstValue("Set-Cookie").ifPresent(cookie -> {
+                if (cookie.contains("JSESSIONID=")) {
+                    String sessionId = cookie.split("JSESSIONID=")[1].split(";")[0];
+                    Sessie.getInstance().setSessionId(sessionId);
+                }
+            });
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Body: " + response.body());
+
+            return mapper.readValue(response.body(), WerknemerDTO.class);
         } catch (Exception e) {
             throw new RuntimeException("Fout bij inloggen", e);
         }

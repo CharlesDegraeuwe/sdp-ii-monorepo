@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="VBox" fx:id="container" spacing="10" xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
+    <TableView fx:id="locatieTable" styleClass="locatie_table" fixedCellSize="40">
+        <columns>
+            <TableColumn fx:id="colNaam" text="name:" prefWidth="120"/>
+            <TableColumn fx:id="colLocatie" text="location:" prefWidth="150"/>
+            <TableColumn fx:id="colStatus" text="status:" prefWidth="100"/>
+            <TableColumn fx:id="colStats" text="quick stats:" prefWidth="160"/>
+        </columns>
+    </TableView>
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="see more" fx:id="see_more" styleClass="see_more_button"/>
+    </HBox>
+</fx:root>

@@ -9,10 +9,9 @@
         <HBox styleClass="dashboard_outer" spacing="16">
             <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
 
-            <!-- LINKER KOLOM (60%) -->
-            <VBox styleClass="dashboard_left" spacing="16" HBox.hgrow="ALWAYS">
+            <!-- LINKER KOLOM -->
+            <VBox styleClass="dashboard_left" spacing="16" HBox.hgrow="ALWAYS" prefWidth="500">
 
-                <!-- Snelle Acties -->
                 <Label text="Snelle Acties" styleClass="section_title"/>
                 <GridPane styleClass="card" hgap="10" vgap="10" fx:id="quick_actions">
                     <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
@@ -20,21 +19,21 @@
                         <ColumnConstraints percentWidth="50"/>
                         <ColumnConstraints percentWidth="50"/>
                     </columnConstraints>
-                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="add_shift" GridPane.columnIndex="0" GridPane.rowIndex="0">
                         <FontIcon iconLiteral="ion4-md-add-circle-outline" iconSize="16" styleClass="action_icon"/>
-                        <Label text="Add Shifts" styleClass="action_label"/>
+                        <Label fx:id="meld_afwezig" text="Shift toevoegen" styleClass="action_label"/>
                     </HBox>
-                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="assign_task" GridPane.columnIndex="1" GridPane.rowIndex="0">
                         <FontIcon iconLiteral="ion4-md-checkmark-circle-outline" iconSize="16" styleClass="action_icon"/>
-                        <Label text="Assign Task" styleClass="action_label"/>
+                        <Label fx:id="meld_afwezig" text="Taak Toekennen" styleClass="action_label"/>
                     </HBox>
-                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="report_absence" GridPane.columnIndex="0" GridPane.rowIndex="1">
                         <FontIcon iconLiteral="ion4-md-alert" iconSize="16" styleClass="action_icon_red"/>
-                        <Label text="Report Absence" styleClass="action_label"/>
+                        <Label fx:id="meld_afwezig" text="Meld Afwezigheid" styleClass="action_label"/>
                     </HBox>
-                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="plan_holiday" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <FontIcon iconLiteral="ion4-md-calendar" iconSize="16" styleClass="action_icon"/>
-                        <Label text="Plan Holiday" styleClass="action_label"/>
+                        <Label fx:id="meld_afwezig" text="Plan Vakantie" styleClass="action_label"/>
                     </HBox>
                 </GridPane>
 
@@ -54,79 +53,80 @@
 
             </VBox>
 
-            <!-- RECHTER KOLOM (40%) -->
-            <VBox styleClass="dashboard_right" spacing="16" prefWidth="400">
+            <!-- RECHTER KOLOM -->
+            <VBox styleClass="dashboard_right" HBox.hgrow="ALWAYS" spacing="16" prefWidth="500">
 
-                <!-- Kalender + Notificaties naast elkaar -->
-                <HBox spacing="16">
+                <GridPane hgap="16">
+
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
 
                     <!-- Kalender -->
-                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <VBox spacing="16"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity">
                         <Label text="Kalender" styleClass="section_title"/>
-                        <VBox styleClass="card" spacing="10">
-                            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                            <HBox alignment="CENTER_LEFT" spacing="8">
-                                <Button fx:id="btnPrevMonth" text="‹" styleClass="btn_icon"/>
-                                <Label fx:id="lblMonth" text="December" styleClass="card_title" HBox.hgrow="ALWAYS"/>
-                                <Button fx:id="btnNextMonth" text="›" styleClass="btn_icon"/>
-                            </HBox>
-                            <GridPane fx:id="calendarGrid" hgap="4" vgap="4" alignment="CENTER">
-                                <!-- Dag headers -->
-                                <Label text="ma" styleClass="cal_header" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                                <Label text="di" styleClass="cal_header" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                                <Label text="wo" styleClass="cal_header" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                                <Label text="do" styleClass="cal_header" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
-                                <Label text="vr" styleClass="cal_header" GridPane.columnIndex="4" GridPane.rowIndex="0"/>
-                                <Label text="za" styleClass="cal_header" GridPane.columnIndex="5" GridPane.rowIndex="0"/>
-                                <Label text="zo" styleClass="cal_header" GridPane.columnIndex="6" GridPane.rowIndex="0"/>
-                            </GridPane>
-                        </VBox>
+                        <VBox styleClass="card" fx:id="kalender_container"
+                              minHeight="230" maxHeight="230"
+                              maxWidth="Infinity"/>
                     </VBox>
 
                     <!-- Notificaties -->
-                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <VBox spacing="16"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity">
                         <Label text="Notificaties" styleClass="section_title"/>
-                        <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
-                            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                            <HBox spacing="6">
-                                <Button text="All" styleClass="tab_active"/>
-                                <Button text="Tasks" styleClass="tab"/>
-                                <Button text="Absence" styleClass="tab"/>
-                            </HBox>
-                            <VBox fx:id="notificatiesList" spacing="8"/>
-                        </VBox>
+                        <VBox styleClass="card" fx:id="notifications_container"
+                              minHeight="230" maxHeight="230"
+                              maxWidth="Infinity"/>
                     </VBox>
 
-                </HBox>
+                </GridPane>
 
-                <!-- Statistieken -->
-                <Label text="Statistieken" styleClass="section_title"/>
-                <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
-                    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                    <HBox spacing="16">
+                <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"> <Label text="Statistieken" styleClass="section_title"/></HBox>
+                <GridPane hgap="16">
 
-                        <!-- Open Taken -->
-                        <VBox spacing="10" HBox.hgrow="ALWAYS">
-                            <HBox spacing="6">
-                                <Button text="Your Tasks" styleClass="tab_active"/>
-                                <Button text="Team Tasks" styleClass="tab"/>
-                            </HBox>
-                            <VBox fx:id="takenList" spacing="8"/>
-                        </VBox>
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                    </columnConstraints>
 
-                        <!-- Afwezige leden -->
-                        <VBox spacing="10" HBox.hgrow="ALWAYS">
-                            <Label text="Absent Members" styleClass="card_subtitle"/>
-                            <VBox fx:id="afwezigenList" spacing="8"/>
-                        </VBox>
-
-                    </HBox>
-
-                    <!-- Plant Coverage -->
-                    <VBox spacing="8">
-                        <Label text="Plant Coverage" styleClass="card_subtitle"/>
-                        <VBox fx:id="plantList" spacing="8"/>
+                    <!-- Statistieken links -->
+                    <VBox styleClass="card"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity"
+                          spacing="10">
+                        <padding>
+                            <Insets top="16" right="16" bottom="16" left="16"/>
+                        </padding>
+                        <VBox fx:id="taken_container"></VBox>
                     </VBox>
+
+                    <!-- Statistieken rechts -->
+                    <VBox styleClass="card"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          maxWidth="Infinity"
+                          spacing="10">
+                        <padding>
+                            <Insets top="16" right="16" bottom="16" left="16"/>
+                        </padding>
+
+                        <VBox fx:id="uren_container"></VBox>
+
+                    </VBox>
+
+                </GridPane>
+
+                <!-- locatie info -->
+                <Label text="Locatie info" styleClass="section_title"/>
+                <VBox styleClass="card" fx:id="locatie_info" spacing="12" VBox.vgrow="ALWAYS">
+
 
                 </VBox>
 

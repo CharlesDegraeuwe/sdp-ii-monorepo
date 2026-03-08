@@ -12,6 +12,7 @@ import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.app.instellingen.InstellingenController;
 import hogent.sdp2.sdpii.gui.app.locaties.LocatiesController;
 import hogent.sdp2.sdpii.gui.app.notificaties.NotificatiesController;
+import hogent.sdp2.sdpii.gui.app.planning.PlanningController;
 import hogent.sdp2.sdpii.gui.app.taken.TakenController;
 import hogent.sdp2.sdpii.gui.app.teams.TeamsController;
 
@@ -35,13 +36,15 @@ public class SchermFactory {
     }
 
     public DashboardController dashboardScherm() {
-        return new DashboardController();
+
+        return new DashboardController(Beheerder.getInstance().getOverzichtFacade());
     }
 
     public NotificatiesController notificatieScherm() {
         return new NotificatiesController();
     }
 
+    public PlanningController planningScherm() { return new PlanningController();}
 
     public LocatiesController locatieScherm() {
         return new LocatiesController();
@@ -59,6 +62,7 @@ public class SchermFactory {
         return new TeamsController();
     }
 
+
     //auth
     public CreeerMedewerkerController creeerMedewerkerScherm() {
         return new CreeerMedewerkerController();
@@ -75,5 +79,6 @@ public class SchermFactory {
     public AdminHomeController adminHomeScherm() {
         return new AdminHomeController();
     }
+
 
 }
