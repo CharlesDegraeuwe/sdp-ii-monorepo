@@ -59,6 +59,26 @@ public class WerknemerController {
         return werknemerService.resetWachtwoord(dto);
     }
 
+    @PutMapping("/{id}/blokkeer")
+    public String blokkeerWerknemerAdmin(@PathVariable Integer id) {
+        return werknemerService.blokkeerWerknemerAdmin(id);
+    }
+
+    @PutMapping("/{id}/activeer")
+    public String activeerWerknemerAdmin(@PathVariable Integer id) {
+        return werknemerService.activeerWerknemerAdmin(id);
+    }
+
+    @PutMapping("/{id}/deactiveer")
+    public String deactiveerWerknemerAdmin(@PathVariable Integer id) {
+        return werknemerService.deactiveerWerknemerAdmin(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteWerknemer(@PathVariable Integer id) {
+        return werknemerService.verwijderWerknemer(id);
+    }
+
     @PutMapping("/update")
     public WerknemerResponseDTO update(@RequestBody UpdateUserDTO dto) {return werknemerService.updateUser(dto);}
 

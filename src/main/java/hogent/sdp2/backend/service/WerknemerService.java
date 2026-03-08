@@ -202,4 +202,54 @@ public class WerknemerService {
                 ))
                 .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
     }
+
+    public String blokkeerWerknemerAdmin(Integer id) {
+        Optional<Werknemer> werknemerOpt = werknemerRepository.findById(id);
+
+        if (werknemerOpt.isEmpty()) {
+            return "Fout: De opgevraagde werknemer is niet gevonden.";
+        }
+        Werknemer werknemer = werknemerOpt.get();
+        werknemer.setStatus("Geblokkeerd");
+
+        werknemerRepository.save(werknemer);
+
+        return "Het account van " + werknemer.getEmail() + " is succesvol geblokkeerd!";
+    }
+
+    public String activeerWerknemerAdmin(Integer id) {
+        Optional<Werknemer> werknemerOpt = werknemerRepository.findById(id);
+
+        if (werknemerOpt.isEmpty()) {
+            return "Fout: De opgevraagde werknemer is niet gevonden.";
+        }
+        Werknemer werknemer = werknemerOpt.get();
+        werknemer.setStatus("Actief");
+
+        werknemerRepository.save(werknemer);
+
+        return "Het account van " + werknemer.getEmail() + " is succesvol geblokkeerd!";
+    }
+
+    public String deactiveerWerknemerAdmin(Integer id) {
+        Optional<Werknemer> werknemerOpt = werknemerRepository.findById(id);
+
+        if (werknemerOpt.isEmpty()) {
+            return "Fout: De opgevraagde werknemer is niet gevonden.";
+        }
+        Werknemer werknemer = werknemerOpt.get();
+        werknemer.setStatus("Inactief");
+
+        werknemerRepository.save(werknemer);
+
+        return "Het account van " + werknemer.getEmail() + " is succesvol geblokkeerd!";
+    }
+
+    public String verwijderWerknemer(Integer id) {
+        if (!werknemerRepository.existsById(id)) {
+            return "Fout: De opgevraagde werknemer is niet gevonden.";
+        }
+        werknemerRepository.deleteById(id);
+        return "Werknemer succesvol verwijderd!";
+    }
 }

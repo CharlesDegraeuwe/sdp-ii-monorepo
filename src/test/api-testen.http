@@ -103,3 +103,15 @@ DELETE http://localhost:8080/api/machines/1
 
 ### Haal de status van een specifieke machine op
 GET http://localhost:8080/api/machines/1/status
+
+### Verwijder een specifieke werknemer
+DELETE http://localhost:8080/api/werknemers/13
+
+### Blokkeer een werknemer
+PUT http://localhost:8080/api/werknemers/13/blokkeer
+
+### Activeer een werknemer
+PUT http://localhost:8080/api/werknemers/13/activeer
+
+### Deactiveer een werknemer
+PUT http://localhost:8080/api/werknemers/13/deactiveer
