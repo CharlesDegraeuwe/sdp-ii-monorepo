@@ -36,7 +36,7 @@ public class Router {
             case INSTELLINGEN -> app.navigateTo(factory.instellingenScherm());
             case LOCATIES -> app.navigateTo(factory.locatieScherm());
             case NOTIFICATIES -> app.navigateTo(factory.notificatieScherm());
-            //case PLANNING -> app.navigateTo(factory.planningScherm());
+            case PLANNING -> app.navigateTo(factory.planningScherm());
             case TAKEN -> app.navigateTo(factory.taskenScherm());
             case TEAMS -> app.navigateTo(factory.teamsScherm());
             case CREEER_MEDEWERKER -> app.navigateTo(factory.creeerMedewerkerScherm());

@@ -127,3 +127,14 @@
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
+.status-goedgekeurd {
+    -fx-text-fill: #2ecc71;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.status-afgewezen {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
