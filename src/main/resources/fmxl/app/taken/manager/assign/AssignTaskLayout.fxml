@@ -10,7 +10,15 @@
         <VBox spacing="16" maxWidth="850" alignment="TOP_LEFT">
             <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
 
-            <Label text="Assign Tasks:" styleClass="card_subtitle"/>
+           <HBox alignment="CENTER">
+               <Label text="Assign Tasks:" styleClass="card_subtitle"/>
+               <Region HBox.hgrow="ALWAYS"/>
+               <HBox alignment="CENTER_RIGHT" spacing="10" minHeight="20">
+                   <ComboBox fx:id="Locatie" value="LocatieA" styleClass="picker"/>
+                   <ComboBox fx:id="Team" value="Team B" styleClass="picker"/>
+                   <ComboBox fx:id="Werknemer" value="Milan" styleClass="picker"/>
+               </HBox>
+           </HBox>
 
             <HBox spacing="16">
                 <VBox styleClass="card" spacing="8" HBox.hgrow="ALWAYS">
