@@ -6,18 +6,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="page">
-    <children>
-        <HBox alignment="CENTER_RIGHT" fx:id="top_bar">
-            <HBox>
-                <Button fx:id="teams_button">
-                    <Label text="teams"/>
-                </Button>
-                <Button fx:id="users_button">
-                    <Label text="gebruikers"/>
-                </Button>
+<?import javafx.geometry.Insets?>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="task_root" stylesheets="@/css/teams.css">
+    <VBox spacing="10" alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+        <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
+        <HBox alignment="CENTER" fx:id="controls">
+            <HBox fx:id="tab_buttons" styleClass="filter-container" alignment="CENTER" maxWidth="400">
+                <Button fx:id="checkKnop" text="Bekijken" styleClass="filter-knop-actief"/>
+                <Button fx:id="creeerKnop" text="Creëren" styleClass="filter-knop"/>
+            </HBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox styleClass="filter-container" fx:id="page_buttons" alignment="CENTER" maxWidth="400">
+                <Button fx:id="teamsPagina" text="Teams" styleClass="filter-knop-actief"/>
+                <Button fx:id="usersPagina" text="Werknemers" styleClass="filter-knop"/>
             </HBox>
         </HBox>
-        <BorderPane fx:id="child_container"/>
-    </children>
+        <BorderPane fx:id="outer_container" VBox.vgrow="ALWAYS"/>
+    </VBox>
 </fx:root>

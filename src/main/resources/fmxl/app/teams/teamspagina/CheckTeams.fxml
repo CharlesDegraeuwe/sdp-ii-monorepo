@@ -6,18 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="page">
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <HBox alignment="CENTER_RIGHT">
-            <HBox>
-                <Button>
-                    <Label text="teams"/>
-                </Button>
-                <Button>
-                    <Label text="gebruikers"/>
-                </Button>
-            </HBox>
-        </HBox>
-        <GridPane fx:id="child_container"/>
+        <Label text="check teams"/>
     </children>
 </fx:root>

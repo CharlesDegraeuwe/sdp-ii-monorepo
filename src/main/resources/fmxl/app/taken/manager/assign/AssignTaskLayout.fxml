@@ -11,10 +11,10 @@
             <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
 
            <HBox alignment="CENTER">
-               <Label text="Assign Tasks:" styleClass="card_subtitle"/>
+               <Label text="Taken Toewijzen:" styleClass="card_subtitle"/>
                <Region HBox.hgrow="ALWAYS"/>
                <HBox alignment="CENTER_RIGHT" spacing="10" minHeight="20">
-                   <ComboBox fx:id="Locatie" value="LocatieA" styleClass="picker"/>
+                   <ComboBox fx:id="Locatie" value="Locatie A" styleClass="picker"/>
                    <ComboBox fx:id="Team" value="Team B" styleClass="picker"/>
                    <ComboBox fx:id="Werknemer" value="Milan" styleClass="picker"/>
                </HBox>
@@ -23,17 +23,17 @@
             <HBox spacing="16">
                 <VBox styleClass="card" spacing="8" HBox.hgrow="ALWAYS">
                     <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                    <Label text="Tasks:" styleClass="section-label"/>
+                    <Label text="Taken:" styleClass="section-label"/>
                     <VBox fx:id="taskListContainer" spacing="8" styleClass="task-section"/>
                 </VBox>
 
                 <VBox spacing="12" HBox.hgrow="ALWAYS">
                     <VBox styleClass="card" spacing="8" VBox.vgrow="ALWAYS">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                        <Label text="Team member assignment:" styleClass="section-label"/>
+                        <Label text="Teamleden:" styleClass="section-label"/>
                         <VBox fx:id="memberListContainer" spacing="6" styleClass="task-section"/>
                     </VBox>
-                    <Button fx:id="assignButton" text="Assign Task" styleClass="create-task-btn" maxWidth="Infinity"/>
+                    <Button fx:id="assignButton" text="Wijs Taak Toe" styleClass="create-task-btn" maxWidth="Infinity"/>
                 </VBox>
             </HBox>
         </VBox>
