@@ -32,6 +32,7 @@ public class NotificatiesController extends BorderPane {
     private List<NotificatieDTO> alleNotificaties;
     private String actieveFilter = "Alles";
     private NotificatieFacade nf;
+
     public NotificatiesController(NotificatieFacade nf) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/notificaties/NotificationsPage.fxml"));
         loader.setRoot(this);

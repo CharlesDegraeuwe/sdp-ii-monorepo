@@ -1,11 +1,11 @@
 .task_root {
-    -fx-max-width: 700;
+    -fx-max-width: 850;
 }
 
 .filter-container {
     -fx-background-color: #ffffff;
     -fx-background-radius: 30;
-    -fx-padding: 6 6 6 6;
+    -fx-padding: 6;
     -fx-spacing: 2;
 }
 
@@ -40,6 +40,7 @@
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
+    -fx-fit-to-height: true;
 }
 
 .scroll-pane > .viewport {
@@ -96,4 +97,220 @@
     -fx-background-color: transparent;
     -fx-text-fill: #2c3e50;
     -fx-font-weight: bold;
+}
+
+
+/* Cards */
+.card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 26;
+    -fx-border-radius: 26;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 4);
+}
+
+.card_title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.card_subtitle {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+.section-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+/* Action Buttons */
+.action_btn {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 10 14 10 14;
+    -fx-cursor: hand;
+}
+
+.action_btn:hover {
+    -fx-background-color: #E4E4E4;
+}
+
+.action_label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.action_icon {
+    -fx-icon-color: #2c3e50;
+}
+
+.action_icon_red {
+    -fx-icon-color: #E31B35;
+}
+
+
+.see_more_button {
+    -fx-text-fill: #888888;
+    -fx-underline: solid;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.see_more_button:hover {
+    -fx-underline: true;
+}
+
+/* Task rows */
+.task-row {
+    -fx-padding: 6 8 6 8;
+    -fx-spacing: 10;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.task-row:hover {
+    -fx-background-color: #F9F9F9;
+    -fx-background-radius: 8;
+}
+
+.task-circle {
+    -fx-fill: transparent;
+    -fx-stroke: #D0D0D0;
+    -fx-stroke-width: 1.5;
+}
+
+.task-name {
+    -fx-font-size: 13px;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Due date badges */
+.task-due-badge {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 8;
+    -fx-padding: 3 8 3 8;
+    -fx-font-size: 10px;
+    -fx-text-fill: #888888;
+}
+
+.task-action-btn {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 6;
+    -fx-padding: 4 8 4 8;
+    -fx-cursor: hand;
+    -fx-min-width: 24;
+    -fx-min-height: 24;
+}
+
+.task-action-btn:hover {
+    -fx-background-color: #E4E4E4;
+}
+
+/* Task detail card */
+.edit-link {
+    -fx-text-fill: #888888;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-underline: true;
+}
+
+.task-due-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #888888;
+}
+
+.task-location-link {
+    -fx-font-size: 11px;
+    -fx-text-fill: #5B9BD5;
+    -fx-cursor: hand;
+}
+
+.task-input {
+    -fx-background-color: #F6F6F6;
+    -fx-background-radius: 25;
+    -fx-border-color: transparent;
+    -fx-padding: 10 12 10 12;
+    -fx-font-size: 12px;
+    -fx-prompt-text-fill: #AAAAAA;
+}
+
+.task-input-area {
+    -fx-background-color: #F6F6F6;
+    -fx-control-inner-background: #F6F6F6;
+    -fx-background-radius: 25;
+    -fx-border-color: transparent;
+    -fx-padding: 10 12 10 12;
+    -fx-font-size: 12px;
+    -fx-prompt-text-fill: #AAAAAA;
+}
+
+.task-section {
+    -fx-padding: 0;
+}
+
+.task-input-small {
+    -fx-background-color: #F6F6F6;
+    -fx-background-radius: 10;
+    -fx-border-color: transparent;
+    -fx-padding: 8 10 8 10;
+    -fx-font-size: 12px;
+    -fx-prompt-text-fill: #AAAAAA;
+    -fx-max-width: 50;
+    -fx-alignment: CENTER;
+}
+
+.toggle-switch {
+    -fx-background-color: #D0D0D0;
+    -fx-background-radius: 20;
+    -fx-padding: 3 16 3 4;
+    -fx-min-width: 40;
+    -fx-min-height: 22;
+    -fx-cursor: hand;
+}
+
+.toggle-switch:selected {
+    -fx-background-color: #2c3e50;
+    -fx-padding: 3 4 3 16;
+}
+
+.create-task-btn {
+    -fx-background-color: #1A1A1A;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 14;
+    -fx-padding: 14 24 14 24;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.create-task-btn:hover {
+    -fx-background-color: #333333;
+}
+
+/* Assign task item */
+.assign-task-item {
+    -fx-background-color: #F9F9F9;
+    -fx-background-radius: 10;
+    -fx-padding: 10 12 10 12;
+}
+
+.assign-task-item:hover {
+    -fx-background-color: #F0F0F0;
+}
+
+/* Member item */
+.member-item {
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 10;
+    -fx-padding: 10 12 10 12;
+    -fx-cursor: hand;
+}
+
+.member-item:hover {
+    -fx-background-color: #F0F0F0;
 }
