@@ -2,12 +2,296 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml">
-    <children>
-        <Label text="create teams"/>
-    </children>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml"
+         spacing="12" style="-fx-background-color: #f0f0f0; -fx-padding: 20;">
+
+    <!-- Top bar: "Create team:" label + "Filter by Plant" button -->
+    <HBox alignment="CENTER_LEFT">
+        <children>
+            <Label text="Create team:" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Filter by Plant  ▾"
+                    style="-fx-background-color: white;
+                           -fx-border-color: #cccccc;
+                           -fx-border-radius: 20;
+                           -fx-background-radius: 20;
+                           -fx-padding: 8 16 8 16;
+                           -fx-font-size: 13px;
+                           -fx-font-weight: bold;
+                           -fx-cursor: hand;"/>
+        </children>
+    </HBox>
+
+    <!-- Main white card -->
+    <HBox spacing="0"
+          style="-fx-background-color: white;
+                 -fx-background-radius: 16;
+                 -fx-border-radius: 16;
+                 -fx-padding: 28;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0, 0, 2);">
+
+        <!-- LEFT: Basic Information -->
+        <VBox spacing="14" HBox.hgrow="ALWAYS" maxWidth="320" minWidth="260">
+            <children>
+                <Label text="Basic Information:"
+                       style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+
+                <TextField promptText="name"
+                           style="-fx-background-color: #f5f5f5;
+                                  -fx-background-radius: 20;
+                                  -fx-border-color: transparent;
+                                  -fx-padding: 10 16 10 16;
+                                  -fx-font-size: 13px;"/>
+
+                <TextArea promptText="description"
+                          prefHeight="120"
+                          wrapText="true"
+                          style="-fx-background-color: #f5f5f5;
+                                 -fx-background-radius: 12;
+                                 -fx-border-color: transparent;
+                                 -fx-padding: 10 16 10 16;
+                                 -fx-font-size: 13px;"/>
+
+                <TextField promptText="team id"
+                           style="-fx-background-color: #f5f5f5;
+                                  -fx-background-radius: 20;
+                                  -fx-border-color: transparent;
+                                  -fx-padding: 10 16 10 16;
+                                  -fx-font-size: 13px;"/>
+
+                <HBox spacing="10">
+                    <children>
+                        <ComboBox promptText="manager" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white;
+                                         -fx-border-color: #cccccc;
+                                         -fx-border-radius: 20;
+                                         -fx-background-radius: 20;
+                                         -fx-padding: 4 8 4 8;
+                                         -fx-font-size: 13px;
+                                         -fx-font-weight: bold;"/>
+                        <ComboBox promptText="plant" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white;
+                                         -fx-border-color: #cccccc;
+                                         -fx-border-radius: 20;
+                                         -fx-background-radius: 20;
+                                         -fx-padding: 4 8 4 8;
+                                         -fx-font-size: 13px;
+                                         -fx-font-weight: bold;"/>
+                    </children>
+                </HBox>
+
+                <Button text="create team"
+                        maxWidth="Infinity"
+                        style="-fx-background-color: #2d2d2d;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-font-size: 14px;
+                               -fx-background-radius: 24;
+                               -fx-padding: 14 0 14 0;
+                               -fx-cursor: hand;"/>
+            </children>
+        </VBox>
+
+        <!-- Vertical Separator -->
+        <Separator orientation="VERTICAL" style="-fx-padding: 0 20 0 20;">
+            <HBox.margin>
+                <Insets left="20" right="20"/>
+            </HBox.margin>
+        </Separator>
+
+        <!-- RIGHT: Members -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <children>
+
+                <!-- Members header with + button -->
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="Members:"
+                               style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <VBox alignment="CENTER" spacing="2">
+                            <children>
+                                <Button text="+"
+                                        style="-fx-background-color: white;
+                                               -fx-border-color: #cccccc;
+                                               -fx-border-radius: 50;
+                                               -fx-background-radius: 50;
+                                               -fx-min-width: 32;
+                                               -fx-min-height: 32;
+                                               -fx-max-width: 32;
+                                               -fx-max-height: 32;
+                                               -fx-font-size: 18px;
+                                               -fx-font-weight: bold;
+                                               -fx-cursor: hand;"/>
+                                <Label text="create employees"
+                                       style="-fx-font-size: 10px; -fx-text-fill: #888888;"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <!-- Search bar -->
+                <HBox alignment="CENTER_LEFT" spacing="0"
+                      style="-fx-background-color: #f5f5f5;
+                             -fx-background-radius: 20;
+                             -fx-padding: 8 14 8 14;">
+                    <children>
+                        <TextField promptText="search employees"
+                                   HBox.hgrow="ALWAYS"
+                                   style="-fx-background-color: transparent;
+                                          -fx-border-color: transparent;
+                                          -fx-font-size: 13px;"/>
+                        <Label text="🔍" style="-fx-font-size: 14px; -fx-text-fill: #888888;"/>
+                    </children>
+                </HBox>
+
+                <!-- Employee rows -->
+                <!-- Row 1 -->
+                <HBox alignment="CENTER_LEFT" spacing="8"
+                      style="-fx-background-color: #f5f5f5;
+                             -fx-background-radius: 20;
+                             -fx-padding: 10 14 10 14;">
+                    <children>
+                        <Label text="Employee" style="-fx-font-size: 13px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox text="supervisor" style="-fx-font-size: 12px;"/>
+                        <Button text="+"
+                                style="-fx-background-color: white;
+                                       -fx-border-color: #cccccc;
+                                       -fx-border-radius: 50;
+                                       -fx-background-radius: 50;
+                                       -fx-min-width: 28;
+                                       -fx-min-height: 28;
+                                       -fx-max-width: 28;
+                                       -fx-max-height: 28;
+                                       -fx-font-weight: bold;
+                                       -fx-cursor: hand;"/>
+                    </children>
+                </HBox>
+
+                <!-- Row 2 -->
+                <HBox alignment="CENTER_LEFT" spacing="8"
+                      style="-fx-background-color: #f5f5f5;
+                             -fx-background-radius: 20;
+                             -fx-padding: 10 14 10 14;">
+                    <children>
+                        <Label text="Employee" style="-fx-font-size: 13px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox text="supervisor" style="-fx-font-size: 12px;"/>
+                        <Button text="+"
+                                style="-fx-background-color: white;
+                                       -fx-border-color: #cccccc;
+                                       -fx-border-radius: 50;
+                                       -fx-background-radius: 50;
+                                       -fx-min-width: 28;
+                                       -fx-min-height: 28;
+                                       -fx-max-width: 28;
+                                       -fx-max-height: 28;
+                                       -fx-font-weight: bold;
+                                       -fx-cursor: hand;"/>
+                    </children>
+                </HBox>
+
+                <!-- Row 3 -->
+                <HBox alignment="CENTER_LEFT" spacing="8"
+                      style="-fx-background-color: #f5f5f5;
+                             -fx-background-radius: 20;
+                             -fx-padding: 10 14 10 14;">
+                    <children>
+                        <Label text="Employee" style="-fx-font-size: 13px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox text="supervisor" style="-fx-font-size: 12px;"/>
+                        <Button text="+"
+                                style="-fx-background-color: white;
+                                       -fx-border-color: #cccccc;
+                                       -fx-border-radius: 50;
+                                       -fx-background-radius: 50;
+                                       -fx-min-width: 28;
+                                       -fx-min-height: 28;
+                                       -fx-max-width: 28;
+                                       -fx-max-height: 28;
+                                       -fx-font-weight: bold;
+                                       -fx-cursor: hand;"/>
+                    </children>
+                </HBox>
+
+                <!-- Row 4 -->
+                <HBox alignment="CENTER_LEFT" spacing="8"
+                      style="-fx-background-color: #f5f5f5;
+                             -fx-background-radius: 20;
+                             -fx-padding: 10 14 10 14;">
+                    <children>
+                        <Label text="Employee" style="-fx-font-size: 13px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox text="supervisor" style="-fx-font-size: 12px;"/>
+                        <Button text="+"
+                                style="-fx-background-color: white;
+                                       -fx-border-color: #cccccc;
+                                       -fx-border-radius: 50;
+                                       -fx-background-radius: 50;
+                                       -fx-min-width: 28;
+                                       -fx-min-height: 28;
+                                       -fx-max-width: 28;
+                                       -fx-max-height: 28;
+                                       -fx-font-weight: bold;
+                                       -fx-cursor: hand;"/>
+                    </children>
+                </HBox>
+
+                <!-- Row 5 -->
+                <HBox alignment="CENTER_LEFT" spacing="8"
+                      style="-fx-background-color: #f5f5f5;
+                             -fx-background-radius: 20;
+                             -fx-padding: 10 14 10 14;">
+                    <children>
+                        <Label text="Employee" style="-fx-font-size: 13px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox text="supervisor" style="-fx-font-size: 12px;"/>
+                        <Button text="+"
+                                style="-fx-background-color: white;
+                                       -fx-border-color: #cccccc;
+                                       -fx-border-radius: 50;
+                                       -fx-background-radius: 50;
+                                       -fx-min-width: 28;
+                                       -fx-min-height: 28;
+                                       -fx-max-width: 28;
+                                       -fx-max-height: 28;
+                                       -fx-font-weight: bold;
+                                       -fx-cursor: hand;"/>
+                    </children>
+                </HBox>
+
+                <!-- Row 6 -->
+                <HBox alignment="CENTER_LEFT" spacing="8"
+                      style="-fx-background-color: #f5f5f5;
+                             -fx-background-radius: 20;
+                             -fx-padding: 10 14 10 14;">
+                    <children>
+                        <Label text="Employee" style="-fx-font-size: 13px;" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox text="supervisor" style="-fx-font-size: 12px;"/>
+                        <Button text="+"
+                                style="-fx-background-color: white;
+                                       -fx-border-color: #cccccc;
+                                       -fx-border-radius: 50;
+                                       -fx-background-radius: 50;
+                                       -fx-min-width: 28;
+                                       -fx-min-height: 28;
+                                       -fx-max-width: 28;
+                                       -fx-max-height: 28;
+                                       -fx-font-weight: bold;
+                                       -fx-cursor: hand;"/>
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+
+    </HBox>
 </fx:root>
