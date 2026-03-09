@@ -17,6 +17,11 @@ public class VerlofController {
         return verlofService.vraagVerlofAan(dto);
     }
 
+    @GetMapping("/{verlofId}/status")
+    public String geefVerlofStatus(@PathVariable Integer verlofId) {
+        return verlofService.geefVerlofStatus(verlofId);
+    }
+
     @PutMapping("/{verlofId}/goedkeuren")
     public String keurVerlofGoed(@PathVariable Integer verlofId) {
         return verlofService.keurVerlofGoed(verlofId);

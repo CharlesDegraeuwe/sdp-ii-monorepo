@@ -59,6 +59,12 @@ public class VerlofService {
         return "Verlofaanvraag succesvol ingediend.";
     }
 
+    public String geefVerlofStatus(Integer verlofId) {
+        return verlofRepository.findById(verlofId)
+                .map(Verlof::getStatus)
+                .orElseThrow(() -> new RuntimeException("Verlof niet gevonden"));
+    }
+
     public String keurVerlofGoed(Integer verlofId) {
         Verlof verlof = verlofRepository.findById(verlofId)
                 .orElseThrow(() -> new RuntimeException("Verlof niet gevonden"));
@@ -101,7 +107,6 @@ public class VerlofService {
 
         Werknemer werknemer = verlof.getWerknemer();
 
-        // Notificatie naar alle teamleden
         teamwerknemerRepository.findByWerknemerId(werknemer.getId())
                 .stream()
                 .findFirst()
