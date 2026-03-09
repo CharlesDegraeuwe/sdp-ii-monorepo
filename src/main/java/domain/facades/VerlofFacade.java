@@ -13,6 +13,10 @@ public class VerlofFacade {
         return api.vraagVerlofAan(dto);
     }
 
+    public String geefVerlofStatus(int verlofId) {
+        return api.geefVerlofStatus(verlofId);
+    }
+
     public String keurVerlofGoed(int verlofId) {
         return api.keurVerlofGoed(verlofId);
     }

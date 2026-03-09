@@ -100,11 +100,9 @@ public class NotificatiesController extends BorderPane {
         rij.getStyleClass().add("notificatie-rij");
         rij.setAlignment(Pos.CENTER_LEFT);
 
-        // Gekleurde dot
         Pane dot = new Pane();
         dot.getStyleClass().add(notificatie.gelezen().equals("Nee") ? "dot-ongelezen" : "dot-gelezen");
 
-        // Tekst
         VBox tekst = new VBox(3);
         HBox.setHgrow(tekst, Priority.ALWAYS);
         Label titel = new Label(notificatie.titel());
@@ -116,28 +114,48 @@ public class NotificatiesController extends BorderPane {
         datum.getStyleClass().add("notificatie-datum");
         tekst.getChildren().addAll(titel, bericht, datum);
 
-        // Acties
         HBox acties = new HBox(8);
         acties.setAlignment(Pos.CENTER_RIGHT);
 
         // Goedkeuren/afwijzen knoppen voor verlofaanvragen (manager)
-        if (notificatie.titel().equals("Nieuwe verlofaanvraag")) {
-            Button goedkeuren = new Button("Goedkeuren");
-            goedkeuren.getStyleClass().add("goedkeuren-knop");
-            Button afwijzen = new Button("Afwijzen");
-            afwijzen.getStyleClass().add("afwijzen-knop");
-
-            goedkeuren.setOnAction(e -> verwerkVerlofActie(notificatie, true, goedkeuren, afwijzen));
-            afwijzen.setOnAction(e -> verwerkVerlofActie(notificatie, false, goedkeuren, afwijzen));
-            acties.getChildren().addAll(goedkeuren, afwijzen);
+        if (notificatie.titel().equals("Nieuwe verlofaanvraag") && notificatie.referentieId() != null) {
+            String status = geefVerlofStatusVeilig(notificatie.referentieId());
+            if ("In afwachting".equals(status)) {
+                Button goedkeuren = new Button("Goedkeuren");
+                goedkeuren.getStyleClass().add("goedkeuren-knop");
+                Button afwijzen = new Button("Afwijzen");
+                afwijzen.getStyleClass().add("afwijzen-knop");
+                goedkeuren.setOnAction(e -> verwerkVerlofActie(notificatie, true, goedkeuren, afwijzen, acties));
+                afwijzen.setOnAction(e -> verwerkVerlofActie(notificatie, false, goedkeuren, afwijzen, acties));
+                acties.getChildren().addAll(goedkeuren, afwijzen);
+            } else if ("Goedgekeurd".equals(status)) {
+                Label statusLabel = new Label("✓ Goedgekeurd");
+                statusLabel.getStyleClass().add("status-goedgekeurd");
+                acties.getChildren().add(statusLabel);
+            } else if ("Afgewezen".equals(status)) {
+                Label statusLabel = new Label("✗ Afgewezen");
+                statusLabel.getStyleClass().add("status-afgewezen");
+                acties.getChildren().add(statusLabel);
+            } else if ("Geannuleerd".equals(status)) {
+                Label statusLabel = new Label("✗ Geannuleerd");
+                statusLabel.getStyleClass().add("status-afgewezen");
+                acties.getChildren().add(statusLabel);
+            }
         }
 
         // Annuleren knop voor werknemer bij goedgekeurd verlof
         if (notificatie.titel().equals("Verlof goedgekeurd") && notificatie.referentieId() != null) {
-            Button annuleren = new Button("Annuleren");
-            annuleren.getStyleClass().add("afwijzen-knop");
-            annuleren.setOnAction(e -> annuleerVerlof(notificatie.referentieId(), annuleren));
-            acties.getChildren().add(annuleren);
+            String status = geefVerlofStatusVeilig(notificatie.referentieId());
+            if ("Goedgekeurd".equals(status)) {
+                Button annuleren = new Button("Annuleren");
+                annuleren.getStyleClass().add("afwijzen-knop");
+                annuleren.setOnAction(e -> annuleerVerlof(notificatie.referentieId(), annuleren, acties));
+                acties.getChildren().add(annuleren);
+            } else if ("Geannuleerd".equals(status)) {
+                Label statusLabel = new Label("✗ Geannuleerd");
+                statusLabel.getStyleClass().add("status-afgewezen");
+                acties.getChildren().add(statusLabel);
+            }
         }
 
         // Gelezen knop
@@ -158,7 +176,15 @@ public class NotificatiesController extends BorderPane {
         return rij;
     }
 
-    private void verwerkVerlofActie(NotificatieDTO notificatie, boolean goedkeuren, Button goedkeurenKnop, Button afwijzenKnop) {
+    private String geefVerlofStatusVeilig(int verlofId) {
+        try {
+            return Beheerder.getInstance().getVerlofFacade().geefVerlofStatus(verlofId);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private void verwerkVerlofActie(NotificatieDTO notificatie, boolean goedkeuren, Button goedkeurenKnop, Button afwijzenKnop, HBox acties) {
         goedkeurenKnop.setDisable(true);
         afwijzenKnop.setDisable(true);
         new Thread(() -> {
@@ -180,7 +206,7 @@ public class NotificatiesController extends BorderPane {
         }).start();
     }
 
-    private void annuleerVerlof(int verlofId, Button annulerenKnop) {
+    private void annuleerVerlof(int verlofId, Button annulerenKnop, HBox acties) {
         annulerenKnop.setDisable(true);
         new Thread(() -> {
             try {

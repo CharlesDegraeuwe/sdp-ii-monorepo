@@ -32,6 +32,19 @@ public class VerlofApiService {
         }
     }
 
+    public String geefVerlofStatus(int verlofId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + verlofId + "/status"))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij ophalen verlofstatus", e);
+        }
+    }
+
     public String keurVerlofGoed(int verlofId) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
