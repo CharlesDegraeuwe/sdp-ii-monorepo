@@ -120,7 +120,7 @@ public class NotificatiesController extends BorderPane {
         HBox acties = new HBox(8);
         acties.setAlignment(Pos.CENTER_RIGHT);
 
-        // Goedkeuren/afwijzen knoppen voor verlofaanvragen
+        // Goedkeuren/afwijzen knoppen voor verlofaanvragen (manager)
         if (notificatie.titel().equals("Nieuwe verlofaanvraag")) {
             Button goedkeuren = new Button("Goedkeuren");
             goedkeuren.getStyleClass().add("goedkeuren-knop");
@@ -130,6 +130,14 @@ public class NotificatiesController extends BorderPane {
             goedkeuren.setOnAction(e -> verwerkVerlofActie(notificatie, true, goedkeuren, afwijzen));
             afwijzen.setOnAction(e -> verwerkVerlofActie(notificatie, false, goedkeuren, afwijzen));
             acties.getChildren().addAll(goedkeuren, afwijzen);
+        }
+
+        // Annuleren knop voor werknemer bij goedgekeurd verlof
+        if (notificatie.titel().equals("Verlof goedgekeurd") && notificatie.referentieId() != null) {
+            Button annuleren = new Button("Annuleren");
+            annuleren.getStyleClass().add("afwijzen-knop");
+            annuleren.setOnAction(e -> annuleerVerlof(notificatie.referentieId(), annuleren));
+            acties.getChildren().add(annuleren);
         }
 
         // Gelezen knop
@@ -168,6 +176,19 @@ public class NotificatiesController extends BorderPane {
                     goedkeurenKnop.setDisable(false);
                     afwijzenKnop.setDisable(false);
                 });
+            }
+        }).start();
+    }
+
+    private void annuleerVerlof(int verlofId, Button annulerenKnop) {
+        annulerenKnop.setDisable(true);
+        new Thread(() -> {
+            try {
+                Beheerder.getInstance().getVerlofFacade().annuleerVerlof(verlofId);
+                Platform.runLater(this::laadNotificaties);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> annulerenKnop.setDisable(false));
             }
         }).start();
     }

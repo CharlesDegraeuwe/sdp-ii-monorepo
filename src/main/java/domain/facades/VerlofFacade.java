@@ -20,4 +20,8 @@ public class VerlofFacade {
     public String wijsVerlofAf(int verlofId) {
         return api.wijsVerlofAf(verlofId);
     }
+
+    public String annuleerVerlof(int verlofId) {
+        return api.annuleerVerlof(verlofId);
+    }
 }
