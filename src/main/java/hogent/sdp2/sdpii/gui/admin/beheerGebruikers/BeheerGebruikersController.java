@@ -95,6 +95,7 @@ public class BeheerGebruikersController extends VBox {
             btnBlokkeer.setDisable(!isGeselecteerd);
         });
 
+        gebruikersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         laadWerknemers();
     }
 
