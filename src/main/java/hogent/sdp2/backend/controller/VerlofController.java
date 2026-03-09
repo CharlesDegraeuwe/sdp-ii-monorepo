@@ -26,4 +26,9 @@ public class VerlofController {
     public String wijsVerlofAf(@PathVariable Integer verlofId) {
         return verlofService.wijsVerlofAf(verlofId);
     }
+
+    @PutMapping("/{verlofId}/annuleren")
+    public String annuleerVerlof(@PathVariable Integer verlofId) {
+        return verlofService.annuleerVerlof(verlofId);
+    }
 }

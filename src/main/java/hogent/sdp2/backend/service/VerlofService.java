@@ -69,7 +69,8 @@ public class VerlofService {
         notificatieService.maakNotificatie(
                 verlof.getWerknemer().getId(),
                 "Verlof goedgekeurd",
-                "Jouw verlofaanvraag van " + verlof.getStartDatum() + " tot " + verlof.getEindDatum() + " is goedgekeurd."
+                "Jouw verlofaanvraag van " + verlof.getStartDatum() + " tot " + verlof.getEindDatum() + " is goedgekeurd.",
+                verlof.getId()
         );
 
         return "Verlof goedgekeurd.";
@@ -89,5 +90,36 @@ public class VerlofService {
         );
 
         return "Verlof afgewezen.";
+    }
+
+    public String annuleerVerlof(Integer verlofId) {
+        Verlof verlof = verlofRepository.findById(verlofId)
+                .orElseThrow(() -> new RuntimeException("Verlof niet gevonden"));
+
+        verlof.setStatus("Geannuleerd");
+        verlofRepository.save(verlof);
+
+        Werknemer werknemer = verlof.getWerknemer();
+
+        // Notificatie naar alle teamleden
+        teamwerknemerRepository.findByWerknemerId(werknemer.getId())
+                .stream()
+                .findFirst()
+                .ifPresent(tw -> {
+                    teamwerknemerRepository.findByTeamId(tw.getTeam().getId())
+                            .forEach(teamlid -> {
+                                if (!teamlid.getWerknemer().getId().equals(werknemer.getId())) {
+                                    notificatieService.maakNotificatie(
+                                            teamlid.getWerknemer().getId(),
+                                            "Verlof geannuleerd",
+                                            werknemer.getVoornaam() + " " + werknemer.getNaam() +
+                                                    " heeft zijn verlof van " + verlof.getStartDatum() +
+                                                    " tot " + verlof.getEindDatum() + " geannuleerd."
+                                    );
+                                }
+                            });
+                });
+
+        return "Verlof geannuleerd.";
     }
 }
