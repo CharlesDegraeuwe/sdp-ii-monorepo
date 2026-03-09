@@ -1,0 +1,50 @@
+.btn-activeer {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15; /* Ruimte binnen de knop: boven rechts onder links */
+    -fx-background-radius: 5; /* Mooie afgeronde hoekjes */
+    -fx-cursor: hand; /* Verandert de muis in een handje als je erover zweeft */
+}
+
+/* Hover-effect: iets donkerder groen als je er met de muis over gaat */
+.btn-activeer:hover {
+    -fx-background-color: #c7182f;
+}
+
+
+/* --- Styling voor de Deactiveer knop (Oranje) --- */
+.btn-deactiveer {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-deactiveer:hover {
+    -fx-background-color: #c7182f;
+}
+
+
+/* --- Styling voor de Blokkeer knop (Rood) --- */
+.btn-blokkeer {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-blokkeer:hover {
+    -fx-background-color: #c7182f;
+}
+
+/* --- Knop uitgeschakeld (disabled) --- */
+/* Dit is handig voor als er nog geen gebruiker geselecteerd is in de tabel */
+.button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
