@@ -7,6 +7,7 @@ import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,11 +18,21 @@ public class WerknemerService {
 
     private final WerknemerRepository werknemerRepository;
 
+        public String genereerZesCijferigeCode() {
+            SecureRandom random = new SecureRandom();
+            // Genereer een willekeurig getal tussen 0 en 999999
+            int getal = random.nextInt(1000000);
+
+            // Formatteer het getal naar een String van precies 6 tekens, vul aan met nullen vooraan indien nodig
+            return String.format("%06d", getal);
+        }
+
+
     public String maakWerknemer(WerknemerAanmakenDTO dto) {
         if (werknemerRepository.existsByEmail(dto.email())) {
             return "Fout: Er bestaat al een werknemer met e-mailadres " + dto.email();
         }
-        String uniekeCode = UUID.randomUUID().toString();
+        String uniekeCode = genereerZesCijferigeCode();
 
         Werknemer nieuweWerknemer = new Werknemer();
         nieuweWerknemer.setNaam(dto.naam());
@@ -238,7 +249,7 @@ public class WerknemerService {
         if (werknemerOpt.isEmpty()) {
             return "Fout: De opgevraagde werknemer is niet gevonden.";
         }
-        String uniekeCode = UUID.randomUUID().toString();
+        String uniekeCode = genereerZesCijferigeCode();
         Werknemer werknemer = werknemerOpt.get();
         werknemer.setStatus("Inactief");
         werknemer.setActivatieCode(uniekeCode);

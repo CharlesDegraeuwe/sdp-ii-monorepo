@@ -114,4 +114,4 @@ PUT http://localhost:8080/api/werknemers/12/blokkeer
 PUT http://localhost:8080/api/werknemers/12/activeer
 
 ### Deactiveer een werknemer
-PUT http://localhost:8080/api/werknemers/12/deactiveer
+PUT http://localhost:8080/api/werknemers/23/deactiveer
