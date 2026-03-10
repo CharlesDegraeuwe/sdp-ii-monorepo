@@ -225,10 +225,11 @@ public class WerknemerService {
         }
         Werknemer werknemer = werknemerOpt.get();
         werknemer.setStatus("Actief");
+        werknemer.setActivatieCode(null);
 
         werknemerRepository.save(werknemer);
 
-        return "Het account van " + werknemer.getEmail() + " is succesvol geblokkeerd!";
+        return "Het account van " + werknemer.getEmail() + " is succesvol geactiveerd!";
     }
 
     public String deactiveerWerknemerAdmin(Integer id) {
@@ -237,12 +238,14 @@ public class WerknemerService {
         if (werknemerOpt.isEmpty()) {
             return "Fout: De opgevraagde werknemer is niet gevonden.";
         }
+        String uniekeCode = UUID.randomUUID().toString();
         Werknemer werknemer = werknemerOpt.get();
         werknemer.setStatus("Inactief");
+        werknemer.setActivatieCode(uniekeCode);
 
         werknemerRepository.save(werknemer);
 
-        return "Het account van " + werknemer.getEmail() + " is succesvol geblokkeerd!";
+        return "Het account van " + werknemer.getEmail() + " is succesvol gedeactiveerd!";
     }
 
     public String verwijderWerknemer(Integer id) {

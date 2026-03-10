@@ -108,10 +108,10 @@ GET http://localhost:8080/api/machines/1/status
 DELETE http://localhost:8080/api/werknemers/13
 
 ### Blokkeer een werknemer
-PUT http://localhost:8080/api/werknemers/13/blokkeer
+PUT http://localhost:8080/api/werknemers/12/blokkeer
 
 ### Activeer een werknemer
-PUT http://localhost:8080/api/werknemers/13/activeer
+PUT http://localhost:8080/api/werknemers/12/activeer
 
 ### Deactiveer een werknemer
-PUT http://localhost:8080/api/werknemers/13/deactiveer
+PUT http://localhost:8080/api/werknemers/12/deactiveer
