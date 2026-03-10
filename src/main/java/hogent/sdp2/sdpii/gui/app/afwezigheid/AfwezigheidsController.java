@@ -47,7 +47,7 @@ public class AfwezigheidsController extends BorderPane {
     private byte[] certificaatBytes;
     private boolean isVerlof = true;
 
-    public AfwezigheidsController() {
+    public AfwezigheidsController(boolean verlof) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/afwezigheden/AbsensePage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -57,6 +57,12 @@ public class AfwezigheidsController extends BorderPane {
             throw new RuntimeException(e);
         }
         setTop(new PageTitleController("Afwezigheden"));
+        if (verlof) {
+            toonVerlof();
+        } else {
+            toonZiekte();
+        }
+
     }
 
     @FXML
@@ -89,8 +95,8 @@ public class AfwezigheidsController extends BorderPane {
         verlofBox.setManaged(true);
         ziekteBox.setVisible(false);
         ziekteBox.setManaged(false);
-        verlofKnop.getStyleClass().setAll("keuze-knop-actief");
-        ziekteKnop.getStyleClass().setAll("keuze-knop");
+        verlofKnop.getStyleClass().setAll("filter-knop-actief");
+        ziekteKnop.getStyleClass().setAll("filter-knop");
         indienKnop.setText("Verlof aanvragen");
     }
 
@@ -101,8 +107,8 @@ public class AfwezigheidsController extends BorderPane {
         verlofBox.setManaged(false);
         ziekteBox.setVisible(true);
         ziekteBox.setManaged(true);
-        ziekteKnop.getStyleClass().setAll("keuze-knop-actief");
-        verlofKnop.getStyleClass().setAll("keuze-knop");
+        ziekteKnop.getStyleClass().setAll("filter-knop-actief");
+        verlofKnop.getStyleClass().setAll("filter-knop");
         indienKnop.setText("Ziekte melden");
     }
 

@@ -3,111 +3,118 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page" stylesheets="@/css/absense.css">
-
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml"
+         styleClass="page"
+         stylesheets="@/css/dashboard.css ,@/css/absense.css">
     <center>
-        <VBox spacing="20" alignment="TOP_CENTER">
-            <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
+        <VBox spacing="16" alignment="TOP_CENTER">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
 
             <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false"/>
             <Label fx:id="succesLabel" styleClass="success-label" visible="false" managed="false"/>
 
-            <!-- Keuze knoppen -->
-            <HBox spacing="15" alignment="CENTER">
-                <Button fx:id="verlofKnop" text="Verlof aanvragen" onAction="#toonVerlof" styleClass="keuze-knop-actief"/>
-                <Button fx:id="ziekteKnop" text="Ziekte melden" onAction="#toonZiekte" styleClass="keuze-knop"/>
+            <!-- Toggle -->
+            <HBox alignment="CENTER">
+                <HBox styleClass="filter-container" spacing="2">
+                    <Button fx:id="verlofKnop" text="Verlof aanvragen" onAction="#toonVerlof" styleClass="filter-knop-actief"/>
+                    <Button fx:id="ziekteKnop" text="Ziekte melden" onAction="#toonZiekte" styleClass="filter-knop"/>
+                </HBox>
             </HBox>
 
-            <!-- Verlof formulier -->
-            <VBox fx:id="verlofBox" styleClass="absense-card" spacing="15">
-                <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+            <VBox styleClass="card" spacing="20" maxWidth="800">
+                <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                <VBox fx:id="verlofBox" spacing="16">
+                    <Label text="Verlof aanvragen" styleClass="card_title"/>
 
-                <Label text="Verlof aanvragen" styleClass="absense-label"/>
+                    <HBox spacing="16">
+                        <VBox spacing="4">
+                            <Label text="Startdatum" styleClass="card_subtitle"/>
+                            <DatePicker fx:id="verlofStartDatum" prefWidth="150"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Einddatum" styleClass="card_subtitle"/>
+                            <DatePicker fx:id="verlofEindDatum" prefWidth="150"/>
+                        </VBox>
+                    </HBox>
 
-                <HBox spacing="15">
                     <VBox spacing="4">
-                        <Label text="Startdatum" styleClass="absense-sublabel"/>
-                        <DatePicker fx:id="verlofStartDatum" prefWidth="150"/>
+                        <Label text="Type verlof" styleClass="card_subtitle"/>
+                        <ComboBox fx:id="verlofTypeCombo" prefWidth="200" styleClass="team_picker"/>
                     </VBox>
-                    <VBox spacing="4">
-                        <Label text="Einddatum" styleClass="absense-sublabel"/>
-                        <DatePicker fx:id="verlofEindDatum" prefWidth="150"/>
-                    </VBox>
-                </HBox>
-
-                <VBox spacing="4">
-                    <Label text="Type verlof" styleClass="absense-sublabel"/>
-                    <ComboBox fx:id="verlofTypeCombo" prefWidth="200"/>
                 </VBox>
 
-            </VBox>
+                <!-- === ZIEKTE === -->
+                <VBox fx:id="ziekteBox" spacing="16" visible="false" managed="false">
+                    <Label text="Ziekte melden" styleClass="card_title"/>
 
-            <!-- Ziekte formulier -->
-            <VBox fx:id="ziekteBox" styleClass="absense-card" spacing="15" visible="false" managed="false">
-                <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                    <TextField fx:id="redenField" promptText="Reden voor afwezigheid..."
+                               styleClass="absense-input"/>
 
-                <TextField fx:id="redenField" promptText="Reden voor afwezigheid..." styleClass="text-field"/>
+                    <HBox spacing="30">
+                        <VBox spacing="12" HBox.hgrow="ALWAYS">
+                            <Label text="Duur:" styleClass="card_title"/>
 
-                <HBox spacing="30">
-                    <VBox spacing="12" HBox.hgrow="ALWAYS">
-                        <Label text="Duur:" styleClass="absense-label"/>
+                            <HBox spacing="16">
+                                <VBox spacing="4">
+                                    <Label text="Startdatum" styleClass="card_subtitle"/>
+                                    <DatePicker fx:id="startDatumPicker" minWidth="130" HBox.hgrow="ALWAYS"/>
+                                </VBox>
+                                <VBox spacing="4">
+                                    <Label text="Einddatum" styleClass="card_subtitle"/>
+                                    <DatePicker fx:id="eindDatumPicker" minWidth="130" HBox.hgrow="ALWAYS"/>
+                                </VBox>
+                            </HBox>
 
-                        <HBox spacing="15">
-                            <VBox spacing="4">
-                                <Label text="Startdatum" styleClass="absense-sublabel"/>
-                                <DatePicker fx:id="startDatumPicker" prefWidth="130"/>
-                            </VBox>
-                            <VBox spacing="4">
-                                <Label text="Einddatum" styleClass="absense-sublabel"/>
-                                <DatePicker fx:id="eindDatumPicker" prefWidth="130"/>
-                            </VBox>
-                        </HBox>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Hele dag" styleClass="card_subtitle"/>
+                                <ToggleButton fx:id="heleDagToggle" styleClass="absense-toggle" selected="false"/>
+                            </HBox>
 
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="Hele dag" styleClass="absense-sublabel"/>
-                            <ToggleButton fx:id="heleDagToggle" styleClass="absense-toggle" selected="false"/>
-                        </HBox>
-
-                        <HBox fx:id="tijdBox" spacing="15" alignment="CENTER_LEFT">
-                            <VBox spacing="4">
-                                <Label text="Starttijd" styleClass="absense-sublabel"/>
-                                <HBox spacing="5" alignment="CENTER">
-                                    <Spinner fx:id="startUurSpinner" prefWidth="55"/>
-                                    <Label text=":" styleClass="absense-sublabel"/>
-                                    <Spinner fx:id="startMinuutSpinner" prefWidth="55"/>
-                                </HBox>
-                            </VBox>
-                            <VBox spacing="4">
-                                <Label text="Eindtijd" styleClass="absense-sublabel"/>
-                                <HBox spacing="5" alignment="CENTER">
-                                    <Spinner fx:id="eindUurSpinner" prefWidth="55"/>
-                                    <Label text=":" styleClass="absense-sublabel"/>
-                                    <Spinner fx:id="eindMinuutSpinner" prefWidth="55"/>
-                                </HBox>
-                            </VBox>
-                        </HBox>
-                    </VBox>
-
-                    <VBox spacing="10" alignment="TOP_LEFT" minWidth="220">
-                        <Label text="Upload ziektebriefje:" styleClass="absense-label"/>
-                        <VBox styleClass="upload-area" alignment="CENTER" spacing="8" minHeight="130">
-                            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-                            <Label text="⬆" styleClass="upload-icon"/>
-                            <Label text="sleep bestanden hierheen" styleClass="absense-sublabel"/>
-                            <Label text="of" styleClass="absense-sublabel"/>
-                            <Button text="bladeren" onAction="#uploadCertificaat" styleClass="browse-btn"/>
+                            <HBox fx:id="tijdBox" spacing="16" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                <VBox spacing="4">
+                                    <Label text="Starttijd" styleClass="card_subtitle"/>
+                                    <HBox spacing="5" alignment="CENTER" HBox.hgrow="ALWAYS">
+                                        <Spinner fx:id="startUurSpinner" prefWidth="55"/>
+                                        <Label text=":" styleClass="card_subtitle"/>
+                                        <Spinner fx:id="startMinuutSpinner" prefWidth="55"/>
+                                    </HBox>
+                                </VBox>
+                                <VBox spacing="4">
+                                    <Label text="Eindtijd" styleClass="card_subtitle"/>
+                                    <HBox spacing="5" alignment="CENTER" HBox.hgrow="ALWAYS">
+                                        <Spinner fx:id="eindUurSpinner" prefWidth="55"/>
+                                        <Label text=":" styleClass="card_subtitle"/>
+                                        <Spinner fx:id="eindMinuutSpinner" prefWidth="55"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
                         </VBox>
-                        <Label fx:id="certificaatLabel" text="" styleClass="absense-sublabel"/>
-                    </VBox>
+
+                        <VBox spacing="10" alignment="TOP_LEFT" minWidth="220" HBox.hgrow="ALWAYS">
+                            <Label text="Upload ziektebriefje:" styleClass="card_title"/>
+                            <VBox styleClass="upload-area" alignment="CENTER" spacing="8" minHeight="130">
+                                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                                <Label text="⬆" styleClass="upload-icon"/>
+                                <Label text="sleep bestanden hierheen" styleClass="card_subtitle"/>
+                                <Label text="of" styleClass="card_subtitle"/>
+                                <Button text="bladeren" onAction="#uploadCertificaat" styleClass="browse-btn"/>
+                            </VBox>
+                            <Label fx:id="certificaatLabel" text="" styleClass="card_subtitle"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Gedeeld: toelichting + submit -->
+                <TextArea fx:id="extraUitlegArea"
+                          promptText="Extra toelichting (optioneel)..."
+                          prefHeight="80" styleClass="absense-textarea"/>
+
+                <HBox alignment="CENTER">
+                    <Button fx:id="indienKnop" text="Verlof aanvragen"
+                            onAction="#indienen" styleClass="absense-report-btn"/>
                 </HBox>
-
             </VBox>
-
-            <TextArea fx:id="extraUitlegArea" promptText="Extra toelichting (optioneel)..." prefHeight="80" styleClass="absense-textarea"/>
-
-            <Button fx:id="indienKnop" text="Verlof aanvragen" onAction="#indienen" styleClass="absense-report-btn"/>
 
         </VBox>
     </center>
-
 </fx:root>

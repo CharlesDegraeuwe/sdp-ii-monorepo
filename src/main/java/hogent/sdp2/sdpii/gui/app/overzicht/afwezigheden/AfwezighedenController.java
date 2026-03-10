@@ -30,6 +30,6 @@ public class AfwezighedenController extends VBox {
         if(Sessie.getInstance().isSuperVisor()) {
             teamPicker.setVisible(false);
         }
-        see_more.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
+        see_more.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.ZIEKTE));
     }
 }

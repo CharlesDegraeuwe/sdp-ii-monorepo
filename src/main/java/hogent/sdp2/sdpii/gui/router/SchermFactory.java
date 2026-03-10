@@ -27,8 +27,8 @@ public class SchermFactory {
     //voeg hier telkens nieuwe schermen toe
 
     //app
-    public AfwezigheidsController afwezigheidsScherm() {
-        return new AfwezigheidsController();
+    public AfwezigheidsController afwezigheidsScherm(boolean verlof) {
+        return new AfwezigheidsController(verlof);
     }
 
     public AccountController accountScherm() {

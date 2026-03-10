@@ -106,7 +106,7 @@ public class DashboardLayoutController extends BorderPane {
         }
        add_shift.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.PLANNING));
        assign_task.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
-       report_absence.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
-       plan_holiday.setOnMouseClicked(e-> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
+       report_absence.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.ZIEKTE));
+       plan_holiday.setOnMouseClicked(e-> Router.getInstance().navigeerNaar(Scherm.VERLOF));
     }
 }
