@@ -16,10 +16,12 @@
                 </HBox>
             </HBox>
             <HBox spacing="16">
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Button fx:id="vorigeKnop" text="‹" onAction="#vorigePeriode" styleClass="nav-knop"/>
-                    <Label fx:id="periodeLabel" text="..." styleClass="periode-label"/>
-                    <Button fx:id="volgendeKnop" text="›" onAction="#volgendePeriode" styleClass="nav-knop"/>
+                <HBox spacing="10" alignment="CENTER">
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button fx:id="vorigeKnop" text="‹" onAction="#vorigePeriode" styleClass="nav-knop"/>
+                        <Label fx:id="periodeLabel" text="..." styleClass="periode-label"/>
+                        <Button fx:id="volgendeKnop" text="›" onAction="#volgendePeriode" styleClass="nav-knop"/>
+                    </HBox>
 
                     <Region HBox.hgrow="ALWAYS"/>
 
@@ -28,14 +30,27 @@
                 <VBox prefWidth="300" minWidth="280" maxWidth="320"/>
             </HBox>
             <HBox spacing="16">
-                <VBox spacing="16" HBox.hgrow="ALWAYS">
+                <VBox spacing="16" HBox.hgrow="ALWAYS" alignment="CENTER">
                     <VBox fx:id="kalenderContainer" spacing="5"/>
                 </VBox>
-                <VBox fx:id="detailPanel" spacing="16" prefWidth="300" minWidth="280" maxWidth="320">
-                    <VBox fx:id="shiftDetailCard" styleClass="card" spacing="10">
+                <VBox fx:id="detailPanel" spacing="16" prefWidth="300" minWidth="280" maxWidth="320" alignment="CENTER">
+                    <VBox fx:id="dateContainer" alignment="CENTER" styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <Label fx:id="detailTitel" text="" styleClass="card_title"/>
+                    </VBox>
+                    <VBox fx:id="absenses" styleClass="card" spacing="10" minHeight="300" VBox.vgrow="ALWAYS">
+                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <VBox fx:id="detailLijst" spacing="8"/>
+                    </VBox>
+                    <VBox fx:id="" styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
+                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                        <Label fx:id="shiftTitel" text="Today's shifts" styleClass="card_title"/>
+                        <VBox fx:id="shiftOverview" spacing="8"/>
+                    </VBox>
+                    <VBox fx:id="" styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
+                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                        <Label fx:id="ShiftDetailTitle" text="Shift details" styleClass="card_title"/>
+                        <VBox fx:id="shiftdetails" spacing="8"/>
                     </VBox>
                 </VBox>
 

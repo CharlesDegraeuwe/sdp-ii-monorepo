@@ -1,6 +1,7 @@
 package hogent.sdp2.sdpii.gui.router;
 
 import domain.Beheerder;
+import domain.facades.TakenFacade;
 import hogent.sdp2.sdpii.gui.admin.beheerGebruikers.BeheerGebruikersController;
 import hogent.sdp2.sdpii.gui.admin.creeerManager.CreeerManagerController;
 import hogent.sdp2.sdpii.gui.admin.creeerMedewerker.CreeerMedewerkerController;
@@ -54,8 +55,8 @@ public class SchermFactory {
         return new InstellingenController();
     }
 
-    public TakenController taskenScherm() {
-        return new TakenController();
+    public TakenController taskenScherm(TakenFacade facade) {
+        return new TakenController(facade);
     }
 
     public TeamsController teamsScherm() {
