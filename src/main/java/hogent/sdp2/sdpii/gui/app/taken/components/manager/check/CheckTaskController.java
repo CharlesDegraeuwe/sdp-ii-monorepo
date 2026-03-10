@@ -19,9 +19,7 @@ public class CheckTaskController extends BorderPane {    @FXML Label titel_taken
     //containers
     @FXML
     VBox finished_task_container;
-    @FXML VBox belangrijk_container;
-    @FXML VBox vandaag_container;
-    @FXML VBox morgen_container;
+    @FXML VBox taken_container;
     @FXML @Getter BorderPane page_container;
     @FXML ComboBox Locatie;
     @FXML ComboBox Team;
@@ -42,8 +40,7 @@ public class CheckTaskController extends BorderPane {    @FXML Label titel_taken
     public void Init() {
         boolean role = Sessie.getInstance().isWerknemer();
         edit_button.setVisible(!role);
-        titel_taken.setText(geselecteerd + "'s taken:");
-        afgewerkte_taken_titel.setText(geselecteerd + "'s afgewerkte taken:");
+        afgewerkte_taken_titel.setText("afgewerkte taken:");
 
         boolean isSupervisor = Sessie.getInstance().isSuperVisor();
         if(isSupervisor) {
@@ -55,24 +52,17 @@ public class CheckTaskController extends BorderPane {    @FXML Label titel_taken
         }
 
         // Belangrijke taken
-        belangrijk_container.getChildren().addAll(
+        taken_container.getChildren().addAll(
                 new TaakItemController("Verslag opmaken", "Tegen vandaag 12:30"),
                 new TaakItemController("Shift ruilen met Jan", "Tegen vandaag 15:00"),
-                new TaakItemController("Inventaris controleren", "Tegen vandaag 17:00")
-        );
-
-        // Taken voor vandaag
-        vandaag_container.getChildren().addAll(
+                new TaakItemController("Inventaris controleren", "Tegen vandaag 17:00"),
                 new TaakItemController("Teamvergadering voorbereiden", "Tegen vandaag 10:00"),
                 new TaakItemController("Nieuwe werknemer inwerken", "Tegen vandaag 14:00"),
-                new TaakItemController("Weekplanning nakijken", "Tegen vandaag 16:30")
-        );
-
-        // Taken voor morgen
-        morgen_container.getChildren().addAll(
+                new TaakItemController("Weekplanning nakijken", "Tegen vandaag 16:30"),
                 new TaakItemController("Klantbespreking", "Tegen morgen 09:00"),
                 new TaakItemController("Maandrapport indienen", "Tegen morgen 12:00")
         );
+
 
         // Afgewerkte taken
         finished_task_container.getChildren().addAll(

@@ -10,7 +10,7 @@
 <VBox styleClass="account-card">
 
     <Label text="Account informatie" styleClass=""/>
-    <GridPane hgap="20" vgap="20" styleClass="account-card">
+    <GridPane hgap="20" vgap="20">
 
         <Label text="Naam" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
         <TextField fx:id="naamField"
@@ -48,7 +48,7 @@
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="5"/>
     </GridPane>
-    <Button fx:id="editButton"
+    <Button fx:id="editButton" styleClass="editButton" minWidth="100"
             text="Wijzig"
             onAction="#toggleEdit"/>
 </VBox>

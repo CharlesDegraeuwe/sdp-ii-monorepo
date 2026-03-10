@@ -25,9 +25,9 @@
                     <HBox minHeight="30" prefHeight="30" alignment="CENTER_LEFT">
                         <Label fx:id="titel_taken" styleClass="card_subtitle"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <ComboBox fx:id="filter" value="filter" styleClass="picker"/>
                     </HBox>
-                    <VBox styleClass="card" spacing="0" VBox.vgrow="ALWAYS">
+                    <VBox styleClass="card" spacing="5" VBox.vgrow="ALWAYS">
+                        <TextField promptText="zoeken..." styleClass="task-input"/>
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <Label text="Belangrijk:" styleClass="section-label"/>
                         <VBox fx:id="belangrijk_container" styleClass="task-section" VBox.vgrow="ALWAYS">
@@ -50,7 +50,7 @@
                     <VBox styleClass="card" spacing="12">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <HBox alignment="CENTER_LEFT">
-                            <Label text="Taak beschrijving:" styleClass="section-label"/>
+                            <Label text="Taak details:" styleClass="section-label"/>
                             <Region HBox.hgrow="ALWAYS"/>
                             <Label fx:id="edit_button" text="edit" styleClass="edit-link"/>
                         </HBox>

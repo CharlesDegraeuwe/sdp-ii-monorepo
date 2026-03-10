@@ -11,9 +11,9 @@
         <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
         <HBox alignment="CENTER" fx:id="controls">
             <HBox fx:id="tab_buttons" styleClass="filter-container" alignment="CENTER" maxWidth="400">
-                <Button fx:id="checkKnop" text="Bekijken" styleClass="filter-knop-actief"/>
                 <Button fx:id="creeerKnop" text="Creëren" styleClass="filter-knop"/>
                 <Button fx:id="toewijzenKnop" text="Toewijzen" styleClass="filter-knop"/>
+                <Button fx:id="checkKnop" text="Bekijken" styleClass="filter-knop-actief"/>
             </HBox>
             <Region HBox.hgrow="ALWAYS"/>
             <HBox styleClass="filter-container" fx:id="page_buttons" alignment="CENTER" maxWidth="400">

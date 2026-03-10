@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.teams;
 
+import hogent.sdp2.sdpii.gui.admin.creeerMedewerker.CreeerMedewerkerController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.CheckTeamsController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.CreateTeamsController;
 import hogent.sdp2.sdpii.gui.app.teams.userspagina.CheckUserpage;
@@ -64,7 +65,7 @@ public class TeamsLayoutController extends VBox {
                 outer_container.setCenter(createTeamsController);
             } else {
                 if (createUserPage == null) createUserPage = new CreateUserPage();
-                outer_container.setCenter(createUserPage);
+                outer_container.setCenter(new CreeerMedewerkerController());
             }
             tab = "create";
             updateTabs();
