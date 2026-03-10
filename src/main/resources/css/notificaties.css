@@ -1,0 +1,163 @@
+.sectie-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+}
+
+.leeg-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #999999;
+}
+.filter-container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 30;
+    -fx-padding: 6 6 6 6;
+    -fx-spacing: 2;
+}
+
+.filter-knop {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 6 16 6 16;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.filter-knop:hover {
+    -fx-background-color: #F6F6F6;
+}
+
+.filter-knop-werk {
+    -fx-text-fill: #99DA64;
+}
+
+.filter-knop-afwezigheid {
+    -fx-text-fill: #DA6464;
+}
+
+.filter-knop-verlof {
+    -fx-text-fill: #F6B74B;
+}
+
+.filter-knop-team {
+    -fx-text-fill: #4B8AF6;
+}
+
+.filter-knop-actief {
+    -fx-background-color: #F6F6F6;
+    -fx-border-color: transparent;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 6 16 6 16;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-text-fill: #1A1A1A;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 1);
+}
+
+.notificatie-rij {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);
+    -fx-padding: 12 15 12 15;
+}
+
+.notificatie-titel {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.notificatie-bericht {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+}
+
+.notificatie-datum {
+    -fx-font-size: 11px;
+    -fx-text-fill: #aaaaaa;
+}
+
+.dot-ongelezen {
+    -fx-background-color: #e74c3c;
+    -fx-background-radius: 50;
+    -fx-min-width: 10;
+    -fx-min-height: 10;
+    -fx-max-width: 10;
+    -fx-max-height: 10;
+}
+
+.dot-gelezen {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 50;
+    -fx-min-width: 10;
+    -fx-min-height: 10;
+    -fx-max-width: 10;
+    -fx-max-height: 10;
+}
+
+.actie-knop {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 50;
+    -fx-border-color: transparent;
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.actie-knop:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+.goedkeuren-knop {
+    -fx-background-color: #2ecc71;
+    -fx-background-radius: 50;
+    -fx-border-color: transparent;
+    -fx-padding: 6 14 6 14;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.goedkeuren-knop:hover {
+    -fx-background-color: #27ae60;
+}
+
+.afwijzen-knop {
+    -fx-background-color: #e74c3c;
+    -fx-background-radius: 50;
+    -fx-border-color: transparent;
+    -fx-padding: 6 14 6 14;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.afwijzen-knop:hover {
+    -fx-background-color: #c0392b;
+}
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.status-goedgekeurd {
+    -fx-text-fill: #2ecc71;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.status-afgewezen {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}

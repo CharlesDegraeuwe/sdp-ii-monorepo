@@ -5,6 +5,9 @@ import domain.dto.WerknemerDTO;
 import domain.facades.WerknemersFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -24,6 +27,9 @@ public class BeheerGebruikersController extends VBox {
     @FXML private TableColumn<WerknemerDTO, String> telefoonCol;
     @FXML private TextField zoekField;
     @FXML private Label foutLabel;
+    @FXML private Button btnActiveer;
+    @FXML private Button btnDeactiveer;
+    @FXML private Button btnBlokkeer;
 
     private final WerknemersFacade service = new WerknemersFacade();
 
@@ -56,7 +62,7 @@ public class BeheerGebruikersController extends VBox {
         // Kolommen instellen
         naamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().naam()));
         voornaamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().voornaam()));
-        emailCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().voornaam()));
+        emailCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().email()));
         rolCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().rol()));
         statusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().status()));
         telefoonCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().telefoonnummer()));
@@ -70,34 +76,88 @@ public class BeheerGebruikersController extends VBox {
                     setStyle("");
                 } else if ("Inactief".equalsIgnoreCase(werknemer.status())) {
                     setStyle("-fx-opacity: 0.5;");
-                } else {
+                } else if ("Geblokkeerd".equalsIgnoreCase(werknemer.status())) {
+                    setStyle("-fx-text-background-color: red; -fx-font-weight: bold;");
+                }else {
                     setStyle("");
                 }
             }
         });
 
-        laadWerknemers();
-        zoekField.textProperty().addListener((obs, oud, nieuw) -> filterWerknemers(nieuw));
+        btnActiveer.setDisable(true);
+        btnDeactiveer.setDisable(true);
+        btnBlokkeer.setDisable(true);
 
+        gebruikersTable.getSelectionModel().selectedItemProperty().addListener((obs, oudeSelectie, nieuweSelectie) -> {
+            boolean isGeselecteerd = (nieuweSelectie != null);
+            btnActiveer.setDisable(!isGeselecteerd);
+            btnDeactiveer.setDisable(!isGeselecteerd);
+            btnBlokkeer.setDisable(!isGeselecteerd);
+        });
+
+        gebruikersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        laadWerknemers();
+    }
+
+    @FXML
+    private void handleActiveer() {
+        pasStatusAan("activeer");
+    }
+
+    @FXML
+    private void handleDeactiveer() {
+        pasStatusAan("deactiveer");
+    }
+
+    @FXML
+    private void handleBlokkeer() {
+        pasStatusAan("blokkeer");
+    }
+
+    private void pasStatusAan(String actie) {
+        WerknemerDTO geselecteerdeWerknemer = gebruikersTable.getSelectionModel().getSelectedItem();
+
+        if (geselecteerdeWerknemer != null) {
+            foutLabel.setVisible(false);
+            boolean succes = service.veranderStatus(geselecteerdeWerknemer.id(), actie);
+
+            if (succes) {
+                laadWerknemers();
+            } else {
+                foutLabel.setText("Er ging iets mis bij het communiceren met de server.");
+                foutLabel.setVisible(true);
+            }
+        }
     }
 
     private void laadWerknemers() {
         alleWerknemers = service.geefAlleWerknemers();
-        gebruikersTable.setItems(FXCollections.observableArrayList(alleWerknemers));
-    }
+        ObservableList<WerknemerDTO> masterData = FXCollections.observableArrayList(alleWerknemers);
 
-    private void filterWerknemers(String zoekterm) {
-        if (zoekterm == null || zoekterm.isBlank()) {
-            gebruikersTable.setItems(FXCollections.observableArrayList(alleWerknemers));
-            return;
-        }
-        String lower = zoekterm.toLowerCase();
-        List<WerknemerDTO> gefilterd = alleWerknemers.stream()
-                .filter(w -> w.naam().toLowerCase().contains(lower)
-                        || w.voornaam().toLowerCase().contains(lower)
-                        || w.email().toLowerCase().contains(lower)
-                        || w.rol().toLowerCase().contains(lower))
-                .toList();
-        gebruikersTable.setItems(FXCollections.observableArrayList(gefilterd));
+        FilteredList<WerknemerDTO> filteredData = new FilteredList<>(masterData, p -> true);
+
+        zoekField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(werknemer -> {
+                if (newValue == null || newValue.isBlank()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (werknemer.voornaam() != null && werknemer.voornaam().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (werknemer.naam() != null && werknemer.naam().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (werknemer.email() != null && werknemer.email().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+        SortedList<WerknemerDTO> sortedData = new SortedList<>(filteredData);
+
+        sortedData.comparatorProperty().bind(gebruikersTable.comparatorProperty());
+
+        gebruikersTable.setItems(sortedData);
     }
 }

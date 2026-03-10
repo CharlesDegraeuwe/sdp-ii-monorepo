@@ -1,0 +1,51 @@
+.btn-activeer {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-activeer:hover {
+    -fx-background-color: #c7182f;
+}
+
+.btn-deactiveer {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-deactiveer:hover {
+    -fx-background-color: #c7182f;
+}
+
+.btn-blokkeer {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-blokkeer:hover {
+    -fx-background-color: #c7182f;
+}
+
+.button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+.table-row-cell:empty {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}

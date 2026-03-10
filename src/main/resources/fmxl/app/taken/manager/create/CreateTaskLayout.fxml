@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/tasks.css"
+         xmlns="http://javafx.com/javafx">
+
+    <?import javafx.scene.layout.*?>
+    <?import javafx.scene.control.*?>
+    <?import javafx.geometry.Insets?>
+
+    <center>
+        <VBox spacing="16" maxWidth="400" alignment="TOP_LEFT">
+            <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+
+            <Label text="Creëer taken:" styleClass="card_subtitle"/>
+
+            <VBox styleClass="card" spacing="16">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                <!-- Description -->
+                <Label text="Beschrijving:" styleClass="section-label"/>
+                <TextField fx:id="nameField" promptText="name" styleClass="task-input"/>
+                <TextArea fx:id="specField" promptText="specificaties" prefRowCount="4" styleClass="task-input-area"/>
+
+                <!-- Due date + Location row -->
+                <HBox spacing="16">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Eind datum:" styleClass="section-label"/>
+                        <TextField fx:id="dueDateField" promptText="dd-mm-jjjj" styleClass="task-input"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Locatie:" styleClass="section-label"/>
+                        <ComboBox fx:id="locationPicker" value="Locatie 1" styleClass="picker" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="16">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label text="Hele dag" styleClass="task-name"/>
+                            <ToggleButton fx:id="wholeDayToggle" styleClass="toggle-switch"/>
+                        </HBox>
+                        <Label text="of" styleClass="task-due-text"/>
+                        <HBox spacing="4" alignment="CENTER_LEFT">
+                            <TextField fx:id="hourField" promptText="00" prefColumnCount="2" styleClass="task-input-small"/>
+                            <Label text=":" styleClass="task-name"/>
+                            <TextField fx:id="minuteField" promptText="00" prefColumnCount="2" styleClass="task-input-small"/>
+                        </HBox>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Duur" styleClass="section-label"/>
+                        <TextField fx:id="durationField" promptText="uu:mm" styleClass="task-input"/>
+                    </VBox>
+                </HBox>
+
+                <Button fx:id="createButton" text="Creëer Taak" styleClass="create-task-btn" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+    </center>
+</fx:root>

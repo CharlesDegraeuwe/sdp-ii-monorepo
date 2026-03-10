@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.taken;
 
+import hogent.sdp2.sdpii.gui.app.taken.components.TakenLayoutController;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -8,7 +9,7 @@ import java.io.IOException;
 
 public class TakenController extends BorderPane {
     public TakenController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/TasksPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/TakenPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -18,5 +19,6 @@ public class TakenController extends BorderPane {
         }
 
         setTop(new PageTitleController("Taken"));
+        setCenter(new TakenLayoutController());
     }
 }

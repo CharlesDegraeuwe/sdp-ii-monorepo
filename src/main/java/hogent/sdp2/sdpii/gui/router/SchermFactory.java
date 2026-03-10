@@ -8,7 +8,7 @@ import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.afwezigheid.AfwezigheidsController;
-import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
+import hogent.sdp2.sdpii.gui.app.overzicht.DashboardController;
 import hogent.sdp2.sdpii.gui.app.instellingen.InstellingenController;
 import hogent.sdp2.sdpii.gui.app.locaties.LocatiesController;
 import hogent.sdp2.sdpii.gui.app.notificaties.NotificatiesController;
@@ -27,8 +27,8 @@ public class SchermFactory {
     //voeg hier telkens nieuwe schermen toe
 
     //app
-    public AfwezigheidsController afwezigheidsScherm() {
-        return new AfwezigheidsController();
+    public AfwezigheidsController afwezigheidsScherm(boolean verlof) {
+        return new AfwezigheidsController(verlof);
     }
 
     public AccountController accountScherm() {
@@ -41,7 +41,7 @@ public class SchermFactory {
     }
 
     public NotificatiesController notificatieScherm() {
-        return new NotificatiesController();
+        return new NotificatiesController(Beheerder.getInstance().getNotificatieFacade());
     }
 
     public PlanningController planningScherm() { return new PlanningController();}
@@ -79,5 +79,6 @@ public class SchermFactory {
     public AdminHomeController adminHomeScherm() {
         return new AdminHomeController();
     }
+
 
 }

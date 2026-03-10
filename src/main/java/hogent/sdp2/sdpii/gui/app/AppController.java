@@ -2,15 +2,12 @@ package hogent.sdp2.sdpii.gui.app;
 
 import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.MainFrameController;
-import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
-import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.components.app.BodyController;
 import hogent.sdp2.sdpii.gui.components.app.SidebarController;
 import hogent.sdp2.sdpii.gui.components.app.header.HeaderController;
 import hogent.sdp2.sdpii.gui.components.app.header.StageHeaderController;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
-import hogent.sdp2.sdpii.gui.router.SchermFactory;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;

@@ -11,6 +11,8 @@ public enum Scherm {
     PLANNING,
     TAKEN,
     TEAMS,
+    ZIEKTE,
+    VERLOF,
 
     //admin
     CREEER_MEDEWERKER,

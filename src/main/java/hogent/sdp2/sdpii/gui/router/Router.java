@@ -31,7 +31,8 @@ public class Router {
         switch (scherm) {
             //app
             case ACCOUNT -> app.navigateTo(factory.accountScherm());
-            case AFWEZIGHEID -> app.navigateTo(factory.afwezigheidsScherm());
+            case VERLOF -> app.navigateTo(factory.afwezigheidsScherm(true));
+            case ZIEKTE -> app.navigateTo(factory.afwezigheidsScherm(false));
             case DASHBOARD -> app.navigateTo(factory.dashboardScherm());
             case INSTELLINGEN -> app.navigateTo(factory.instellingenScherm());
             case LOCATIES -> app.navigateTo(factory.locatieScherm());
@@ -42,6 +43,7 @@ public class Router {
             case CREEER_MEDEWERKER -> app.navigateTo(factory.creeerMedewerkerScherm());
             case CREEER_MANAGER -> app.navigateTo(factory.creeerManagerScherm());
             case ADMIN_HOME -> app.navigateTo(factory.adminHomeScherm());
+            case BEHEER_GEBRUIKERS -> app.navigateTo(factory.beheerGebruikersScherm());
 
             //auth
             case LOGIN -> {}

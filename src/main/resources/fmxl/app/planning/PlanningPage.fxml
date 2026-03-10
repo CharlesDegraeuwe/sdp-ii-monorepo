@@ -1,10 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
 
-<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page">
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml"
+         styleClass="page"
+         stylesheets="@/css/dashboard.css, @/css/planning.css">
+    <center>
+        <VBox spacing="10" >
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <HBox styleClass="filter-container" spacing="0">
+                    <Button fx:id="maandKnop" text="Maand" onAction="#toonMaand" styleClass="filter-knop-actief"/>
+                    <Button fx:id="weekKnop" text="Week" onAction="#toonWeek" styleClass="filter-knop"/>
+                    <Button fx:id="dagKnop" text="Dag" onAction="#toonDag" styleClass="filter-knop"/>
+                </HBox>
+            </HBox>
+            <HBox spacing="16">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button fx:id="vorigeKnop" text="‹" onAction="#vorigePeriode" styleClass="nav-knop"/>
+                    <Label fx:id="periodeLabel" text="..." styleClass="periode-label"/>
+                    <Button fx:id="volgendeKnop" text="›" onAction="#volgendePeriode" styleClass="nav-knop"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button text="Vandaag" onAction="#naarVandaag" styleClass="vandaag-knop"/>
+                </HBox>
+                <VBox prefWidth="300" minWidth="280" maxWidth="320"/>
+            </HBox>
+            <HBox spacing="16">
+                <VBox spacing="16" HBox.hgrow="ALWAYS">
+                    <VBox fx:id="kalenderContainer" spacing="5"/>
+                </VBox>
+                <VBox fx:id="detailPanel" spacing="16" prefWidth="300" minWidth="280" maxWidth="320">
+                    <VBox fx:id="shiftDetailCard" styleClass="card" spacing="10">
+                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                        <Label fx:id="detailTitel" text="" styleClass="card_title"/>
+                        <VBox fx:id="detailLijst" spacing="8"/>
+                    </VBox>
+                </VBox>
+
+            </HBox>
+        </VBox>
+    </center>
 </fx:root>

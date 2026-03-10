@@ -6,6 +6,7 @@ import domain.dto.WerknemerDTO;
 import domain.facades.AuthFacade;
 import hogent.sdp2.sdpii.gui.MainFrameController;
 import hogent.sdp2.sdpii.gui.app.AppController;
+import hogent.sdp2.sdpii.gui.auth.LoginController;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,8 +27,9 @@ public class LoginFormController extends VBox {
 
     private MainFrameController mf;
     private Stage stage;
+    private LoginController login;
 
-    public LoginFormController(MainFrameController mf, Stage stage) {
+    public LoginFormController(MainFrameController mf, Stage stage, LoginController login) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/auth/LoginForm.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -39,6 +41,7 @@ public class LoginFormController extends VBox {
 
         this.mf = mf;
         this.stage = stage;
+        this.login = login;
         this.init();
 
 
@@ -106,7 +109,8 @@ public class LoginFormController extends VBox {
     }
 
     private void navigeerNaarActivatie() {
-        this.mf.setCenter(new AppController(stage, mf));
+        this.mf.setCenter(new AppController(stage, mf)
+        );
     }
 }
 

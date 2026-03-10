@@ -15,7 +15,7 @@ public class AccountController extends BorderPane {
     public AccountController(AppController app) {
         this.app = app;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/afwezigheden/AccountPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/account/AccountPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

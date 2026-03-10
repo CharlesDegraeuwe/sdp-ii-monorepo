@@ -73,7 +73,7 @@ public class SidebarController extends VBox {
         schermItems.put(Scherm.PLANNING, planning);
         schermItems.put(Scherm.TAKEN, tasks);
         schermItems.put(Scherm.LOCATIES, plants);
-        schermItems.put(Scherm.AFWEZIGHEID, absense);
+        schermItems.put(Scherm.ZIEKTE, absense);
         schermItems.put(Scherm.TEAMS, teams);
         schermItems.put(Scherm.ADMIN_HOME, admin);
     }
@@ -99,7 +99,7 @@ public class SidebarController extends VBox {
         planning.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.PLANNING));
         tasks.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
         plants.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.LOCATIES));
-        absense.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
+        absense.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.ZIEKTE));
         teams.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TEAMS));
 
         if (admin != null) {
