@@ -86,7 +86,20 @@ public class LoginFormController extends VBox {
                 return;
             }
             Sessie.getInstance().setIngelogdeWerknemer(werknemer);
-            navigeerNaarActivatie();
+            String status = werknemer.status();
+
+            if ("Actief".equalsIgnoreCase(status)) {
+                navigeerNaarApp();
+
+            } else if ("Inactief".equalsIgnoreCase(status)) {
+                navigeerNaarActivatieScherm();
+
+            } else if ("Geblokkeerd".equalsIgnoreCase(status)) {
+                lblFout.setText("Je account is geblokkeerd.");
+                Sessie.getInstance().setIngelogdeWerknemer(null);
+                loginBtn.setText("Log in");
+                loginBtn.setDisable(false);
+            }
         });
 
         task.setOnFailed(e -> {
@@ -100,7 +113,6 @@ public class LoginFormController extends VBox {
     }
 
 
-
     public void reset() {
         this.loginBtn.setText("Log in");
         this.loginBtn.setDisable(false);
@@ -108,10 +120,11 @@ public class LoginFormController extends VBox {
         txtWachtwoord.setText("");
     }
 
-    private void navigeerNaarActivatie() {
-        this.mf.setCenter(new AppController(stage, mf)
-        );
-    }
-}
+        private void navigeerNaarApp() {
+            this.mf.setCenter(new AppController(stage, mf));
+        }
 
-//
+        private void navigeerNaarActivatieScherm() {
+            this.mf.setCenter(new ActivatieFormController(stage, mf));
+        }
+}
