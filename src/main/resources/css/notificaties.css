@@ -8,32 +8,55 @@
     -fx-font-size: 13px;
     -fx-text-fill: #999999;
 }
+.filter-container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 30;
+    -fx-padding: 6 6 6 6;
+    -fx-spacing: 2;
+}
 
 .filter-knop {
-    -fx-background-color: #FFFFFF;
-    -fx-border-color: #cccccc;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
     -fx-border-radius: 20;
     -fx-background-radius: 20;
-    -fx-padding: 6 18 6 18;
-    -fx-font-size: 12px;
+    -fx-padding: 6 16 6 16;
+    -fx-font-size: 13px;
     -fx-cursor: hand;
-    -fx-text-fill: #666666;
+    -fx-font-weight: bold;
 }
 
 .filter-knop:hover {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: #F6F6F6;
+}
+
+.filter-knop-werk {
+    -fx-text-fill: #99DA64;
+}
+
+.filter-knop-afwezigheid {
+    -fx-text-fill: #DA6464;
+}
+
+.filter-knop-verlof {
+    -fx-text-fill: #F6B74B;
+}
+
+.filter-knop-team {
+    -fx-text-fill: #4B8AF6;
 }
 
 .filter-knop-actief {
-    -fx-background-color: #3D3D3D;
-    -fx-border-color: #3D3D3D;
+    -fx-background-color: #F6F6F6;
+    -fx-border-color: transparent;
     -fx-border-radius: 20;
     -fx-background-radius: 20;
-    -fx-padding: 6 18 6 18;
-    -fx-font-size: 12px;
+    -fx-padding: 6 16 6 16;
+    -fx-font-size: 13px;
     -fx-cursor: hand;
-    -fx-text-fill: white;
+    -fx-text-fill: #1A1A1A;
     -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 1);
 }
 
 .notificatie-rij {

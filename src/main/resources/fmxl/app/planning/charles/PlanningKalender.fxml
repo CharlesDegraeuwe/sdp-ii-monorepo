@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="VBox" spacing="12" xmlns:fx="http://javafx.com/fxml">
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button fx:id="btnPrev" text="‹" styleClass="btn_icon"/>
+        <Label fx:id="lblMonth" text="December 2025" styleClass="planning_month_label"/>
+        <Button fx:id="btnNext" text="›" styleClass="btn_icon"/>
+    </HBox>
+    <GridPane fx:id="kalenderGrid" hgap="8" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" fillWidth="true"/>
+            <ColumnConstraints hgrow="ALWAYS" fillWidth="true"/>
+            <ColumnConstraints hgrow="ALWAYS" fillWidth="true"/>
+            <ColumnConstraints hgrow="ALWAYS" fillWidth="true"/>
+            <ColumnConstraints hgrow="ALWAYS" fillWidth="true"/>
+            <ColumnConstraints hgrow="ALWAYS" fillWidth="true"/>
+            <ColumnConstraints hgrow="ALWAYS" fillWidth="true"/>
+        </columnConstraints>
+        <!-- header row -->
+        <Label text="ma" styleClass="planning_day_header" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Label text="di" styleClass="planning_day_header" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="wo" styleClass="planning_day_header" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+        <Label text="do" styleClass="planning_day_header" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+        <Label text="vr" styleClass="planning_day_header" GridPane.columnIndex="4" GridPane.rowIndex="0"/>
+        <Label text="za" styleClass="planning_day_header" GridPane.columnIndex="5" GridPane.rowIndex="0"/>
+        <Label text="zo" styleClass="planning_day_header" GridPane.columnIndex="6" GridPane.rowIndex="0"/>
+    </GridPane>
+</fx:root>

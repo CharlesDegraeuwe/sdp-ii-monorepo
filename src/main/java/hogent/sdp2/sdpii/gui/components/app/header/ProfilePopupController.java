@@ -39,7 +39,7 @@ public class ProfilePopupController extends VBox {
         });
 
         admin_trigger.setOnMouseClicked(e -> {
-            Router.getInstance().navigeerNaar(Scherm.INSTELLINGEN);
+            Router.getInstance().navigeerNaar(Scherm.ADMIN_HOME);
         });
 
         logout_trigger.setOnMouseClicked(e -> {

@@ -21,19 +21,19 @@
                     </columnConstraints>
                     <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="add_shift" GridPane.columnIndex="0" GridPane.rowIndex="0">
                         <FontIcon iconLiteral="ion4-md-add-circle-outline" iconSize="16" styleClass="action_icon"/>
-                        <Label fx:id="meld_afwezig" text="Shift toevoegen" styleClass="action_label"/>
+                        <Label fx:id="shift" styleClass="action_label"/>
                     </HBox>
                     <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="assign_task" GridPane.columnIndex="1" GridPane.rowIndex="0">
                         <FontIcon iconLiteral="ion4-md-checkmark-circle-outline" iconSize="16" styleClass="action_icon"/>
-                        <Label fx:id="meld_afwezig" text="Taak Toekennen" styleClass="action_label"/>
+                        <Label fx:id="taak" styleClass="action_label"/>
                     </HBox>
                     <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="report_absence" GridPane.columnIndex="0" GridPane.rowIndex="1">
                         <FontIcon iconLiteral="ion4-md-alert" iconSize="16" styleClass="action_icon_red"/>
-                        <Label fx:id="meld_afwezig" text="Meld Afwezigheid" styleClass="action_label"/>
+                        <Label fx:id="afwezig" text="Meld Afwezigheid" styleClass="action_label"/>
                     </HBox>
                     <HBox styleClass="action_btn" spacing="10" alignment="CENTER_LEFT" fx:id="plan_holiday" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <FontIcon iconLiteral="ion4-md-calendar" iconSize="16" styleClass="action_icon"/>
-                        <Label fx:id="meld_afwezig" text="Plan Vakantie" styleClass="action_label"/>
+                        <Label fx:id="vakantie" text="Plan Vakantie" styleClass="action_label"/>
                     </HBox>
                 </GridPane>
 
@@ -41,14 +41,7 @@
                 <Label text="Geplande Uren" styleClass="section_title"/>
                 <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
                     <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                    <TableView fx:id="shiftsTable" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="colDag" text="Dag" prefWidth="80"/>
-                            <TableColumn fx:id="colNaam" text="Naam" prefWidth="150"/>
-                            <TableColumn fx:id="colUren" text="Uren" prefWidth="120"/>
-                            <TableColumn fx:id="colSite" text="Site" prefWidth="80"/>
-                        </columns>
-                    </TableView>
+                    <VBox fx:id="planned_hours_container"></VBox>
                 </VBox>
 
             </VBox>
@@ -87,7 +80,8 @@
 
                 </GridPane>
 
-                <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT"> <Label text="Statistieken" styleClass="section_title"/></HBox>
+                <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
+                    <Label text="Statistieken" styleClass="section_title"/></HBox>
                 <GridPane hgap="16">
 
                     <columnConstraints>
@@ -124,9 +118,10 @@
                 </GridPane>
 
                 <!-- locatie info -->
-                <Label text="Locatie info" styleClass="section_title"/>
-                <VBox styleClass="card" fx:id="locatie_info" spacing="12" VBox.vgrow="ALWAYS">
-
+                    <VBox fx:id="locatie_info_container" spacing="16">
+                        <Label text="Locatie info" styleClass="section_title"/>
+                        <VBox styleClass="card" fx:id="locatie_info" spacing="12" VBox.vgrow="ALWAYS">
+                    </VBox>
 
                 </VBox>
 

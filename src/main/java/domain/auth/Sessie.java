@@ -34,6 +34,18 @@ public class Sessie {
         return ingelogdeWerknemer != null && userRole().equals("Admin");
     }
 
+    public boolean isMangerOrAdmin() {
+        return userRole().equals("Manager") || userRole().equals("Admin");
+    }
+
+    public boolean isSuperVisor() {
+        return userRole().equals("Supervisor");
+    }
+
+    public boolean isWerknemer() {
+        return userRole().equals("Werknemer");
+    }
+
     public String userRole() {
             if (ingelogdeWerknemer == null){
                 throw new IllegalArgumentException("geen gebruiker gevonden");
@@ -42,9 +54,8 @@ public class Sessie {
 
 
             return ingelogdeWerknemer.rol();
-
-
     }
+
 
     public static Sessie getInstance() {
         return SessieHolder.INSTANCE;

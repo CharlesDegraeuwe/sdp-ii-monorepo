@@ -56,6 +56,7 @@ public class PlanningController extends BorderPane {
 
     @FXML
     public void initialize() {
+        toonDagDetail(LocalDate.now());
         laadAfwezigheden();
     }
 
@@ -70,7 +71,7 @@ public class PlanningController extends BorderPane {
         new Thread(() -> {
             try {
                 List<AfwezigheidsOverzichtDTO> data = Beheerder.getInstance()
-                         .getPlanningFacade()
+                        .getPlanningFacade()
                         .geefAfwezighedenVanTeam(werknemer.id(), van, tot);
                 Platform.runLater(() -> {
                     this.afwezigheden = data;
@@ -95,29 +96,27 @@ public class PlanningController extends BorderPane {
 
     private void tekenMaand() {
         kalenderContainer.getChildren().clear();
-        detailPanel.setVisible(false);
-        detailPanel.setManaged(false);
 
         periodeLabel.setText(huidigeDatum.format(MAAND_FORMAT));
 
-        // Dag headers
-        String[] dagen = {"Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"};
-        GridPane grid = maakGrid(7);
-
-        HBox header = new HBox();
-        for (String dag : dagen) {
-            Label l = new Label(dag);
+        // Dag headers — eigen grid
+        GridPane headerGrid = maakGrid(7);
+        String[] dagen = {"ma", "di", "wo", "do", "vr", "za", "zo"};
+        for (int i = 0; i < dagen.length; i++) {
+            Label l = new Label(dagen[i]);
             l.getStyleClass().add("dag-header");
-            HBox.setHgrow(l, Priority.ALWAYS);
             l.setMaxWidth(Double.MAX_VALUE);
             l.setAlignment(Pos.CENTER);
-            header.getChildren().add(l);
+            headerGrid.add(l, i, 0);
         }
-        kalenderContainer.getChildren().add(header);
-        kalenderContainer.getChildren().add(grid);
+        kalenderContainer.getChildren().add(headerGrid);
+
+        // Kalender cellen — APARTE grid
+        GridPane celGrid = maakGrid(7);
+        kalenderContainer.getChildren().add(celGrid);
 
         LocalDate eersteVanMaand = huidigeDatum.withDayOfMonth(1);
-        int startKolom = eersteVanMaand.getDayOfWeek().getValue() - 1; // Ma=0
+        int startKolom = eersteVanMaand.getDayOfWeek().getValue() - 1;
         int aantalDagen = huidigeDatum.lengthOfMonth();
 
         int rij = 0;
@@ -126,7 +125,7 @@ public class PlanningController extends BorderPane {
         for (int dag = 1; dag <= aantalDagen; dag++) {
             LocalDate datum = huidigeDatum.withDayOfMonth(dag);
             VBox cel = maakMaandCel(datum);
-            grid.add(cel, kolom, rij);
+            celGrid.add(cel, kolom, rij);
 
             kolom++;
             if (kolom == 7) {
@@ -152,8 +151,13 @@ public class PlanningController extends BorderPane {
     private VBox maakMaandCel(LocalDate datum) {
         VBox cel = new VBox(3);
         cel.getStyleClass().add("maand-cel");
-        cel.setPadding(new Insets(6));
-        cel.setMinHeight(70);
+        cel.setPadding(new Insets(8));
+        cel.setMinHeight(80);
+
+        // Weekend tint
+        if (datum.getDayOfWeek() == DayOfWeek.SATURDAY || datum.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            cel.getStyleClass().add("maand-cel-weekend");
+        }
 
         if (datum.equals(LocalDate.now())) {
             cel.getStyleClass().add("maand-cel-vandaag");
@@ -178,8 +182,7 @@ public class PlanningController extends BorderPane {
 
     private void tekenWeek() {
         kalenderContainer.getChildren().clear();
-        detailPanel.setVisible(false);
-        detailPanel.setManaged(false);
+
 
         LocalDate maandag = huidigeDatum.with(DayOfWeek.MONDAY);
         LocalDate zondag = maandag.plusDays(6);
@@ -263,8 +266,6 @@ public class PlanningController extends BorderPane {
         }
 
         kalenderContainer.getChildren().add(dagView);
-        detailPanel.setVisible(false);
-        detailPanel.setManaged(false);
     }
 
     // ─── DAG DETAIL (klik op dag in maand/week) ──────────────────────────────────
@@ -284,9 +285,6 @@ public class PlanningController extends BorderPane {
                 detailLijst.getChildren().add(maakDetailRij(a));
             }
         }
-
-        detailPanel.setVisible(true);
-        detailPanel.setManaged(true);
     }
 
     private HBox maakDetailRij(AfwezigheidsOverzichtDTO a) {
@@ -381,8 +379,9 @@ public class PlanningController extends BorderPane {
     }
 
     private void setToggle(Button actief) {
-        maandKnop.getStyleClass().setAll(maandKnop == actief ? "toggle-knop-actief" : "toggle-knop");
-        weekKnop.getStyleClass().setAll(weekKnop == actief ? "toggle-knop-actief" : "toggle-knop");
-        dagKnop.getStyleClass().setAll(dagKnop == actief ? "toggle-knop-actief" : "toggle-knop");
+        for (Button b : List.of(maandKnop, weekKnop, dagKnop)) {
+            b.getStyleClass().removeAll("filter-knop", "filter-knop-actief");
+            b.getStyleClass().add(b == actief ? "filter-knop-actief" : "filter-knop");
+        }
     }
 }

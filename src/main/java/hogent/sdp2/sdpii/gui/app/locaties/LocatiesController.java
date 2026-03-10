@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class LocatiesController extends BorderPane {
     public LocatiesController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/PlanningPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/locaties/PlantsPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

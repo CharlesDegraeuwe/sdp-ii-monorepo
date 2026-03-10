@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page" stylesheets="@/css/notificaties.css">
+
+    <center>
+        <ScrollPane fitToWidth="true" maxWidth="600" hbarPolicy="NEVER" styleClass="scroll-pane">
+            <content>
+                <VBox spacing="30" alignment="TOP_CENTER">
+                    <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
+
+                    <!-- Filter knoppen -->
+                    <HBox alignment="CENTER">
+                        <HBox styleClass="filter-container" alignment="CENTER" maxWidth="400">
+                            <Button fx:id="allesKnop" id="allesKnop" text="Alles" onAction="#filterAlles" styleClass="filter-knop-actief"/>
+                            <Button fx:id="werkKnop" id="werkKnop" text="Werk" onAction="#filterWerk" styleClass="filter-knop,filter-knop-werk"/>
+                            <Button fx:id="afwezigheidKnop" id="afwezigheidKnop" text="Afwezigheid" onAction="#filterAfwezigheid" styleClass="filter-knop,filter-knop-afwezigheid"/>
+                            <Button fx:id="verlofKnop" id="verlofKnop" text="Verlof" onAction="#filterVerlof" styleClass="filter-knop,filter-knop-verlof"/>
+                        </HBox>
+                    </HBox>
+
+
+                    <!-- Ongelezen sectie -->
+                    <VBox fx:id="ongelezenSectie" spacing="10">
+                        <Label text="Ongelezen:" styleClass="sectie-label"/>
+                        <VBox fx:id="ongelezenLijst" spacing="8"/>
+                    </VBox>
+
+                    <!-- Alle notificaties sectie -->
+                    <VBox spacing="10">
+                        <Label text="Alle notificaties:" styleClass="sectie-label"/>
+                        <VBox fx:id="alleLijst" spacing="8"/>
+                    </VBox>
+
+                    <Label fx:id="leegLabel" text="Geen notificaties." styleClass="leeg-label" visible="false" managed="false"/>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</fx:root>

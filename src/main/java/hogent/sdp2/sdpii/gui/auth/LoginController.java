@@ -23,7 +23,7 @@ public class LoginController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        form = new LoginFormController(mf, stage);
+        form = new LoginFormController(mf, stage, this);
         StageHeaderController controls = new StageHeaderController(stage);
         setCenter(form);
         setTop(controls);

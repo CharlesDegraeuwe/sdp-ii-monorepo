@@ -8,13 +8,13 @@
     <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
     <TableView fx:id="locatieTable" styleClass="locatie_table" fixedCellSize="40">
         <columns>
-            <TableColumn fx:id="colNaam" text="name:" prefWidth="120"/>
-            <TableColumn fx:id="colLocatie" text="location:" prefWidth="150"/>
+            <TableColumn fx:id="colNaam" text="naam:" prefWidth="120"/>
+            <TableColumn fx:id="colLocatie" text="locatie:" prefWidth="150"/>
             <TableColumn fx:id="colStatus" text="status:" prefWidth="100"/>
-            <TableColumn fx:id="colStats" text="quick stats:" prefWidth="160"/>
+            <TableColumn fx:id="colStats" text="snelle stats:" prefWidth="160"/>
         </columns>
     </TableView>
     <HBox alignment="CENTER_RIGHT">
-        <Button text="see more" fx:id="see_more" styleClass="see_more_button"/>
+        <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
     </HBox>
 </fx:root>

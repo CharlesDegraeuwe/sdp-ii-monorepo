@@ -3,46 +3,43 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page" stylesheets="@/css/planning.css">
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml"
+         styleClass="page"
+         stylesheets="@/css/dashboard.css, @/css/planning.css">
     <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-pane">
-            <content>
-                <VBox spacing="20">
-                    <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
+        <VBox spacing="10" >
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <HBox styleClass="filter-container" spacing="0">
+                    <Button fx:id="maandKnop" text="Maand" onAction="#toonMaand" styleClass="filter-knop-actief"/>
+                    <Button fx:id="weekKnop" text="Week" onAction="#toonWeek" styleClass="filter-knop"/>
+                    <Button fx:id="dagKnop" text="Dag" onAction="#toonDag" styleClass="filter-knop"/>
+                </HBox>
+            </HBox>
+            <HBox spacing="16">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button fx:id="vorigeKnop" text="‹" onAction="#vorigePeriode" styleClass="nav-knop"/>
+                    <Label fx:id="periodeLabel" text="..." styleClass="periode-label"/>
+                    <Button fx:id="volgendeKnop" text="›" onAction="#volgendePeriode" styleClass="nav-knop"/>
 
-                    <!-- Toolbar: views + navigatie -->
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <!-- View toggles -->
-                        <HBox styleClass="toggle-groep" spacing="0">
-                            <Button fx:id="maandKnop" text="Maand" onAction="#toonMaand" styleClass="toggle-knop-actief"/>
-                            <Button fx:id="weekKnop" text="Week" onAction="#toonWeek" styleClass="toggle-knop"/>
-                            <Button fx:id="dagKnop" text="Dag" onAction="#toonDag" styleClass="toggle-knop"/>
-                        </HBox>
+                    <Region HBox.hgrow="ALWAYS"/>
 
-                        <Region HBox.hgrow="ALWAYS"/>
-
-                        <!-- Navigatie -->
-                        <Button fx:id="vorigeKnop" text="‹" onAction="#vorigePeriode" styleClass="nav-knop"/>
-                        <Label fx:id="periodeLabel" text="..." styleClass="periode-label"/>
-                        <Button fx:id="volgendeKnop" text="›" onAction="#volgendePeriode" styleClass="nav-knop"/>
-
-                        <Region HBox.hgrow="ALWAYS"/>
-
-                        <!-- Vandaag knop -->
-                        <Button text="Vandaag" onAction="#naarVandaag" styleClass="vandaag-knop"/>
-                    </HBox>
-
-                    <!-- Kalender container -->
-                    <VBox fx:id="kalenderContainer" spacing="0" styleClass="kalender-container"/>
-
-                    <!-- Detail panel (dag detail) -->
-                    <VBox fx:id="detailPanel" spacing="10" styleClass="detail-panel" visible="false" managed="false">
-                        <Label fx:id="detailTitel" text="" styleClass="detail-titel"/>
-                        <VBox fx:id="detailLijst" spacing="6"/>
-                    </VBox>
-
+                    <Button text="Vandaag" onAction="#naarVandaag" styleClass="vandaag-knop"/>
+                </HBox>
+                <VBox prefWidth="300" minWidth="280" maxWidth="320"/>
+            </HBox>
+            <HBox spacing="16">
+                <VBox spacing="16" HBox.hgrow="ALWAYS">
+                    <VBox fx:id="kalenderContainer" spacing="5"/>
                 </VBox>
-            </content>
-        </ScrollPane>
+                <VBox fx:id="detailPanel" spacing="16" prefWidth="300" minWidth="280" maxWidth="320">
+                    <VBox fx:id="shiftDetailCard" styleClass="card" spacing="10">
+                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                        <Label fx:id="detailTitel" text="" styleClass="card_title"/>
+                        <VBox fx:id="detailLijst" spacing="8"/>
+                    </VBox>
+                </VBox>
+
+            </HBox>
+        </VBox>
     </center>
 </fx:root>
