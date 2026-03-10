@@ -60,7 +60,7 @@
 }
 
 .form-submit-btn {
-    -fx-background-color: #2b2b2b;
+    -fx-background-color: #E31B35;
     -fx-text-fill: white;
     -fx-background-radius: 20;
     -fx-padding: 12 0;
@@ -73,7 +73,7 @@
 }
 
 .form-submit-btn:hover {
-    -fx-background-color: #3d3d3d;
+    -fx-background-color: #ba182d;
 }
 
 .form-login-link {

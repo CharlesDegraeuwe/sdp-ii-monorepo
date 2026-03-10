@@ -130,7 +130,7 @@
 }
 
 .create-btn {
-    -fx-background-color: #2d2d2d;
+    -fx-background-color: #E31B35;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -141,7 +141,7 @@
 }
 
 .create-btn:hover {
-    -fx-background-color: #444444;
+    -fx-background-color: #b6152a;
 }
 
 .divider {

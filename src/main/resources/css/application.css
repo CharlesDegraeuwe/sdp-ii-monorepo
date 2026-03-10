@@ -215,7 +215,7 @@
 }
 
 .login-btn {
-    -fx-background-color: #2d2d2d;
+    -fx-background-color: #E31B35;
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -225,7 +225,7 @@
 }
 
 .login-btn:hover {
-    -fx-background-color: #444444;
+    -fx-background-color: #b3172b;
 }
 
 #profile_popup {
@@ -337,7 +337,7 @@
 }
 
 .editButton {
-    -fx-background-color: #2d2d2d;
+    -fx-background-color: #E31B35;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -348,6 +348,6 @@
 }
 
 .editButton:hover {
-    -fx-background-color: #444444;
+    -fx-background-color: #af162a;
 }
 
