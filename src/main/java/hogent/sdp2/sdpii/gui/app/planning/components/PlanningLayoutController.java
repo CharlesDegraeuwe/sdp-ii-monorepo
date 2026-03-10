@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class PlanningLayoutController extends BorderPane {
     public PlanningLayoutController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/PlanningLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/charles/PlanningLayout.fxml"));
         loader.setRoot(this); loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
 

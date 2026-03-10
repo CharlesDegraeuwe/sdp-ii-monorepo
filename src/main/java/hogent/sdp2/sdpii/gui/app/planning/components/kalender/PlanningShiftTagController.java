@@ -12,7 +12,7 @@ public class PlanningShiftTagController extends HBox {
     Label lblShift;
 
     public PlanningShiftTagController(String tekst, boolean isVacation) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/PlanningShiftTag.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/charles/PlanningShiftTag.fxml"));
         loader.setRoot(this); loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
         lblShift.setText(tekst);

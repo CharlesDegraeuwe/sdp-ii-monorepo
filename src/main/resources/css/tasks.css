@@ -1,11 +1,10 @@
 .task_root {
     -fx-max-width: 850;
 }
-
 .filter-container {
     -fx-background-color: #ffffff;
     -fx-background-radius: 30;
-    -fx-padding: 6;
+    -fx-padding: 6 6 6 6;
     -fx-spacing: 2;
 }
 
@@ -36,6 +35,7 @@
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 1);
 }
+
 
 .scroll-pane {
     -fx-background-color: transparent;
@@ -313,4 +313,59 @@
 
 .member-item:hover {
     -fx-background-color: #F0F0F0;
+}
+
+.taak_container {
+    -fx-background-color: rgba(240, 240, 240, 0.48);
+    -fx-background-radius: 999px;
+    -fx-cursor: hand;
+    -fx-padding: 10 5 10 5;
+}
+
+.finshed_container {
+    -fx-background-color: rgba(240, 240, 240, 0.48);
+    -fx-background-radius: 999px;
+    -fx-cursor: hand;
+    -fx-padding: 10 5 10 5;
+}
+
+.taak_delete_btn {
+    -fx-background-color: rgba(240, 240, 240, 0.48);
+    -fx-background-radius: 999px;
+    -fx-cursor: hand;
+}
+
+.taak_delete_btn:hover {
+    -fx-background-color: #E4E4E4;
+}
+
+.taak_delete_icon {
+    -fx-icon-color: #2c3e50;
+}
+
+.taak_checkbox .box {
+    -fx-background-radius: 999px;
+    -fx-border-radius: 999px;
+    -fx-border-color: #cccccc;
+    -fx-background-color: white;
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+}
+
+.taak_checkbox:selected .box {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+}
+
+.taak_checkbox:selected .mark {
+    -fx-background-color: transparent;
+}
+
+.taak_checkbox .mark {
+    -fx-background-color: transparent;
+}
+
+.taak_datum {
+    -fx-font-size: 10px;
+    -fx-text-fill: #858585;
 }

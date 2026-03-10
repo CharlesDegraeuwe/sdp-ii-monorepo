@@ -77,6 +77,7 @@ public class TeamsLayoutController extends VBox {
             if (checkTeamsController == null) checkTeamsController = new CheckTeamsController();
             outer_container.setCenter(checkTeamsController);
             updatePages();
+            updateTabs();
         });
 
         usersPagina.setOnMouseClicked(e -> {
@@ -85,8 +86,8 @@ public class TeamsLayoutController extends VBox {
             if (checkUserpage == null) checkUserpage = new CheckUserpage();
             outer_container.setCenter(checkUserpage);
             updatePages();
+            updateTabs();
         });
-
         updateTabs();
         updatePages();
     }

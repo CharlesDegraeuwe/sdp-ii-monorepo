@@ -16,7 +16,7 @@ public class PlanningTaakItemController extends HBox {
     @FXML Label lblDeadline;
 
     public PlanningTaakItemController(String naam, String deadline, boolean finished) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/PlanningTaakItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/charles/PlanningTaakItem.fxml"));
         loader.setRoot(this); loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
         lblNaam.setText(naam);

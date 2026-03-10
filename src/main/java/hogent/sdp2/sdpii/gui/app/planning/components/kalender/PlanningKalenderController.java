@@ -21,7 +21,7 @@ public class PlanningKalenderController extends VBox {
     private LocalDate currentMonth = LocalDate.now().withDayOfMonth(1);
 
     public PlanningKalenderController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/PlanningKalender.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/charles/PlanningKalender.fxml"));
         loader.setRoot(this); loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
         init();

@@ -30,6 +30,8 @@
                 <VBox spacing="12" HBox.hgrow="ALWAYS">
                     <VBox styleClass="card" spacing="8" VBox.vgrow="ALWAYS">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                        <Label text="Teams:" styleClass="section-label"/>
+                        <VBox fx:id="teamListContainer" spacing="6" styleClass="task-section"/>
                         <Label text="Teamleden:" styleClass="section-label"/>
                         <VBox fx:id="memberListContainer" spacing="6" styleClass="task-section"/>
                     </VBox>

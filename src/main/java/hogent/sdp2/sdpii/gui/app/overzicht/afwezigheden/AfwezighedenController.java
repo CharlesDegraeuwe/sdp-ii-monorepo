@@ -27,10 +27,8 @@ public class AfwezighedenController extends VBox {
 
         itemContainer.getChildren().add(new AfwezighedenItemController("Milan Van Bellingen", "ziekte"));
         itemContainer.getChildren().add(new AfwezighedenItemController("Marte De Backer", "vakantie"));
-        String role = Sessie.getInstance().userRole();
-        if (role.equals("manager") || role.equals("admin")) {
+        if(Sessie.getInstance().isSuperVisor()) {
             teamPicker.setVisible(false);
-            teamPicker.setManaged(false);
         }
         see_more.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
     }

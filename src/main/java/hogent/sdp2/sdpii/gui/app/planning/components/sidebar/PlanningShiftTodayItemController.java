@@ -16,7 +16,7 @@ public class PlanningShiftTodayItemController extends HBox {
     @FXML Label lblLocatie;
 
     public PlanningShiftTodayItemController(String tijd, String locatie) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/PlanningShiftTodayItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/charles/PlanningShiftTodayItem.fxml"));
         loader.setRoot(this); loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
         lblTijd.setText(tijd);

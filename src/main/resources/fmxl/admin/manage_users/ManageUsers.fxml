@@ -6,7 +6,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Label?>
 
-<fx:root type="VBox" styleClass="page" spacing="20" xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.control.Button?>
+<fx:root type="VBox" stylesheets="@/css/manageUsers.css" styleClass="page" spacing="20" xmlns:fx="http://javafx.com/fxml">
+
 
     <Label text="Mijn Team" styleClass="page-title"/>
 
@@ -26,5 +28,11 @@
             <TableColumn fx:id="telefoonCol" text="Telefoonnummer" prefWidth="140"/>
         </columns>
     </TableView>
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Button fx:id="btnActiveer" text="Activeer" onAction="#handleActiveer" styleClass="btn-activeer"/>
+        <Button fx:id="btnDeactiveer" text="Deactiveer" onAction="#handleDeactiveer" styleClass="btn-deactiveer"/>
+        <Button fx:id="btnBlokkeer" text="Blokkeer" onAction="#handleBlokkeer" styleClass="btn-blokkeer"/>
+    </HBox>
 
 </fx:root>

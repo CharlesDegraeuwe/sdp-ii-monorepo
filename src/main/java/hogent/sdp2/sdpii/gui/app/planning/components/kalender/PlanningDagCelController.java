@@ -13,7 +13,7 @@ public class PlanningDagCelController extends VBox {
     @FXML VBox tagsContainer;
 
     public PlanningDagCelController(int dag) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/PlanningDagCel.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/charles/PlanningDagCel.fxml"));
         loader.setRoot(this); loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
         lblDag.setText(String.valueOf(dag));

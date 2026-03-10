@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<fx:root type="HBox" fx:id="container" spacing="8" alignment="CENTER_LEFT"
+         xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="4" right="4" bottom="4" left="4"/></padding>
+
+    <HBox styleClass="taak_container" prefHeight="36" spacing="10" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+        <FontIcon iconLiteral="ion4-ios-checkmark" iconSize="20"/>
+        <Label fx:id="title" maxWidth="130" styleClass="taak_title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="datum" styleClass="taak_datum"/>
+    </HBox>
+</fx:root>

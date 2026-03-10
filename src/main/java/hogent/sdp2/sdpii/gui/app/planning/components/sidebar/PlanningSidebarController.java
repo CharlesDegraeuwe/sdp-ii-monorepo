@@ -21,7 +21,7 @@ public class PlanningSidebarController extends VBox {
     private LocalDate selectedDay = LocalDate.now();
 
     public PlanningSidebarController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/PlanningSidebar.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/planning/charles/PlanningSidebar.fxml"));
         loader.setRoot(this); loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
         init();

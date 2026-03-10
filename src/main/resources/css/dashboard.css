@@ -38,7 +38,7 @@
 
 /* Action Buttons */
 .action_btn {
-    -fx-background-color: #F0F0F0;
+    -fx-background-color: rgba(240, 240, 240, 0.48);
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-padding: 10 14 10 14;
@@ -187,7 +187,7 @@
     -fx-background-color: #00ff7f;
 }
 .notification_item {
-    -fx-background-color: rgba(240, 240, 240, 0.5);
+    -fx-background-color: rgba(240, 240, 240, 0.48);
     -fx-background-radius: 50;
     -fx-border-radius: 12;
     -fx-padding: 10 14 10 14;
@@ -217,7 +217,7 @@
     -fx-background-color: white;
     -fx-background-radius: 999px;
     -fx-border-radius: 999px;
-    -fx-background-color: rgba(228, 228, 228, 0.75);
+    -fx-background-color: rgba(240, 240, 240, 0.48);
 }
 
 .taak_title {
@@ -237,6 +237,13 @@
     -fx-border-color: #cccccc;
     -fx-background-color: white;
 }
+
+.uur_title {
+    -fx-font-size: 13px;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
 .team_picker {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 30;
@@ -351,7 +358,7 @@
     -fx-alignment: CENTER_LEFT;
     -fx-cursor: hand;
     -fx-font-size: 10;
-    -fx-background-color: rgba(228, 228, 228, 0.75);
+    -fx-background-color: rgba(240, 240, 240, 0.48);
 
 }
 

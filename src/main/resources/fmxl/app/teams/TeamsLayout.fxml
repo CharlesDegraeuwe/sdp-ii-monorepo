@@ -11,12 +11,12 @@
     <VBox spacing="10" alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
         <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
         <HBox alignment="CENTER" fx:id="controls">
-            <HBox fx:id="tab_buttons" styleClass="filter-container" alignment="CENTER" maxWidth="400">
+            <HBox fx:id="tab_buttons" styleClass="filter-container" alignment="CENTER">
                 <Button fx:id="checkKnop" text="Bekijken" styleClass="filter-knop-actief"/>
                 <Button fx:id="creeerKnop" text="Creëren" styleClass="filter-knop"/>
             </HBox>
             <Region HBox.hgrow="ALWAYS"/>
-            <HBox styleClass="filter-container" fx:id="page_buttons" alignment="CENTER" maxWidth="400">
+            <HBox styleClass="filter-container" fx:id="page_buttons" alignment="CENTER">
                 <Button fx:id="teamsPagina" text="Teams" styleClass="filter-knop-actief"/>
                 <Button fx:id="usersPagina" text="Werknemers" styleClass="filter-knop"/>
             </HBox>

@@ -69,5 +69,8 @@ public class Beheerder {
     public OverzichtsFacade getOverzichtFacade() {
         return new OverzichtsFacade();
     }
+    public PlanningFacade getPlanningFacade() {
+        return new PlanningFacade();
+    }
 
 }

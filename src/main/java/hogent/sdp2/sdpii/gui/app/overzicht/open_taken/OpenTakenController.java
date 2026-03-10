@@ -16,7 +16,7 @@ public class OpenTakenController extends VBox {
     @FXML ComboBox teamPicker;
     @FXML Button see_more;
     public OpenTakenController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/open_taken/OpenTaken.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/uren/GeplandeUren.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -27,10 +27,12 @@ public class OpenTakenController extends VBox {
 
         itemContainer.getChildren().add(new OpenTakenItemController("Taak 1", "13/04/26"));
         itemContainer.getChildren().add(new OpenTakenItemController("Taak 2", "13/04/26"));
-        String role = Sessie.getInstance().userRole();
-        if (role.equals("manager") || role.equals("admin")) {
+        boolean role = Sessie.getInstance().isWerknemer();
+        if (role) {
             teamPicker.setVisible(false);
-            teamPicker.setManaged(false);
+        }
+        if(Sessie.getInstance().isSuperVisor()) {
+            teamPicker.setVisible(false);
         }
         see_more.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
     }
