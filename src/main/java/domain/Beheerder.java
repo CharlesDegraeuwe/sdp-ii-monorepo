@@ -72,5 +72,8 @@ public class Beheerder {
     public PlanningFacade getPlanningFacade() {
         return new PlanningFacade();
     }
+    public GeschiedenisFacade getGeschiedenisFacade() {
+        return new GeschiedenisFacade();
+    }
 
 }
