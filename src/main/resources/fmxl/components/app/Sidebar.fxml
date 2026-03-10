@@ -6,6 +6,7 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
 <fx:root type="VBox" styleClass="sidebar" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml">
     <children>
 
@@ -15,17 +16,17 @@
             </ImageView>
         </children>
     </VBox>
-
-        <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="dashboard">
-            <children>
-                <ImageView fitWidth="25" fitHeight="25">
-                    <image>
-                        <Image url="/icons/dashboard.png"/>
-                    </image>
-                </ImageView>
-                <Label text="Overzicht" styleClass="sidebar_label"/>
-            </children>
+        <VBox minHeight="100.0" minWidth="100.0" alignment="CENTER" styleClass="sidebar-item" fx:id="dashboard">
+                <children>
+                    <ImageView fitWidth="25" fitHeight="25">
+                        <image>
+                            <Image url="/icons/dashboard.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="Overzicht" styleClass="sidebar_label"/>
+                </children>
         </VBox>
+
 
         <VBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER" styleClass="sidebar-item" fx:id="planning">
             <children>

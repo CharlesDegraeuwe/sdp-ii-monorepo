@@ -95,6 +95,7 @@
 .maand-cel {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 14;
+    -fx-border-width: 2;
     -fx-border-color: transparent;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 1);
