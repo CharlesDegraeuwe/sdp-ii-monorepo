@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ### Activeer het account
-POST http://localhost:8080/api/werknemers/activeer?code=code_van_console
+POST http://localhost:8080/api/werknemers/15/activeer?code=418073
 
 ### Test het inloggen
 POST http://localhost:8080/api/werknemers/login
@@ -108,10 +108,10 @@ GET http://localhost:8080/api/machines/1/status
 DELETE http://localhost:8080/api/werknemers/13
 
 ### Blokkeer een werknemer
-PUT http://localhost:8080/api/werknemers/12/blokkeer
+PUT http://localhost:8080/api/werknemers/13/blokkeer
 
 ### Activeer een werknemer
-PUT http://localhost:8080/api/werknemers/12/activeer
+PUT http://localhost:8080/api/werknemers/14/activeer
 
 ### Deactiveer een werknemer
-PUT http://localhost:8080/api/werknemers/23/deactiveer
+PUT http://localhost:8080/api/werknemers/14/deactiveer

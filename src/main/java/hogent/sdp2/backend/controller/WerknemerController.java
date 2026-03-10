@@ -24,9 +24,9 @@ public class WerknemerController {
         return werknemerService.maakWerknemer(dto);
     }
 
-    @PostMapping("/activeer")
-    public String activeerWerknemer(@RequestParam String code) {
-        return werknemerService.activeerAccount(code);
+    @PostMapping("/{id}/activeer")
+    public String activeerWerknemer(@PathVariable int id, @RequestParam String code) {
+        return werknemerService.activeerAccount(id, code);
     }
 
     @PostMapping("/login")

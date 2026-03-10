@@ -50,19 +50,23 @@ public class WerknemerService {
         return "Werknemer " + dto.voornaam() + " " + dto.naam() + " is succesvol aangemaakt met activatiecode " + uniekeCode;
     }
 
-    public String activeerAccount(String activatieCode) {
-
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByActivatieCode(activatieCode);
+    public String activeerAccount(int werknemerId, String activatieCode) {
+        Optional<Werknemer> werknemerOpt = werknemerRepository.findById(werknemerId);
 
         if (werknemerOpt.isEmpty()) {
-            return "Fout: Ongeldige of al gebruikte activatiecode.";
+            return "Fout: Gebruiker niet gevonden.";
         }
 
         Werknemer werknemer = werknemerOpt.get();
+
+        if (werknemer.getActivatieCode() == null || !werknemer.getActivatieCode().equals(activatieCode)) {
+            return "Fout: Ongeldige activatiecode.";
+        }
         werknemer.setStatus("Actief");
         werknemer.setActivatieCode(null);
 
         werknemerRepository.save(werknemer);
+
         return "Account succesvol geactiveerd! Je kunt nu inloggen.";
     }
 
@@ -75,9 +79,6 @@ public class WerknemerService {
 
         if (!werknemer.getWachtwoord().equals(dto.wachtwoord()))
             throw new RuntimeException("Ongeldige inloggegevens");
-
-        if ("Inactief".equalsIgnoreCase(werknemer.getStatus()))
-            throw new RuntimeException("Account nog niet geactiveerd");
 
         return new WerknemerResponseDTO(
                 werknemer.getId(),
