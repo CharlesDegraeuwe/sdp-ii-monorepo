@@ -11,7 +11,7 @@
          stylesheets="@/css/create-manager.css">
 
     <HBox styleClass="form-back-btn-row">
-        <Button fx:id="backBtn" styleClass="back-btn">
+        <Button fx:id="backBtn" styleClass="back-btn" onAction="#handleBack">
             <FontIcon iconLiteral="ion4-ios-arrow-round-back" iconSize="16" mouseTransparent="true"/>
         </Button>
     </HBox>
@@ -22,12 +22,12 @@
 
     <TextField fx:id="nameField" promptText="naam" styleClass="form-input"/>
     <TextField fx:id="surnameField" promptText="voornaam" styleClass="form-input"/>
+    <DatePicker fx:id="dobField" promptText="geboortedatum" styleClass="form-input"/>
     <TextField fx:id="phoneField" promptText="gsm" styleClass="form-input"/>
     <TextField fx:id="emailField" promptText="email" styleClass="form-input"/>
+    <ComboBox fx:id="roleComboBox" promptText="rol" styleClass="form-input"/>
 
-    <Label text="Beschikbaaarheid:" styleClass="form-section-label"/>
-    <TextField fx:id="plantField" promptText="locatie" styleClass="form-input"/>
-
-    <Button fx:id="createBtn" text="creëer medewerker" styleClass="form-submit-btn"/>
+    <Label fx:id="feedbackLabel" text="" style="-fx-font-weight: bold;" wrapText="true"/>
+    <Button text="Creëer medewerker" onAction="#handleRegistreer" styleClass="form-submit-btn"/>
 
 </fx:root>
