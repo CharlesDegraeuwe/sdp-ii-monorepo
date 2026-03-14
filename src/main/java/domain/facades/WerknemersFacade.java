@@ -57,4 +57,41 @@ public class WerknemersFacade {
             return false;
         }
     }
+
+    public boolean registreerWerknemer(String naam, String voornaam, String email, String telefoon, String geboortedatum, String rol) {
+        try {
+            String jsonBody = String.format(
+                    "{" +
+                            "\"naam\": \"%s\"," +
+                            "\"voornaam\": \"%s\"," +
+                            "\"email\": \"%s\"," +
+                            "\"wachtwoord\": \"Wachtwoord123\"," +
+                            "\"telefoonnummer\": \"%s\"," +
+                            "\"geboortedatum\": \"%s\"," +
+                            "\"rol\": \"%s\"" +
+                            "}",
+                    naam, voornaam, email, telefoon, geboortedatum, rol
+            );
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/api/werknemers"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200 || response.statusCode() == 201) {
+                return true;
+            } else {
+                System.err.println("Fout bij registreren. Server antwoord: " + response.body());
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.err.println("Verbindingsfout: " + e.getMessage());
+            return false;
+        }
+    }
 }
