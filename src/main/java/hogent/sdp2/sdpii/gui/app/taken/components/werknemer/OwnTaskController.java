@@ -22,7 +22,7 @@ public class OwnTaskController extends BorderPane {
     @FXML VBox morgen_container;
 
         public OwnTaskController() {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/werknemer/OwnTaskLayout.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/werknemer/OwnTaskLayout.fxml"));
             loader.setRoot(this);
             loader.setController(this);
             try {

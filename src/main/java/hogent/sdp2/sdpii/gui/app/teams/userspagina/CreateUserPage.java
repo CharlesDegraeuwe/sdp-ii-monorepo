@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class CreateUserPage extends VBox {
     public CreateUserPage() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/userspagina/CreateUsers.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/userspagina/CreateUsers.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

@@ -11,7 +11,7 @@ public class AssignTaakItemController extends HBox {
     @FXML Label title;
     @FXML Label datum;
     public AssignTaakItemController(String title, String datum) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/manager/items/AssignTaakItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/manager/items/AssignTaakItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

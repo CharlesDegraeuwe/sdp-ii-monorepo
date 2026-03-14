@@ -26,7 +26,7 @@ public class CheckTaskController extends BorderPane {    @FXML Label titel_taken
     String geselecteerd = "Milan";
 
     public CheckTaskController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/manager/check/CheckTaskLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/manager/check/CheckTaskLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class CreateTaskController extends BorderPane {
     public CreateTaskController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/manager/create/CreateTaskLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/manager/create/CreateTaskLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

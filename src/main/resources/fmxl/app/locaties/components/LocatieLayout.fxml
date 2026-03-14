@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="task_root" stylesheets="@/css/locaties.css">
+    <GridPane hgap="10" vgap="10">
+        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+        <columnConstraints>
+            <ColumnConstraints percentWidth="70"/>
+            <ColumnConstraints percentWidth="30"/>
+        </columnConstraints>
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="card">
+            <HBox styleClass="card_header" alignment="CENTER_LEFT">
+                <padding><Insets top="5" right="25" bottom="5" left="25"/></padding>
+                <Label text="Alle locaties" fx:id="page_title" styleClass="page_title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER" spacing="15">
+                    <TextField fx:id="zoekField" promptText="Zoek op naam of email..." prefWidth="300"/>
+                    <ComboBox fx:id="statusDropdown" value="Toegewezen" styleClass="picker">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Toegewezen"/>
+                                <String fx:value="Niet toegewezen"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </HBox>
+            </HBox>
+            <TableView fx:id="locatieTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="naamCol" text="Naam" prefWidth="120"/>
+                    <TableColumn fx:id="locatieCol" text="Locatie" prefWidth="200"/>
+                    <TableColumn fx:id="capCol" text="Capaciteit" prefWidth="100"/>
+                    <TableColumn fx:id="statusCol" text="Status" prefWidth="100"/>
+                </columns>
+            </TableView>
+
+        </VBox>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="card">
+            <HBox styleClass="card_header" spacing="3" alignment="CENTER_LEFT">
+
+                <VBox>
+                    <Label/>
+                    <Label/>
+                </VBox>
+            </HBox>
+            <ScrollPane>
+                <VBox>
+                    <VBox>
+                        <Label text="Site-info"/>
+                        <VBox>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                        </VBox>
+                    </VBox>
+                    <VBox>
+                        <Label text="Status"/>
+                        <VBox>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </GridPane>
+</fx:root>

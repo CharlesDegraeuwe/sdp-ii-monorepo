@@ -31,7 +31,7 @@ public class TeamsLayoutController extends VBox {
     private String pagina = "teams";
 
     public TeamsLayoutController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/TeamsLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/TeamsLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

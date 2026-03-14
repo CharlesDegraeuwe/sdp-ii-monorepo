@@ -4,7 +4,6 @@ import domain.auth.Sessie;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.AssignMemberItemController;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.AssignTaakItemController;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.AssignTeamItemController;
-import hogent.sdp2.sdpii.gui.app.taken.components.items.TaakItemController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
@@ -21,7 +20,7 @@ public class AssignTaskController extends BorderPane {
     @FXML VBox memberListContainer;
 
     public AssignTaskController()  {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/manager/assign/AssignTaskLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/manager/assign/AssignTaskLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

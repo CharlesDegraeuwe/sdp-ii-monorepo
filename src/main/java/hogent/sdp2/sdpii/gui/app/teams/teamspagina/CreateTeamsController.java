@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class CreateTeamsController extends VBox {
     public CreateTeamsController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/teamspagina/CreeerTeams.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/teamspagina/CreeerTeams.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

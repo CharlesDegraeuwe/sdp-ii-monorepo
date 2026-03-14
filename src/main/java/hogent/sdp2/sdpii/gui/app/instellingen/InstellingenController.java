@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class InstellingenController extends BorderPane {
     public InstellingenController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/SettingsPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/instellingen/SettingsPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
