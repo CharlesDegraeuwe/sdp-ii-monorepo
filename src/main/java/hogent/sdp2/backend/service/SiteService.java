@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,15 +28,14 @@ public class SiteService {
 
         Site nieuweSite = new Site();
         nieuweSite.setNaam(dto.naam());
-        nieuweSite.setStad(dto.stad());
-        nieuweSite.setLand(dto.land());
-        nieuweSite.setLongitude(dto.longitude());
-        nieuweSite.setLatitude(dto.latitude());
+        nieuweSite.setLocatie(dto.locatie());
+        nieuweSite.setCapaciteit(dto.capaciteit());
+        nieuweSite.setStatus(dto.status());
 
         siteRepository.save(nieuweSite);
 
         log.info("Audit: Site {} succesvol opgeslagen in database.", dto.naam());
-        return "Site '" + dto.naam() + "' is succesvol aangemaakt in " + dto.stad() + "!";
+        return "Site '" + dto.naam() + "' is succesvol aangemaakt in " + dto.locatie() + "!";
     }
 
     public String wijzigSite(Integer id, SiteWijzigenDTO dto) {
@@ -56,10 +56,9 @@ public class SiteService {
         }
 
         site.setNaam(dto.naam());
-        site.setStad(dto.stad());
-        site.setLand(dto.land());
-        site.setLongitude(dto.longitude());
-        site.setLatitude(dto.latitude());
+        site.setLocatie(dto.locatie());
+        site.setCapaciteit(dto.capaciteit());
+        site.setStatus(dto.status());
 
         siteRepository.save(site);
 
@@ -79,5 +78,15 @@ public class SiteService {
 
         log.info("Audit: Site met ID {} is succesvol verwijderd.", id);
         return "Site succesvol verwijderd!";
+    }
+
+    public List<Site> haalAlleSitesOp() {
+        log.info("Audit: Alle sites worden opgevraagd.");
+        return siteRepository.findAll();
+    }
+
+    public Site haalSiteOpId(Integer id) {
+        log.info("Audit: Site met ID {} wordt opgevraagd.", id);
+        return siteRepository.findById(id).orElse(null);
     }
 }

@@ -56,11 +56,10 @@ POST http://localhost:8080/api/sites
 Content-Type: application/json
 
 {
-  "naam": "HOGENT Campus Schoonmeersen",
-  "stad": "Gent",
-  "land": "België",
-  "latitude": 51.03191,
-  "longitude": 3.70278
+  "naam": "Hoofdgebouw A",
+  "locatie": "Nieuwstraat 10, 1000 Brussel",
+  "capaciteit": 250,
+  "status": "Actief"
 }
 
 ### Wijzig een bestaande site
@@ -74,6 +73,14 @@ Content-Type: application/json
   "latitude": 51.03195,
   "longitude": 3.70280
 }
+
+### Haal alle sites op
+GET http://localhost:8080/api/sites
+Accept: application/json
+
+### Haal één specifieke site op (vervang 1 door een bestaand ID)
+GET http://localhost:8080/api/sites/1
+Accept: application/json
 
 ### Verwijder een site
 DELETE http://localhost:8080/api/sites/1

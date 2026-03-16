@@ -4,8 +4,7 @@ import java.math.BigDecimal;
 
 public record SiteAanmakenDTO(
         String naam,
-        String stad,
-        String land,
-        BigDecimal longitude,
-        BigDecimal latitude
+        String locatie,
+        Integer capaciteit,
+        String status
 ) {}
