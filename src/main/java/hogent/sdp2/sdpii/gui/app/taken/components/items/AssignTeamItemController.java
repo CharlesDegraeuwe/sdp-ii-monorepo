@@ -11,7 +11,7 @@ public class AssignTeamItemController extends HBox {
     @FXML
     Label title;
     public AssignTeamItemController(String title) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/manager/items/AssignTeamItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/manager/items/AssignTeamItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

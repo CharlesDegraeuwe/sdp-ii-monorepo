@@ -36,7 +36,7 @@ public class TakenLayoutController extends VBox {
     private String pagina = "jouwTaken";
 
     public TakenLayoutController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/TakenLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/TakenLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
