@@ -19,16 +19,12 @@ public class Site {
     @Column(name = "Naam", nullable = false, length = 45)
     private String naam;
 
-    @Column(name = "Stad", nullable = false, length = 45)
-    private String stad;
+    @Column(name = "Locatie", nullable = false, length = 120)
+    private String locatie;
 
-    @Column(name = "Land", nullable = false, length = 45)
-    private String land;
+    @Column(name = "Capaciteit", nullable = false)
+    private Integer capaciteit;
 
-    @Column(name = "Latitude", nullable = false, precision = 8, scale = 6)
-    private BigDecimal latitude;
-
-    @Column(name = "Longitude", nullable = false, precision = 9, scale = 6)
-    private BigDecimal longitude;
-
+    @Column(name = "Status", nullable = false, length = 45)
+    private String status;
 }
