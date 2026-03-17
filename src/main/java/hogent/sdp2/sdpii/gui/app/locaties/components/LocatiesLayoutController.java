@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.locaties.components;
 
+
 import domain.dto.LocatieDTO;
 import domain.facades.LocatieFacade;
 import javafx.beans.property.SimpleObjectProperty;
@@ -11,6 +12,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.collections.transformation.FilteredList;
+
+import javafx.beans.binding.Bindings;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -40,6 +47,9 @@ public class LocatiesLayoutController extends VBox {
     private boolean isAanmakenModus = false;
 
     private final LocatieFacade locatieFacade = new LocatieFacade();
+    @FXML VBox leftCard;
+    @FXML VBox rightCard;
+
 
     public LocatiesLayoutController(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/locaties/components/LocatieLayout.fxml"));
@@ -50,6 +60,16 @@ public class LocatiesLayoutController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        locatieTable.setPlaceholder(new Label(""));
+        locatieTable.setFixedCellSize(40);
+
+        locatieTable.prefHeightProperty().bind(
+                locatieTable.fixedCellSizeProperty()
+                        .multiply(Bindings.size(locatieTable.getItems()))
+                        .add(35) // hoogte van de header
+        );
+        locatieTable.setMinHeight(75); // header + minstens 1 rij
+
     }
 
     @FXML
