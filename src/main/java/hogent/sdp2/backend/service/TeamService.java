@@ -2,7 +2,7 @@ package hogent.sdp2.backend.service;
 
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.TeamResponseDTO;
-import hogent.sdp2.backend.dto.request.WerknemerResponseDTO;
+import hogent.sdp2.backend.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.repository.TeamRepository;
 import hogent.sdp2.backend.repository.TeamwerknemerRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class TeamService {
     }
 
     public List<WerknemerResponseDTO> geefWerknemersVanTeam(Integer teamId) {
-        return teamwerknemerRepository.findByTeam_Id(teamId).stream()
+        return teamwerknemerRepository.findByTeamId(teamId).stream()
                 .map(tw -> {
                     Werknemer w = tw.getWerknemer();
                     return new WerknemerResponseDTO(w.getId(), w.getNaam(), w.getVoornaam(),

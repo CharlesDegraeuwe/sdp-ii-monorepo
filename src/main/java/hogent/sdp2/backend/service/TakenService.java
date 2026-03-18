@@ -1,10 +1,11 @@
 package hogent.sdp2.backend.service;
 
 import hogent.sdp2.backend.domain.Taken;
+import hogent.sdp2.backend.domain.Teamwerknemer;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.TaakAanmakenDTO;
 import hogent.sdp2.backend.dto.request.TaakResponseDTO;
-import hogent.sdp2.backend.dto.request.WerknemerResponseDTO;
+import hogent.sdp2.backend.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.repository.SiteteamRepository;
 import hogent.sdp2.backend.repository.TakenRepository;
 import hogent.sdp2.backend.repository.TeamwerknemerRepository;
@@ -47,7 +48,7 @@ public class TakenService {
     }
 
     public String markeerAfgewerkt(int taakId) {
-        var taak = takenRepository.findById(taakId)
+        Taken taak = takenRepository.findById(taakId)
                 .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
         taak.setAfgewerkt("ja");
         takenRepository.save(taak);
@@ -61,9 +62,9 @@ public class TakenService {
     }
 
     public String wijsTaakToe(int taakId, int werknemerId) {
-        var taak = takenRepository.findById(taakId)
+        Taken taak = takenRepository.findById(taakId)
                 .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
-        var werknemer = werknemerRepository.findById(werknemerId)
+        Werknemer werknemer = werknemerRepository.findById(werknemerId)
                 .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
         taak.setWerknemer(werknemer);
         takenRepository.save(taak);
@@ -71,7 +72,7 @@ public class TakenService {
     }
 
     public String verwijderTaak(int taakId) {
-        var taak = takenRepository.findById(taakId)
+        Taken taak = takenRepository.findById(taakId)
                 .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
         takenRepository.delete(taak);
         return "Taak '" + taak.getTitel() + "' succesvol verwijderd";
@@ -80,9 +81,9 @@ public class TakenService {
     private TaakResponseDTO toDTO(Taken taak) {
         Werknemer w = taak.getWerknemer();
 
-        var teamIds = teamwerknemerRepository.findTeamIdsByWerknemerId(w.getId());
-        log.info("Werknemer {} heeft teams: {}", w.getId(), teamIds);
-        Integer teamId = teamIds.isEmpty() ? null : teamIds.get(0);
+        List<Teamwerknemer> teamwerknemers = teamwerknemerRepository.findByWerknemerId(w.getId());
+        log.info("Werknemer {} heeft teams: {}", w.getId(), teamwerknemers);
+        Integer teamId = teamwerknemers.isEmpty() ? null : teamwerknemers.get(0).getTeam().getId();
 
         List<Integer> siteIds = teamId != null ? siteteamRepository.findSiteIdsByTeamId(teamId) : List.of();
         log.info("Team {} heeft sites: {}", teamId, siteIds);
