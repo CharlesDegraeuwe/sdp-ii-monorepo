@@ -36,7 +36,7 @@
                     </VBox>
                     <VBox spacing="6" HBox.hgrow="ALWAYS">
                         <Label text="Locatie:" styleClass="section-label"/>
-                        <ComboBox fx:id="locationPicker" value="Locatie 1" styleClass="picker" maxWidth="Infinity"/>
+                        <ComboBox fx:id="locationPicker" styleClass="picker" maxWidth="Infinity"/>
                     </VBox>
                 </HBox>
 
@@ -60,6 +60,7 @@
                 </HBox>
 
                 <Button fx:id="createButton" text="Creëer Taak" styleClass="create-task-btn" maxWidth="Infinity"/>
+                <Label fx:id="feedbackLabel" visible="false" wrapText="true"/>
             </VBox>
         </VBox>
     </center>

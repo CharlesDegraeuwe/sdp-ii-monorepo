@@ -20,6 +20,6 @@ public class TakenController extends BorderPane {
         }
 
         setTop(new PageTitleController("Taken"));
-        setCenter(new TakenLayoutController());
+        setCenter(new TakenLayoutController(takenFacade));
     }
 }

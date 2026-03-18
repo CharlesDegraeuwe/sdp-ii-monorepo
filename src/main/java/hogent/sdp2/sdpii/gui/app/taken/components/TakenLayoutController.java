@@ -1,6 +1,7 @@
 package hogent.sdp2.sdpii.gui.app.taken.components;
 
 import domain.auth.Sessie;
+import domain.facades.TakenFacade;
 import hogent.sdp2.sdpii.gui.app.taken.components.manager.*;
 import hogent.sdp2.sdpii.gui.app.taken.components.manager.assign.AssignTaskController;
 import hogent.sdp2.sdpii.gui.app.taken.components.manager.check.CheckTaskController;
@@ -35,7 +36,7 @@ public class TakenLayoutController extends VBox {
     private String tab = "check";
     private String pagina = "jouwTaken";
 
-    public TakenLayoutController() {
+    public TakenLayoutController(TakenFacade takenFacade) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/TakenLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -44,18 +45,18 @@ public class TakenLayoutController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.init();
+        this.init(takenFacade);
     }
 
-    public void init() {
+    public void init(TakenFacade takenFacade) {
         boolean role = Sessie.getInstance().isWerknemer();
 
-        ownTaskController = new OwnTaskController();
+        ownTaskController = new OwnTaskController(takenFacade);
         outer_container.setCenter(ownTaskController);
 
         if (!role) {
             teamTaskController = new TeamTaskController();
-            checkTaskController = new CheckTaskController();
+            checkTaskController = new CheckTaskController(takenFacade);
             BorderPane inner_container = teamTaskController.getPage_container();
 
             setTabButtonsVisible(false);
@@ -68,6 +69,7 @@ public class TakenLayoutController extends VBox {
             });
 
             teamTaken.setOnMouseClicked(e -> {
+                ownTaskController.verbergDetails();
                 outer_container.setCenter(teamTaskController);
                 pagina = "teamTaken";
                 tab = "check";
@@ -86,8 +88,9 @@ public class TakenLayoutController extends VBox {
 
             creeerKnop.setOnMouseClicked(e -> {
                 if (createTaskController == null) {
-                    createTaskController = new CreateTaskController();
+                    createTaskController = new CreateTaskController(takenFacade);
                 }
+
                 inner_container.setCenter(createTaskController);
                 tab = "create";
                 updateTabs();
@@ -95,7 +98,7 @@ public class TakenLayoutController extends VBox {
 
             toewijzenKnop.setOnMouseClicked(e -> {
                 if (assignTaskController == null) {
-                    assignTaskController = new AssignTaskController();
+                    assignTaskController = new AssignTaskController(takenFacade);
                 }
                 inner_container.setCenter(assignTaskController);
                 tab = "toewijzen";
