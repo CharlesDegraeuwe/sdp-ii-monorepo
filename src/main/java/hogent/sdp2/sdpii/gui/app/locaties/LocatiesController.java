@@ -9,6 +9,10 @@ import java.io.IOException;
 
 public class LocatiesController extends BorderPane {
     public LocatiesController() {
+        this(null);
+    }
+
+    public LocatiesController(Integer selecteerSiteId) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/locaties/LocatiePage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -19,6 +23,8 @@ public class LocatiesController extends BorderPane {
         }
 
         setTop(new PageTitleController("Locaties"));
-        setCenter(new LocatiesLayoutController());
+        LocatiesLayoutController layout = new LocatiesLayoutController();
+        setCenter(layout);
+        if (selecteerSiteId != null) layout.selecteerLocatieBijId(selecteerSiteId);
     }
 }

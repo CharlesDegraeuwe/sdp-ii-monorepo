@@ -42,6 +42,28 @@ public class LocatieFacade {
         }
     }
 
+    public LocatieDTO vindLocatie(Integer id) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL + "/" + id))
+                    .GET()
+                    .header("Accept", "application/json")
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return mapper.readValue(response.body(), LocatieDTO.class);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("Kan locatie niet ophalen: " + e.getMessage());
+            return null;
+        }
+    }
+
     public boolean verwijderLocatie(Integer id) {
         try {
             HttpClient client = HttpClient.newHttpClient();

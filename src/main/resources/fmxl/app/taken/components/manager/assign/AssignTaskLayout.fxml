@@ -14,26 +14,36 @@
                <Label text="Taken Toewijzen:" styleClass="card_subtitle"/>
                <Region HBox.hgrow="ALWAYS"/>
                <HBox alignment="CENTER_RIGHT" spacing="10" minHeight="20">
-                   <ComboBox fx:id="Locatie" value="Locatie A" styleClass="picker"/>
-                   <ComboBox fx:id="Team" value="Team B" styleClass="picker"/>
-                   <ComboBox fx:id="Werknemer" value="Milan" styleClass="picker"/>
+                   <ComboBox fx:id="Locatie" promptText="Locatie..." styleClass="picker"/>
+                   <ComboBox fx:id="Team" promptText="Team..." styleClass="picker"/>
+                   <ComboBox fx:id="Werknemer" promptText="Werknemer..." styleClass="picker"/>
                </HBox>
            </HBox>
 
-            <HBox spacing="16">
+            <HBox spacing="16" VBox.vgrow="ALWAYS">
                 <VBox styleClass="card" spacing="8" HBox.hgrow="ALWAYS">
                     <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                    <Label text="Taken:" styleClass="section-label"/>
-                    <VBox fx:id="taskListContainer" spacing="8" styleClass="task-section"/>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="Taken:" styleClass="section-label"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox fx:id="toonToegewezenCheckbox" text="ook toegewezen taken bekijken" styleClass="filter-checkbox"/>
+                    </HBox>
+                    <ScrollPane styleClass="assign-scroll" fitToWidth="true" prefHeight="400" maxHeight="400">
+                        <VBox fx:id="taskListContainer" spacing="8" styleClass="task-section"/>
+                    </ScrollPane>
                 </VBox>
 
                 <VBox spacing="12" HBox.hgrow="ALWAYS">
-                    <VBox styleClass="card" spacing="8" VBox.vgrow="ALWAYS">
+                    <VBox styleClass="card" spacing="8">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <Label text="Teams:" styleClass="section-label"/>
-                        <VBox fx:id="teamListContainer" spacing="6" styleClass="task-section"/>
+                        <ScrollPane styleClass="assign-scroll" fitToWidth="true" prefHeight="160" maxHeight="160">
+                            <VBox fx:id="teamListContainer" spacing="6" styleClass="task-section"/>
+                        </ScrollPane>
                         <Label text="Teamleden:" styleClass="section-label"/>
-                        <VBox fx:id="memberListContainer" spacing="6" styleClass="task-section"/>
+                        <ScrollPane styleClass="assign-scroll" fitToWidth="true" prefHeight="200" maxHeight="200">
+                            <VBox fx:id="memberListContainer" spacing="6" styleClass="task-section"/>
+                        </ScrollPane>
                     </VBox>
                     <Button fx:id="assignButton" text="Wijs Taak Toe" styleClass="create-task-btn" maxWidth="Infinity"/>
                 </VBox>

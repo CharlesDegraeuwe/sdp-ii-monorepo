@@ -1,8 +1,7 @@
 package hogent.sdp2.sdpii.gui.app.taken.components.manager.create;
 
-import domain.Beheerder;
 import domain.dto.LocatieDTO;
-import domain.facades.SiteFacade;
+import domain.facades.LocatieFacade;
 import domain.facades.TakenFacade;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +24,11 @@ public class CreateTaskController extends BorderPane {
     @FXML Label feedbackLabel;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private Runnable onAangemaakt;
+
+    public void setOnAangemaakt(Runnable callback) {
+        this.onAangemaakt = callback;
+    }
 
     public CreateTaskController(TakenFacade takenFacade) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/manager/create/CreateTaskLayout.fxml"));
@@ -41,8 +45,8 @@ public class CreateTaskController extends BorderPane {
     }
 
     private void laadSites() {
-        SiteFacade siteFacade = Beheerder.getInstance().getSiteFacade();
-        List<LocatieDTO> sites = siteFacade.geefSitesVanManager();
+        LocatieFacade siteFacade = new LocatieFacade();
+        List<LocatieDTO> sites = siteFacade.geefAlleLocaties();
 
         locationPicker.setConverter(new StringConverter<>() {
             @Override public String toString(LocatieDTO site) { return site != null ? site.naam() : ""; }
@@ -78,6 +82,7 @@ public class CreateTaskController extends BorderPane {
             nameField.clear();
             specField.clear();
             dueDateField.clear();
+            if (onAangemaakt != null) onAangemaakt.run();
         } catch (Exception ex) {
             toonFeedback("Fout: " + ex.getMessage(), true);
         }

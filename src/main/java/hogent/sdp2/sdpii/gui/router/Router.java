@@ -26,6 +26,12 @@ public class Router {
         this.app = app;
     }
 
+    public void navigeerNaarLocatie(Integer siteId) {
+        SchermFactory factory = new SchermFactory(app);
+        app.navigateTo(factory.locatieScherm(siteId));
+        app.getSidebar().setActiveScherm(Scherm.LOCATIES);
+    }
+
     public void navigeerNaar(Scherm scherm) {
         SchermFactory factory = new SchermFactory(app);
         switch (scherm) {

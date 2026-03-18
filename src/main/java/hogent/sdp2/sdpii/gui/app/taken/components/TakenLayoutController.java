@@ -89,6 +89,12 @@ public class TakenLayoutController extends VBox {
             creeerKnop.setOnMouseClicked(e -> {
                 if (createTaskController == null) {
                     createTaskController = new CreateTaskController(takenFacade);
+                    createTaskController.setOnAangemaakt(() -> {
+                        checkTaskController.herlaad();
+                        inner_container.setCenter(checkTaskController);
+                        tab = "check";
+                        updateTabs();
+                    });
                 }
 
                 inner_container.setCenter(createTaskController);

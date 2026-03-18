@@ -57,6 +57,7 @@
                         <HBox alignment="CENTER_LEFT">
                             <Label fx:id="detail_deadline" text="" styleClass="task-due-text"/>
                             <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="detail_locatie" text="" styleClass="task-location-link"/>
                         </HBox>
                         <TextField fx:id="detail_titel" promptText="taak naam" styleClass="task-input" editable="false"/>
                         <TextArea fx:id="detail_beschrijving" promptText="specificaties" prefRowCount="3" styleClass="task-input-area" editable="false"/>

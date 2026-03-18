@@ -1,8 +1,11 @@
 package hogent.sdp2.sdpii.gui.app.taken.components.werknemer;
 
 import domain.auth.Sessie;
+import domain.dto.LocatieDTO;
 import domain.dto.TaakDTO;
+import domain.facades.LocatieFacade;
 import domain.facades.TakenFacade;
+import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.FinishedTaakItem;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.TaakItemController;
 import javafx.fxml.FXML;
@@ -29,6 +32,7 @@ public class OwnTaskController extends BorderPane {
     @FXML VBox morgen_container;
     @FXML VBox detail_card;
     @FXML Label detail_deadline;
+    @FXML Label detail_locatie;
     @FXML TextField detail_titel;
     @FXML TextArea detail_beschrijving;
     @FXML Button opslaan_button;
@@ -54,6 +58,19 @@ public class OwnTaskController extends BorderPane {
         detail_deadline.setText("Deadline: " + taak.deadline().format(formatter));
         detail_titel.setText(taak.titel());
         detail_beschrijving.setText(taak.beschrijving() != null ? taak.beschrijving() : "");
+        LocatieDTO gevondenLocatie = taak.siteId() != null
+                ? new LocatieFacade().vindLocatie(taak.siteId())
+                : null;
+        if (gevondenLocatie != null) {
+            detail_locatie.setText(gevondenLocatie.naam());
+            final int siteId = gevondenLocatie.id();
+            detail_locatie.setOnMouseClicked(e -> Router.getInstance().navigeerNaarLocatie(siteId));
+            detail_locatie.setVisible(true);
+            detail_locatie.setManaged(true);
+        } else {
+            detail_locatie.setVisible(false);
+            detail_locatie.setManaged(false);
+        }
         zetEditModusUit();
         detail_card.setVisible(true);
         detail_card.setManaged(true);
