@@ -1,11 +1,14 @@
 package domain.facades;
 
+import domain.dto.TeamDTO;
 import domain.services.TeamApiService;
+
+import java.util.List;
 
 public class TeamFacade {
     private final TeamApiService api = new TeamApiService();
 
-    public String bekijkTeams() {
-        return api.geefTeamsTerug();
+    public List<TeamDTO> getAlleTeams() {
+        return api.getAlleTeams();
     }
 }
