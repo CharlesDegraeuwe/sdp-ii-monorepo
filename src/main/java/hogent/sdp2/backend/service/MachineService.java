@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -109,5 +111,19 @@ public class MachineService {
         log.info("Audit: Status van machine {} succesvol opgehaald.", machine.getNaam());
 
         return "De status van machine '" + machine.getNaam() + "' is: " + machine.getStatus();
+    }
+
+    public List<MachineWijzigenDTO> haalMachinesOpVoorSite(Integer siteId) {
+        log.info("Audit: Machines opvragen voor site ID: {}", siteId);
+
+        List<Machine> machines = machineRepository.findBySiteId(siteId);
+
+        return machines.stream()
+                .map(machine -> new MachineWijzigenDTO(
+                        machine.getNaam(),
+                        machine.getStatus(),
+                        machine.getId()
+                ))
+                .collect(Collectors.toList());
     }
 }

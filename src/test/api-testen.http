@@ -105,6 +105,10 @@ Content-Type: application/json
   "siteId": 2
 }
 
+### Haal alle machines op
+GET http://localhost:8080/api/sites/2/machines
+Accept: application/json
+
 ### Verwijder een machine
 DELETE http://localhost:8080/api/machines/1
 

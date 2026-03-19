@@ -1,8 +1,10 @@
 package hogent.sdp2.backend.controller;
 
 import hogent.sdp2.backend.domain.Site;
+import hogent.sdp2.backend.dto.request.MachineWijzigenDTO;
 import hogent.sdp2.backend.dto.request.SiteAanmakenDTO;
 import hogent.sdp2.backend.dto.request.SiteWijzigenDTO;
+import hogent.sdp2.backend.service.MachineService;
 import hogent.sdp2.backend.service.SiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 public class SiteController {
 
     private final SiteService siteService;
+    private final MachineService machineService;
 
     @PostMapping
     public String createSite(@RequestBody SiteAanmakenDTO dto) {
@@ -35,7 +38,7 @@ public class SiteController {
     @GetMapping
     public ResponseEntity<List<Site>> getAlleSites() {
         List<Site> sites = siteService.haalAlleSitesOp();
-        return ResponseEntity.ok(sites); // Geeft een 200 OK met de lijst in JSON terug
+        return ResponseEntity.ok(sites);
     }
 
     @GetMapping("/{id}")
@@ -45,5 +48,11 @@ public class SiteController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(site);
+    }
+    @GetMapping("/{id}/machines")
+    public ResponseEntity<List<MachineWijzigenDTO>> getMachinesVanSite(@PathVariable Integer id) {
+        List<MachineWijzigenDTO> machines = machineService.haalMachinesOpVoorSite(id);
+
+        return ResponseEntity.ok(machines);
     }
 }
