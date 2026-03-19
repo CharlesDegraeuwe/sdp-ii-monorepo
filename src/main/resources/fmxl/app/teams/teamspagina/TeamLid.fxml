@@ -6,6 +6,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="HBox" fx:id="container" spacing="10" styleClass="kalender_item" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="HBox" fx:id="PopUp" spacing="10" styleClass="kalender_item" xmlns:fx="http://javafx.com/fxml">
     <Label fx:id="dag"/>
 </fx:root>

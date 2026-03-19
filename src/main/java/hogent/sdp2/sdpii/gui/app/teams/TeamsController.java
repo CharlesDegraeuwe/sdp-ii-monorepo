@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.teams;
 
+import domain.facades.TeamFacade;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -7,7 +8,7 @@ import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 
 public class TeamsController extends BorderPane {
-    public TeamsController() {
+    public TeamsController(TeamFacade teamFacade) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/TeamsPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -18,6 +19,6 @@ public class TeamsController extends BorderPane {
         }
 
         setTop(new PageTitleController("Teams"));
-        setCenter(new TeamsLayoutController());
+        setCenter(new TeamsLayoutController(teamFacade));
     }
 }

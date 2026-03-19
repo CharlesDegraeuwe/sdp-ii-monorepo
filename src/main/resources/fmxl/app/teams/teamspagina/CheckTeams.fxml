@@ -13,12 +13,11 @@
     <!-- Main card -->
     <HBox styleClass="main-card" spacing="24" VBox.vgrow="ALWAYS">
 
-        <!-- LEFT: Teams list -->
         <VBox spacing="12" HBox.hgrow="ALWAYS" maxWidth="340">
             <Label text="Teams:" styleClass="section-title"/>
             <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
                         style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                <VBox fx:id="teamsList" spacing="8"/>
+                <VBox fx:id="teamsList" spacing="8"  style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
             </ScrollPane>
         </VBox>
 

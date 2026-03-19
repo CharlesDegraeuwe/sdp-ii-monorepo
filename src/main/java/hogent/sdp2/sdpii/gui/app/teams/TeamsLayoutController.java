@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.teams;
 
+import domain.facades.TeamFacade;
 import hogent.sdp2.sdpii.gui.admin.creeerMedewerker.CreeerMedewerkerController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.CheckTeamsController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.CreateTeamsController;
@@ -26,11 +27,12 @@ public class TeamsLayoutController extends VBox {
     private CreateTeamsController createTeamsController;
     private CheckUserpage checkUserpage;
     private CreateUserPage createUserPage;
+    private TeamFacade tm;
 
     private String tab = "check";
     private String pagina = "teams";
 
-    public TeamsLayoutController() {
+    public TeamsLayoutController(TeamFacade tm) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/TeamsLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -39,17 +41,18 @@ public class TeamsLayoutController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        this.tm = tm;
         init();
     }
 
     public void init() {
-        checkTeamsController = new CheckTeamsController();
+        checkTeamsController = new CheckTeamsController(tm);
         outer_container.setCenter(checkTeamsController);
 
         // Tab knoppen
         checkKnop.setOnMouseClicked(e -> {
             if (pagina.equals("teams")) {
-                if (checkTeamsController == null) checkTeamsController = new CheckTeamsController();
+                if (checkTeamsController == null) checkTeamsController = new CheckTeamsController(tm);
                 outer_container.setCenter(checkTeamsController);
             } else {
                 if (checkUserpage == null) checkUserpage = new CheckUserpage();
@@ -75,7 +78,7 @@ public class TeamsLayoutController extends VBox {
         teamsPagina.setOnMouseClicked(e -> {
             pagina = "teams";
             tab = "check";
-            if (checkTeamsController == null) checkTeamsController = new CheckTeamsController();
+            if (checkTeamsController == null) checkTeamsController = new CheckTeamsController(tm);
             outer_container.setCenter(checkTeamsController);
             updatePages();
             updateTabs();
