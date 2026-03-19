@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.locaties.components;
 
+
 import domain.dto.LocatieDTO;
 import domain.dto.MachineAanmaakDTO;
 import domain.facades.LocatieFacade;
@@ -48,6 +49,9 @@ public class LocatiesLayoutController extends VBox {
     private boolean isAanmakenModus = false;
 
     private final LocatieFacade locatieFacade = new LocatieFacade();
+    @FXML VBox leftCard;
+    @FXML VBox rightCard;
+
 
     public LocatiesLayoutController(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/locaties/components/LocatieLayout.fxml"));
@@ -58,6 +62,16 @@ public class LocatiesLayoutController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        locatieTable.setPlaceholder(new Label(""));
+        locatieTable.setFixedCellSize(40);
+
+        locatieTable.prefHeightProperty().bind(
+                locatieTable.fixedCellSizeProperty()
+                        .multiply(Bindings.size(locatieTable.getItems()))
+                        .add(35) // hoogte van de header
+        );
+        locatieTable.setMinHeight(75); // header + minstens 1 rij
+
     }
 
     @FXML

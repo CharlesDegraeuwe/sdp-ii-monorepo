@@ -8,26 +8,31 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.collections.FXCollections?>
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="task_root" stylesheets="@/css/locaties.css">
-    <GridPane hgap="10" vgap="10">
+<?import javafx.scene.shape.Rectangle?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="task_root" stylesheets="@/css/locaties.css" VBox.vgrow="ALWAYS">
+    <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
         <columnConstraints>
             <ColumnConstraints percentWidth="70"/>
             <ColumnConstraints percentWidth="30"/>
         </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" fillHeight="true"/>
+        </rowConstraints>
 
-        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="card">
+        <VBox VBox.vgrow="ALWAYS" fx:id="leftCard" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="card">
             <HBox styleClass="card_header" alignment="CENTER_LEFT">
                 <padding><Insets top="5" right="25" bottom="5" left="25"/></padding>
                 <Label text="Alle locaties" fx:id="page_title" styleClass="page_title"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <HBox alignment="CENTER" spacing="15">
                     <TextField fx:id="zoekField" promptText="Zoek op naam of locatie..." prefWidth="300"/>
-                    <ComboBox fx:id="statusDropdown" value="Toegewezen" styleClass="picker">
+                    <ComboBox fx:id="statusDropdown" value="Status" id="picker" styleClass="picker">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Toegewezen"/>
-                                <String fx:value="Niet toegewezen"/>
+                                <String fx:value="Actief"/>
+                                <String fx:value="Inactief"/>
                             </FXCollections>
                         </items>
                     </ComboBox>
@@ -54,6 +59,39 @@
             </HBox>
 
         </VBox>
+        <VBox VBox.vgrow="ALWAYS" fx:id="rightCard" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="card">
+            <HBox styleClass="card_header" spacing="15" alignment="CENTER_LEFT">
+                <padding><Insets top="5" right="25" bottom="5" left="25"/></padding>
+                <FontIcon iconLiteral="mdal-location_on" iconSize="25" iconColor="#E31B35"/>
+                <VBox alignment="CENTER_LEFT">
+                    <Label text="LocatieNaam" styleClass="location_title"/>
+                    <Label text="Locatie" styleClass="location_subtitle"/>
+                </VBox>
+            </HBox>
+            <ScrollPane>
+                <VBox>
+                    <padding><Insets top="5" right="25" bottom="5" left="25"/></padding>
+                    <VBox>
+                        <Label text="Site-info"/>
+                        <VBox>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                        </VBox>
+                    </VBox>
+                    <VBox>
+                        <Label text="Status"/>
+                        <VBox>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
         <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="card" VBox.vgrow="ALWAYS">
             <VBox spacing="15" VBox.vgrow="ALWAYS">
                 <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
@@ -61,21 +99,18 @@
                 <Label text="Site-info" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
 
                 <VBox spacing="5">
-                    <Label text="Naam:" style="-fx-text-fill: gray;"/>
                     <Label fx:id="lblDetailNaam" text="Selecteer een locatie..." style="-fx-font-size: 14px;"/>
-                    <TextField fx:id="txtDetailNaam" visible="false" managed="false"/>
+                    <TextField fx:id="txtDetailNaam" promptText="naam..." visible="false" managed="false"/>
                 </VBox>
 
                 <VBox spacing="5">
-                    <Label text="Locatie/Adres:" style="-fx-text-fill: gray;"/>
                     <Label fx:id="lblDetailLocatie" text="-" wrapText="true"/>
-                    <TextField fx:id="txtDetailLocatie" visible="false" managed="false"/>
+                    <TextField fx:id="txtDetailLocatie" promptText="locatie/adres..." visible="false" managed="false"/>
                 </VBox>
 
                 <VBox spacing="5">
-                    <Label text="Capaciteit:" style="-fx-text-fill: gray;"/>
                     <Label fx:id="lblDetailCapaciteit" text="-"/>
-                    <TextField fx:id="txtDetailCapaciteit" visible="false" managed="false"/>
+                    <TextField fx:id="txtDetailCapaciteit" promptText="capaciteit..." visible="false" managed="false"/>
                 </VBox>
 
                 <Label text="Status" style="-fx-font-weight: bold; -fx-font-size: 16px;">
@@ -83,7 +118,7 @@
                 </Label>
                 <VBox spacing="5">
                     <Label fx:id="lblDetailStatus" text="-"/>
-                    <ComboBox fx:id="cmbDetailStatus" visible="false" managed="false" prefWidth="150"/>
+                    <ComboBox fx:id="cmbDetailStatus" value="status" styleClass="picker" visible="false" managed="false" prefWidth="150"/>
                 </VBox>
 
                 <Label text="Gekoppelde Machines" style="-fx-font-weight: bold; -fx-font-size: 16px;">
