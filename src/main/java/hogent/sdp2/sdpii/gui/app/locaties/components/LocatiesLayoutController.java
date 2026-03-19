@@ -2,22 +2,20 @@ package hogent.sdp2.sdpii.gui.app.locaties.components;
 
 
 import domain.dto.LocatieDTO;
+import domain.dto.MachineAanmaakDTO;
 import domain.facades.LocatieFacade;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.util.StringConverter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.collections.transformation.FilteredList;
-
-import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -28,6 +26,8 @@ public class LocatiesLayoutController extends VBox {
 
     @FXML private TextField zoekField;
     @FXML private ComboBox<String> statusDropdown;
+    @FXML private ListView<MachineAanmaakDTO> listMachines;
+    @FXML private Button btnWijzigMachine;
     @FXML private TableView<LocatieDTO> locatieTable;
     @FXML private TableColumn<LocatieDTO, String> naamCol;
     @FXML private TableColumn<LocatieDTO, String> locatieCol;
@@ -38,11 +38,13 @@ public class LocatiesLayoutController extends VBox {
     @FXML private Label lblDetailCapaciteit;
     @FXML private Label lblDetailStatus;
     @FXML private Button btnWijzig;
+    @FXML private Button btnVerwijderMachine;
     @FXML private Button btnVerwijder;
     @FXML private TextField txtDetailNaam;
     @FXML private TextField txtDetailLocatie;
     @FXML private TextField txtDetailCapaciteit;
     @FXML private ComboBox<String> cmbDetailStatus;
+    @FXML private Button btnMaakMachine;
     private boolean isBewerkenModus = false;
     private boolean isAanmakenModus = false;
 
@@ -85,6 +87,23 @@ public class LocatiesLayoutController extends VBox {
             toonLocatieDetails(nieuweSelectie);
         });
         cmbDetailStatus.getItems().addAll("Actief", "Inactief");
+        listMachines.setCellFactory(param -> new javafx.scene.control.ListCell<>() {
+            @Override
+            protected void updateItem(MachineAanmaakDTO machine, boolean empty) {
+                super.updateItem(machine, empty);
+                if (empty || machine == null) {
+                    setText(null);
+                } else {
+                    setText(machine.naam() + " (" + machine.status() + ")"); // Ziet eruit als: Poes (Onderhoud)
+                }
+            }
+        });
+
+        listMachines.getSelectionModel().selectedItemProperty().addListener((obs, oudeSelectie, nieuweSelectie) -> {
+            boolean heeftSelectie = (nieuweSelectie != null);
+            btnWijzigMachine.setDisable(!heeftSelectie);
+            btnVerwijderMachine.setDisable(!heeftSelectie);
+        });
         laadLocaties();
     }
 
@@ -138,6 +157,9 @@ public class LocatiesLayoutController extends VBox {
 
             btnWijzig.setDisable(false);
             btnVerwijder.setDisable(false);
+            btnMaakMachine.setDisable(false);
+            List<MachineAanmaakDTO> echteMachines = locatieFacade.haalMachinesOpVoorSite(locatie.id());
+            listMachines.setItems(FXCollections.observableArrayList(echteMachines));
         } else {
             lblDetailNaam.setText("Selecteer een locatie...");
             lblDetailLocatie.setText("-");
@@ -146,6 +168,9 @@ public class LocatiesLayoutController extends VBox {
 
             btnWijzig.setDisable(true);
             btnVerwijder.setDisable(true);
+            btnMaakMachine.setDisable(true);
+            btnVerwijderMachine.setDisable(true);
+            listMachines.getItems().clear();
         }
     }
 
@@ -260,5 +285,156 @@ public class LocatiesLayoutController extends VBox {
         btnVerwijder.setDisable(true);
 
         zetBewerkVeldenZichtbaar(true);
+    }
+
+    @FXML
+    private void handleMaakMachine() {
+        LocatieDTO geselecteerd = locatieTable.getSelectionModel().getSelectedItem();
+
+        if (geselecteerd == null) return;
+
+        Dialog<MachineAanmaakDTO> dialog = new Dialog<>();
+        dialog.setTitle("Nieuwe Machine Creëren");
+        dialog.setHeaderText("Voeg een machine toe aan site: " + geselecteerd.naam());
+
+        ButtonType btnTypeAanmaken = new ButtonType("Aanmaken", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnTypeAanmaken, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
+
+        TextField naamVeld = new TextField();
+        naamVeld.setPromptText("Naam (bijv. Graafmachine)");
+
+        ComboBox<String> statusBox = new ComboBox<>();
+        statusBox.getItems().addAll("Actief", "Inactief", "Onderhoud");
+        statusBox.getSelectionModel().selectFirst();
+
+        grid.add(new Label("Machine naam:"), 0, 0);
+        grid.add(naamVeld, 1, 0);
+        grid.add(new Label("Status:"), 0, 1);
+        grid.add(statusBox, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        Platform.runLater(naamVeld::requestFocus);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == btnTypeAanmaken && !naamVeld.getText().isBlank()) {
+                return new MachineAanmaakDTO(
+                        naamVeld.getText(),
+                        statusBox.getValue(),
+                        geselecteerd.id()
+                );
+            }
+            return null;
+        });
+
+        Optional<MachineAanmaakDTO> resultaat = dialog.showAndWait();
+
+        resultaat.ifPresent(nieuweMachine -> {
+            boolean succes = locatieFacade.maakMachine(nieuweMachine);
+
+            if (succes) {
+                System.out.println("Machine '" + nieuweMachine.naam() + "' succesvol op status '" + nieuweMachine.status() + "' gezet!");
+            } else {
+                System.err.println("Fout bij het aanmaken van de machine. Check je backend.");
+            }
+        });
+    }
+
+    @FXML
+    private void handleWijzigMachine() {
+        MachineAanmaakDTO geselecteerdeMachine = listMachines.getSelectionModel().getSelectedItem();
+        LocatieDTO huidigeSite = locatieTable.getSelectionModel().getSelectedItem();
+
+        if (geselecteerdeMachine == null || huidigeSite == null) return;
+
+        Dialog<MachineAanmaakDTO> dialog = new Dialog<>();
+        dialog.setTitle("Machine Wijzigen");
+        dialog.setHeaderText("Wijzig gegevens van: " + geselecteerdeMachine.naam());
+
+        ButtonType btnOpslaan = new ButtonType("Opslaan", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnOpslaan, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10); grid.setVgap(10); grid.setPadding(new javafx.geometry.Insets(20, 20, 10, 10));
+
+        TextField txtNaam = new TextField(geselecteerdeMachine.naam());
+
+        ComboBox<String> cmbStatus = new ComboBox<>();
+        cmbStatus.getItems().addAll("Actief", "Inactief", "Onderhoud");
+        cmbStatus.setValue(geselecteerdeMachine.status());
+
+        ComboBox<LocatieDTO> cmbSites = new ComboBox<>();
+        List<LocatieDTO> alleSites = locatieFacade.geefAlleLocaties();
+        cmbSites.setItems(FXCollections.observableArrayList(alleSites));
+
+        cmbSites.setConverter(new StringConverter<>() {
+            @Override public String toString(LocatieDTO l) { return l == null ? "" : l.naam(); }
+            @Override public LocatieDTO fromString(String s) { return null; }
+        });
+
+        alleSites.stream()
+                .filter(s -> s.id().equals(huidigeSite.id()))
+                .findFirst()
+                .ifPresent(cmbSites::setValue);
+
+        grid.add(new Label("Naam:"), 0, 0); grid.add(txtNaam, 1, 0);
+        grid.add(new Label("Status:"), 0, 1); grid.add(cmbStatus, 1, 1);
+        grid.add(new Label("Gekoppeld aan Site:"), 0, 2); grid.add(cmbSites, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(button -> {
+            if (button == btnOpslaan && !txtNaam.getText().isBlank() && cmbSites.getValue() != null) {
+                return new MachineAanmaakDTO(
+                        txtNaam.getText(),
+                        cmbStatus.getValue(),
+                        Math.toIntExact(cmbSites.getValue().id())
+                );
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(gewijzigdeData -> {
+            boolean succes = locatieFacade.wijzigMachine(geselecteerdeMachine.siteId(), gewijzigdeData);
+            if (succes) {
+                System.out.println("Machine succesvol gewijzigd!");
+                toonLocatieDetails(huidigeSite);
+            } else {
+                System.err.println("Fout bij opslaan machine op de server.");
+            }
+        });
+    }
+
+    @FXML
+    private void handleVerwijderMachine() {
+        MachineAanmaakDTO geselecteerdeMachine = listMachines.getSelectionModel().getSelectedItem();
+        LocatieDTO huidigeSite = locatieTable.getSelectionModel().getSelectedItem();
+
+        if (geselecteerdeMachine != null && huidigeSite != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Machine Verwijderen");
+            alert.setHeaderText("Weet je zeker dat je '" + geselecteerdeMachine.naam() + "' wilt verwijderen?");
+            alert.setContentText("Deze actie kan niet ongedaan worden gemaakt.");
+
+            Optional<ButtonType> resultaat = alert.showAndWait();
+
+            if (resultaat.isPresent() && resultaat.get() == ButtonType.OK) {
+
+                boolean succes = locatieFacade.verwijderMachine(geselecteerdeMachine.siteId());
+
+                if (succes) {
+                    System.out.println("Machine succesvol verwijderd!");
+
+                    toonLocatieDetails(huidigeSite);
+                } else {
+                    System.err.println("Fout bij verwijderen machine op de server.");
+                }
+            }
+        }
     }
 }

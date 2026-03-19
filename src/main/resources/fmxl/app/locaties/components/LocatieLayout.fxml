@@ -46,11 +46,16 @@
                     <TableColumn fx:id="statusCol" text="Status" prefWidth="100"/>
                 </columns>
             </TableView>
-            <HBox alignment="CENTER_LEFT">
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f8f9fa; -fx-background-radius: 0 0 8px 8px; -fx-border-color: #e2e8f0; -fx-border-width: 1px 0 0 0;">
                 <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
 
+                <Button fx:id="btnNieuw" text="+ Maak site aan" onAction="#handleNieuw" styleClass="btn-success" minWidth="-Infinity"/>
+                <Button fx:id="btnWijzig" text="Wijzig site" onAction="#handleWijzig" disable="true" styleClass="btn-secondary" minWidth="-Infinity"/>
+                <Button fx:id="btnVerwijder" text="Verwijder site" onAction="#handleVerwijder" disable="true" styleClass="btn-danger" minWidth="-Infinity"/>
 
-                <Button fx:id="btnNieuw" text="+ Maak site aan" onAction="#handleNieuw" styleClass="btn-success"/>
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="btnMaakMachine" text="+ Creëer machine" onAction="#handleMaakMachine" disable="true" styleClass="btn-success" minWidth="-Infinity"/>
             </HBox>
 
         </VBox>
@@ -115,11 +120,18 @@
                     <Label fx:id="lblDetailStatus" text="-"/>
                     <ComboBox fx:id="cmbDetailStatus" value="status" styleClass="picker" visible="false" managed="false" prefWidth="150"/>
                 </VBox>
-            </VBox> <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="card_footer">
-            <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
-            <Button fx:id="btnWijzig" text="Wijzig" onAction="#handleWijzig" disable="true" styleClass="btn-secondary"/>
-            <Button fx:id="btnVerwijder" text="Verwijder" onAction="#handleVerwijder" disable="true" styleClass="btn-danger"/>
-        </HBox>
+
+                <Label text="Gekoppelde Machines" style="-fx-font-weight: bold; -fx-font-size: 16px;">
+                    <VBox.margin><Insets top="10"/></VBox.margin>
+                </Label>
+                <ListView fx:id="listMachines" VBox.vgrow="ALWAYS" prefHeight="100" styleClass="machine-list"/>
+                </VBox>
+            <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-background-color: #f8f9fa; -fx-background-radius: 0 0 8px 8px;">
+                <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+
+                <Button fx:id="btnWijzigMachine" text="Wijzig machine" onAction="#handleWijzigMachine" disable="true" styleClass="btn-secondary" minWidth="-Infinity"/>
+                <Button fx:id="btnVerwijderMachine" text="Verwijder machine" onAction="#handleVerwijderMachine" disable="true" styleClass="btn-danger" minWidth="-Infinity"/>
+            </HBox>
 
         </VBox> </GridPane>
 </fx:root>

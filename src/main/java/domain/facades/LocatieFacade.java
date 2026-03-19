@@ -2,7 +2,9 @@ package domain.facades;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import domain.Machine;
 import domain.dto.LocatieDTO;
+import domain.dto.MachineAanmaakDTO;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -99,6 +101,83 @@ public class LocatieFacade {
 
         } catch (Exception e) {
             System.err.println("Fout bij aanmaken: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean maakMachine(MachineAanmaakDTO dto) {
+        try {
+            String jsonBody = mapper.writeValueAsString(dto);
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/api/machines"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.statusCode() == 200 || response.statusCode() == 201;
+
+        } catch (Exception e) {
+            System.err.println("Fout bij aanmaken machine: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public List<MachineAanmaakDTO> haalMachinesOpVoorSite(Integer siteId) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL + "/" + siteId + "/machines"))
+                    .GET()
+                    .header("Accept", "application/json")
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return mapper.readValue(response.body(), new TypeReference<List<MachineAanmaakDTO>>() {});
+            }
+        } catch (Exception e) {
+            System.err.println("Fout bij ophalen machines: " + e.getMessage());
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean wijzigMachine(Integer machineId, MachineAanmaakDTO dto) {
+        try {
+            String jsonBody = mapper.writeValueAsString(dto);
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/api/machines/" + machineId))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.statusCode() == 200;
+        } catch (Exception e) {
+            System.err.println("Fout bij wijzigen machine: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean verwijderMachine(Integer machineId) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/api/machines/" + machineId))
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode() == 200 || response.statusCode() == 204;
+
+        } catch (Exception e) {
+            System.err.println("Fout bij verwijderen machine: " + e.getMessage());
             return false;
         }
     }

@@ -9,7 +9,7 @@
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 16;
     -fx-border-radius: 16;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 15, 0, 0, 4);
 }
 
 .card_header {
@@ -30,18 +30,17 @@
     -fx-text-fill: #2c3e50;
 }
 
-/* Search & filters */
-.text-field {
+/* ===== SEARCH & FILTERS ===== */
+.search-field {
     -fx-background-color: #F0F0F0;
     -fx-background-radius: 50;
     -fx-border-color: transparent;
-    -fx-padding: 12 20 12 20;
-    -fx-font-size: 14px;
-    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-padding: 8 20 8 20;
+    -fx-font-size: 13px;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }
 
 /* Picker — zelfde als team_picker uit dashboard */
-
 .picker {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 30;
@@ -94,10 +93,7 @@
     -fx-font-weight: bold;
 }
 
-
-
 /* ===== TABLE — consistent met dashboard ===== */
-
 .table-view {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -105,7 +101,7 @@
 
 .table-view .column-header-background {
     -fx-background-color: #F6F6F6;
-    -fx-background-radius: 10 10 0 0;
+    -fx-background-radius: 0;
 }
 
 .table-view .column-header,
@@ -128,7 +124,7 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: rgba(227, 27, 53, 0.08);
+    -fx-background-color: rgba(227, 27, 53, 0.08); /* Het HOGENT rood, transparant */
 }
 
 .table-row-cell:selected .text {
@@ -142,7 +138,7 @@
 }
 
 .table-row-cell:hover {
-    -fx-background-color: #f9f9f9;
+    -fx-background-color: #fcfcfc;
 }
 
 .table-row-cell:selected:hover {
@@ -158,49 +154,58 @@
     -fx-border-width: 0;
 }
 
-.table-view .placeholder .label {
+/* ===== INVOERVELDEN (Voor details en pop-ups) ===== */
+.form-control {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #e8e8e8;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 6 12 6 12;
     -fx-font-size: 13px;
-    -fx-text-fill: #aaaaaa;
 }
 
-/* Scrollbars — verborgen zoals dashboard */
-.table-view .scroll-bar:vertical,
-.table-view .scroll-bar:horizontal {
+.form-control:focused {
+    -fx-border-color: #E31B35;
+    -fx-border-width: 1.5px;
+}
+
+/* ===== MACHINES LIJST (Gelijkgetrokken met TableView) ===== */
+.machine-list {
     -fx-background-color: transparent;
-}
-
-.table-view .scroll-bar .thumb {
-    -fx-background-color: rgba(0, 0, 0, 0.08);
-    -fx-background-radius: 10;
-}
-
-.table-view .scroll-bar .thumb:hover {
-    -fx-background-color: rgba(0, 0, 0, 0.15);
-}
-
-.table-view .scroll-bar .increment-button,
-.table-view .scroll-bar .decrement-button {
+    -fx-border-color: #e8e8e8;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
     -fx-padding: 0;
-    -fx-background-color: transparent;
 }
 
-
-/* ===== DETAIL PANEL (rechts) ===== */
-
-.location_title {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
+.machine-list .list-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #F0F0F0 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 13px;
     -fx-text-fill: #2c3e50;
 }
 
-.location_subtitle {
-    -fx-font-size: 11px;
-    -fx-text-fill: #888888;
+.machine-list .list-cell:hover {
+    -fx-background-color: #f9f9f9;
 }
 
+.machine-list .list-cell:selected {
+    -fx-background-color: rgba(227, 27, 53, 0.08);
+    -fx-text-fill: #2c3e50;
+}
+
+.machine-list .list-cell:selected:hover {
+    -fx-background-color: rgba(227, 27, 53, 0.12);
+}
+
+.machine-list .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
 
 /* ===== BUTTONS — design system ===== */
-
 .button {
     -fx-font-size: 13px;
     -fx-font-weight: bold;
@@ -244,23 +249,4 @@
 
 .btn-danger:hover {
     -fx-background-color: rgba(227, 27, 53, 0.08);
-}
-
-
-
-
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 0;
-}
-
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
-}
-
-.scroll-pane .scroll-bar {
-    -fx-opacity: 0;
-    -fx-padding: -10;
 }
