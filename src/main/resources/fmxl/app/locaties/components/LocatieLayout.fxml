@@ -89,8 +89,8 @@
                 <Label text="Gekoppelde Machines" style="-fx-font-weight: bold; -fx-font-size: 16px;">
                     <VBox.margin><Insets top="10"/></VBox.margin>
                 </Label>
-                <ListView fx:id="listMachines" VBox.vgrow="ALWAYS" prefHeight="100" style="-fx-background-color: transparent; -fx-border-color: #e2e8f0; -fx-border-radius: 5px;"/>
-            </VBox>
+                <ListView fx:id="listMachines" VBox.vgrow="ALWAYS" prefHeight="100" styleClass="machine-list"/>
+                </VBox>
             <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-background-color: #f8f9fa; -fx-background-radius: 0 0 8px 8px;">
                 <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
 
