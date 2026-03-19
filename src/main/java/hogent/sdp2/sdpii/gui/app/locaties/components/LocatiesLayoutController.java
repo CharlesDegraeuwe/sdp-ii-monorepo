@@ -5,6 +5,7 @@ import domain.dto.LocatieDTO;
 import domain.dto.MachineAanmaakDTO;
 import domain.facades.LocatieFacade;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
