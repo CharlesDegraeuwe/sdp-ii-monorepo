@@ -6,6 +6,8 @@
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<fx:root type="VBox"  fx:id="container" VBox.vgrow="always">
+<fx:root type="VBox" fx:id="container" VBox.vgrow="always"
+         xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml" spacing="10">
 
 </fx:root>

@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="root-container">
     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
@@ -30,7 +31,9 @@
                 <Label text="Leden:" styleClass="section-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <VBox styleClass="create-employee-box">
-                    <Button text="+" styleClass="icon-btn-lg" fx:id="addMemberBtn"/>
+                    <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">
+                        <FontIcon iconLiteral="fas-plus" iconSize="20"/>
+                    </Button>
                     <Label text="voeg leden toe" styleClass="icon-label"/>
                 </VBox>
             </HBox>

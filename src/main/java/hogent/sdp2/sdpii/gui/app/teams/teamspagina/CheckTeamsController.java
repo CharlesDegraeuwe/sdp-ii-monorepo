@@ -61,7 +61,7 @@ public class CheckTeamsController extends VBox {
     public Pane noItems() {
         VBox v = new VBox();
         v.setStyle("-fx-alignment: CENTER");
-        VBox.setVgrow(v, Priority.valueOf("always"));
+        VBox.setVgrow(v, Priority.ALWAYS);
         Label l = new Label();
         l.setText("geen team geselecteerd");
         v.getChildren().add(l);
@@ -95,4 +95,5 @@ public class CheckTeamsController extends VBox {
         membersList.getChildren().clear();
         membersList.getChildren().add(noItems());
     }
+
 }

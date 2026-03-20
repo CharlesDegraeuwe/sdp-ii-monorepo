@@ -41,7 +41,7 @@ public class TeamApiService {
     public List<WerknemerDTO> getTeamMembers(int teamId) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/" + teamId + "/members"))
+                    .uri(URI.create(BASE_URL + "/" + teamId + "/werknemers"))
                     .GET()
                     .build();
 

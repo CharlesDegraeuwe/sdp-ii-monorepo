@@ -162,10 +162,11 @@
 }
 
 .icon-btn-lg {
-    -fx-background-color: white;
-    -fx-border-color: #cccccc;
+    -fx-background-color: #E31B35;
+    -fx-border-color: rgba(204, 204, 204, 0.35);
     -fx-border-radius: 50;
     -fx-background-radius: 50;
+    -fx-text-fill: white;
     -fx-min-width: 32;
     -fx-min-height: 32;
     -fx-max-width: 32;
@@ -177,6 +178,14 @@
 
 .icon-btn-lg:hover {
     -fx-background-color: #f0f0f0;
+}
+
+.icon-btn-lg .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.icon-btn-lg:hover .ikonli-font-icon {
+    -fx-icon-color: #E31B35;
 }
 
 .icon-label {
@@ -379,6 +388,16 @@
 
 
 .team_item {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 20;
+    -fx-border-color: #f5f5f5;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-padding: 12 16 12 16;
+    -fx-cursor: hand;
+}
+
+.member_item {
     -fx-background-color: #f5f5f5;
     -fx-background-radius: 20;
     -fx-border-color: #f5f5f5;
