@@ -267,6 +267,17 @@ public class LocatiesLayoutController extends VBox {
         cmbDetailStatus.setVisible(toonInvoer); cmbDetailStatus.setManaged(toonInvoer);
     }
 
+    public void selecteerLocatieBijId(Integer id) {
+        if (id == null) return;
+        locatieTable.getItems().stream()
+                .filter(l -> id.equals(l.id()))
+                .findFirst()
+                .ifPresent(l -> {
+                    locatieTable.getSelectionModel().select(l);
+                    locatieTable.scrollTo(l);
+                });
+    }
+
     @FXML
     private void handleNieuw() {
         locatieTable.getSelectionModel().clearSelection();

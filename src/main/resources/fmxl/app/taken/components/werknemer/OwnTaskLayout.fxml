@@ -37,7 +37,7 @@
                         <VBox fx:id="vandaag_container" spacing="4" styleClass="task-section" VBox.vgrow="ALWAYS">
                             <padding><Insets top="8" bottom="12"/></padding>
                         </VBox>
-                        <Label text="Taken tegen morgen:" styleClass="section-label"/>
+                        <Label text="Taken met deadlines vanaf morgen:" styleClass="section-label"/>
                         <VBox fx:id="morgen_container" spacing="4" styleClass="task-section" VBox.vgrow="ALWAYS">
                             <padding><Insets top="8" bottom="4"/></padding>
                         </VBox>
@@ -47,7 +47,7 @@
                 <!-- Kolom 1 -->
                 <VBox spacing="12" GridPane.columnIndex="1" GridPane.vgrow="ALWAYS">
                     <Region minHeight="30" prefHeight="30"/>
-                    <VBox styleClass="card" spacing="12">
+                    <VBox fx:id="detail_card" styleClass="card" spacing="12" visible="false" managed="false">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <HBox alignment="CENTER_LEFT">
                             <Label text="Taak details:" styleClass="section-label"/>
@@ -55,12 +55,13 @@
                             <Label fx:id="edit_button" text="edit" styleClass="edit-link"/>
                         </HBox>
                         <HBox alignment="CENTER_LEFT">
-                            <Label text="Tegen 12:30" styleClass="task-due-text"/>
+                            <Label fx:id="detail_deadline" text="" styleClass="task-due-text"/>
                             <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="Locatie 3" styleClass="task-location-link"/>
+                            <Label fx:id="detail_locatie" text="" styleClass="task-location-link"/>
                         </HBox>
-                        <TextField promptText="taak naam" styleClass="task-input"/>
-                        <TextArea promptText="specificaties" prefRowCount="3" styleClass="task-input-area"/>
+                        <TextField fx:id="detail_titel" promptText="taak naam" styleClass="task-input" editable="false"/>
+                        <TextArea fx:id="detail_beschrijving" promptText="specificaties" prefRowCount="3" styleClass="task-input-area" editable="false"/>
+                        <Button fx:id="opslaan_button" text="Opslaan" visible="false" managed="false" maxWidth="Infinity" styleClass="create-task-btn"/>
                     </VBox>
                     <VBox styleClass="card" spacing="4" VBox.vgrow="ALWAYS">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>

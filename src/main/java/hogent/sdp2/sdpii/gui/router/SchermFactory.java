@@ -51,6 +51,10 @@ public class SchermFactory {
         return new LocatiesController();
     }
 
+    public LocatiesController locatieScherm(Integer siteId) {
+        return new LocatiesController(siteId);
+    }
+
     public InstellingenController instellingenScherm() {
         return new InstellingenController();
     }

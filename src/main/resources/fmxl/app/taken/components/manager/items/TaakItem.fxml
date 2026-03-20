@@ -11,13 +11,13 @@
 
     <HBox styleClass="taak_container" spacing="10" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
         <padding><Insets top="8" right="20" bottom="8" left="10"/></padding>
-        <CheckBox styleClass="taak_checkbox"/>
+        <CheckBox fx:id="taak_checkbox" styleClass="taak_checkbox"/>
         <Label fx:id="title" maxWidth="130" styleClass="taak_title"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Label fx:id="datum" styleClass="taak_datum"/>
     </HBox>
 
-    <HBox alignment="CENTER" styleClass="taak_delete_btn"
+    <HBox fx:id="taak_delete_btn" alignment="CENTER" styleClass="taak_delete_btn"
           prefWidth="36" prefHeight="36" minWidth="36" minHeight="36">
         <FontIcon iconLiteral="ion4-md-trash" iconSize="14" styleClass="taak_delete_icon"/>
     </HBox>
