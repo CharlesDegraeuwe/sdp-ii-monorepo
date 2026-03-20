@@ -17,6 +17,11 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final TeamwerknemerRepository teamwerknemerRepository;
 
+    public List<TeamResponseDTO> geefTeams() {
+        return teamRepository.findAll().stream().map(
+                t -> new TeamResponseDTO(t.getId(), t.getNaam())).toList();
+
+    }
     public List<TeamResponseDTO> geefTeamsVanSite(Integer siteId) {
         return teamRepository.findBySiteId(siteId).stream()
                 .map(t -> new TeamResponseDTO(t.getId(), t.getNaam()))
@@ -32,5 +37,9 @@ public class TeamService {
                             w.getRol(), w.getStatus());
                 })
                 .toList();
+    }
+
+    public List<WerknemerResponseDTO> voegToeAanTeam(int teamId, int werknemerId) {
+        return null;
     }
 }
