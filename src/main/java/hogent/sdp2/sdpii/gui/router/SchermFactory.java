@@ -60,7 +60,7 @@ public class SchermFactory {
 
     public TeamsController teamsScherm() {
 
-        return new TeamsController(Beheerder.getInstance().getTeamFacade());
+        return new TeamsController(Beheerder.getInstance().getTeamFacade(), Beheerder.getInstance().getWerknemersFacade());
     }
 
 

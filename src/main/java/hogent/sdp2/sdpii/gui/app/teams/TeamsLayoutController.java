@@ -1,6 +1,7 @@
 package hogent.sdp2.sdpii.gui.app.teams;
 
 import domain.facades.TeamFacade;
+import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.admin.creeerMedewerker.CreeerMedewerkerController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.CheckTeamsController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.CreateTeamsController;
@@ -28,11 +29,12 @@ public class TeamsLayoutController extends VBox {
     private CheckUserpage checkUserpage;
     private CreateUserPage createUserPage;
     private TeamFacade tm;
+    private WerknemersFacade wm;
 
     private String tab = "check";
     private String pagina = "teams";
 
-    public TeamsLayoutController(TeamFacade tm) {
+    public TeamsLayoutController(TeamFacade tm, WerknemersFacade wm) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/TeamsLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -42,6 +44,7 @@ public class TeamsLayoutController extends VBox {
             throw new RuntimeException(e);
         }
         this.tm = tm;
+        this.wm = wm;
         init();
     }
 
@@ -55,7 +58,7 @@ public class TeamsLayoutController extends VBox {
                 if (checkTeamsController == null) checkTeamsController = new CheckTeamsController(tm);
                 outer_container.setCenter(checkTeamsController);
             } else {
-                if (checkUserpage == null) checkUserpage = new CheckUserpage();
+                if (checkUserpage == null) checkUserpage = new CheckUserpage(wm);
                 outer_container.setCenter(checkUserpage);
             }
             tab = "check";
@@ -87,7 +90,7 @@ public class TeamsLayoutController extends VBox {
         usersPagina.setOnMouseClicked(e -> {
             pagina = "users";
             tab = "check";
-            if (checkUserpage == null) checkUserpage = new CheckUserpage();
+            if (checkUserpage == null) checkUserpage = new CheckUserpage(wm);
             outer_container.setCenter(checkUserpage);
             updatePages();
             updateTabs();

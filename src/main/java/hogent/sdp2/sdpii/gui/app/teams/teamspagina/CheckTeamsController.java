@@ -1,6 +1,7 @@
 package hogent.sdp2.sdpii.gui.app.teams.teamspagina;
 
 import domain.dto.TeamDTO;
+import domain.dto.WerknemerDTO;
 import domain.facades.TeamFacade;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,18 +9,21 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.List;
 
-public class CheckTeamsController extends VBox {
+public class CheckTeamsController extends StackPane {
     private TeamFacade tm;
     private List<TeamDTO> teams;
     private TeamItemController selected;
     //FXML
     @FXML VBox teamsList;
     @FXML VBox membersList;
+
+    private StackPane overlay;
 
     public CheckTeamsController(TeamFacade tm) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/teamspagina/CheckTeams.fxml"));

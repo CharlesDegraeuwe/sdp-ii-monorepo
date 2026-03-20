@@ -420,3 +420,42 @@
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
+
+.user-detail-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.user-detail-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+}
+
+.btn-danger {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 10 24;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #E31B35;
+}
+
+.btn-outline {
+    -fx-background-color: transparent;
+    -fx-border-color: #2c3e50;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 10 24;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.btn-outline:hover {
+    -fx-background-color: #f0f0f0;
+}

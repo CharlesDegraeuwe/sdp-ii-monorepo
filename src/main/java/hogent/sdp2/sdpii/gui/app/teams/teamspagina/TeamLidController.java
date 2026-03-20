@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 
 public class TeamLidController extends HBox {
@@ -34,17 +35,15 @@ public class TeamLidController extends HBox {
 
     public void init() {
         naam.setText(werknemer.voornaam() + " " + werknemer.naam());
-        this.setOnMouseClicked(e -> new TeamLidDetailsController());
         this.setStyle("-fx-background-color: " + pickColor(i));
     }
 
     private String pickColor(int i) {
         switch(i) {
-            case 0 -> {return "#D6E8EF";}
-            case 1 -> {return "#D5EFE";}
-            case 2 -> {return "#F6ECCF";}
-            case 3 -> {return "#F6B4B4";}
-            case 4 -> {return "#F6B85B";}
+            case 0 -> {return "rgba(117, 188, 218, 0.25)";}
+            case 1 -> {return "rgba(115, 220, 169, 0.25)";}
+            case 2 -> {return "rgba(246, 184, 91, 0.25)";}
+            case 3 -> {return "rgba(246, 180, 180, 0.25)";}
         }
         return null;
     }

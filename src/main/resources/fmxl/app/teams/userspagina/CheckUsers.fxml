@@ -6,8 +6,48 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml">
-    <children>
-        <Label text="create users"/>
-    </children>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="root-container">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <!-- Page title -->
+    <Label text="Teams:" styleClass="page-title"/>
+
+    <!-- Main card -->
+    <HBox alignment="CENTER_RIGHT">
+        <VBox>
+            <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">
+                <FontIcon iconLiteral="fas-plus" iconSize="20"/>
+            </Button>
+            <Label text="voeg medewerker toe" styleClass="icon-label"/>
+        </VBox>
+    </HBox>
+
+    <HBox styleClass="main-card" spacing="24" VBox.vgrow="ALWAYS">
+
+        <VBox spacing="12" HBox.hgrow="ALWAYS" maxWidth="340">
+            <Label text="Alle medewerkers:" styleClass="section-title"/>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                <VBox fx:id="teamsList" spacing="8"  style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+            </ScrollPane>
+        </VBox>
+
+        <!-- Divider -->
+        <Separator orientation="VERTICAL" styleClass="divider"/>
+
+        <!-- RIGHT: Members list -->
+        <VBox spacing="12" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="members-header">
+                <Label text="Medewerker:" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                <VBox fx:id="membersList" spacing="8"/>
+            </ScrollPane>
+        </VBox>
+
+    </HBox>
 </fx:root>

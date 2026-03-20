@@ -9,12 +9,14 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TeamLedenController extends VBox {
     //variables
     private int TeamID;
     private TeamFacade facade;
     private List<WerknemerDTO> teamleden;
+    private Consumer<WerknemerDTO> onMemberClick;
 
     @FXML VBox container;
 
@@ -31,6 +33,7 @@ public class TeamLedenController extends VBox {
 
         this.TeamID = TeamId;
         this.facade = facade;
+        this.onMemberClick = onMemberClick;
         this.init();
     }
 
