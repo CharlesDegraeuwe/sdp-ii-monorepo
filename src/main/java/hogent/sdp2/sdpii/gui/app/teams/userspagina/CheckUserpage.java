@@ -11,7 +11,7 @@ import javafx.scene.layout.*;
 import java.io.IOException;
 import java.util.List;
 
-public class CheckUserpage extends StackPane {
+public class CheckUserpage extends VBox {
     private WerknemersFacade facade;
     private List<WerknemerDTO> werknemers;
     private UserItemController selected;
