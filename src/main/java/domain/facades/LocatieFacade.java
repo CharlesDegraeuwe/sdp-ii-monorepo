@@ -2,7 +2,6 @@ package domain.facades;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import domain.Machine;
 import domain.dto.LocatieDTO;
 import domain.dto.MachineAanmaakDTO;
 
