@@ -18,6 +18,10 @@ public class CheckUserpage extends VBox {
 
     @FXML VBox teamsList;
     @FXML VBox membersList;
+    @FXML HBox mainCard;
+    @FXML VBox leftColumn;
+    @FXML VBox rightColumn;
+
 
     public CheckUserpage(WerknemersFacade facade) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/userspagina/CheckUsers.fxml"));
@@ -33,6 +37,10 @@ public class CheckUserpage extends VBox {
     }
 
     public void init() {
+        leftColumn.prefWidthProperty().bind(mainCard.widthProperty().subtract(48).multiply(0.5));
+        rightColumn.prefWidthProperty().bind(mainCard.widthProperty().subtract(48).multiply(0.5));
+        leftColumn.setMaxWidth(Double.MAX_VALUE);
+        rightColumn.setMaxWidth(Double.MAX_VALUE);
         werknemers = facade.geefAlleWerknemers();
 
         werknemers.forEach(w -> {
@@ -50,6 +58,8 @@ public class CheckUserpage extends VBox {
             }
             clearSelection();
         });
+
+
     }
 
     public Pane noItems() {

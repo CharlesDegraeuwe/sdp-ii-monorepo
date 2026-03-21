@@ -397,6 +397,10 @@
     -fx-cursor: hand;
 }
 
+.team_item_label {
+
+}
+
 .member_item {
     -fx-background-color: #f5f5f5;
     -fx-background-radius: 20;
@@ -411,6 +415,7 @@
     -fx-border-color: #1c1c1c;
 }
 
+
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -420,6 +425,14 @@
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
+
+.scroll-pane .scroll-bar:vertical,
+.scroll-pane .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
 
 .user-detail-name {
     -fx-font-size: 18px;

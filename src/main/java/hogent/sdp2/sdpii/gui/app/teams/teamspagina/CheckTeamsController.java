@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,6 +19,9 @@ public class CheckTeamsController extends StackPane {
     //FXML
     @FXML VBox teamsList;
     @FXML VBox membersList;
+    @FXML HBox mainCard;
+    @FXML VBox leftColumn;
+    @FXML VBox rightColumn;
 
     private StackPane overlay;
 
@@ -39,6 +39,11 @@ public class CheckTeamsController extends StackPane {
     }
 
     public void init() {
+        leftColumn.prefWidthProperty().bind(mainCard.widthProperty().subtract(48).multiply(0.5));
+        rightColumn.prefWidthProperty().bind(mainCard.widthProperty().subtract(48).multiply(0.5));
+        leftColumn.setMaxWidth(Double.MAX_VALUE);
+        rightColumn.setMaxWidth(Double.MAX_VALUE);
+
         teams = tm.getAlleTeams();
 
         teams.forEach(teamDTO -> {

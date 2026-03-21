@@ -6,9 +6,9 @@
 
 <fx:root type="HBox" xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
-         styleClass="team-item" alignment="CENTER_LEFT">
+         styleClass="team_item" alignment="CENTER_LEFT">
     <padding>
         <Insets top="12" right="16" bottom="12" left="16"/>
     </padding>
-    <Label fx:id="naam" styleClass="team-item-label"/>
+    <Label fx:id="naam" styleClass="team_item_label"/>
 </fx:root>

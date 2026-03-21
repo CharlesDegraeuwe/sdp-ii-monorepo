@@ -11,25 +11,24 @@
 <fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="root-container">
     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-    <!-- Page title -->
-    <Label text="Teams:" styleClass="page-title"/>
 
     <!-- Main card -->
     <HBox alignment="CENTER_RIGHT">
-        <VBox>
+        <VBox alignment="CENTER">
             <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">
-                <FontIcon iconLiteral="fas-plus" iconSize="20"/>
+                <graphic>
+                    <FontIcon iconLiteral="fas-plus" iconSize="16" iconColor="WHITE"/>
+                </graphic>
             </Button>
             <Label text="voeg medewerker toe" styleClass="icon-label"/>
         </VBox>
     </HBox>
 
-    <HBox styleClass="main-card" spacing="24" VBox.vgrow="ALWAYS">
+    <HBox fx:id="mainCard" styleClass="main-card" spacing="24" VBox.vgrow="ALWAYS">
 
-        <VBox spacing="12" HBox.hgrow="ALWAYS" maxWidth="340">
+        <VBox fx:id="leftColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
             <Label text="Alle medewerkers:" styleClass="section-title"/>
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
-                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+            <ScrollPane styleClass="scroll-pane" fitToWidth="true" VBox.vgrow="ALWAYS">
                 <VBox fx:id="teamsList" spacing="8"  style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
             </ScrollPane>
         </VBox>
@@ -38,7 +37,7 @@
         <Separator orientation="VERTICAL" styleClass="divider"/>
 
         <!-- RIGHT: Members list -->
-        <VBox spacing="12" HBox.hgrow="ALWAYS">
+        <VBox fx:id="rightColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="members-header">
                 <Label text="Medewerker:" styleClass="section-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
