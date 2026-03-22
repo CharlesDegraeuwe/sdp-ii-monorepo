@@ -12,8 +12,10 @@ import java.util.List;
 @Repository
 public interface SiteteamRepository extends JpaRepository<Siteteam, SiteteamId> {
 
-    List<Siteteam> findByTeam_Id(Integer teamId);
+    List<Siteteam> findByTeamId(Integer teamId);
 
     @Query("SELECT st.site.id FROM Siteteam st WHERE st.team.id = :teamId")
     List<Integer> findSiteIdsByTeamId(@Param("teamId") Integer teamId);
+
+
 }

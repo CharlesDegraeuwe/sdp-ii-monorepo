@@ -1,11 +1,11 @@
 package hogent.sdp2.backend.dto.request;
 
-public record TeamResponseDTO(
-        int id,
+import java.util.List;
+
+public record CreateTeamRequestDTO(
         String naam,
         String beschrijving,
         Integer managerId,
-        String managerNaam,
         Integer siteId,
-        String siteNaam
+        List<TeamLidRequestDTO> leden
 ) {}
