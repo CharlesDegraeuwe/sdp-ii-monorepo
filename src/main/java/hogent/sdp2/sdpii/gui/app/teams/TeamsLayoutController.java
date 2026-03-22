@@ -34,8 +34,9 @@ public class TeamsLayoutController extends VBox {
     private String tab = "check";
     private String pagina = "teams";
 
+
     public TeamsLayoutController(TeamFacade tm, WerknemersFacade wm) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/TeamsLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/TeamsLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -52,13 +53,12 @@ public class TeamsLayoutController extends VBox {
         checkTeamsController = new CheckTeamsController(tm);
         outer_container.setCenter(checkTeamsController);
 
-        // Tab knoppen
         checkKnop.setOnMouseClicked(e -> {
             if (pagina.equals("teams")) {
-                if (checkTeamsController == null) checkTeamsController = new CheckTeamsController(tm);
+                checkTeamsController = new CheckTeamsController(tm);
                 outer_container.setCenter(checkTeamsController);
             } else {
-                if (checkUserpage == null) checkUserpage = new CheckUserpage(wm);
+                checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
                 outer_container.setCenter(checkUserpage);
             }
             tab = "check";
@@ -67,21 +67,19 @@ public class TeamsLayoutController extends VBox {
 
         creeerKnop.setOnMouseClicked(e -> {
             if (pagina.equals("teams")) {
-                if (createTeamsController == null) createTeamsController = new CreateTeamsController();
+                createTeamsController = new CreateTeamsController(tm);
                 outer_container.setCenter(createTeamsController);
             } else {
-                if (createUserPage == null) createUserPage = new CreateUserPage();
                 outer_container.setCenter(new CreeerMedewerkerController());
             }
             tab = "create";
             updateTabs();
         });
 
-        // Pagina knoppen
         teamsPagina.setOnMouseClicked(e -> {
             pagina = "teams";
             tab = "check";
-            if (checkTeamsController == null) checkTeamsController = new CheckTeamsController(tm);
+            checkTeamsController = new CheckTeamsController(tm);
             outer_container.setCenter(checkTeamsController);
             updatePages();
             updateTabs();
@@ -90,13 +88,31 @@ public class TeamsLayoutController extends VBox {
         usersPagina.setOnMouseClicked(e -> {
             pagina = "users";
             tab = "check";
-            if (checkUserpage == null) checkUserpage = new CheckUserpage(wm);
+            checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
             outer_container.setCenter(checkUserpage);
             updatePages();
             updateTabs();
         });
+
         updateTabs();
         updatePages();
+    }
+
+    private void navigeerNaarTeam(int teamId) {
+        pagina = "teams";
+        tab = "check";
+        checkTeamsController = new CheckTeamsController(tm, teamId);
+        outer_container.setCenter(checkTeamsController);
+        updatePages();
+        updateTabs();
+    }
+
+    private void navigeerNaarCreateUser() {
+        pagina = "users";
+        tab = "create";
+        outer_container.setCenter(new CreeerMedewerkerController());
+        updatePages();
+        updateTabs();
     }
 
     public void updateTabs() {

@@ -5,26 +5,30 @@ import domain.facades.WerknemersFacade;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CheckUserpage extends VBox {
     private WerknemersFacade facade;
     private List<WerknemerDTO> werknemers;
     private UserItemController selected;
+    private Consumer<Integer> onNavigeerNaarTeam;
+    private Runnable onNavigeerNaarCreateUser;
 
     @FXML VBox teamsList;
     @FXML VBox membersList;
     @FXML HBox mainCard;
     @FXML VBox leftColumn;
     @FXML VBox rightColumn;
+    @FXML Button addMemberBtn;
 
-
-    public CheckUserpage(WerknemersFacade facade) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/userspagina/CheckUsers.fxml"));
+    public CheckUserpage(WerknemersFacade facade, Consumer<Integer> onNavigeerNaarTeam, Runnable onNavigeerNaarCreateUser) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/userspagina/CheckUsers.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -33,6 +37,8 @@ public class CheckUserpage extends VBox {
             throw new RuntimeException(e);
         }
         this.facade = facade;
+        this.onNavigeerNaarTeam = onNavigeerNaarTeam;
+        this.onNavigeerNaarCreateUser = onNavigeerNaarCreateUser;
         init();
     }
 
@@ -41,14 +47,15 @@ public class CheckUserpage extends VBox {
         rightColumn.prefWidthProperty().bind(mainCard.widthProperty().subtract(48).multiply(0.5));
         leftColumn.setMaxWidth(Double.MAX_VALUE);
         rightColumn.setMaxWidth(Double.MAX_VALUE);
-        werknemers = facade.geefAlleWerknemers();
 
+        werknemers = facade.geefAlleWerknemers();
         werknemers.forEach(w -> {
-            UserItemController item = new UserItemController(w, this::setSelected);
-            teamsList.getChildren().add(item);
+            teamsList.getChildren().add(new UserItemController(w, this::setSelected));
         });
 
         membersList.getChildren().add(noItems());
+
+        addMemberBtn.setOnAction(e -> onNavigeerNaarCreateUser.run());
 
         teamsList.setOnMouseClicked(e -> {
             Node node = (Node) e.getTarget();
@@ -58,8 +65,16 @@ public class CheckUserpage extends VBox {
             }
             clearSelection();
         });
+    }
 
-
+    private void setSelected(UserItemController selectedItem) {
+        this.selected = selectedItem;
+        teamsList.getChildren().forEach(node -> {
+            if (node instanceof UserItemController item) item.setSelected(false);
+        });
+        selectedItem.setSelected(true);
+        membersList.getChildren().clear();
+        membersList.getChildren().add(new UserDetailsController(selectedItem.getWerknemer(), facade, this::refreshList, onNavigeerNaarTeam));
     }
 
     public Pane noItems() {
@@ -71,19 +86,6 @@ public class CheckUserpage extends VBox {
         return v;
     }
 
-    private void setSelected(UserItemController selectedItem) {
-        this.selected = selectedItem;
-
-        teamsList.getChildren().forEach(node -> {
-            if (node instanceof UserItemController item) {
-                item.setSelected(false);
-            }
-        });
-
-        selectedItem.setSelected(true);
-        membersList.getChildren().clear();
-        membersList.getChildren().add(new UserDetailsController(selectedItem.getWerknemer(), facade, this::refreshList));
-    }
 
     private void clearSelection() {
         selected = null;

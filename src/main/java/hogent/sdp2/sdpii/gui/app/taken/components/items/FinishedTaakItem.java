@@ -11,7 +11,7 @@ public class FinishedTaakItem extends HBox {
     @FXML Label title;
     @FXML Label datum;
     public FinishedTaakItem(String title, String datum) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/manager/items/FinishedTaakItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/manager/items/FinishedTaakItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

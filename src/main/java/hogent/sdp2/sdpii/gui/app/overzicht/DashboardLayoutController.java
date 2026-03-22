@@ -1,13 +1,13 @@
 package hogent.sdp2.sdpii.gui.app.overzicht;
 
 import domain.auth.Sessie;
-import hogent.sdp2.sdpii.gui.app.overzicht.afwezigheden.AfwezighedenController;
-import hogent.sdp2.sdpii.gui.app.overzicht.kalender.KalenderController;
-import hogent.sdp2.sdpii.gui.app.overzicht.locatie_info.LocatieInfoController;
-import hogent.sdp2.sdpii.gui.app.overzicht.notificaties.NotificatieController;
-import hogent.sdp2.sdpii.gui.app.overzicht.open_taken.OpenTakenController;
-import hogent.sdp2.sdpii.gui.app.overzicht.uren.UrenController;
-import hogent.sdp2.sdpii.gui.app.overzicht.jouw_uren.JouwUrenController;
+import hogent.sdp2.sdpii.gui.app.overzicht.components.afwezigheden.AfwezighedenController;
+import hogent.sdp2.sdpii.gui.app.overzicht.components.kalender.KalenderController;
+import hogent.sdp2.sdpii.gui.app.overzicht.components.locatie_info.LocatieInfoController;
+import hogent.sdp2.sdpii.gui.app.overzicht.components.notificaties.NotificatieController;
+import hogent.sdp2.sdpii.gui.app.overzicht.components.open_taken.OpenTakenController;
+import hogent.sdp2.sdpii.gui.app.overzicht.components.uren.UrenController;
+import hogent.sdp2.sdpii.gui.app.overzicht.components.jouw_uren.JouwUrenController;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.fxml.FXML;
@@ -67,7 +67,7 @@ public class DashboardLayoutController extends BorderPane {
     @FXML private VBox plantList;
 
     public DashboardLayoutController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/DashboardLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/DashboardLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

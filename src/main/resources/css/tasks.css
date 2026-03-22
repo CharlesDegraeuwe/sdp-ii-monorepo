@@ -47,6 +47,45 @@
     -fx-background-color: transparent;
 }
 
+.assign-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.assign-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.assign-scroll .scroll-bar:vertical {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 999px;
+    -fx-pref-width: 8px;
+}
+
+.assign-scroll .scroll-bar:vertical .track {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 999px;
+}
+
+.assign-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #E31B35;
+    -fx-background-radius: 999px;
+}
+
+.assign-scroll .scroll-bar:vertical .increment-button,
+.assign-scroll .scroll-bar:vertical .decrement-button {
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+}
+
+.assign-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+}
+
 .picker {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 30;
@@ -358,6 +397,42 @@
 
 .taak_checkbox .mark {
     -fx-background-color: transparent;
+}
+
+.filter-checkbox {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888888;
+    -fx-cursor: hand;
+}
+
+.filter-checkbox .box {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 999px;
+    -fx-border-radius: 999px;
+    -fx-border-color: transparent;
+    -fx-pref-width: 18;
+    -fx-pref-height: 18;
+}
+
+.filter-checkbox:selected .box {
+    -fx-background-color: #E31B35;
+    -fx-border-color: transparent;
+}
+
+.filter-checkbox:selected .mark {
+    -fx-background-color: white;
+    -fx-shape: "M 0,4 L 2,7 L 7,0";
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+}
+
+.filter-checkbox .mark {
+    -fx-background-color: transparent;
+}
+
+.filter-checkbox:selected {
+    -fx-text-fill: #E31B35;
 }
 
 .taak_datum {

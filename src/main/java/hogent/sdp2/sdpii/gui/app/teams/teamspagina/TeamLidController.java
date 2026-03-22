@@ -19,7 +19,7 @@ public class TeamLidController extends HBox {
     private int i;
 
     public TeamLidController(WerknemerDTO werknemer, int i) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/teamspagina/TeamLid.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/teamspagina/TeamLid.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

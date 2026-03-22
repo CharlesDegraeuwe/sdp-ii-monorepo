@@ -21,7 +21,7 @@ public class TeamItemController extends HBox {
     @FXML Label teamNaam;
 
     public TeamItemController(TeamDTO team, OnTeamSelected onSelect) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/teamspagina/TeamItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/teamspagina/TeamItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

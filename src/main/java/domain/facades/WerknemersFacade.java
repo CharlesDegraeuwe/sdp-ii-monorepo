@@ -40,21 +40,10 @@ public class WerknemersFacade {
     }
 
     public boolean veranderStatus(int werknemerId, String actie) {
-        try {
-            String url = "http://localhost:8080/api/werknemers/" + werknemerId + "/" + actie;
+        return api.veranderStatus(werknemerId, actie);
+    }
 
-            HttpClient client = HttpClient.newHttpClient();
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .PUT(HttpRequest.BodyPublishers.noBody())
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200 || response.statusCode() == 204;
-        } catch (Exception e) {
-            System.err.println("Fout bij het aanroepen van API: " + e.getMessage());
-            return false;
-        }
+    public boolean registreerWerknemer(String naam, String voornaam, String email, String telefoon, String geboortedatum, String rol) {
+        return api.registreerWerknemer(naam, voornaam, email, telefoon, geboortedatum, rol);
     }
 }

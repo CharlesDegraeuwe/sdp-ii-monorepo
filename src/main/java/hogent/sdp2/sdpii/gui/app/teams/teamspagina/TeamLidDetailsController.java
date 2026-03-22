@@ -20,7 +20,7 @@ public class TeamLidDetailsController extends VBox {
     private WerknemerDTO werknemer;
 
     public TeamLidDetailsController(WerknemerDTO werknemer) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/teamspagina/TeamLidDetails.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/teamspagina/TeamLidDetails.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

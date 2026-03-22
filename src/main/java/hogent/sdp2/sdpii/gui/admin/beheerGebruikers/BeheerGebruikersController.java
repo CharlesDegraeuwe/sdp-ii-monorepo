@@ -30,12 +30,12 @@ public class BeheerGebruikersController extends VBox {
     @FXML private Button btnActiveer;
     @FXML private Button btnDeactiveer;
     @FXML private Button btnBlokkeer;
+    @FXML private ComboBox<String> statusFilterBox;
 
     private final WerknemersFacade service = new WerknemersFacade();
 
 
     private List<WerknemerDTO> alleWerknemers;
-    // TODO filtered list, observable sorted list toevoegen
     // lijstje via decorators omringen wrappers
 
     public BeheerGebruikersController() {
@@ -51,7 +51,6 @@ public class BeheerGebruikersController extends VBox {
 
     @FXML
     public void initialize() {
-        // Controleer of de ingelogde gebruiker admin is
         if (!Sessie.getInstance().isAdmin()) {
             foutLabel.setText("Toegang geweigerd: alleen admins kunnen deze pagina bekijken.");
             foutLabel.setVisible(true);
@@ -67,7 +66,6 @@ public class BeheerGebruikersController extends VBox {
         statusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().status()));
         telefoonCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().telefoonnummer()));
 
-        // Kleur actieve/inactieve rijen
         gebruikersTable.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(WerknemerDTO werknemer, boolean empty) {
@@ -96,6 +94,9 @@ public class BeheerGebruikersController extends VBox {
         });
 
         gebruikersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        statusFilterBox.getItems().addAll("Alle", "Actief", "Inactief", "Geblokkeerd");
+        statusFilterBox.getSelectionModel().selectFirst();
         laadWerknemers();
     }
 
@@ -135,27 +136,26 @@ public class BeheerGebruikersController extends VBox {
         ObservableList<WerknemerDTO> masterData = FXCollections.observableArrayList(alleWerknemers);
 
         FilteredList<WerknemerDTO> filteredData = new FilteredList<>(masterData, p -> true);
+        Runnable updateFilter = () -> {
+            String zoekTekst = zoekField.getText() == null ? "" : zoekField.getText().toLowerCase();
+            String gekozenStatus = statusFilterBox.getValue() == null ? "Alle" : statusFilterBox.getValue();
 
-        zoekField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(werknemer -> {
-                if (newValue == null || newValue.isBlank()) {
-                    return true;
-                }
+                boolean statusMatch = "Alle".equals(gekozenStatus) || gekozenStatus.equalsIgnoreCase(werknemer.status());
 
-                String lowerCaseFilter = newValue.toLowerCase();
+                boolean tekstMatch = zoekTekst.isBlank() ||
+                        (werknemer.voornaam() != null && werknemer.voornaam().toLowerCase().contains(zoekTekst)) ||
+                        (werknemer.naam() != null && werknemer.naam().toLowerCase().contains(zoekTekst)) ||
+                        (werknemer.email() != null && werknemer.email().toLowerCase().contains(zoekTekst));
 
-                if (werknemer.voornaam() != null && werknemer.voornaam().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (werknemer.naam() != null && werknemer.naam().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (werknemer.email() != null && werknemer.email().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
+                return statusMatch && tekstMatch;
             });
-        });
-        SortedList<WerknemerDTO> sortedData = new SortedList<>(filteredData);
+        };
+        zoekField.textProperty().addListener((observable, oldValue, newValue) -> updateFilter.run());
+        statusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> updateFilter.run());
+        updateFilter.run();
 
+        SortedList<WerknemerDTO> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(gebruikersTable.comparatorProperty());
 
         gebruikersTable.setItems(sortedData);

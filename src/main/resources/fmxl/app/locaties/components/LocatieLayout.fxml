@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.shape.Rectangle?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="task_root" stylesheets="@/css/locaties.css" VBox.vgrow="ALWAYS">
+    <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
+        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+        <columnConstraints>
+            <ColumnConstraints percentWidth="70"/>
+            <ColumnConstraints percentWidth="30"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" fillHeight="true"/>
+        </rowConstraints>
+
+        <VBox VBox.vgrow="ALWAYS" fx:id="leftCard" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="card">
+            <HBox styleClass="card_header" alignment="CENTER_LEFT">
+                <padding><Insets top="5" right="25" bottom="5" left="25"/></padding>
+                <Label text="Alle locaties" fx:id="page_title" styleClass="page_title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox alignment="CENTER" spacing="15">
+                    <TextField fx:id="zoekField" promptText="Zoek op naam of locatie..." prefWidth="300"/>
+                    <ComboBox fx:id="statusDropdown" value="Status" id="picker" styleClass="picker">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Actief"/>
+                                <String fx:value="Inactief"/>
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </HBox>
+            </HBox>
+            <TableView fx:id="locatieTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="naamCol" text="Naam" prefWidth="120"/>
+                    <TableColumn fx:id="locatieCol" text="Locatie" prefWidth="200"/>
+                    <TableColumn fx:id="capCol" text="Capaciteit" prefWidth="100"/>
+                    <TableColumn fx:id="statusCol" text="Status" prefWidth="100"/>
+                </columns>
+            </TableView>
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f8f9fa; -fx-background-radius: 0 0 8px 8px; -fx-border-color: #e2e8f0; -fx-border-width: 1px 0 0 0;">
+                <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+
+                <Button fx:id="btnNieuw" text="+ Maak site aan" onAction="#handleNieuw" styleClass="btn-success" minWidth="-Infinity"/>
+                <Button fx:id="btnWijzig" text="Wijzig site" onAction="#handleWijzig" disable="true" styleClass="btn-secondary" minWidth="-Infinity"/>
+                <Button fx:id="btnVerwijder" text="Verwijder site" onAction="#handleVerwijder" disable="true" styleClass="btn-danger" minWidth="-Infinity"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="btnMaakMachine" text="+ Creëer machine" onAction="#handleMaakMachine" disable="true" styleClass="btn-success" minWidth="-Infinity"/>
+            </HBox>
+
+        </VBox>
+        <VBox VBox.vgrow="ALWAYS" fx:id="rightCard" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="card">
+            <HBox styleClass="card_header" spacing="15" alignment="CENTER_LEFT">
+                <padding><Insets top="5" right="25" bottom="5" left="25"/></padding>
+                <FontIcon iconLiteral="mdal-location_on" iconSize="25" iconColor="#E31B35"/>
+                <VBox alignment="CENTER_LEFT">
+                    <Label text="LocatieNaam" styleClass="location_title"/>
+                    <Label text="Locatie" styleClass="location_subtitle"/>
+                </VBox>
+            </HBox>
+            <ScrollPane>
+                <VBox>
+                    <padding><Insets top="5" right="25" bottom="5" left="25"/></padding>
+                    <VBox>
+                        <Label text="Site-info"/>
+                        <VBox>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                        </VBox>
+                    </VBox>
+                    <VBox>
+                        <Label text="Status"/>
+                        <VBox>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                            <Label/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="card" VBox.vgrow="ALWAYS">
+            <VBox spacing="15" VBox.vgrow="ALWAYS">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                <Label text="Site-info" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+
+                <VBox spacing="5">
+                    <Label fx:id="lblDetailNaam" text="Selecteer een locatie..." style="-fx-font-size: 14px;"/>
+                    <TextField fx:id="txtDetailNaam" promptText="naam..." visible="false" managed="false"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label fx:id="lblDetailLocatie" text="-" wrapText="true"/>
+                    <TextField fx:id="txtDetailLocatie" promptText="locatie/adres..." visible="false" managed="false"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label fx:id="lblDetailCapaciteit" text="-"/>
+                    <TextField fx:id="txtDetailCapaciteit" promptText="capaciteit..." visible="false" managed="false"/>
+                </VBox>
+
+                <Label text="Status" style="-fx-font-weight: bold; -fx-font-size: 16px;">
+                    <VBox.margin><Insets top="10"/></VBox.margin>
+                </Label>
+                <VBox spacing="5">
+                    <Label fx:id="lblDetailStatus" text="-"/>
+                    <ComboBox fx:id="cmbDetailStatus" value="status" styleClass="picker" visible="false" managed="false" prefWidth="150"/>
+                </VBox>
+
+                <Label text="Gekoppelde Machines" style="-fx-font-weight: bold; -fx-font-size: 16px;">
+                    <VBox.margin><Insets top="10"/></VBox.margin>
+                </Label>
+                <ListView fx:id="listMachines" VBox.vgrow="ALWAYS" prefHeight="100" styleClass="machine-list"/>
+                </VBox>
+            <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-background-color: #f8f9fa; -fx-background-radius: 0 0 8px 8px;">
+                <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+
+                <Button fx:id="btnWijzigMachine" text="Wijzig machine" onAction="#handleWijzigMachine" disable="true" styleClass="btn-secondary" minWidth="-Infinity"/>
+                <Button fx:id="btnVerwijderMachine" text="Verwijder machine" onAction="#handleVerwijderMachine" disable="true" styleClass="btn-danger" minWidth="-Infinity"/>
+            </HBox>
+
+        </VBox> </GridPane>
+</fx:root>

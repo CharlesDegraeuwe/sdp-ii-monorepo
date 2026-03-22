@@ -16,7 +16,7 @@ public class UserItemController extends HBox {
     private Consumer<UserItemController> onSelect;
 
     public UserItemController(WerknemerDTO werknemer, Consumer<UserItemController> onSelect) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/userspagina/UserItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/userspagina/UserItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

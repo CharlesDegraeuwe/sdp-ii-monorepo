@@ -18,7 +18,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class NotificatiesController extends BorderPane {
-
+    //TODO Wrapper klasse gebruiken
+    //
     @FXML private VBox ongelezenLijst;
     @FXML private VBox alleLijst;
     @FXML private VBox ongelezenSectie;

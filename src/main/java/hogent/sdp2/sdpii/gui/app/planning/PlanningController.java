@@ -33,6 +33,7 @@ public class PlanningController extends BorderPane {
     @FXML private VBox detailPanel;
     @FXML private Label detailTitel;
     @FXML private VBox detailLijst;
+    private VBox geselecteerdeCel;
 
     private enum View { MAAND, WEEK, DAG }
     private View huidigeView = View.MAAND;
@@ -157,6 +158,7 @@ public class PlanningController extends BorderPane {
 
         if (datum.equals(LocalDate.now())) {
             cel.getStyleClass().add("maand-cel-vandaag");
+            geselecteerdeCel = cel;
         }
 
         Label dagNummer = new Label(String.valueOf(datum.getDayOfMonth()));
@@ -168,7 +170,14 @@ public class PlanningController extends BorderPane {
             cel.getChildren().add(maakBadge(a));
         }
 
-        cel.setOnMouseClicked(e -> toonDagDetail(datum));
+        cel.setOnMouseClicked(e -> {
+            if (geselecteerdeCel != null) {
+                geselecteerdeCel.getStyleClass().remove("maand-cel-vandaag");
+            }
+            toonDagDetail(datum);
+            cel.getStyleClass().add("maand-cel-vandaag");
+            geselecteerdeCel = cel;
+        });
         return cel;
     }
 

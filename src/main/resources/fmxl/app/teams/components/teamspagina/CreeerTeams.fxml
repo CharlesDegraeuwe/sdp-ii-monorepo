@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml"
+         styleClass="root-container"
+         stylesheets="@/css/teams.css">
+
+    <HBox styleClass="top-bar">
+        <Label text="Create team:" styleClass="page-title"/>
+    </HBox>
+
+    <HBox styleClass="main-card" VBox.vgrow="ALWAYS">
+
+        <VBox styleClass="left-pane" HBox.hgrow="ALWAYS" minWidth="0">
+            <Label text="Basis Informatie:" styleClass="section-title"/>
+            <TextField fx:id="nameField" promptText="naam" styleClass="input-field"/>
+            <TextArea fx:id="descriptionField" promptText="beschrijving" styleClass="input-area" wrapText="true"/>
+            <HBox styleClass="dropdown-row">
+                <ComboBox fx:id="managerCombo" promptText="manager" styleClass="picker" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <ComboBox fx:id="plantCombo" promptText="locatie" styleClass="picker" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            </HBox>
+            <Button fx:id="createTeamBtn" text="creëer team" styleClass="create-btn" maxWidth="Infinity"/>
+        </VBox>
+
+        <Separator orientation="VERTICAL" styleClass="divider">
+            <HBox.margin><Insets left="24" right="24"/></HBox.margin>
+        </Separator>
+
+        <VBox styleClass="right-pane" HBox.hgrow="ALWAYS" minWidth="0">
+            <HBox styleClass="members-header" alignment="CENTER_LEFT">
+                <Label text="Leden (max 4):" styleClass="section-title"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                <VBox fx:id="employeeListContainer" spacing="8"/>
+            </ScrollPane>
+        </VBox>
+    </HBox>
+</fx:root>

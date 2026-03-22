@@ -433,6 +433,10 @@
     -fx-pref-height: 0;
 }
 
+.user-detail-rol {
+    -fx-font-size: 12px;
+    -fx-text-fill: #555555;
+}
 
 .user-detail-name {
     -fx-font-size: 18px;
@@ -457,6 +461,33 @@
 .btn-danger:hover {
     -fx-background-color: #E31B35;
 }
+
+.btn-blokkeer {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 10 24;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.btn-blokkeer:hover {
+    -fx-background-color: #9c0719;
+}
+
+.btn-deblokkeer {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 10 24;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.btn-deblokkeer:hover {
+    -fx-background-color: #3e6387;
+}
+
 
 .btn-outline {
     -fx-background-color: transparent;

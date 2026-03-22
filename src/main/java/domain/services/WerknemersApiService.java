@@ -113,4 +113,35 @@ public class WerknemersApiService {
             throw new RuntimeException("Fout bij ophalen werknemer", e);
         }
     }
+
+    public boolean veranderStatus(int werknemerId, String actie) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + werknemerId + "/" + actie))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.statusCode() == 200 || response.statusCode() == 204;
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij status wijzigen", e);
+        }
+    }
+
+    public boolean registreerWerknemer(String naam, String voornaam, String email, String telefoon, String geboortedatum, String rol) {
+        try {
+            String jsonBody = String.format(
+                    "{\"naam\":\"%s\",\"voornaam\":\"%s\",\"email\":\"%s\",\"wachtwoord\":\"Wachtwoord123\",\"telefoonnummer\":\"%s\",\"geboortedatum\":\"%s\",\"rol\":\"%s\"}",
+                    naam, voornaam, email, telefoon, geboortedatum, rol
+            );
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.statusCode() == 200 || response.statusCode() == 201;
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij registreren werknemer", e);
+        }
+    }
 }

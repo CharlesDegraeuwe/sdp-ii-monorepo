@@ -42,11 +42,3 @@
     -fx-opacity: 0.5;
     -fx-cursor: default;
 }
-
-.table-row-cell:empty {
-    -fx-background-color: transparent;
-}
-
-.table-row-cell:empty .table-cell {
-    -fx-border-width: 0px;
-}

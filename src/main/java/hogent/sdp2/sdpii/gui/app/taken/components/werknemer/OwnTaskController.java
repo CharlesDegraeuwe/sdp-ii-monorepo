@@ -1,70 +1,155 @@
 package hogent.sdp2.sdpii.gui.app.taken.components.werknemer;
 
 import domain.auth.Sessie;
+import domain.dto.LocatieDTO;
+import domain.dto.TaakDTO;
+import domain.facades.LocatieFacade;
+import domain.facades.TakenFacade;
+import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.FinishedTaakItem;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.TaakItemController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class OwnTaskController extends BorderPane {
     @FXML Label titel_taken;
     @FXML Label afgewerkte_taken_titel;
     @FXML Label edit_button;
-    //containers
     @FXML VBox finished_task_container;
     @FXML VBox belangrijk_container;
     @FXML VBox vandaag_container;
     @FXML VBox morgen_container;
+    @FXML VBox detail_card;
+    @FXML Label detail_deadline;
+    @FXML Label detail_locatie;
+    @FXML TextField detail_titel;
+    @FXML TextArea detail_beschrijving;
+    @FXML Button opslaan_button;
 
-        public OwnTaskController() {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/werknemer/OwnTaskLayout.fxml"));
-            loader.setRoot(this);
-            loader.setController(this);
-            try {
-                loader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    private TaakDTO geselecteerdeTaak;
+    private TakenFacade takenFacade;
+
+    public OwnTaskController(TakenFacade takenFacade) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/werknemer/OwnTaskLayout.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+        try {
+            loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        init(takenFacade);
+    }
+
+    private void toonDetails(TaakDTO taak) {
+        geselecteerdeTaak = taak;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        detail_deadline.setText("Deadline: " + taak.deadline().format(formatter));
+        detail_titel.setText(taak.titel());
+        detail_beschrijving.setText(taak.beschrijving() != null ? taak.beschrijving() : "");
+        LocatieDTO gevondenLocatie = taak.siteId() != null
+                ? new LocatieFacade().vindLocatie(taak.siteId())
+                : null;
+        if (gevondenLocatie != null) {
+            detail_locatie.setText(gevondenLocatie.naam());
+            final int siteId = gevondenLocatie.id();
+            detail_locatie.setOnMouseClicked(e -> Router.getInstance().navigeerNaarLocatie(siteId));
+            detail_locatie.setVisible(true);
+            detail_locatie.setManaged(true);
+        } else {
+            detail_locatie.setVisible(false);
+            detail_locatie.setManaged(false);
+        }
+        zetEditModusUit();
+        detail_card.setVisible(true);
+        detail_card.setManaged(true);
+    }
+
+    public void verbergDetails() {
+        detail_card.setVisible(false);
+        detail_card.setManaged(false);
+        geselecteerdeTaak = null;
+    }
+
+    private void zetEditModusAan() {
+        detail_titel.setEditable(true);
+        detail_beschrijving.setEditable(true);
+        opslaan_button.setVisible(true);
+        opslaan_button.setManaged(true);
+        edit_button.setText("annuleer");
+    }
+
+    private void zetEditModusUit() {
+        detail_titel.setEditable(false);
+        detail_beschrijving.setEditable(false);
+        opslaan_button.setVisible(false);
+        opslaan_button.setManaged(false);
+        edit_button.setText("edit");
+    }
+
+    public void init(TakenFacade takenFacade) {
+        this.takenFacade = takenFacade;
+        titel_taken.setText(Sessie.getInstance().getIngelogdeWerknemer().voornaam() + "'s taken:");
+        afgewerkte_taken_titel.setText(Sessie.getInstance().getIngelogdeWerknemer().voornaam() + "'s afgewerkte taken:");
+        boolean rol = Sessie.getInstance().isWerknemer();
+        edit_button.setVisible(!rol);
+
+        edit_button.setOnMouseClicked(e -> {
+            if (opslaan_button.isVisible()) {
+                zetEditModusUit();
+                if (geselecteerdeTaak != null) toonDetails(geselecteerdeTaak);
+            } else {
+                zetEditModusAan();
             }
-            Init();
+        });
+
+        opslaan_button.setOnMouseClicked(e -> {
+            if (geselecteerdeTaak == null) return;
+            takenFacade.wijzigTaak(geselecteerdeTaak.id(), detail_titel.getText(), detail_beschrijving.getText());
+            zetEditModusUit();
+        });
+
+        List<TaakDTO> taken = takenFacade.geefEigenTaken();
+        LocalDate vandaag = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        for (TaakDTO taak : taken) {
+            String deadlineTekst = "Deadline: " + taak.deadline().format(formatter);
+            if (taak.afgewerkt().equals("nee")) {
+                TaakItemController item = new TaakItemController(taak.titel(), deadlineTekst);
+                item.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> toonDetails(taak));
+                item.setOnVerwijder(() -> {
+                    takenFacade.verwijderTaak(taak.id());
+                    VBox parent = (VBox) item.getParent();
+                    parent.getChildren().remove(item);
+                });
+                item.setOnAfgewerkt(() -> {
+                    takenFacade.markeerAfgewerkt(taak.id());
+                    VBox parent = (VBox) item.getParent();
+                    parent.getChildren().remove(item);
+                    finished_task_container.getChildren().add(new FinishedTaakItem(taak.titel(), "Afgewerkt op " + deadlineTekst));
+                });
+                if (taak.deadline().isBefore(vandaag)) {
+                    belangrijk_container.getChildren().add(item);
+                } else if (taak.deadline().isEqual(vandaag)) {
+                    vandaag_container.getChildren().add(item);
+                } else {
+                    morgen_container.getChildren().add(item);
+                }
+            } else {
+                finished_task_container.getChildren().add(new FinishedTaakItem(taak.titel(), "Afgewerkt op " + deadlineTekst));
+            }
         }
-
-        public void Init() {
-            titel_taken.setText(Sessie.getInstance().getIngelogdeWerknemer().voornaam() + "'s taken:");
-            afgewerkte_taken_titel.setText(Sessie.getInstance().getIngelogdeWerknemer().voornaam() + "'s afgewerkte taken:");
-            boolean rol = Sessie.getInstance().isWerknemer();
-            edit_button.setVisible(!rol);
-
-            // Belangrijke taken
-            belangrijk_container.getChildren().addAll(
-                    new TaakItemController("Verslag opmaken", "Tegen vandaag 12:30"),
-                    new TaakItemController("Shift ruilen met Jan", "Tegen vandaag 15:00"),
-                    new TaakItemController("Inventaris controleren", "Tegen vandaag 17:00")
-            );
-
-            // Taken voor vandaag
-            vandaag_container.getChildren().addAll(
-                    new TaakItemController("Teamvergadering voorbereiden", "Tegen vandaag 10:00"),
-                    new TaakItemController("Nieuwe werknemer inwerken", "Tegen vandaag 14:00"),
-                    new TaakItemController("Weekplanning nakijken", "Tegen vandaag 16:30")
-            );
-
-            // Taken voor morgen
-            morgen_container.getChildren().addAll(
-                    new TaakItemController("Klantbespreking", "Tegen morgen 09:00"),
-                    new TaakItemController("Maandrapport indienen", "Tegen morgen 12:00")
-            );
-
-            // Afgewerkte taken
-            finished_task_container.getChildren().addAll(
-                    new FinishedTaakItem("Loonstroken versturen", "Afgewerkt gisteren 19:25"),
-                    new FinishedTaakItem("Planning week 11 goedkeuren", "Afgewerkt gisteren 16:40"),
-                    new FinishedTaakItem("Verlofaanvraag behandelen", "Afgewerkt eergisteren 14:10"),
-                    new FinishedTaakItem("Veiligheidscontrole uitvoeren", "Afgewerkt eergisteren 11:00")
-            );
-        }
+    }
 }

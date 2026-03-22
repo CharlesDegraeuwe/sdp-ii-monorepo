@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="StackPane" xmlns:fx="http://javafx.com/fxml" styleClass="root-container">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <!-- Page title -->
+    <Label text="Teams:" styleClass="page-title"/>
+
+    <!-- Main card -->
+    <HBox fx:id="mainCard" styleClass="main-card" spacing="24" VBox.vgrow="ALWAYS">
+
+        <VBox fx:id="leftColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
+            <Label text="Teams:" styleClass="section-title"/>
+            <ScrollPane styleClass="scroll-pane"  fitToWidth="true" VBox.vgrow="ALWAYS">
+                <VBox fx:id="teamsList" spacing="8"  style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+            </ScrollPane>
+        </VBox>
+
+        <!-- Divider -->
+        <Separator orientation="VERTICAL" styleClass="divider"/>
+
+        <!-- RIGHT: Members list -->
+        <VBox fx:id="rightColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="members-header">
+                <Label text="Leden:" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <VBox styleClass="create-employee-box" fx:id="addMembersContainer">
+                    <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-plus" iconSize="16" iconColor="WHITE"/>
+                        </graphic>
+                    </Button>
+                    <Label text="voeg leden toe" styleClass="icon-label"/>
+                </VBox>
+            </HBox>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                <VBox fx:id="membersList" spacing="8"/>
+            </ScrollPane>
+        </VBox>
+
+    </HBox>
+</fx:root>
