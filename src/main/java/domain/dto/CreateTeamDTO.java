@@ -1,11 +1,11 @@
 package domain.dto;
 
-public record TeamDTO(
-        int id,
+import java.util.List;
+
+public record CreateTeamDTO(
         String naam,
         String beschrijving,
         Integer managerId,
-        String managerNaam,
         Integer siteId,
-        String siteNaam
+        List<TeamLidDTO> leden
 ) {}

@@ -40,58 +40,10 @@ public class WerknemersFacade {
     }
 
     public boolean veranderStatus(int werknemerId, String actie) {
-        try {
-            String url = "http://localhost:8080/api/werknemers/" + werknemerId + "/" + actie;
-
-            HttpClient client = HttpClient.newHttpClient();
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .PUT(HttpRequest.BodyPublishers.noBody())
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200 || response.statusCode() == 204;
-        } catch (Exception e) {
-            System.err.println("Fout bij het aanroepen van API: " + e.getMessage());
-            return false;
-        }
+        return api.veranderStatus(werknemerId, actie);
     }
 
     public boolean registreerWerknemer(String naam, String voornaam, String email, String telefoon, String geboortedatum, String rol) {
-        try {
-            String jsonBody = String.format(
-                    "{" +
-                            "\"naam\": \"%s\"," +
-                            "\"voornaam\": \"%s\"," +
-                            "\"email\": \"%s\"," +
-                            "\"wachtwoord\": \"Wachtwoord123\"," +
-                            "\"telefoonnummer\": \"%s\"," +
-                            "\"geboortedatum\": \"%s\"," +
-                            "\"rol\": \"%s\"" +
-                            "}",
-                    naam, voornaam, email, telefoon, geboortedatum, rol
-            );
-
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8080/api/werknemers"))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200 || response.statusCode() == 201) {
-                return true;
-            } else {
-                System.err.println("Fout bij registreren. Server antwoord: " + response.body());
-                return false;
-            }
-
-        } catch (Exception e) {
-            System.err.println("Verbindingsfout: " + e.getMessage());
-            return false;
-        }
+        return api.registreerWerknemer(naam, voornaam, email, telefoon, geboortedatum, rol);
     }
 }

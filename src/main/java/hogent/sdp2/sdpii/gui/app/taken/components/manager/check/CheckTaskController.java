@@ -50,7 +50,7 @@ public class CheckTaskController extends BorderPane {
 
     private static final String ALLE_TOEGEWEZEN = "Alle taken";
     private static final LocatieDTO ALLE_LOCATIES = new LocatieDTO(-1, "Alle locaties", null, null, null);
-    private static final TeamDTO ALLE_TEAMS = new TeamDTO(-1, "Alle teams");
+    private static final TeamDTO ALLE_TEAMS = new TeamDTO(-1, "Alle teams", null, null, null, null, null);
     private static final WerknemerDTO ALLE_WERKNEMERS = new WerknemerDTO(-1, "Alle werknemers", "", null, null, null, null, null);
 
     private TaakDTO geselecteerdeTaak;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="VBox" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         spacing="12">
+    <padding>
+        <Insets top="5" right="16" bottom="16" left="16"/>
+    </padding>
+
+    <Label text="Info" styleClass="section-title"/>
+    <HBox alignment="CENTER">
+        <Label fx:id="naam" styleClass="user-detail-name"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="rol" styleClass="user-detail-rol"/>
+    </HBox>
+
+    <Label fx:id="email" styleClass="user-detail-value"/>
+    <Label fx:id="telefoon" styleClass="user-detail-value"/>
+
+    <Separator/>
+    <Label text="Teams" styleClass="section-title"/>
+    <ScrollPane styleClass="scroll-pane">
+        <VBox fx:id="teamsContainer" spacing="8"/>
+    </ScrollPane>
+    <Separator/>
+
+    <Label fx:id="status" styleClass="user-detail-value"/>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <Button fx:id="blockBtn"  maxWidth="Infinity"/>
+</fx:root>

@@ -1,6 +1,5 @@
 package hogent.sdp2.sdpii.gui.app.locaties.components;
 
-
 import domain.dto.LocatieDTO;
 import domain.dto.MachineAanmaakDTO;
 import domain.facades.LocatieFacade;
@@ -63,6 +62,7 @@ public class LocatiesLayoutController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         locatieTable.setPlaceholder(new Label(""));
         locatieTable.setFixedCellSize(40);
 
@@ -448,5 +448,6 @@ public class LocatiesLayoutController extends VBox {
                 }
             }
         }
+
     }
 }
