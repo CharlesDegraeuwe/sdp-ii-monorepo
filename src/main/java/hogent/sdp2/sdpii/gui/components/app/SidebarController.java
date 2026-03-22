@@ -119,7 +119,7 @@ public class SidebarController extends VBox {
     }
 
     private void showAdminOnly() {
-        configureVisibility(Set.of(admin));
+        configureVisibility(Set.of(admin, planning, tasks, plants, absense, teams));
         setActive(admin);
     }
 

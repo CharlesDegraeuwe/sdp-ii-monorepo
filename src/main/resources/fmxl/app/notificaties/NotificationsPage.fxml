@@ -6,7 +6,7 @@
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page" stylesheets="@/css/notificaties.css">
 
     <center>
-        <ScrollPane fitToWidth="true" maxWidth="600" hbarPolicy="NEVER" styleClass="scroll-pane">
+        <ScrollPane fitToWidth="true" maxWidth="850" hbarPolicy="NEVER" styleClass="scroll-pane">
             <content>
                 <VBox spacing="30" alignment="TOP_CENTER">
                     <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>

@@ -33,6 +33,7 @@ public class PlanningController extends BorderPane {
     @FXML private VBox detailPanel;
     @FXML private Label detailTitel;
     @FXML private VBox detailLijst;
+    private VBox geselecteerdeCel;
 
     private enum View { MAAND, WEEK, DAG }
     private View huidigeView = View.MAAND;
@@ -64,7 +65,6 @@ public class PlanningController extends BorderPane {
         WerknemerDTO werknemer = Sessie.getInstance().getIngelogdeWerknemer();
         if (werknemer == null) return;
 
-        // Haal breed genoeg op: een jaar rondom vandaag
         LocalDate van = LocalDate.now().minusMonths(3);
         LocalDate tot = LocalDate.now().plusMonths(9);
 
@@ -99,7 +99,6 @@ public class PlanningController extends BorderPane {
 
         periodeLabel.setText(huidigeDatum.format(MAAND_FORMAT));
 
-        // Dag headers — eigen grid
         GridPane headerGrid = maakGrid(7);
         String[] dagen = {"ma", "di", "wo", "do", "vr", "za", "zo"};
         for (int i = 0; i < dagen.length; i++) {
@@ -111,7 +110,6 @@ public class PlanningController extends BorderPane {
         }
         kalenderContainer.getChildren().add(headerGrid);
 
-        // Kalender cellen — APARTE grid
         GridPane celGrid = maakGrid(7);
         kalenderContainer.getChildren().add(celGrid);
 
@@ -154,27 +152,32 @@ public class PlanningController extends BorderPane {
         cel.setPadding(new Insets(8));
         cel.setMinHeight(80);
 
-        // Weekend tint
         if (datum.getDayOfWeek() == DayOfWeek.SATURDAY || datum.getDayOfWeek() == DayOfWeek.SUNDAY) {
             cel.getStyleClass().add("maand-cel-weekend");
         }
 
         if (datum.equals(LocalDate.now())) {
             cel.getStyleClass().add("maand-cel-vandaag");
+            geselecteerdeCel = cel;
         }
 
         Label dagNummer = new Label(String.valueOf(datum.getDayOfMonth()));
         dagNummer.getStyleClass().add("dag-nummer");
         cel.getChildren().add(dagNummer);
 
-        // Afwezigheden op deze dag
         List<AfwezigheidsOverzichtDTO> opDag = afwezighedenOpDag(datum);
         for (AfwezigheidsOverzichtDTO a : opDag) {
-            Label badge = maakBadge(a);
-            cel.getChildren().add(badge);
+            cel.getChildren().add(maakBadge(a));
         }
 
-        cel.setOnMouseClicked(e -> toonDagDetail(datum));
+        cel.setOnMouseClicked(e -> {
+            if (geselecteerdeCel != null) {
+                geselecteerdeCel.getStyleClass().remove("maand-cel-vandaag");
+            }
+            toonDagDetail(datum);
+            cel.getStyleClass().add("maand-cel-vandaag");
+            geselecteerdeCel = cel;
+        });
         return cel;
     }
 
@@ -182,7 +185,6 @@ public class PlanningController extends BorderPane {
 
     private void tekenWeek() {
         kalenderContainer.getChildren().clear();
-
 
         LocalDate maandag = huidigeDatum.with(DayOfWeek.MONDAY);
         LocalDate zondag = maandag.plusDays(6);
@@ -218,8 +220,7 @@ public class PlanningController extends BorderPane {
             kolom.getChildren().add(leeg);
         } else {
             for (AfwezigheidsOverzichtDTO a : opDag) {
-                VBox kaart = maakWeekKaart(a);
-                kolom.getChildren().add(kaart);
+                kolom.getChildren().add(maakWeekKaart(a));
             }
         }
 
@@ -229,12 +230,16 @@ public class PlanningController extends BorderPane {
 
     private VBox maakWeekKaart(AfwezigheidsOverzichtDTO a) {
         VBox kaart = new VBox(2);
-        kaart.getStyleClass().add(a.type().equals("Ziekte") ? "week-kaart-ziekte" : "week-kaart-verlof");
+        boolean isWachten = a.status() != null && a.status().equals("In afwachting");
+        String stijl = a.type().equals("Ziekte") ? "week-kaart-ziekte"
+                : (isWachten ? "week-kaart-verlof-wachten" : "week-kaart-verlof");
+        kaart.getStyleClass().add(stijl);
         kaart.setPadding(new Insets(6, 8, 6, 8));
 
         Label naam = new Label(a.voornaam() + " " + a.naam());
         naam.getStyleClass().add("week-kaart-naam");
-        Label type = new Label(a.type().equals("Ziekte") ? "🤒 Ziekte" : "🌴 Verlof" + (a.status() != null && a.status().equals("In afwachting") ? " (wachten)" : ""));
+        Label type = new Label(a.type().equals("Ziekte") ? "Ziekte"
+                : (isWachten ? "Verlof (wachten)" : "Verlof"));
         type.getStyleClass().add("week-kaart-type");
 
         kaart.getChildren().addAll(naam, type);
@@ -260,15 +265,14 @@ public class PlanningController extends BorderPane {
             dagView.getChildren().add(leeg);
         } else {
             for (AfwezigheidsOverzichtDTO a : opDag) {
-                HBox rij = maakDetailRij(a);
-                dagView.getChildren().add(rij);
+                dagView.getChildren().add(maakDetailRij(a));
             }
         }
 
         kalenderContainer.getChildren().add(dagView);
     }
 
-    // ─── DAG DETAIL (klik op dag in maand/week) ──────────────────────────────────
+    // ─── DAG DETAIL ──────────────────────────────────────────────────────────────
 
     private void toonDagDetail(LocalDate datum) {
         List<AfwezigheidsOverzichtDTO> opDag = afwezighedenOpDag(datum);
@@ -289,11 +293,14 @@ public class PlanningController extends BorderPane {
 
     private HBox maakDetailRij(AfwezigheidsOverzichtDTO a) {
         HBox rij = new HBox(12);
-        rij.getStyleClass().add(a.type().equals("Ziekte") ? "detail-rij-ziekte" : "detail-rij-verlof");
+        boolean isWachten = a.status() != null && a.status().equals("In afwachting");
+        String stijl = a.type().equals("Ziekte") ? "detail-rij-ziekte"
+                : (isWachten ? "detail-rij-verlof-wachten" : "detail-rij-verlof");
+        rij.getStyleClass().add(stijl);
         rij.setAlignment(Pos.CENTER_LEFT);
         rij.setPadding(new Insets(10, 14, 10, 14));
 
-        Label icon = new Label(a.type().equals("Ziekte") ? "🤒" : "🌴");
+        Label icon = new Label(a.type().equals("Ziekte") ? "Z" : "V");
         icon.setStyle("-fx-font-size: 18px;");
 
         VBox info = new VBox(2);
@@ -327,9 +334,12 @@ public class PlanningController extends BorderPane {
     }
 
     private Label maakBadge(AfwezigheidsOverzichtDTO a) {
-        String tekst = a.voornaam() + (a.type().equals("Ziekte") ? " 🤒" : " 🌴");
+        boolean isWachten = a.status() != null && a.status().equals("In afwachting");
+        String tekst = a.voornaam() + (a.type().equals("Ziekte") ? " (Z)" : " (V)");
         Label badge = new Label(tekst);
-        badge.getStyleClass().add(a.type().equals("Ziekte") ? "badge-ziekte" : "badge-verlof");
+        String stijl = a.type().equals("Ziekte") ? "badge-ziekte"
+                : (isWachten ? "badge-verlof-wachten" : "badge-verlof");
+        badge.getStyleClass().add(stijl);
         badge.setMaxWidth(Double.MAX_VALUE);
         badge.setWrapText(false);
         return badge;

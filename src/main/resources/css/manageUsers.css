@@ -1,5 +1,6 @@
+
 .btn-activeer {
-    -fx-background-color: #E31B35;
+    -fx-background-color: #4CAF50;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 8 15 8 15;
@@ -8,11 +9,11 @@
 }
 
 .btn-activeer:hover {
-    -fx-background-color: #c7182f;
+    -fx-background-color: #45a049;
 }
 
 .btn-deactiveer {
-    -fx-background-color: #E31B35;
+    -fx-background-color: #ff9800;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-padding: 8 15 8 15;
@@ -21,7 +22,7 @@
 }
 
 .btn-deactiveer:hover {
-    -fx-background-color: #c7182f;
+    -fx-background-color: #e68a00;
 }
 
 .btn-blokkeer {
@@ -34,18 +35,10 @@
 }
 
 .btn-blokkeer:hover {
-    -fx-background-color: #c7182f;
+    -fx-background-color: #da190b;
 }
 
 .button:disabled {
     -fx-opacity: 0.5;
     -fx-cursor: default;
-}
-
-.table-row-cell:empty {
-    -fx-background-color: transparent;
-}
-
-.table-row-cell:empty .table-cell {
-    -fx-border-width: 0px;
 }

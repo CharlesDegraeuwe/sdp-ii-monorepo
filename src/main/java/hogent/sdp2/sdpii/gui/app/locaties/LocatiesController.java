@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.locaties;
 
+import hogent.sdp2.sdpii.gui.app.locaties.components.LocatiesLayoutController;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -8,7 +9,11 @@ import java.io.IOException;
 
 public class LocatiesController extends BorderPane {
     public LocatiesController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/locaties/PlantsPage.fxml"));
+        this(null);
+    }
+
+    public LocatiesController(Integer selecteerSiteId) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/locaties/LocatiePage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -18,5 +23,8 @@ public class LocatiesController extends BorderPane {
         }
 
         setTop(new PageTitleController("Locaties"));
+        LocatiesLayoutController layout = new LocatiesLayoutController();
+        setCenter(layout);
+        if (selecteerSiteId != null) layout.selecteerLocatieBijId(selecteerSiteId);
     }
 }

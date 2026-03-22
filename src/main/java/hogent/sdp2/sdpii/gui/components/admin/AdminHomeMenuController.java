@@ -28,7 +28,11 @@ public class AdminHomeMenuController extends VBox {
             throw new RuntimeException(e);
         }
 
-        welcome_msg.setText("Welcome, " + Sessie.getInstance().getIngelogdeWerknemer().voornaam());
+        if(!Sessie.getInstance().isAdmin()) {
+            rgstr_mngr.setVisible(false);
+            rgstr_mngr.setManaged(false);
+        }
+        welcome_msg.setText("Welkom, " + Sessie.getInstance().getIngelogdeWerknemer().voornaam());
         this.Router();
     }
 

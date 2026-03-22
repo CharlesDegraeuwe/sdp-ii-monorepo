@@ -81,7 +81,7 @@
 
 /* ── Submit knop ── */
 .absense-report-btn {
-    -fx-background-color: #2c3e50;
+    -fx-background-color: #E31B35;
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
@@ -91,7 +91,7 @@
 }
 
 .absense-report-btn:hover {
-    -fx-background-color: #3d5166;
+    -fx-background-color: #ba162b;
 }
 
 /* ── Feedback ── */
@@ -258,4 +258,18 @@
     -fx-background-color: transparent;
     -fx-text-fill: #2c3e50;
     -fx-font-weight: bold;
+}
+.teamlid-knop {
+    -fx-background-color: #f6f6f6;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-text-fill: #2c3e50;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.teamlid-knop:hover {
+    -fx-background-color: #eeeeee;
 }

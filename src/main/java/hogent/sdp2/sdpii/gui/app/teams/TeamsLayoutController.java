@@ -1,5 +1,8 @@
 package hogent.sdp2.sdpii.gui.app.teams;
 
+import domain.facades.TeamFacade;
+import domain.facades.WerknemersFacade;
+import hogent.sdp2.sdpii.gui.admin.creeerMedewerker.CreeerMedewerkerController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.CheckTeamsController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.CreateTeamsController;
 import hogent.sdp2.sdpii.gui.app.teams.userspagina.CheckUserpage;
@@ -25,12 +28,15 @@ public class TeamsLayoutController extends VBox {
     private CreateTeamsController createTeamsController;
     private CheckUserpage checkUserpage;
     private CreateUserPage createUserPage;
+    private TeamFacade tm;
+    private WerknemersFacade wm;
 
     private String tab = "check";
     private String pagina = "teams";
 
-    public TeamsLayoutController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/TeamsLayout.fxml"));
+
+    public TeamsLayoutController(TeamFacade tm, WerknemersFacade wm) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/TeamsLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -38,20 +44,21 @@ public class TeamsLayoutController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        this.tm = tm;
+        this.wm = wm;
+
         init();
     }
 
     public void init() {
-        checkTeamsController = new CheckTeamsController();
+        checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
         outer_container.setCenter(checkTeamsController);
-
-        // Tab knoppen
         checkKnop.setOnMouseClicked(e -> {
             if (pagina.equals("teams")) {
-                if (checkTeamsController == null) checkTeamsController = new CheckTeamsController();
+                checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
                 outer_container.setCenter(checkTeamsController);
             } else {
-                if (checkUserpage == null) checkUserpage = new CheckUserpage();
+                checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
                 outer_container.setCenter(checkUserpage);
             }
             tab = "check";
@@ -60,21 +67,19 @@ public class TeamsLayoutController extends VBox {
 
         creeerKnop.setOnMouseClicked(e -> {
             if (pagina.equals("teams")) {
-                if (createTeamsController == null) createTeamsController = new CreateTeamsController();
+                createTeamsController = new CreateTeamsController(tm);
                 outer_container.setCenter(createTeamsController);
             } else {
-                if (createUserPage == null) createUserPage = new CreateUserPage();
-                outer_container.setCenter(createUserPage);
+                outer_container.setCenter(new CreeerMedewerkerController());
             }
             tab = "create";
             updateTabs();
         });
 
-        // Pagina knoppen
         teamsPagina.setOnMouseClicked(e -> {
             pagina = "teams";
             tab = "check";
-            if (checkTeamsController == null) checkTeamsController = new CheckTeamsController();
+            checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
             outer_container.setCenter(checkTeamsController);
             updatePages();
             updateTabs();
@@ -83,13 +88,40 @@ public class TeamsLayoutController extends VBox {
         usersPagina.setOnMouseClicked(e -> {
             pagina = "users";
             tab = "check";
-            if (checkUserpage == null) checkUserpage = new CheckUserpage();
+            checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
             outer_container.setCenter(checkUserpage);
             updatePages();
             updateTabs();
         });
+
         updateTabs();
         updatePages();
+    }
+
+    private void navigeerNaarUser(int werknemerId) {
+        pagina = "users";
+        tab = "check";
+        checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser, werknemerId);
+        outer_container.setCenter(checkUserpage);
+        updatePages();
+        updateTabs();
+    }
+
+    private void navigeerNaarTeam(int teamId) {
+        pagina = "teams";
+        tab = "check";
+        checkTeamsController = new CheckTeamsController(tm, teamId, this::navigeerNaarUser);
+        outer_container.setCenter(checkTeamsController);
+        updatePages();
+        updateTabs();
+    }
+
+    private void navigeerNaarCreateUser() {
+        pagina = "users";
+        tab = "create";
+        outer_container.setCenter(new CreeerMedewerkerController());
+        updatePages();
+        updateTabs();
     }
 
     public void updateTabs() {
