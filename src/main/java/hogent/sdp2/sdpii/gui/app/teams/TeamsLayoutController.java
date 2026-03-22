@@ -46,16 +46,16 @@ public class TeamsLayoutController extends VBox {
         }
         this.tm = tm;
         this.wm = wm;
+
         init();
     }
 
     public void init() {
-        checkTeamsController = new CheckTeamsController(tm);
+        checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
         outer_container.setCenter(checkTeamsController);
-
         checkKnop.setOnMouseClicked(e -> {
             if (pagina.equals("teams")) {
-                checkTeamsController = new CheckTeamsController(tm);
+                checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
                 outer_container.setCenter(checkTeamsController);
             } else {
                 checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
@@ -79,7 +79,7 @@ public class TeamsLayoutController extends VBox {
         teamsPagina.setOnMouseClicked(e -> {
             pagina = "teams";
             tab = "check";
-            checkTeamsController = new CheckTeamsController(tm);
+            checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
             outer_container.setCenter(checkTeamsController);
             updatePages();
             updateTabs();
@@ -98,10 +98,19 @@ public class TeamsLayoutController extends VBox {
         updatePages();
     }
 
+    private void navigeerNaarUser(int werknemerId) {
+        pagina = "users";
+        tab = "check";
+        checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser, werknemerId);
+        outer_container.setCenter(checkUserpage);
+        updatePages();
+        updateTabs();
+    }
+
     private void navigeerNaarTeam(int teamId) {
         pagina = "teams";
         tab = "check";
-        checkTeamsController = new CheckTeamsController(tm, teamId);
+        checkTeamsController = new CheckTeamsController(tm, teamId, this::navigeerNaarUser);
         outer_container.setCenter(checkTeamsController);
         updatePages();
         updateTabs();

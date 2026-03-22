@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.teams.teamspagina;
+package hogent.sdp2.sdpii.gui.app.teams.teamspagina.components;
 
 public enum Colors {
     BLUE,

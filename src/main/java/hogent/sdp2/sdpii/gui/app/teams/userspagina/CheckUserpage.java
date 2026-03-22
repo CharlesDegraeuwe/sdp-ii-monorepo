@@ -2,6 +2,8 @@ package hogent.sdp2.sdpii.gui.app.teams.userspagina;
 
 import domain.dto.WerknemerDTO;
 import domain.facades.WerknemersFacade;
+import hogent.sdp2.sdpii.gui.app.teams.userspagina.components.UserDetailsController;
+import hogent.sdp2.sdpii.gui.app.teams.userspagina.components.UserItemController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,6 +29,7 @@ public class CheckUserpage extends VBox {
     @FXML VBox rightColumn;
     @FXML Button addMemberBtn;
 
+
     public CheckUserpage(WerknemersFacade facade, Consumer<Integer> onNavigeerNaarTeam, Runnable onNavigeerNaarCreateUser) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/userspagina/CheckUsers.fxml"));
         loader.setRoot(this);
@@ -40,6 +43,17 @@ public class CheckUserpage extends VBox {
         this.onNavigeerNaarTeam = onNavigeerNaarTeam;
         this.onNavigeerNaarCreateUser = onNavigeerNaarCreateUser;
         init();
+    }
+
+    //auto selectie constructor
+    public CheckUserpage(WerknemersFacade facade, Consumer<Integer> onNavigeerNaarTeam, Runnable onNavigeerNaarCreateUser, int autoSelectWerknemerId) {
+        this(facade, onNavigeerNaarTeam, onNavigeerNaarCreateUser);
+        for (Node node : teamsList.getChildren()) {
+            if (node instanceof UserItemController item && item.getWerknemer().id() == autoSelectWerknemerId) {
+                setSelected(item);
+                break;
+            }
+        }
     }
 
     public void init() {

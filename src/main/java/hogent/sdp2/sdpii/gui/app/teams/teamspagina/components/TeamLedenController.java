@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.teams.teamspagina;
+package hogent.sdp2.sdpii.gui.app.teams.teamspagina.components;
 
 import domain.dto.WerknemerDTO;
 import domain.facades.TeamFacade;
@@ -17,16 +17,18 @@ import lombok.Getter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TeamLedenController extends VBox {
     private int teamID;
     private TeamFacade facade;
     @Getter private List<WerknemerDTO> teamleden;
     private Runnable onRefresh;
+    private Consumer<Integer> onNavigeerNaarUser;
 
     @FXML VBox container;
 
-    public TeamLedenController(int teamId, TeamFacade facade, Runnable onRefresh) {
+    public TeamLedenController(int teamId, TeamFacade facade, Runnable onRefresh, Consumer<Integer> onNavigeerNaarUser) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/teamspagina/TeamLeden.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -38,6 +40,7 @@ public class TeamLedenController extends VBox {
         this.teamID = teamId;
         this.facade = facade;
         this.onRefresh = onRefresh;
+        this.onNavigeerNaarUser = onNavigeerNaarUser;
         showLeden();
     }
 
@@ -45,8 +48,14 @@ public class TeamLedenController extends VBox {
         container.getChildren().clear();
         teamleden = facade.getTeamLeden(teamID);
         for (int i = 0; i < teamleden.size(); i++) {
-            container.getChildren().add(new TeamLidController(teamleden.get(i), i));
+            container.getChildren().add(new TeamLidController(
+                    teamleden.get(i), i, teamID, facade, this::refresh, onNavigeerNaarUser));
         }
+    }
+
+    private void refresh() {
+        showLeden();
+        if (onRefresh != null) onRefresh.run();
     }
 
     public void showBeschikbareWerknemers() {

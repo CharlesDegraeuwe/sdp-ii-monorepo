@@ -151,4 +151,16 @@ public class TeamApiService {
             throw new RuntimeException("Fout bij ophalen teams van werknemer", e);
         }
     }
+
+    public void verwijderLid(int teamId, int werknemerId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + teamId + "/" + werknemerId))
+                    .DELETE()
+                    .build();
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij verwijderen lid", e);
+        }
+    }
 }

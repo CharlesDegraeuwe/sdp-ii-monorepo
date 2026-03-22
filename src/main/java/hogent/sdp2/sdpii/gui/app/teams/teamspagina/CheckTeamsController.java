@@ -1,8 +1,9 @@
 package hogent.sdp2.sdpii.gui.app.teams.teamspagina;
 
 import domain.dto.TeamDTO;
-import domain.dto.WerknemerDTO;
 import domain.facades.TeamFacade;
+import hogent.sdp2.sdpii.gui.app.teams.teamspagina.components.TeamItemController;
+import hogent.sdp2.sdpii.gui.app.teams.teamspagina.components.TeamLedenController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,6 +13,7 @@ import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CheckTeamsController extends StackPane {
     private TeamFacade tm;
@@ -28,17 +30,9 @@ public class CheckTeamsController extends StackPane {
 
     private TeamLedenController currentLedenController;
     private StackPane overlay;
+    private Consumer<Integer> onNavigeerNaarUser;
 
-    public CheckTeamsController(TeamFacade tm, int autoSelectTeamId) {
-        this(tm);
-        for (Node node : teamsList.getChildren()) {
-            if (node instanceof TeamItemController item && item.getTeam().id() == autoSelectTeamId) {
-                setSelected(item);
-                break;
-            }
-        }
-    }
-
+    //dus deze is als ge de pagina nrml laadt
     public CheckTeamsController(TeamFacade tm) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/teamspagina/CheckTeams.fxml"));
         loader.setRoot(this);
@@ -51,6 +45,23 @@ public class CheckTeamsController extends StackPane {
         this.tm = tm;
         init();
     }
+
+    //dit is als ge van t useroverzicht komt
+    public CheckTeamsController(TeamFacade tm, Consumer<Integer> onNavigeerNaarUser) {
+        this(tm);
+        this.onNavigeerNaarUser = onNavigeerNaarUser;
+    }
+
+    public CheckTeamsController(TeamFacade tm, int autoSelectTeamId, Consumer<Integer> onNavigeerNaarUser) {
+        this(tm, onNavigeerNaarUser);
+        for (Node node : teamsList.getChildren()) {
+            if (node instanceof TeamItemController item && item.getTeam().id() == autoSelectTeamId) {
+                setSelected(item);
+                break;
+            }
+        }
+    }
+
 
     public void init() {
         addMembersContainer.setVisible(false);
@@ -91,7 +102,8 @@ public class CheckTeamsController extends StackPane {
         });
         selectedItem.setSelected(true);
         membersList.getChildren().clear();
-        currentLedenController = new TeamLedenController(selectedItem.getTeam().id(), tm, this::refreshTeams);
+        currentLedenController = new TeamLedenController(
+                selectedItem.getTeam().id(), tm, this::refreshTeams, onNavigeerNaarUser);
         membersList.getChildren().add(currentLedenController);
         addMembersContainer.setVisible(currentLedenController.getTeamleden().size() < 4);
     }

@@ -51,5 +51,9 @@ public class TeamFacade {
     public List<TeamDTO> getTeamsVanWerknemer(int werknemerId) {
         return api.getTeamsVanWerknemer(werknemerId);
     }
+
+    public void verwijderLid(int teamId, int werknemerId) {
+        api.verwijderLid(teamId, werknemerId);
+    }
 }
 

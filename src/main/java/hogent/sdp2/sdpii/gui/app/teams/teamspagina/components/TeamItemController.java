@@ -1,4 +1,4 @@
-package hogent.sdp2.sdpii.gui.app.teams.teamspagina;
+package hogent.sdp2.sdpii.gui.app.teams.teamspagina.components;
 
 import domain.dto.TeamDTO;
 import javafx.fxml.FXML;
