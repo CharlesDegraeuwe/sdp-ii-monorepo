@@ -34,4 +34,9 @@ public class TeamController {
     public  List<WerknemerResponseDTO> voegToeAanTeam(@PathVariable Integer teamId, @PathVariable Integer werknemerId) {
         return teamService.voegToeAanTeam(teamId, werknemerId);
     }
+
+    @GetMapping("/{teamId}/beschikbaar")
+    public List<WerknemerResponseDTO> geefBeschikbareWerknemers(@PathVariable Integer teamId) {
+        return teamService.geefBeschikbareWerknemers(teamId);
+    }
 }

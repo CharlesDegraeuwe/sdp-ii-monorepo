@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface TeamwerknemerRepository extends JpaRepository<Teamwerknemer, TeamwerknemerId> {
     List<Teamwerknemer> findByWerknemerId(Integer werknemerId);
     List<Teamwerknemer> findByTeamId(Integer teamId);
+    long countByTeamId(Integer teamId);
+    boolean existsByTeamIdAndWerknemerId(Integer teamId, Integer werknemerId);
 
     @Query("SELECT tw FROM Teamwerknemer tw WHERE tw.team.id = :teamId AND tw.werknemer.rol = 'Manager'")
     Optional<Teamwerknemer> findGoedkeurderVanTeam(@Param("teamId") Integer teamId);
