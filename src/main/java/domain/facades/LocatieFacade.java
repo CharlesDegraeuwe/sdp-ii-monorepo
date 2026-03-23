@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import domain.dto.LocatieDTO;
 import domain.dto.MachineAanmaakDTO;
+import domain.services.LogService;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -75,7 +76,9 @@ public class LocatieFacade {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return response.statusCode() == 200 || response.statusCode() == 204;
+            boolean succes = response.statusCode() == 200 || response.statusCode() == 204;
+            if (succes) LogService.log("DELETE", "locatie", "Locatie verwijderd – id: " + id);
+            return succes;
 
         } catch (Exception e) {
             System.err.println("Fout bij verwijderen: " + e.getMessage());
@@ -96,8 +99,9 @@ public class LocatieFacade {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            return response.statusCode() == 200;
+            boolean succes = response.statusCode() == 200;
+            if (succes) LogService.log("UPDATE", "locatie", "Locatie gewijzigd – id: " + id + ", naam: " + gewijzigdeLocatie.naam());
+            return succes;
 
         } catch (Exception e) {
             System.err.println("Fout bij wijzigen: " + e.getMessage());
@@ -117,8 +121,9 @@ public class LocatieFacade {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            return response.statusCode() == 200 || response.statusCode() == 201;
+            boolean succes = response.statusCode() == 200 || response.statusCode() == 201;
+            if (succes) LogService.log("CREATE", "locatie", "Locatie aangemaakt – naam: " + nieuweLocatie.naam() + ", locatie: " + nieuweLocatie.locatie());
+            return succes;
 
         } catch (Exception e) {
             System.err.println("Fout bij aanmaken: " + e.getMessage());
@@ -138,7 +143,9 @@ public class LocatieFacade {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200 || response.statusCode() == 201;
+            boolean succes = response.statusCode() == 200 || response.statusCode() == 201;
+            if (succes) LogService.log("CREATE", "machine", "Machine aangemaakt – siteId: " + dto.siteId());
+            return succes;
 
         } catch (Exception e) {
             System.err.println("Fout bij aanmaken machine: " + e.getMessage());
@@ -178,7 +185,9 @@ public class LocatieFacade {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200;
+            boolean succes = response.statusCode() == 200;
+            if (succes) LogService.log("UPDATE", "machine", "Machine gewijzigd – machineId: " + machineId);
+            return succes;
         } catch (Exception e) {
             System.err.println("Fout bij wijzigen machine: " + e.getMessage());
             return false;
@@ -194,8 +203,9 @@ public class LocatieFacade {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            return response.statusCode() == 200 || response.statusCode() == 204;
+            boolean succes = response.statusCode() == 200 || response.statusCode() == 204;
+            if (succes) LogService.log("DELETE", "machine", "Machine verwijderd – machineId: " + machineId);
+            return succes;
 
         } catch (Exception e) {
             System.err.println("Fout bij verwijderen machine: " + e.getMessage());

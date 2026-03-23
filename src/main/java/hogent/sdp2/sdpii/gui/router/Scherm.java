@@ -19,6 +19,7 @@ public enum Scherm {
     CREEER_MANAGER,
     ADMIN_HOME,
     BEHEER_GEBRUIKERS,
+    VIEW_LOGS,
 
     //auth
     LOGIN,

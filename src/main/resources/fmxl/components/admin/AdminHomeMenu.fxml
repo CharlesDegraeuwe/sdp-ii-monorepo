@@ -26,4 +26,9 @@
         <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
         <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
     </HBox>
+    <HBox styleClass="popup-item" fx:id="log">
+        <Label text="Logs bekijkens" mouseTransparent="true"/>
+        <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
+        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
+    </HBox>
 </fx:root>
