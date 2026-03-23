@@ -14,7 +14,9 @@
         <Region HBox.hgrow="ALWAYS"/>
         <ComboBox fx:id="teamPicker" value="Team A" styleClass="team_picker"/>
     </HBox>
-        <VBox fx:id="itemContainer" spacing="7" alignment="CENTER" minHeight="50"/>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" maxHeight="200" VBox.vgrow="ALWAYS">
+        <VBox fx:id="itemContainer" spacing="7"/>
+    </ScrollPane>
     <HBox alignment="CENTER_RIGHT">
         <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
     </HBox>

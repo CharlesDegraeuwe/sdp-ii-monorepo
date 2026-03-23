@@ -50,6 +50,7 @@ public class Router {
             case CREEER_MANAGER -> app.navigateTo(factory.creeerManagerScherm());
             case ADMIN_HOME -> app.navigateTo(factory.adminHomeScherm());
             case BEHEER_GEBRUIKERS -> app.navigateTo(factory.beheerGebruikersScherm());
+            case VIEW_LOGS -> app.navigateTo(factory.logScherm());
 
             //auth
             case LOGIN -> {}

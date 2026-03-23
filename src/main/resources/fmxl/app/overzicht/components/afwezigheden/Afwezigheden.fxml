@@ -9,8 +9,11 @@
         <Label text="Afwezige teamleden:" styleClass="section_label"/>
         <Region HBox.hgrow="ALWAYS"/>
         <ComboBox fx:id="teamPicker" value="Team A" styleClass="team_picker"/>
+        <Button fx:id="filterBtn" text="Filter" styleClass="tab_active"/>
     </HBox>
-    <VBox fx:id="itemContainer" spacing="7" minHeight="50"/>
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" maxHeight="200" VBox.vgrow="ALWAYS">
+        <VBox fx:id="itemContainer" spacing="7"/>
+    </ScrollPane>
     <HBox alignment="CENTER_RIGHT">
         <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
     </HBox>

@@ -61,7 +61,6 @@ public class AppController extends BorderPane {
         setCenter(body);
         body.setTop(header);
 
-
         //custom window functionality
         Router.getInstance().navigeerNaar(Sessie.getInstance().isAdmin() ? Scherm.ADMIN_HOME : Scherm.DASHBOARD);
 

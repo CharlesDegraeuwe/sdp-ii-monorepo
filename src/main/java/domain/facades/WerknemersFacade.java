@@ -28,7 +28,7 @@ public class WerknemersFacade {
     }
 
     public void deactiveerWerknemer(int werknemerId) {
-
+        // TODO
     }
 
     public WerknemerDTO zoekOpEmail(String email) {
@@ -47,6 +47,10 @@ public class WerknemersFacade {
         return api.veranderStatus(werknemerId, actie);
     }
 
+    /**
+     * Registreert een nieuwe werknemer met validatie.
+     * Gooit IllegalArgumentException als de input ongeldig is.
+     */
     public boolean registreerWerknemer(String naam, String voornaam, String email, String telefoon, String geboortedatum, String rol) {
         // Naam validatie
         if (naam == null || naam.isBlank())

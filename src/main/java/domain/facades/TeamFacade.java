@@ -24,6 +24,11 @@ public class TeamFacade {
         return api.getTeamMembers(teamId);
     }
 
+
+    public List<TeamInfoDTO> geefTeamsVanManager(int managerId) {
+        return api.geefTeamsVanManager(managerId);
+    }
+
     public List<TeamLidDTO> geefTeamLedenMetSupervisor(int teamId) {
         return api.getTeamLedenMetSupervisor(teamId);
     }
