@@ -13,7 +13,9 @@
 
     <HBox styleClass="form-back-btn-row">
         <Button fx:id="backBtn" styleClass="back-btn" onAction="#handleBack">
-            <FontIcon iconLiteral="ion4-ios-arrow-round-back" iconSize="16" mouseTransparent="true"/>
+            <graphic>
+                <FontIcon iconLiteral="ion4-ios-arrow-round-back" iconSize="16" mouseTransparent="true"/>
+            </graphic>
         </Button>
     </HBox>
 

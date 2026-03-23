@@ -6,8 +6,49 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml">
-    <children>
-        <Label text="create users"/>
-    </children>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="root-container">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+
+    <!-- Main card -->
+    <HBox alignment="CENTER_RIGHT">
+        <VBox alignment="CENTER" fx:id="buttonContainer">
+            <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">
+                <graphic>
+                    <FontIcon iconLiteral="fas-plus" iconSize="16" iconColor="WHITE"/>
+                </graphic>
+            </Button>
+            <Label text="voeg medewerker toe" styleClass="icon-label"/>
+        </VBox>
+    </HBox>
+
+    <HBox fx:id="mainCard" styleClass="main-card" spacing="24" VBox.vgrow="ALWAYS">
+
+        <VBox fx:id="leftColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
+            <Label text="Alle medewerkers:" styleClass="section-title"/>
+            <TextField fx:id="searchField" promptText="zoek op naam..." styleClass="input-field"/>
+            <ComboBox fx:id="statusFilter" styleClass="picker" maxWidth="Infinity"/>
+            <ScrollPane styleClass="scroll-pane" fitToWidth="true" VBox.vgrow="ALWAYS">
+                <VBox fx:id="teamsList" spacing="8" style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+            </ScrollPane>
+        </VBox>
+
+        <!-- Divider -->
+        <Separator orientation="VERTICAL" styleClass="divider"/>
+
+        <!-- RIGHT: Members list -->
+        <VBox fx:id="rightColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="members-header">
+                <Label text="Medewerker:" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                <VBox fx:id="membersList" spacing="8"/>
+            </ScrollPane>
+        </VBox>
+
+    </HBox>
 </fx:root>

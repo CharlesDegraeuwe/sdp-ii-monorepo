@@ -1,6 +1,5 @@
 package hogent.sdp2.sdpii.gui.app.locaties.components;
 
-
 import domain.dto.LocatieDTO;
 import domain.dto.MachineAanmaakDTO;
 import domain.facades.LocatieFacade;
@@ -9,6 +8,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.util.StringConverter;
@@ -29,6 +30,7 @@ public class LocatiesLayoutController extends VBox {
     @FXML private ComboBox<String> statusDropdown;
     @FXML private ListView<MachineAanmaakDTO> listMachines;
     @FXML private Button btnWijzigMachine;
+    @FXML private Button btnAnnuleerSite;
     @FXML private TableView<LocatieDTO> locatieTable;
     @FXML private TableColumn<LocatieDTO, String> naamCol;
     @FXML private TableColumn<LocatieDTO, String> locatieCol;
@@ -45,6 +47,7 @@ public class LocatiesLayoutController extends VBox {
     @FXML private TextField txtDetailLocatie;
     @FXML private TextField txtDetailCapaciteit;
     @FXML private ComboBox<String> cmbDetailStatus;
+    @FXML private Label lblSiteError;
     @FXML private Button btnMaakMachine;
     private boolean isBewerkenModus = false;
     private boolean isAanmakenModus = false;
@@ -63,6 +66,7 @@ public class LocatiesLayoutController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         locatieTable.setPlaceholder(new Label(""));
         locatieTable.setFixedCellSize(40);
 
@@ -95,7 +99,7 @@ public class LocatiesLayoutController extends VBox {
                 if (empty || machine == null) {
                     setText(null);
                 } else {
-                    setText(machine.naam() + " (" + machine.status() + ")"); // Ziet eruit als: Poes (Onderhoud)
+                    setText(machine.naam() + " (" + machine.status() + ")");
                 }
             }
         });
@@ -105,33 +109,42 @@ public class LocatiesLayoutController extends VBox {
             btnWijzigMachine.setDisable(!heeftSelectie);
             btnVerwijderMachine.setDisable(!heeftSelectie);
         });
+        statusDropdown.getItems().addAll("Alle", "Actief", "Inactief");
+        statusDropdown.setValue("Alle");
+
         laadLocaties();
     }
 
     private void laadLocaties() {
         List<LocatieDTO> alleLocaties = locatieFacade.geefAlleLocaties();
         ObservableList<LocatieDTO> masterData = FXCollections.observableArrayList(alleLocaties);
-
         FilteredList<LocatieDTO> filteredData = new FilteredList<>(masterData, p -> true);
 
-        zoekField.textProperty().addListener((observable, oldValue, newValue) -> {
+        Runnable updateFilter = () -> {
+            String zoekTekst = zoekField.getText() == null ? "" : zoekField.getText().toLowerCase();
+            String geselecteerdeStatus = statusDropdown.getValue();
+
             filteredData.setPredicate(locatie -> {
-                // Als het zoekveld leeg is, laat dan alles zien
-                if (newValue == null || newValue.isBlank()) {
-                    return true;
-                }
-                String lowerCaseFilter = newValue.toLowerCase();
-
-                if (locatie.naam() != null && locatie.naam().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                else if (locatie.locatie() != null && locatie.locatie().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
+                boolean matchStatus = true;
+                if (geselecteerdeStatus != null && !geselecteerdeStatus.equals("Alle")) {
+                    matchStatus = locatie.status() != null && locatie.status().equalsIgnoreCase(geselecteerdeStatus);
                 }
 
-                return false;
+                boolean matchTekst = true;
+                if (!zoekTekst.isBlank()) {
+                    boolean inNaam = locatie.naam() != null && locatie.naam().toLowerCase().contains(zoekTekst);
+                    boolean inAdres = locatie.locatie() != null && locatie.locatie().toLowerCase().contains(zoekTekst);
+                    matchTekst = inNaam || inAdres;
+                }
+
+                return matchStatus && matchTekst;
             });
-        });
+        };
+
+        zoekField.textProperty().addListener((observable, oldValue, newValue) -> updateFilter.run());
+
+        statusDropdown.valueProperty().addListener((observable, oldValue, newValue) -> updateFilter.run());
+
         SortedList<LocatieDTO> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(locatieTable.comparatorProperty());
 
@@ -210,6 +223,8 @@ public class LocatiesLayoutController extends VBox {
             btnWijzig.setText("Opslaan");
             btnWijzig.getStyleClass().remove("btn-secondary");
             btnWijzig.getStyleClass().add("btn-success");
+            btnAnnuleerSite.setVisible(true);
+            btnAnnuleerSite.setManaged(true);
 
             txtDetailNaam.setText(geselecteerd.naam());
             txtDetailLocatie.setText(geselecteerd.locatie());
@@ -219,11 +234,22 @@ public class LocatiesLayoutController extends VBox {
             zetBewerkVeldenZichtbaar(true);
 
         } else {
+            String nieuweNaam = txtDetailNaam.getText();
+            String nieuweLocatie = txtDetailLocatie.getText();
+            String capTekst = txtDetailCapaciteit.getText();
+            String nieuweStatus = cmbDetailStatus.getValue();
+
+            if (nieuweNaam == null || nieuweNaam.isBlank() ||
+                    nieuweLocatie == null || nieuweLocatie.isBlank() ||
+                    capTekst == null || capTekst.isBlank() ||
+                    nieuweStatus == null) {
+
+                lblSiteError.setText("Fout: Vul alle velden in!");
+                return;
+            }
+
             try {
-                String nieuweNaam = txtDetailNaam.getText();
-                String nieuweLocatie = txtDetailLocatie.getText();
-                int nieuweCapaciteit = Integer.parseInt(txtDetailCapaciteit.getText());
-                String nieuweStatus = cmbDetailStatus.getValue();
+                int nieuweCapaciteit = Integer.parseInt(capTekst);
 
                 boolean succes;
 
@@ -239,17 +265,18 @@ public class LocatiesLayoutController extends VBox {
                     System.out.println(isAanmakenModus ? "Nieuwe site aangemaakt!" : "Wijziging opgeslagen!");
                     isBewerkenModus = false;
                     isAanmakenModus = false;
-                    btnWijzig.setText("Wijzig");
+                    btnWijzig.setText("Wijzig site");
                     btnWijzig.getStyleClass().remove("btn-success");
                     btnWijzig.getStyleClass().add("btn-secondary");
                     zetBewerkVeldenZichtbaar(false);
 
                     laadLocaties();
                 } else {
-                    System.err.println("Fout bij opslaan op de server.");
+                    lblSiteError.setText("Fout bij opslaan op de server. Probeer opnieuw.");
                 }
+
             } catch (NumberFormatException ex) {
-                System.err.println("Capaciteit moet een geldig getal zijn!");
+                lblSiteError.setText("Fout: Capaciteit moet een geldig getal zijn!");
             }
         }
     }
@@ -302,57 +329,78 @@ public class LocatiesLayoutController extends VBox {
     @FXML
     private void handleMaakMachine() {
         LocatieDTO geselecteerd = locatieTable.getSelectionModel().getSelectedItem();
-
         if (geselecteerd == null) return;
 
         Dialog<MachineAanmaakDTO> dialog = new Dialog<>();
         dialog.setTitle("Nieuwe Machine Creëren");
         dialog.setHeaderText("Voeg een machine toe aan site: " + geselecteerd.naam());
 
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/css/locaties.css").toExternalForm());
+
         ButtonType btnTypeAanmaken = new ButtonType("Aanmaken", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(btnTypeAanmaken, ButtonType.CANCEL);
+        ButtonType btnTypeAnnuleer = new ButtonType("Annuleer", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnTypeAanmaken, btnTypeAnnuleer);
+
+        Button aanmakenNode = (Button) dialog.getDialogPane().lookupButton(btnTypeAanmaken);
+        aanmakenNode.getStyleClass().add("btn-success");
+        Button annuleerNode = (Button) dialog.getDialogPane().lookupButton(btnTypeAnnuleer);
+        annuleerNode.getStyleClass().add("btn-secondary");
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
+        grid.setVgap(15);
+        grid.setPadding(new javafx.geometry.Insets(10, 10, 10, 10));
 
         TextField naamVeld = new TextField();
         naamVeld.setPromptText("Naam (bijv. Graafmachine)");
+        naamVeld.getStyleClass().add("form-control");
 
         ComboBox<String> statusBox = new ComboBox<>();
         statusBox.getItems().addAll("Actief", "Inactief", "Onderhoud");
         statusBox.getSelectionModel().selectFirst();
+        statusBox.getStyleClass().add("form-control");
+
+        Label lblFout = new Label(" ");
+        lblFout.setStyle("-fx-text-fill: #E31B35; -fx-font-weight: bold;");
+        lblFout.setMinHeight(20);
 
         grid.add(new Label("Machine naam:"), 0, 0);
         grid.add(naamVeld, 1, 0);
         grid.add(new Label("Status:"), 0, 1);
         grid.add(statusBox, 1, 1);
+        grid.add(lblFout, 0, 2, 2, 1);
 
         dialog.getDialogPane().setContent(grid);
-
         Platform.runLater(naamVeld::requestFocus);
 
+        aanmakenNode.addEventFilter(ActionEvent.ACTION, event -> {
+            if (naamVeld.getText() == null || naamVeld.getText().isBlank()) {
+                lblFout.setText("Fout: De naam mag niet leeg zijn.");
+                event.consume();
+            } else if (statusBox.getValue() == null) {
+                lblFout.setText("Fout: Kies een status.");
+                event.consume();
+            }
+        });
+
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == btnTypeAanmaken && !naamVeld.getText().isBlank()) {
+            if (dialogButton == btnTypeAanmaken) {
                 return new MachineAanmaakDTO(
                         naamVeld.getText(),
                         statusBox.getValue(),
-                        geselecteerd.id()
+                        Math.toIntExact(geselecteerd.id())
                 );
             }
             return null;
         });
 
-        Optional<MachineAanmaakDTO> resultaat = dialog.showAndWait();
-
-        resultaat.ifPresent(nieuweMachine -> {
+        dialog.showAndWait().ifPresent(nieuweMachine -> {
             boolean succes = locatieFacade.maakMachine(nieuweMachine);
-
             if (succes) {
-                System.out.println("Machine '" + nieuweMachine.naam() + "' succesvol op status '" + nieuweMachine.status() + "' gezet!");
+                System.out.println("Machine succesvol aangemaakt!");
+                toonLocatieDetails(geselecteerd);
             } else {
-                System.err.println("Fout bij het aanmaken van de machine. Check je backend.");
+                System.err.println("Fout bij het opslaan op de server.");
             }
         });
     }
@@ -368,19 +416,32 @@ public class LocatiesLayoutController extends VBox {
         dialog.setTitle("Machine Wijzigen");
         dialog.setHeaderText("Wijzig gegevens van: " + geselecteerdeMachine.naam());
 
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/css/locaties.css").toExternalForm());
+
         ButtonType btnOpslaan = new ButtonType("Opslaan", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(btnOpslaan, ButtonType.CANCEL);
+        ButtonType btnAnnuleer = new ButtonType("Annuleer", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnOpslaan, btnAnnuleer);
+
+        Button opslaanNode = (Button) dialog.getDialogPane().lookupButton(btnOpslaan);
+        opslaanNode.getStyleClass().add("btn-success");
+        Button annuleerNode = (Button) dialog.getDialogPane().lookupButton(btnAnnuleer);
+        annuleerNode.getStyleClass().add("btn-secondary");
 
         GridPane grid = new GridPane();
-        grid.setHgap(10); grid.setVgap(10); grid.setPadding(new javafx.geometry.Insets(20, 20, 10, 10));
+        grid.setHgap(10);
+        grid.setVgap(15);
+        grid.setPadding(new javafx.geometry.Insets(10, 10, 10, 10));
 
         TextField txtNaam = new TextField(geselecteerdeMachine.naam());
+        txtNaam.getStyleClass().add("form-control");
 
         ComboBox<String> cmbStatus = new ComboBox<>();
         cmbStatus.getItems().addAll("Actief", "Inactief", "Onderhoud");
         cmbStatus.setValue(geselecteerdeMachine.status());
+        cmbStatus.getStyleClass().add("form-control");
 
         ComboBox<LocatieDTO> cmbSites = new ComboBox<>();
+        cmbSites.getStyleClass().add("form-control");
         List<LocatieDTO> alleSites = locatieFacade.geefAlleLocaties();
         cmbSites.setItems(FXCollections.observableArrayList(alleSites));
 
@@ -389,19 +450,33 @@ public class LocatiesLayoutController extends VBox {
             @Override public LocatieDTO fromString(String s) { return null; }
         });
 
-        alleSites.stream()
-                .filter(s -> s.id().equals(huidigeSite.id()))
-                .findFirst()
-                .ifPresent(cmbSites::setValue);
+        alleSites.stream().filter(s -> s.id().equals(huidigeSite.id())).findFirst().ifPresent(cmbSites::setValue);
 
-        grid.add(new Label("Naam:"), 0, 0); grid.add(txtNaam, 1, 0);
-        grid.add(new Label("Status:"), 0, 1); grid.add(cmbStatus, 1, 1);
+        Label lblFout = new Label(" ");
+        lblFout.setStyle("-fx-text-fill: #E31B35; -fx-font-weight: bold;");
+        lblFout.setMinHeight(20);
+
+        grid.add(new Label("Naam:"), 0, 0);               grid.add(txtNaam, 1, 0);
+        grid.add(new Label("Status:"), 0, 1);             grid.add(cmbStatus, 1, 1);
         grid.add(new Label("Gekoppeld aan Site:"), 0, 2); grid.add(cmbSites, 1, 2);
-
+        grid.add(lblFout, 0, 3, 2, 1);
         dialog.getDialogPane().setContent(grid);
 
+        opslaanNode.addEventFilter(ActionEvent.ACTION, event -> {
+            if (txtNaam.getText() == null || txtNaam.getText().isBlank()) {
+                lblFout.setText("Fout: De naam mag niet leeg zijn.");
+                event.consume();
+            } else if (cmbStatus.getValue() == null) {
+                lblFout.setText("Fout: Kies een status.");
+                event.consume();
+            } else if (cmbSites.getValue() == null) {
+                lblFout.setText("Fout: Kies een site waar de machine staat.");
+                event.consume();
+            }
+        });
+
         dialog.setResultConverter(button -> {
-            if (button == btnOpslaan && !txtNaam.getText().isBlank() && cmbSites.getValue() != null) {
+            if (button == btnOpslaan) {
                 return new MachineAanmaakDTO(
                         txtNaam.getText(),
                         cmbStatus.getValue(),
@@ -448,5 +523,25 @@ public class LocatiesLayoutController extends VBox {
                 }
             }
         }
+
+    }
+
+    @FXML
+    private void handleAnnuleerSite() {
+        isBewerkenModus = false;
+        isAanmakenModus = false;
+
+        btnWijzig.setText("Wijzig site");
+        btnWijzig.getStyleClass().remove("btn-success");
+        btnWijzig.getStyleClass().add("btn-secondary");
+
+        btnAnnuleerSite.setVisible(false);
+        btnAnnuleerSite.setManaged(false);
+        lblSiteError.setText(" ");
+
+        zetBewerkVeldenZichtbaar(false);
+
+        LocatieDTO geselecteerd = locatieTable.getSelectionModel().getSelectedItem();
+        toonLocatieDetails(geselecteerd);
     }
 }

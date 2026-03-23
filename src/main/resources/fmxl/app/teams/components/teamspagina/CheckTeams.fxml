@@ -4,21 +4,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="root-container">
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="StackPane" xmlns:fx="http://javafx.com/fxml" styleClass="root-container">
     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
     <!-- Page title -->
     <Label text="Teams:" styleClass="page-title"/>
 
     <!-- Main card -->
-    <HBox styleClass="main-card" spacing="24" VBox.vgrow="ALWAYS">
+    <HBox fx:id="mainCard" styleClass="main-card" spacing="24" VBox.vgrow="ALWAYS">
 
-        <!-- LEFT: Teams list -->
-        <VBox spacing="12" HBox.hgrow="ALWAYS" maxWidth="340">
+        <VBox fx:id="leftColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
             <Label text="Teams:" styleClass="section-title"/>
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
-                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                <VBox fx:id="teamsList" spacing="8"/>
+            <TextField fx:id="searchField" promptText="zoek op naam of team..." styleClass="input-field"/>
+            <ScrollPane styleClass="scroll-pane" fitToWidth="true" VBox.vgrow="ALWAYS">
+                <VBox fx:id="teamsList" spacing="8" style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
             </ScrollPane>
         </VBox>
 
@@ -26,12 +26,16 @@
         <Separator orientation="VERTICAL" styleClass="divider"/>
 
         <!-- RIGHT: Members list -->
-        <VBox spacing="12" HBox.hgrow="ALWAYS">
+        <VBox fx:id="rightColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="members-header">
-                <Label text="Leden:" styleClass="section-title"/>
+                <Label text="TeamInfo:" styleClass="section-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <VBox styleClass="create-employee-box">
-                    <Button text="+" styleClass="icon-btn-lg" fx:id="addMemberBtn"/>
+                <VBox styleClass="create-employee-box" fx:id="addMembersContainer">
+                    <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-plus" iconSize="16" iconColor="WHITE"/>
+                        </graphic>
+                    </Button>
                     <Label text="voeg leden toe" styleClass="icon-label"/>
                 </VBox>
             </HBox>

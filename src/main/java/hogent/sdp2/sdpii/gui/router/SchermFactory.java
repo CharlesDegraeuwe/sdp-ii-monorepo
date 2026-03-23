@@ -3,6 +3,7 @@ package hogent.sdp2.sdpii.gui.router;
 import domain.Beheerder;
 import domain.facades.TakenFacade;
 import hogent.sdp2.sdpii.gui.admin.beheerGebruikers.BeheerGebruikersController;
+import hogent.sdp2.sdpii.gui.admin.viewLogs.LogViewController;
 import hogent.sdp2.sdpii.gui.admin.creeerManager.CreeerManagerController;
 import hogent.sdp2.sdpii.gui.admin.creeerMedewerker.CreeerMedewerkerController;
 import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
@@ -64,7 +65,8 @@ public class SchermFactory {
     }
 
     public TeamsController teamsScherm() {
-        return new TeamsController();
+
+        return new TeamsController(Beheerder.getInstance().getTeamFacade(), Beheerder.getInstance().getWerknemersFacade());
     }
 
 
@@ -83,6 +85,10 @@ public class SchermFactory {
 
     public AdminHomeController adminHomeScherm() {
         return new AdminHomeController();
+    }
+
+    public LogViewController logScherm() {
+        return new LogViewController();
     }
 
 
