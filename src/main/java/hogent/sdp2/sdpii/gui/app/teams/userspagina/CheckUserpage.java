@@ -1,6 +1,8 @@
 package hogent.sdp2.sdpii.gui.app.teams.userspagina;
 
+import domain.auth.Sessie;
 import domain.dto.WerknemerDTO;
+import domain.facades.TeamFacade;
 import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.app.teams.userspagina.components.UserDetailsController;
 import hogent.sdp2.sdpii.gui.app.teams.userspagina.components.UserItemController;
@@ -17,11 +19,13 @@ import java.util.function.Consumer;
 
 public class CheckUserpage extends VBox {
     private WerknemersFacade facade;
+    private TeamFacade teamFacade;
     private List<WerknemerDTO> werknemers;
     private UserItemController selected;
     private Consumer<Integer> onNavigeerNaarTeam;
     private Runnable onNavigeerNaarCreateUser;
 
+    @FXML VBox buttonContainer;
     @FXML VBox teamsList;
     @FXML VBox membersList;
     @FXML HBox mainCard;
@@ -30,7 +34,7 @@ public class CheckUserpage extends VBox {
     @FXML Button addMemberBtn;
 
 
-    public CheckUserpage(WerknemersFacade facade, Consumer<Integer> onNavigeerNaarTeam, Runnable onNavigeerNaarCreateUser) {
+    public CheckUserpage(WerknemersFacade facade, TeamFacade teamFacade, Consumer<Integer> onNavigeerNaarTeam, Runnable onNavigeerNaarCreateUser) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/userspagina/CheckUsers.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -40,14 +44,15 @@ public class CheckUserpage extends VBox {
             throw new RuntimeException(e);
         }
         this.facade = facade;
+        this.teamFacade = teamFacade;
         this.onNavigeerNaarTeam = onNavigeerNaarTeam;
         this.onNavigeerNaarCreateUser = onNavigeerNaarCreateUser;
         init();
     }
 
     //auto selectie constructor
-    public CheckUserpage(WerknemersFacade facade, Consumer<Integer> onNavigeerNaarTeam, Runnable onNavigeerNaarCreateUser, int autoSelectWerknemerId) {
-        this(facade, onNavigeerNaarTeam, onNavigeerNaarCreateUser);
+    public CheckUserpage(WerknemersFacade facade, TeamFacade teamFacade, Consumer<Integer> onNavigeerNaarTeam, Runnable onNavigeerNaarCreateUser, int autoSelectWerknemerId) {
+        this(facade, teamFacade, onNavigeerNaarTeam, onNavigeerNaarCreateUser);
         for (Node node : teamsList.getChildren()) {
             if (node instanceof UserItemController item && item.getWerknemer().id() == autoSelectWerknemerId) {
                 setSelected(item);
@@ -62,11 +67,28 @@ public class CheckUserpage extends VBox {
         leftColumn.setMaxWidth(Double.MAX_VALUE);
         rightColumn.setMaxWidth(Double.MAX_VALUE);
 
-        werknemers = facade.geefAlleWerknemers();
+        boolean isSupervisor = Sessie.getInstance().isSuperVisor();
+
+        if (isSupervisor) {
+            int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
+
+            var teams = teamFacade.getTeamsVanWerknemer(werknemerId);
+            werknemers = teams.stream()
+                    .flatMap(t -> teamFacade.getTeamLeden(t.id()).stream())
+                    .map(lid -> new WerknemerDTO(lid.werknemerId(), lid.naam(), lid.voornaam(),
+                            lid.email(), lid.telefoonnummer(), null, lid.rol(), "Actief"))
+                    .distinct().toList();
+
+            buttonContainer.setVisible(false);
+            buttonContainer.setManaged(false);
+
+        } else {
+            werknemers = facade.geefAlleWerknemers();
+        }
+
         werknemers.forEach(w -> {
             teamsList.getChildren().add(new UserItemController(w, this::setSelected));
         });
-
         membersList.getChildren().add(noItems());
 
         addMemberBtn.setOnAction(e -> onNavigeerNaarCreateUser.run());

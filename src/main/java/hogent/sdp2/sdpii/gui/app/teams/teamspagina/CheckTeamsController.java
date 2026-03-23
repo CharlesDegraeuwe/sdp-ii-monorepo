@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.teams.teamspagina;
 
+import domain.auth.Sessie;
 import domain.dto.TeamDTO;
 import domain.facades.TeamFacade;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.components.TeamItemController;
@@ -70,7 +71,15 @@ public class CheckTeamsController extends StackPane {
         leftColumn.setMaxWidth(Double.MAX_VALUE);
         rightColumn.setMaxWidth(Double.MAX_VALUE);
 
-        teams = tm.getAlleTeams();
+        boolean isSupervisor = Sessie.getInstance().isSuperVisor();
+
+        if (isSupervisor) {
+            int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
+            teams = tm.getTeamsVanWerknemer(werknemerId);
+        } else {
+            teams = tm.getAlleTeams();
+        }
+
         teams.forEach(teamDTO -> {
             TeamItemController item = new TeamItemController(teamDTO, this::setSelected);
             teamsList.getChildren().add(item);
@@ -78,6 +87,11 @@ public class CheckTeamsController extends StackPane {
 
         membersList.getChildren().add(noItems());
 
+        // Supervisor mag geen leden toevoegen/verwijderen
+        if (isSupervisor) {
+            addMemberBtn.setVisible(false);
+            addMemberBtn.setManaged(false);
+        }
 
         addMemberBtn.setOnAction(e -> {
             if (selected != null && currentLedenController != null) {

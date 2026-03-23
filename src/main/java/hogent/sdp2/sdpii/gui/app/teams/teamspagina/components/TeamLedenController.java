@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.teams.teamspagina.components;
 
+import domain.auth.Sessie;
 import domain.dto.TeamDTO;
 import domain.dto.TeamLidDTO;
 import domain.dto.WerknemerDTO;
@@ -55,17 +56,26 @@ public class TeamLedenController extends VBox {
     }
 
     private void init() {
-
         naam.setText(team.naam());
-        locatie.setText(team.siteNaam());
-        manager.setText(team.managerNaam());
+        locatie.setText(team.siteNaam() != null ? team.siteNaam() : "Geen locatie");
+
         locatie.setOnMouseClicked(e -> {
             Router.getInstance().navigeerNaar(Scherm.LOCATIES);
         });
-        deleteBtn.setOnMouseClicked(e -> {
-            facade.verwijderTeam(teamID);
-            if (onRefresh != null) onRefresh.run();
-        });
+
+        boolean isSupervisor = Sessie.getInstance().isSuperVisor();
+
+        // Supervisor mag team niet verwijderen
+        if (isSupervisor) {
+            deleteBtn.setVisible(false);
+            deleteBtn.setManaged(false);
+        } else {
+            deleteBtn.setOnMouseClicked(e -> {
+                facade.verwijderTeam(teamID);
+                if (onRefresh != null) onRefresh.run();
+            });
+        }
+
         showLeden();
     }
 
