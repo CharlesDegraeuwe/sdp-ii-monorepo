@@ -20,6 +20,20 @@ public class PlanningApiService {
     private final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
 
+    public List<AfwezigheidsOverzichtDTO> geefAlleAfwezigheden(LocalDate van, LocalDate tot) {
+        try {
+            String url = BASE_URL + "/afwezigheid?van=" + van + "&tot=" + tot;
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return mapper.readValue(response.body(), new TypeReference<List<AfwezigheidsOverzichtDTO>>() {});
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij ophalen alle afwezigheden", e);
+        }
+    }
+
     public List<AfwezigheidsOverzichtDTO> geefAfwezighedenVanTeam(int werknemerId, LocalDate van, LocalDate tot) {
         try {
             String url = BASE_URL + "/team/" + werknemerId + "?van=" + van + "&tot=" + tot;

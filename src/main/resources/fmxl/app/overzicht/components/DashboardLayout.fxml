@@ -80,41 +80,27 @@
 
                 </GridPane>
 
-                <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
-                    <Label text="Statistieken" styleClass="section_title"/></HBox>
                 <GridPane hgap="16">
-
                     <columnConstraints>
                         <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
                         <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
                     </columnConstraints>
 
-                    <!-- Statistieken links -->
-                    <VBox styleClass="card"
-                          GridPane.columnIndex="0"
-                          GridPane.rowIndex="0"
-                          maxWidth="Infinity"
-                          spacing="10">
-                        <padding>
-                            <Insets top="16" right="16" bottom="16" left="16"/>
-                        </padding>
-                        <VBox fx:id="taken_container"></VBox>
+                    <!-- Open Taken -->
+                    <VBox styleClass="card" spacing="10"
+                          GridPane.columnIndex="0" GridPane.rowIndex="0"
+                          maxWidth="Infinity">
+                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                        <VBox fx:id="taken_container"/>
                     </VBox>
 
-                    <!-- Statistieken rechts -->
-                    <VBox styleClass="card"
-                          GridPane.columnIndex="1"
-                          GridPane.rowIndex="0"
-                          maxWidth="Infinity"
-                          spacing="10">
-                        <padding>
-                            <Insets top="16" right="16" bottom="16" left="16"/>
-                        </padding>
-
-                        <VBox fx:id="uren_container"></VBox>
-
+                    <!-- Afwezigheden / Uren -->
+                    <VBox styleClass="card" spacing="10"
+                          GridPane.columnIndex="1" GridPane.rowIndex="0"
+                          maxWidth="Infinity">
+                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                        <VBox fx:id="uren_container"/>
                     </VBox>
-
                 </GridPane>
 
                 <!-- locatie info -->

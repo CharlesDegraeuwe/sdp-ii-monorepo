@@ -12,4 +12,8 @@ public class PlanningFacade {
     public List<AfwezigheidsOverzichtDTO> geefAfwezighedenVanTeam(int werknemerId, LocalDate van, LocalDate tot) {
         return api.geefAfwezighedenVanTeam(werknemerId, van, tot);
     }
+
+    public List<AfwezigheidsOverzichtDTO> geefAlleAfwezigheden(LocalDate van, LocalDate tot) {
+        return api.geefAlleAfwezigheden(van, tot);
+    }
 }

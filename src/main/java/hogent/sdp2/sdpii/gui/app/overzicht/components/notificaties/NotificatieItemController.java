@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.overzicht.components.notificaties;
 
+import domain.dto.NotificatieDTO;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.fxml.FXML;
@@ -16,9 +17,13 @@ public class NotificatieItemController extends HBox {
 
     @FXML HBox container;
     @FXML VBox icon;
-    @FXML
-    Label title;
-    public NotificatieItemController() {
+    @FXML Label title;
+
+    public NotificatieItemController(NotificatieDTO dto) {
+        this(dto.titel(), "#aaaaaa", Scherm.NOTIFICATIES);
+    }
+
+    public NotificatieItemController(String titel, String iconColor, Scherm navigeerNaar) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/notificaties/NotificationItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -27,17 +32,12 @@ public class NotificatieItemController extends HBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        this.init();
-
-
+        title.setText(titel);
+        icon.setStyle("-fx-background-color: " + iconColor + "; -fx-background-radius: 999px;");
+        container.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(navigeerNaar));
     }
 
-    private void init() {
 
-        container.setOnMouseClicked(e -> {
-            Router.getInstance().navigeerNaar(Scherm.NOTIFICATIES);});
-    }
 
     private Map<String, String> colors() {
         Map<String, String> colors = new HashMap<>();
