@@ -1,6 +1,7 @@
 package hogent.sdp2.sdpii.gui.app.overzicht.components.locatie_info;
 
 import domain.dto.LocatieInfoDTO;
+import domain.facades.LocatieFacade;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.fxml.FXML;
@@ -43,10 +44,18 @@ public class LocatieInfoController extends VBox {
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colStats.setCellValueFactory(new PropertyValueFactory<>("quickStats"));
 
-        // mock data
-        locatieTable.getItems().addAll(
-                new LocatieInfoDTO("Plant B", "Eeklo, 9900, East-Flanders", "healthy", "capacity: 1259 people")
-        );
+        try {
+            new LocatieFacade().geefAlleLocaties().forEach(l ->
+                locatieTable.getItems().add(new LocatieInfoDTO(
+                        l.naam(),
+                        l.locatie(),
+                        l.status() != null ? l.status() : "—",
+                        l.capaciteit() != null ? "capaciteit: " + l.capaciteit() : "—"
+                ))
+            );
+        } catch (Exception e) {
+            // toon lege tabel bij fout
+        }
 
         locatieTable.setPrefHeight(35 + locatieTable.getItems().size() * 40);
         locatieTable.setMinHeight(Region.USE_PREF_SIZE);

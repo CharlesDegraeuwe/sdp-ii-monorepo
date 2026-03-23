@@ -4,15 +4,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 
 public class AfwezighedenItemController extends HBox {
-    @FXML FontIcon icon;
+    @FXML Label emoji;
     @FXML Label naam;
 
-    public AfwezighedenItemController(String name, String typeAbsence) {
+    public AfwezighedenItemController(String name, String type) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/afwezigheden/AfwezighedenItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -22,6 +21,15 @@ public class AfwezighedenItemController extends HBox {
             throw new RuntimeException(e);
         }
         naam.setText(name);
-        icon.setIconLiteral(typeAbsence == "vakantie" ? "ion4-md-car" : "ion4-md-close-circle-outline");
+        emoji.setText(bepaalEmoji(type));
+    }
+
+    private String bepaalEmoji(String type) {
+        if (type == null) return "❓";
+        return switch (type.toLowerCase()) {
+            case "vakantie", "verlof" -> "🌴";
+            case "ziekte", "ziek"     -> "🤒";
+            default                   -> "📋";
+        };
     }
 }

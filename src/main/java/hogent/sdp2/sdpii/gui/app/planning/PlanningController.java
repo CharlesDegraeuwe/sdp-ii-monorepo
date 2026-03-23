@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class PlanningController extends BorderPane {
-
+    public static LocalDate startDatumVanuitDashboard = null;
     @FXML private Button maandKnop;
     @FXML private Button weekKnop;
     @FXML private Button dagKnop;
@@ -57,7 +57,18 @@ public class PlanningController extends BorderPane {
 
     @FXML
     public void initialize() {
-        toonDagDetail(LocalDate.now());
+        if (startDatumVanuitDashboard != null) {
+            huidigeDatum = startDatumVanuitDashboard;
+            huidigeView = View.MAAND;
+
+            Platform.runLater(() -> setToggle(maandKnop));
+
+            startDatumVanuitDashboard = null;
+        } else {
+            huidigeDatum = LocalDate.now();
+        }
+
+        toonDagDetail(huidigeDatum);
         laadAfwezigheden();
     }
 
@@ -73,9 +84,11 @@ public class PlanningController extends BorderPane {
                 List<AfwezigheidsOverzichtDTO> data = Beheerder.getInstance()
                         .getPlanningFacade()
                         .geefAfwezighedenVanTeam(werknemer.id(), van, tot);
+
                 Platform.runLater(() -> {
                     this.afwezigheden = data;
                     teken();
+                    toonDagDetail(huidigeDatum);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
@@ -156,7 +169,7 @@ public class PlanningController extends BorderPane {
             cel.getStyleClass().add("maand-cel-weekend");
         }
 
-        if (datum.equals(LocalDate.now())) {
+        if (datum.equals(huidigeDatum)) {
             cel.getStyleClass().add("maand-cel-vandaag");
             geselecteerdeCel = cel;
         }

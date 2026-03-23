@@ -3,11 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <fx:root type="HBox" fx:id="container" spacing="10" alignment="CENTER_LEFT"
-         styleClass="taakItem" xmlns:fx="http://javafx.com/fxml">
-    <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
-    <FontIcon fx:id="icon" iconLiteral="ion4-md-close-circle-outline" iconSize="16" styleClass="absent_icon"/>
-    <Label fx:id="naam" text="Milan Van Bellingen" styleClass="taak_title"/>
+         styleClass="notification_item" xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="6" right="12" bottom="6" left="12"/></padding>
+    <Label fx:id="emoji" styleClass="afwezig_emoji"/>
+    <Label fx:id="naam" text="naam" styleClass="taak_title"/>
 </fx:root>

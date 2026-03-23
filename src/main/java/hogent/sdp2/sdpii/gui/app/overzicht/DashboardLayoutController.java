@@ -40,8 +40,8 @@ public class DashboardLayoutController extends BorderPane {
     @FXML private GridPane calendarGrid;
     @FXML private VBox kalender_container;
     @FXML private VBox notifications_container;
-    @FXML private VBox uren_container;
     @FXML private VBox taken_container;
+    @FXML private VBox uren_container;
     @FXML private VBox locatie_info;
     @FXML private VBox locatie_info_container;
     @FXML private VBox planned_hours_container;
