@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import domain.dto.AfwezigheidsOverzichtDTO;
+import domain.dto.TeamDTO;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.net.URI;
@@ -45,6 +46,27 @@ public class PlanningApiService {
             return mapper.readValue(response.body(), new TypeReference<List<AfwezigheidsOverzichtDTO>>() {});
         } catch (Exception e) {
             throw new RuntimeException("Fout bij ophalen afwezigheidsoverzicht", e);
+        }
+    }
+
+    // --- ONZE NIEUWE AANGEPASTE METHODE ---
+    public List<AfwezigheidsOverzichtDTO> geefAfwezighedenVanSpecifiekTeam(int teamId, LocalDate van, LocalDate tot) {
+        try {
+            // We gebruiken netjes BASE_URL en bouwen de link exact zoals je andere methodes doen
+            String url = BASE_URL + "/team/" + teamId + "/afwezigheden?van=" + van + "&tot=" + tot;
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            // We gebruiken de 'client' en 'mapper' die je bovenaan je bestand al had staan
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return mapper.readValue(response.body(), new TypeReference<List<AfwezigheidsOverzichtDTO>>() {});
+
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij ophalen afwezigheden van specifiek team", e);
         }
     }
 }

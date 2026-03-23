@@ -3,21 +3,23 @@ package hogent.sdp2.sdpii.gui.app.overzicht.components.afwezigheden;
 import domain.auth.Sessie;
 import domain.dto.AfwezigheidsOverzichtDTO;
 import domain.dto.TeamDTO;
-import domain.facades.LocatieFacade;
+import domain.dto.TeamInfoDTO;
 import domain.facades.PlanningFacade;
 import domain.facades.TeamFacade;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class AfwezighedenController extends VBox {
@@ -26,8 +28,8 @@ public class AfwezighedenController extends VBox {
     @FXML Button filterBtn;
     @FXML Button see_more;
 
-    private List<AfwezigheidsOverzichtDTO> alleAfwezigen;
-    private Map<Integer, String> werknemerTeamMap = new HashMap<>();
+    // We bewaren de teams zodat we de naam aan het ID kunnen koppelen
+    private List<TeamInfoDTO> mijnTeams;
 
     public AfwezighedenController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/afwezigheden/Afwezigheden.fxml"));
@@ -44,81 +46,115 @@ public class AfwezighedenController extends VBox {
     }
 
     private void laadData() {
-        try {
-            PlanningFacade planningFacade = new PlanningFacade();
-            LocalDate vandaag = LocalDate.now();
+        // We verbergen de oude filterknop, dit gaat nu vanzelf!
+        filterBtn.setVisible(false);
+        filterBtn.setManaged(false);
 
-            filterBtn.setVisible(false);
+        // Check of er iemand is ingelogd
+        if (Sessie.getInstance().getIngelogdeWerknemer() == null) return;
 
-            if (Sessie.getInstance().isMangerOrAdmin()) {
-                alleAfwezigen = planningFacade.geefAlleAfwezigheden(vandaag, vandaag.plusMonths(1))
-                        .stream()
-                        .filter(dto -> "goedgekeurd".equalsIgnoreCase(dto.status()))
-                        .collect(Collectors.toList());
+        // Haal het ID van de ingelogde werknemer op (Pas dit aan als jouw Sessie of DTO iets anders gebruikt!)
+        int mijnId = Sessie.getInstance().getIngelogdeWerknemer().id();
 
-                bouwWerknemerTeamMap();
-                vulTeamPicker();
+        new Thread(() -> {
+            try {
+                if (Sessie.getInstance().isMangerOrAdmin()) {
+                    mijnTeams = new TeamFacade().geefTeamsVanManager(mijnId);
 
-                teamPicker.setVisible(true);
-                filterBtn.setVisible(true);
-                filterBtn.setOnMouseClicked(e -> filterOpTeam(teamPicker.getValue()));
-            } else {
-                teamPicker.setVisible(false);
-                int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
-                alleAfwezigen = planningFacade.geefAfwezighedenVanTeam(werknemerId, vandaag, vandaag.plusMonths(1))
-                        .stream()
-                        .filter(dto -> "goedgekeurd".equalsIgnoreCase(dto.status()))
-                        .collect(Collectors.toList());
+                    Platform.runLater(() -> {
+                        if (mijnTeams != null && !mijnTeams.isEmpty()) {
+                            teamPicker.setVisible(true);
+
+                            // Vul de dropdown met namen
+                            List<String> namen = mijnTeams.stream().map(TeamInfoDTO::naam).collect(Collectors.toList());
+                            teamPicker.setItems(FXCollections.observableArrayList(namen));
+
+                            // Luisteraar: Laad data in als de dropdown verandert
+                            teamPicker.valueProperty().addListener((obs, oud, nieuwNaam) -> {
+                                if (nieuwNaam != null) laadAfwezigenVoorTeam(nieuwNaam);
+                            });
+
+                            // Selecteer automatisch het eerste team
+                            teamPicker.getSelectionModel().selectFirst();
+                        } else {
+                            teamPicker.setVisible(false);
+                            toonMelding("Je beheert nog geen teams.");
+                        }
+                    });
+                } else {
+                    // Logica voor een gewone werknemer (Haalt gewoon zijn eigen team op)
+                    teamPicker.setVisible(false);
+                    LocalDate vandaag = LocalDate.now();
+                    List<AfwezigheidsOverzichtDTO> afwezigen = new PlanningFacade()
+                            .geefAfwezighedenVanTeam(mijnId, vandaag, vandaag.plusMonths(1))
+                            .stream()
+                            .filter(dto -> "goedgekeurd".equalsIgnoreCase(dto.status()))
+                            .collect(Collectors.toList());
+
+                    Platform.runLater(() -> toonAfwezigen(afwezigen));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> toonMelding("Fout bij laden."));
             }
-        } catch (Exception e) {
-            alleAfwezigen = List.of();
-        }
-
-        toonAfwezigen(alleAfwezigen);
+        }).start();
     }
 
-    private void bouwWerknemerTeamMap() {
-        try {
-            TeamFacade teamFacade = new TeamFacade();
-            LocatieFacade locatieFacade = new LocatieFacade();
+    private void laadAfwezigenVoorTeam(String teamNaam) {
+        // Zoek het juiste TeamDTO op basis van de gekozen naam in de dropdown
+        TeamInfoDTO gekozenTeam = mijnTeams.stream()
+                .filter(t -> t.naam().equals(teamNaam))
+                .findFirst()
+                .orElse(null);
 
-            locatieFacade.geefAlleLocaties().forEach(locatie -> {
-                teamFacade.geefTeamsVanSite(locatie.id()).forEach(team -> {
-                    teamFacade.geefWerknemersVanTeam(team.id()).forEach(w ->
-                            werknemerTeamMap.put(w.id(), team.naam())
-                    );
-                });
-            });
-        } catch (Exception e) {
-            // map blijft leeg
-        }
-    }
+        if (gekozenTeam != null) {
+            itemContainer.getChildren().clear();
 
-    private void vulTeamPicker() {
-        List<String> teams = werknemerTeamMap.values().stream()
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
-        teams.add(0, "Alle teams");
-        teamPicker.setItems(FXCollections.observableArrayList(teams));
-        teamPicker.setValue("Alle teams");
-    }
+            new Thread(() -> {
+                try {
+                    LocalDate vandaag = LocalDate.now();
+                    List<AfwezigheidsOverzichtDTO> afwezigen = new PlanningFacade()
+                            .geefAfwezighedenVanSpecifiekTeam(gekozenTeam.id(), vandaag, vandaag.plusMonths(1))
+                            .stream()
+                            .filter(dto -> "goedgekeurd".equalsIgnoreCase(dto.status()))
+                            .collect(Collectors.toList());
 
-    private void filterOpTeam(String keuze) {
-        if (keuze == null || keuze.equals("Alle teams")) {
-            toonAfwezigen(alleAfwezigen);
-        } else {
-            toonAfwezigen(alleAfwezigen.stream()
-                    .filter(dto -> keuze.equals(werknemerTeamMap.get(dto.werknemerId())))
-                    .collect(Collectors.toList()));
+                    Platform.runLater(() -> toonAfwezigen(afwezigen));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Platform.runLater(() -> toonMelding("Kon afwezigen niet laden."));
+                }
+            }).start();
         }
     }
 
     private void toonAfwezigen(List<AfwezigheidsOverzichtDTO> lijst) {
         itemContainer.getChildren().clear();
-        lijst.forEach(dto -> {
+
+        if (lijst == null || lijst.isEmpty()) {
+            toonMelding("Iedereen is aanwezig vandaag!");
+            return;
+        }
+
+        // Toon max 4 mensen
+        int maxTonen = Math.min(lijst.size(), 4);
+        for (int i = 0; i < maxTonen; i++) {
+            AfwezigheidsOverzichtDTO dto = lijst.get(i);
             String naam = dto.voornaam() + " " + dto.naam();
             itemContainer.getChildren().add(new AfwezighedenItemController(naam, dto.type()));
-        });
+        }
+
+        if (lijst.size() > 4) {
+            Label meerLabel = new Label("+ nog " + (lijst.size() - 4) + " afwezigen");
+            meerLabel.setStyle("-fx-text-fill: #888888; -fx-font-size: 11px; -fx-padding: 5 0 0 5;");
+            itemContainer.getChildren().add(meerLabel);
+        }
+    }
+
+    private void toonMelding(String text) {
+        itemContainer.getChildren().clear();
+        Label lbl = new Label(text);
+        lbl.setStyle("-fx-text-fill: #10B981; -fx-font-style: italic; -fx-padding: 10;");
+        itemContainer.getChildren().add(lbl);
     }
 }

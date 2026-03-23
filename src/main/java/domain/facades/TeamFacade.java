@@ -1,6 +1,7 @@
 package domain.facades;
 
 import domain.dto.TeamDTO;
+import domain.dto.TeamInfoDTO;
 import domain.dto.WerknemerDTO;
 import domain.services.TeamApiService;
 
@@ -15,5 +16,9 @@ public class TeamFacade {
 
     public List<WerknemerDTO> geefWerknemersVanTeam(int teamId) {
         return api.geefWerknemersVanTeam(teamId);
+    }
+
+    public List<TeamInfoDTO> geefTeamsVanManager(int managerId) {
+        return api.geefTeamsVanManager(managerId);
     }
 }
