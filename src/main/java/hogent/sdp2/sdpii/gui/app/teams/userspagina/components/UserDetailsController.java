@@ -46,6 +46,27 @@ public class UserDetailsController extends VBox {
     }
 
     private void init() {
+        String statusTekst = werknemer.status() != null ? werknemer.status() : "Onbekend";
+        status.setText(statusTekst);
+
+        if (werknemer.equals(Sessie.getInstance().getIngelogdeWerknemer())) {
+            blockBtn.setVisible(false);
+        }
+
+        if ("Geblokkeerd".equals(statusTekst)) {
+            blockBtn.getStyleClass().add("btn-deblokkeer");
+            blockBtn.setText("deblokkeer");
+            blockBtn.setOnAction(e -> {
+                if (facade.veranderStatus(werknemer.id(), "activeer")) onUpdate.run();
+            });
+        } else {
+            blockBtn.getStyleClass().add("btn-blokkeer");
+            blockBtn.setText("blokkeer");
+            blockBtn.setOnAction(e -> {
+                if (facade.veranderStatus(werknemer.id(), "blokkeer")) onUpdate.run();
+            });
+        }
+
         naam.setText(werknemer.voornaam() + " " + werknemer.naam());
         email.setText(werknemer.email());
         telefoon.setText(werknemer.telefoonnummer());

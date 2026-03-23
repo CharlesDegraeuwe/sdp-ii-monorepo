@@ -1,7 +1,9 @@
 package hogent.sdp2.sdpii.gui.app.teams.teamspagina;
 
+import domain.auth.Sessie;
 import domain.dto.TeamDTO;
 import domain.facades.TeamFacade;
+import domain.util.FilteredListUtil;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.components.TeamItemController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.components.TeamLedenController;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
@@ -27,6 +30,7 @@ public class CheckTeamsController extends StackPane {
     @FXML VBox rightColumn;
     @FXML Button addMemberBtn;
     @FXML VBox addMembersContainer;
+    @FXML TextField searchField;
 
     private TeamLedenController currentLedenController;
     private StackPane overlay;
@@ -70,14 +74,39 @@ public class CheckTeamsController extends StackPane {
         leftColumn.setMaxWidth(Double.MAX_VALUE);
         rightColumn.setMaxWidth(Double.MAX_VALUE);
 
-        teams = tm.getAlleTeams();
-        teams.forEach(teamDTO -> {
-            TeamItemController item = new TeamItemController(teamDTO, this::setSelected);
-            teamsList.getChildren().add(item);
+        boolean isSupervisor = Sessie.getInstance().isSuperVisor();
+
+        if (isSupervisor) {
+            int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
+            teams = tm.getTeamsVanWerknemer(werknemerId);
+        } else {
+            teams = tm.getAlleTeams();
+        }
+
+        vulTeamsList(teams);
+
+        if (isSupervisor) {
+            addMemberBtn.setVisible(false);
+            addMemberBtn.setManaged(false);
+        }
+
+        // Search filter
+        searchField.textProperty().addListener((obs, oud, nieuw) -> {
+            String query = nieuw.toLowerCase().trim();
+            if (query.isEmpty()) {
+                vulTeamsList(teams);
+            } else {
+                List<TeamDTO> gefilterd = FilteredListUtil.filter(teams, t ->
+                        t.naam().toLowerCase().contains(query) ||
+                                (t.managerNaam() != null && t.managerNaam().toLowerCase().contains(query)) ||
+                                (t.siteNaam() != null && t.siteNaam().toLowerCase().contains(query))
+                );
+                vulTeamsList(gefilterd);
+            }
+            clearSelection();
         });
 
         membersList.getChildren().add(noItems());
-
 
         addMemberBtn.setOnAction(e -> {
             if (selected != null && currentLedenController != null) {
@@ -92,6 +121,14 @@ public class CheckTeamsController extends StackPane {
                 node = node.getParent();
             }
             clearSelection();
+        });
+    }
+
+    private void vulTeamsList(List<TeamDTO> teamsToShow) {
+        teamsList.getChildren().clear();
+        teamsToShow.forEach(teamDTO -> {
+            TeamItemController item = new TeamItemController(teamDTO, this::setSelected);
+            teamsList.getChildren().add(item);
         });
     }
 
@@ -115,11 +152,16 @@ public class CheckTeamsController extends StackPane {
         selected = null;
         currentLedenController = null;
 
-        teams = tm.getAlleTeams();
-        teams.forEach(teamDTO -> {
-            TeamItemController item = new TeamItemController(teamDTO, this::setSelected);
-            teamsList.getChildren().add(item);
-        });
+        boolean isSupervisor = Sessie.getInstance().isSuperVisor();
+        if (isSupervisor) {
+            int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
+            teams = tm.getTeamsVanWerknemer(werknemerId);
+        } else {
+            teams = tm.getAlleTeams();
+        }
+
+        vulTeamsList(teams);
+        searchField.clear();
     }
 
     public Pane noItems() {

@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.teams.teamspagina.components;
 
+import domain.auth.Sessie;
 import domain.dto.TeamDTO;
 import domain.dto.TeamLidDTO;
 import domain.dto.WerknemerDTO;
@@ -56,6 +57,15 @@ public class TeamLidController extends HBox {
             isSupervisor.setManaged(false);
         }
 
+        // Verberg delete knop voor supervisors
+        boolean isSupervisorRole = Sessie.getInstance().isSuperVisor();
+        if (isSupervisorRole) {
+            // Zoek de FontIcon (delete knop) en verberg die
+            this.getChildren().stream()
+                    .filter(n -> n.getStyleClass().contains("taak_delete_icon"))
+                    .forEach(n -> { n.setVisible(false); n.setManaged(false); });
+        }
+
         naam.setStyle("-fx-cursor: hand;");
         naam.setOnMouseClicked(e -> {
             if (onNavigeerNaarUser != null) {
@@ -64,7 +74,6 @@ public class TeamLidController extends HBox {
             e.consume();
         });
     }
-
     @FXML
     private void handleDelete() {
         if (totaalLeden <= 1) return; // min 1 lid

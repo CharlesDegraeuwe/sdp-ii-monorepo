@@ -23,6 +23,7 @@
                 <ComboBox fx:id="managerCombo" promptText="manager" styleClass="picker" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <ComboBox fx:id="plantCombo" promptText="locatie" styleClass="picker" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
+            <Label fx:id="feedbackLabel" text="" style="-fx-font-weight: bold;" wrapText="true" visible="false"/>
             <Button fx:id="createTeamBtn" text="creëer team" styleClass="create-btn" maxWidth="Infinity"/>
         </VBox>
 

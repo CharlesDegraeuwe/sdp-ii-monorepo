@@ -14,7 +14,7 @@
 
     <!-- Main card -->
     <HBox alignment="CENTER_RIGHT">
-        <VBox alignment="CENTER">
+        <VBox alignment="CENTER" fx:id="buttonContainer">
             <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">
                 <graphic>
                     <FontIcon iconLiteral="fas-plus" iconSize="16" iconColor="WHITE"/>
@@ -28,8 +28,10 @@
 
         <VBox fx:id="leftColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
             <Label text="Alle medewerkers:" styleClass="section-title"/>
+            <TextField fx:id="searchField" promptText="zoek op naam..." styleClass="input-field"/>
+            <ComboBox fx:id="statusFilter" styleClass="picker" maxWidth="Infinity"/>
             <ScrollPane styleClass="scroll-pane" fitToWidth="true" VBox.vgrow="ALWAYS">
-                <VBox fx:id="teamsList" spacing="8"  style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+                <VBox fx:id="teamsList" spacing="8" style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
             </ScrollPane>
         </VBox>
 

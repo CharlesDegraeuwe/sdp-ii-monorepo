@@ -55,8 +55,6 @@ public class LocatieFacade {
         return api.verwijderMachine(machineId);
     }
 
-    // ─── VALIDATIE ───────────────────────────────────────────────────────────────
-
     private void valideerLocatie(LocatieDTO locatie) {
         if (locatie.naam() == null || locatie.naam().isBlank())
             throw new IllegalArgumentException("Locatienaam is verplicht.");
