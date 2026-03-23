@@ -1,6 +1,7 @@
 package domain.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import domain.dto.LogDTO;
 import domain.dto.UpdateWerknemerDTO;
@@ -20,7 +21,8 @@ public class LogsApiService {
     private final String BASE_URL = dotenv.get("BASE_URL") +"/logs";
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     //calls etc
     // ====================================================================
@@ -45,7 +47,7 @@ public class LogsApiService {
     // ====================================================================
     public String voegLogToe(LogDTO log) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
+            //ObjectMapper mapper = new ObjectMapper();
             String jsonBody = mapper.writeValueAsString(log);
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -57,6 +59,10 @@ public class LogsApiService {
 
             HttpResponse<String> response =
                     client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("STATUS: " + response.statusCode());
+            System.out.println("BODY: " + response.body());
+            System.out.println(jsonBody);
 
             return response.body();
 

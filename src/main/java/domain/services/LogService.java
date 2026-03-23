@@ -14,10 +14,25 @@ public class LogService {
     public static void log(String type, String tabel, String details) {
         try {
             WerknemerDTO werknemer = Sessie.getInstance().getIngelogdeWerknemer();
-            LogDTO logDTO = new LogDTO(0, werknemer, type, tabel, LocalDateTime.now(), details);
+
+            if (werknemer == null) {
+                System.out.println("Logging mislukt: geen ingelogde gebruiker");
+                return;
+            }
+
+            LogDTO logDTO = new LogDTO(
+                    null,
+                    werknemer.id(),
+                    type,
+                    tabel,
+                    LocalDateTime.now(),
+                    details
+            );
+
             facade.voegLogToe(logDTO);
+
         } catch (Exception e) {
-            // logging mag nooit een actie blokkeren
+            e.printStackTrace();
         }
     }
 }
