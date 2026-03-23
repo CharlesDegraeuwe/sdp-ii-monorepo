@@ -16,8 +16,9 @@
 
         <VBox fx:id="leftColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
             <Label text="Teams:" styleClass="section-title"/>
-            <ScrollPane styleClass="scroll-pane"  fitToWidth="true" VBox.vgrow="ALWAYS">
-                <VBox fx:id="teamsList" spacing="8"  style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+            <TextField fx:id="searchField" promptText="zoek op naam of team..." styleClass="input-field"/>
+            <ScrollPane styleClass="scroll-pane" fitToWidth="true" VBox.vgrow="ALWAYS">
+                <VBox fx:id="teamsList" spacing="8" style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
             </ScrollPane>
         </VBox>
 

@@ -8,7 +8,6 @@ import java.util.List;
 public class TeamFacade {
     private final TeamApiService api = new TeamApiService();
 
-
     public List<TeamDTO> getAlleTeams() {
         return api.getAlleTeams();
     }
@@ -46,6 +45,23 @@ public class TeamFacade {
     }
 
     public TeamDTO maakTeam(CreateTeamDTO dto) {
+        if (dto.naam() == null || dto.naam().isBlank())
+            throw new IllegalArgumentException("Teamnaam is verplicht.");
+        if (dto.managerId() == null)
+            throw new IllegalArgumentException("Selecteer een manager.");
+        if (dto.siteId() == null)
+            throw new IllegalArgumentException("Selecteer een site.");
+        if (dto.leden() == null || dto.leden().isEmpty())
+            throw new IllegalArgumentException("Selecteer minstens één teamlid.");
+        if (dto.leden().size() > 4)
+            throw new IllegalArgumentException("Een team mag maximaal 4 leden hebben.");
+
+        long aantalSupervisors = dto.leden().stream()
+                .filter(l -> l.isSupervisor())
+                .count();
+        if (aantalSupervisors > 1) {
+            throw new IllegalArgumentException("Een team mag maximaal één supervisor hebben.");
+        }
         return api.maakTeam(dto);
     }
 
@@ -57,7 +73,7 @@ public class TeamFacade {
         api.verwijderLid(teamId, werknemerId);
     }
 
-    public void verwijderTeam(int teamId){
+    public void verwijderTeam(int teamId) {
         api.verwijderTeam(teamId);
     }
 
@@ -65,4 +81,3 @@ public class TeamFacade {
         api.maakSupervisor(teamId, werknemerId);
     }
 }
-

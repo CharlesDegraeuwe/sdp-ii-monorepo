@@ -63,11 +63,7 @@ public class CreateTaskController extends BorderPane {
         String datumTekst = dueDateField.getText().trim();
         LocatieDTO geselecteerdeSite = locationPicker.getValue();
 
-        if (titel.isEmpty() || beschrijving.isEmpty() || datumTekst.isEmpty() || geselecteerdeSite == null) {
-            toonFeedback("Vul alle velden in.", true);
-            return;
-        }
-
+        // Datum parsing blijft in GUI (is UI-formatting, geen business rule)
         LocalDate deadline;
         try {
             deadline = LocalDate.parse(datumTekst, FORMATTER);
@@ -77,12 +73,18 @@ public class CreateTaskController extends BorderPane {
         }
 
         try {
-            String resultaat = takenFacade.maakTaakAan(titel, beschrijving, deadline, geselecteerdeSite.id());
+            // Facade valideert: lege velden, deadline in verleden, etc.
+            String resultaat = takenFacade.maakTaakAan(
+                    titel, beschrijving, deadline,
+                    geselecteerdeSite != null ? geselecteerdeSite.id() : -1
+            );
             toonFeedback(resultaat, false);
             nameField.clear();
             specField.clear();
             dueDateField.clear();
             if (onAangemaakt != null) onAangemaakt.run();
+        } catch (IllegalArgumentException ex) {
+            toonFeedback(ex.getMessage(), true);
         } catch (Exception ex) {
             toonFeedback("Fout: " + ex.getMessage(), true);
         }

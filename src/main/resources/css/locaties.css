@@ -250,3 +250,33 @@
 .btn-danger:hover {
     -fx-background-color: rgba(227, 27, 53, 0.08);
 }
+
+/* ===== DIALOG / POP-UPS ===== */
+
+.dialog-pane {
+    -fx-background-color: #FFFFFF;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #F6F6F6;
+    -fx-padding: 15 20 15 20;
+    -fx-border-color: transparent transparent #E8E8E8 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.dialog-pane > .content {
+    -fx-padding: 20;
+}
+
+.dialog-pane > .button-bar > .container {
+    -fx-padding: 15 20 15 20;
+    -fx-background-color: #F6F6F6;
+    -fx-border-color: #E8E8E8 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}

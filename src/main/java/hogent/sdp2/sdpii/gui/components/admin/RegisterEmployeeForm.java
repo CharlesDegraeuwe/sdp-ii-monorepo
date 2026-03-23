@@ -1,27 +1,20 @@
 package hogent.sdp2.sdpii.gui.components.admin;
 
 import domain.Beheerder;
-import hogent.sdp2.sdpii.gui.MainFrameController;
-import hogent.sdp2.sdpii.gui.admin.formvalidatie.FormValidatie;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class RegisterEmployeeForm extends VBox {
-    private MainFrameController mf;
-    private Stage stage;
 
     @FXML private TextField nameField;
     @FXML private TextField surnameField;
@@ -42,7 +35,6 @@ public class RegisterEmployeeForm extends VBox {
         }
 
         roleComboBox.getItems().addAll("Werknemer", "Supervisor");
-
         roleComboBox.getSelectionModel().select("Werknemer");
     }
 
@@ -59,26 +51,13 @@ public class RegisterEmployeeForm extends VBox {
         String voornaam = surnameField.getText();
         String email = emailField.getText();
         String telefoon = phoneField.getText();
-        LocalDate datum = dobField.getValue();
+        String geboortedatumStr = dobField.getValue() != null ? dobField.getValue().toString() : null;
         String rol = roleComboBox.getValue();
 
-        String fout = FormValidatie.valideer(naam, voornaam, email, telefoon, datum);
-        if (fout != null) {
-            feedbackLabel.setText(fout);
-            feedbackLabel.setStyle("-fx-text-fill: red;");
-            highlightFout(fout);
-            return;
-        }
-        if (rol == null) {
-            feedbackLabel.setText("Selecteer een rol.");
-            feedbackLabel.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        String geboortedatumStr = datum.toString();
         Task<Boolean> task = new Task<>() {
             @Override
             protected Boolean call() {
+                // Validatie zit nu in de facade - gooit IllegalArgumentException bij fouten
                 return Beheerder.getInstance().getWerknemersFacade().registreerWerknemer(
                         naam, voornaam, email, telefoon, geboortedatumStr, rol);
             }
@@ -97,7 +76,13 @@ public class RegisterEmployeeForm extends VBox {
         });
 
         task.setOnFailed(e -> {
-            feedbackLabel.setText("Netwerkfout.");
+            Throwable oorzaak = task.getException();
+            if (oorzaak instanceof IllegalArgumentException) {
+                feedbackLabel.setText(oorzaak.getMessage());
+                highlightFout(oorzaak.getMessage());
+            } else {
+                feedbackLabel.setText("Netwerkfout.");
+            }
             feedbackLabel.setStyle("-fx-text-fill: red;");
         });
 
