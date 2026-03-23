@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class PlanningFacade {
-    private final PlanningApiService api = new PlanningApiService();
+    private PlanningApiService api = new PlanningApiService();
 
     // Wordt gebruikt door een 'gewone' werknemer (zoekt op basis van zijn eigen ID)
     public List<AfwezigheidsOverzichtDTO> geefAfwezighedenVanTeam(int werknemerId, LocalDate van, LocalDate tot) {

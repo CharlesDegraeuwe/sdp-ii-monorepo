@@ -7,7 +7,7 @@ import domain.services.LogService;
 import java.time.LocalDate;
 
 public class AfwezigheidFacade {
-    private final AfwezigheidApiService api = new AfwezigheidApiService();
+    private AfwezigheidApiService api = new AfwezigheidApiService();
 
     public String meldAfwezigheid(int werknemerId, LocalDate startDatum, LocalDate eindDatum, String reden, byte[] certificaat) {
         if (startDatum == null)
