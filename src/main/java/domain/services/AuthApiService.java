@@ -1,20 +1,14 @@
 package domain.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import domain.auth.Sessie;
 import domain.dto.WerknemerDTO;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class AuthApiService extends ApiService {
-    Dotenv dotenv = Dotenv.load();
-    private final String BASE_URL = dotenv.get("BASE_URL")+"/werknemers";
-
+    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/werknemers";
 
     public WerknemerDTO login(String email, String wachtwoord) {
         try {
@@ -26,7 +20,6 @@ public class AuthApiService extends ApiService {
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
-
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             response.headers().firstValue("Set-Cookie").ifPresent(cookie -> {
@@ -35,12 +28,24 @@ public class AuthApiService extends ApiService {
                     Sessie.getInstance().setSessionId(sessionId);
                 }
             });
-            System.out.println("Status: " + response.statusCode());
-            System.out.println("Body: " + response.body());
 
             return mapper.readValue(response.body(), WerknemerDTO.class);
         } catch (Exception e) {
             throw new RuntimeException("Fout bij inloggen", e);
+        }
+    }
+
+    public boolean activeerAccount(int werknemerId, String activatieCode) {
+        try {
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + werknemerId + "/activeer?code=" + activatieCode)
+                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode() == 200 && !response.body().contains("Fout");
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij activeren", e);
         }
     }
 }

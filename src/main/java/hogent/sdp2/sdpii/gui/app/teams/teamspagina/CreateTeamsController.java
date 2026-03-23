@@ -24,11 +24,12 @@ public class CreateTeamsController extends VBox {
     @FXML ComboBox<SiteDTO> plantCombo;
     @FXML Button createTeamBtn;
     @FXML VBox employeeListContainer;
+    @FXML Label feedbackLabel;
 
     private TeamFacade facade;
     private List<WerknemerDTO> alleWerknemers;
-    private  List<WerknemerDTO> managers;
-    private  List<WerknemerDTO> werknemers;
+    private List<WerknemerDTO> managers;
+    private List<WerknemerDTO> werknemers;
     private List<SelectedLid> geselecteerdeLeden = new ArrayList<>();
 
     public CreateTeamsController(TeamFacade facade) {
@@ -45,7 +46,6 @@ public class CreateTeamsController extends VBox {
     }
 
     private void init() {
-        // Sites enz laden
         List<SiteDTO> sites = facade.getAlleSites();
         plantCombo.getItems().addAll(sites);
         plantCombo.setConverter(new StringConverter<>() {
@@ -53,21 +53,17 @@ public class CreateTeamsController extends VBox {
             @Override public SiteDTO fromString(String s) { return null; }
         });
 
-        // Werknemers laden voor manager dropdown en ledenselectie
         alleWerknemers = facade.getAlleWerknemersVoorTeams();
-        managers = alleWerknemers.stream().filter(werknemerDTO -> werknemerDTO.rol().equals("Manager")).toList();
-        werknemers = alleWerknemers.stream().filter(werknemerDTO -> !werknemerDTO.rol().equals("Manager") && !werknemerDTO.rol().equals("Admin")).toList();
+        managers = alleWerknemers.stream().filter(w -> w.rol().equals("Manager")).toList();
+        werknemers = alleWerknemers.stream().filter(w -> !w.rol().equals("Manager") && !w.rol().equals("Admin")).toList();
         managerCombo.getItems().addAll(managers);
         managerCombo.setConverter(new StringConverter<>() {
             @Override public String toString(WerknemerDTO w) { return w == null ? "" : w.voornaam() + " " + w.naam(); }
             @Override public WerknemerDTO fromString(String s) { return null; }
         });
 
-        // Werknemerslijst tonen in rechterkolom
         buildEmployeeList();
-
         createTeamBtn.setOnAction(e -> handleCreate());
-
     }
 
     private void buildEmployeeList() {
@@ -99,7 +95,6 @@ public class CreateTeamsController extends VBox {
                     supervisorCb.setSelected(false);
                     lid.supervisor = false;
                 }
-
                 long aantalGeselecteerd = geselecteerdeLeden.stream().filter(l -> l.selected).count();
                 alleSelectCbs.forEach(cb -> {
                     if (!cb.isSelected()) cb.setDisable(aantalGeselecteerd >= 4);
@@ -141,7 +136,6 @@ public class CreateTeamsController extends VBox {
             if (!lid.selected) {
                 cb.setDisable(true);
             } else if (heeftSupervisor && !lid.supervisor) {
-                // Er is al een supervisor, blokkeer de rest
                 cb.setDisable(true);
             } else {
                 cb.setDisable(false);
@@ -150,14 +144,10 @@ public class CreateTeamsController extends VBox {
     }
 
     private void handleCreate() {
+        nameField.setStyle("");
+
         String naam = nameField.getText().trim();
         String beschrijving = descriptionField.getText().trim();
-
-        if (naam.isEmpty()) {
-            nameField.setStyle("-fx-border-color: #E31B35; -fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: #f5f5f5; -fx-padding: 10 16;");
-            return;
-        }
-
         Integer managerId = managerCombo.getValue() != null ? managerCombo.getValue().id() : null;
         Integer siteId = plantCombo.getValue() != null ? plantCombo.getValue().id() : null;
 
@@ -168,20 +158,37 @@ public class CreateTeamsController extends VBox {
                 .toList();
 
         CreateTeamDTO dto = new CreateTeamDTO(naam, beschrijving, managerId, siteId, leden);
-        facade.maakTeam(dto);
 
-        nameField.clear();
-        descriptionField.clear();
-        managerCombo.setValue(null);
-        plantCombo.setValue(null);
-        buildEmployeeList();
+        try {
+            facade.maakTeam(dto);
+            toonFeedback("Team succesvol aangemaakt!", false);
+            nameField.clear();
+            descriptionField.clear();
+            managerCombo.setValue(null);
+            plantCombo.setValue(null);
+            buildEmployeeList();
+        } catch (IllegalArgumentException ex) {
+            toonFeedback(ex.getMessage(), true);
+            if (ex.getMessage().contains("Teamnaam")) {
+                nameField.setStyle("-fx-border-color: #E31B35; -fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: #f5f5f5; -fx-padding: 10 16;");
+            }
+        } catch (Exception ex) {
+            toonFeedback("Fout: " + ex.getMessage(), true);
+        }
+    }
+
+    private void toonFeedback(String bericht, boolean isError) {
+        if (feedbackLabel != null) {
+            feedbackLabel.setText(bericht);
+            feedbackLabel.setStyle(isError ? "-fx-text-fill: red;" : "-fx-text-fill: green;");
+            feedbackLabel.setVisible(true);
+        }
     }
 
     private static class SelectedLid {
         WerknemerDTO werknemer;
         boolean selected = false;
         boolean supervisor = false;
-
         SelectedLid(WerknemerDTO w) { this.werknemer = w; }
     }
 }
