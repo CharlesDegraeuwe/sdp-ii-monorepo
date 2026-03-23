@@ -1,20 +1,17 @@
 package hogent.sdp2.sdpii.gui.components.admin;
 
 import domain.Beheerder;
-import hogent.sdp2.sdpii.gui.admin.formvalidatie.FormValidatie;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class RegisterManagerForm extends VBox {
 
@@ -35,6 +32,7 @@ public class RegisterManagerForm extends VBox {
             throw new RuntimeException(e);
         }
     }
+
     @FXML
     private void handleBack() {
         Router.getInstance().navigeerNaar(Scherm.ADMIN_HOME);
@@ -48,20 +46,12 @@ public class RegisterManagerForm extends VBox {
         String voornaam = surnameField.getText();
         String email = emailField.getText();
         String telefoon = phoneField.getText();
-        LocalDate datum = dobField.getValue();
+        String geboortedatumStr = dobField.getValue() != null ? dobField.getValue().toString() : null;
 
-        String fout = FormValidatie.valideer(naam, voornaam, email, telefoon, datum);
-        if (fout != null) {
-            feedbackLabel.setText(fout);
-            feedbackLabel.setStyle("-fx-text-fill: red;");
-            highlightFout(fout);
-            return;
-        }
-
-        String geboortedatumStr = datum.toString();
         Task<Boolean> task = new Task<>() {
             @Override
             protected Boolean call() {
+                // Validatie zit in WerknemersFacade - gooit IllegalArgumentException bij fouten
                 return Beheerder.getInstance().getWerknemersFacade().registreerWerknemer(
                         naam, voornaam, email, telefoon, geboortedatumStr, "Manager");
             }
@@ -80,7 +70,13 @@ public class RegisterManagerForm extends VBox {
         });
 
         task.setOnFailed(e -> {
-            feedbackLabel.setText("Netwerkfout.");
+            Throwable oorzaak = task.getException();
+            if (oorzaak instanceof IllegalArgumentException) {
+                feedbackLabel.setText(oorzaak.getMessage());
+                highlightFout(oorzaak.getMessage());
+            } else {
+                feedbackLabel.setText("Netwerkfout.");
+            }
             feedbackLabel.setStyle("-fx-text-fill: red;");
         });
 
