@@ -2,6 +2,7 @@ package domain.facades;
 
 import domain.auth.Sessie;
 import domain.dto.TaakDTO;
+import domain.services.LogService;
 import domain.services.TakenApiService;
 
 import java.time.LocalDate;
@@ -20,7 +21,9 @@ public class TakenFacade {
     }
 
     public String wijsTaakToe(int taakId, int werknemerId) {
-        return api.wijsTaakToe(taakId, werknemerId);
+        String result = api.wijsTaakToe(taakId, werknemerId);
+        LogService.log("UPDATE", "taken", "Taak toegewezen – taakId: " + taakId + ", werknemerId: " + werknemerId);
+        return result;
     }
 
     public String maakTaakAan(String titel, String beschrijving, LocalDate deadline, int siteId) {
@@ -36,21 +39,27 @@ public class TakenFacade {
             throw new IllegalArgumentException("Selecteer een geldige locatie.");
 
         int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
-        return api.maakTaakAan(werknemerId, titel, beschrijving, deadline, siteId);
+        String result = api.maakTaakAan(werknemerId, titel, beschrijving, deadline, siteId);
+        LogService.log("CREATE", "taken", "Taak aangemaakt – titel: " + titel + ", deadline: " + deadline);
+        return result;
     }
 
     public String wijzigTaak(int taakId, String titel, String beschrijving) {
-        if (titel == null || titel.isBlank())
-            throw new IllegalArgumentException("Titel is verplicht.");
+        String result = api.wijzigTaak(taakId, titel, beschrijving);
+        LogService.log("UPDATE", "taken", "Taak gewijzigd – taakId: " + taakId + ", titel: " + titel);
+        return result;
 
-        return api.wijzigTaak(taakId, titel, beschrijving);
     }
 
     public String verwijderTaak(int taakId) {
-        return api.verwijderTaak(taakId);
+        String result = api.verwijderTaak(taakId);
+        LogService.log("DELETE", "taken", "Taak verwijderd – taakId: " + taakId);
+        return result;
     }
 
     public String markeerAfgewerkt(int taakId) {
-        return api.markeerAfgewerkt(taakId);
+        String result = api.markeerAfgewerkt(taakId);
+        LogService.log("UPDATE", "taken", "Taak afgewerkt – taakId: " + taakId);
+        return result;
     }
 }

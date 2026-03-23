@@ -17,6 +17,7 @@ public class AdminHomeMenuController extends VBox {
     @FXML HBox rgstr_mngr;
     @FXML HBox rgstr_emp;
     @FXML HBox mng_usr;
+    @FXML HBox log;
 
     public AdminHomeMenuController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/admin/AdminHomeMenu.fxml"));
@@ -40,6 +41,6 @@ public class AdminHomeMenuController extends VBox {
         rgstr_mngr.setOnMouseClicked(e ->  {Router.getInstance().navigeerNaar(Scherm.CREEER_MANAGER);});
         rgstr_emp.setOnMouseClicked(e ->  {Router.getInstance().navigeerNaar(Scherm.CREEER_MEDEWERKER);});
         mng_usr.setOnMouseClicked(e ->  {Router.getInstance().navigeerNaar(Scherm.BEHEER_GEBRUIKERS);});
-
+        log.setOnMouseClicked(e -> {Router.getInstance().navigeerNaar(Scherm.VIEW_LOGS);});
     }
 }
