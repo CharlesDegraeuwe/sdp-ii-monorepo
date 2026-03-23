@@ -102,18 +102,25 @@ public class CheckTeamsController extends StackPane {
         });
         selectedItem.setSelected(true);
         membersList.getChildren().clear();
-        currentLedenController = new TeamLedenController(
-                selectedItem.getTeam().id(), tm, this::refreshTeams, onNavigeerNaarUser);
+        currentLedenController = new TeamLedenController(selectedItem.getTeam(), tm, this::refreshTeams, onNavigeerNaarUser);
         membersList.getChildren().add(currentLedenController);
         addMembersContainer.setVisible(currentLedenController.getTeamleden().size() < 4);
     }
 
     private void refreshTeams() {
-        if (selected != null) {
-            setSelected(selected);
-        }
-    }
+        teamsList.getChildren().clear();
+        membersList.getChildren().clear();
+        membersList.getChildren().add(noItems());
+        addMembersContainer.setVisible(false);
+        selected = null;
+        currentLedenController = null;
 
+        teams = tm.getAlleTeams();
+        teams.forEach(teamDTO -> {
+            TeamItemController item = new TeamItemController(teamDTO, this::setSelected);
+            teamsList.getChildren().add(item);
+        });
+    }
 
     public Pane noItems() {
         VBox v = new VBox();

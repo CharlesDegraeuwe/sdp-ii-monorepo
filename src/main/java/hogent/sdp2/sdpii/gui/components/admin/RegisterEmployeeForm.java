@@ -2,6 +2,7 @@ package hogent.sdp2.sdpii.gui.components.admin;
 
 import domain.Beheerder;
 import hogent.sdp2.sdpii.gui.MainFrameController;
+import hogent.sdp2.sdpii.gui.admin.formvalidatie.FormValidatie;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.concurrent.Task;
@@ -52,53 +53,72 @@ public class RegisterEmployeeForm extends VBox {
 
     @FXML
     private void handleRegistreer() {
+        resetFieldStyles();
+
         String naam = nameField.getText();
         String voornaam = surnameField.getText();
         String email = emailField.getText();
         String telefoon = phoneField.getText();
-
         LocalDate datum = dobField.getValue();
         String rol = roleComboBox.getValue();
 
-        if (naam.isBlank() || voornaam.isBlank() || email.isBlank() || telefoon.isBlank() || datum == null || rol == null) {
-            feedbackLabel.setText("Vul aub alle velden in.");
+        String fout = FormValidatie.valideer(naam, voornaam, email, telefoon, datum);
+        if (fout != null) {
+            feedbackLabel.setText(fout);
             feedbackLabel.setStyle("-fx-text-fill: red;");
-            System.out.println("Niet alle velden zijn ingevuld!");
+            highlightFout(fout);
             return;
         }
-        String geboortedatumStr = datum.toString();
+        if (rol == null) {
+            feedbackLabel.setText("Selecteer een rol.");
+            feedbackLabel.setStyle("-fx-text-fill: red;");
+            return;
+        }
 
+        String geboortedatumStr = datum.toString();
         Task<Boolean> task = new Task<>() {
             @Override
             protected Boolean call() {
                 return Beheerder.getInstance().getWerknemersFacade().registreerWerknemer(
-                        naam, voornaam, email, telefoon, geboortedatumStr, rol
-                );
+                        naam, voornaam, email, telefoon, geboortedatumStr, rol);
             }
         };
 
         task.setOnSucceeded(e -> {
-            boolean gelukt = task.getValue();
-            if (gelukt) {
-                System.out.println("Werknemer succesvol aangemaakt!");
-                nameField.clear();
-                surnameField.clear();
-                emailField.clear();
-                phoneField.clear();
-                dobField.setValue(null);
-
+            if (task.getValue()) {
+                nameField.clear(); surnameField.clear(); emailField.clear();
+                phoneField.clear(); dobField.setValue(null);
                 feedbackLabel.setText("Werknemer succesvol geregistreerd!");
                 feedbackLabel.setStyle("-fx-text-fill: green;");
             } else {
-                System.out.println("Er is iets misgegaan bij het registreren.");
-                feedbackLabel.setText("Fout bij opslaan.");
+                feedbackLabel.setText("Fout bij opslaan. Bestaat deze e-mail al?");
+                feedbackLabel.setStyle("-fx-text-fill: red;");
             }
         });
 
         task.setOnFailed(e -> {
-            System.out.println("Netwerkfout.");
+            feedbackLabel.setText("Netwerkfout.");
+            feedbackLabel.setStyle("-fx-text-fill: red;");
         });
 
         new Thread(task).start();
+    }
+
+    private void resetFieldStyles() {
+        String normal = "-fx-border-color: transparent;";
+        nameField.setStyle(normal);
+        surnameField.setStyle(normal);
+        emailField.setStyle(normal);
+        phoneField.setStyle(normal);
+        dobField.setStyle(normal);
+    }
+
+    private void highlightFout(String fout) {
+        String error = "-fx-border-color: #E31B35; -fx-border-radius: 20; -fx-border-width: 1.5;";
+        if (fout.contains("Naam")) nameField.setStyle(error);
+        else if (fout.contains("Voornaam")) surnameField.setStyle(error);
+        else if (fout.contains("mail")) emailField.setStyle(error);
+        else if (fout.contains("telefoon") || fout.contains("Telefoon")) phoneField.setStyle(error);
+        else if (fout.contains("Geboortedatum") || fout.contains("oud")) dobField.setStyle(error);
     }
 }

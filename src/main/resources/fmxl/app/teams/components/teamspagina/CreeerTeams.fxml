@@ -10,7 +10,7 @@
          stylesheets="@/css/teams.css">
 
     <HBox styleClass="top-bar">
-        <Label text="Create team:" styleClass="page-title"/>
+        <Label text="Creëer team:" styleClass="page-title"/>
     </HBox>
 
     <HBox styleClass="main-card" VBox.vgrow="ALWAYS">

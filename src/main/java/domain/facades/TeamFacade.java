@@ -1,9 +1,6 @@
 package domain.facades;
 
-import domain.dto.CreateTeamDTO;
-import domain.dto.SiteDTO;
-import domain.dto.TeamDTO;
-import domain.dto.WerknemerDTO;
+import domain.dto.*;
 import domain.services.TeamApiService;
 
 import java.util.List;
@@ -16,16 +13,20 @@ public class TeamFacade {
         return api.getAlleTeams();
     }
 
-    public List<WerknemerDTO> getTeamLeden(int teamID) {
-        return api.getTeamMembers(teamID);
+    public List<TeamLidDTO> getTeamLeden(int teamId) {
+        return api.getTeamMembers(teamId);
     }
 
     public List<TeamDTO> geefTeamsVanSite(int siteId) {
         return api.geefTeamsVanSite(siteId);
     }
 
-    public List<WerknemerDTO> geefWerknemersVanTeam(int teamId) {
+    public List<TeamLidDTO> geefWerknemersVanTeam(int teamId) {
         return api.getTeamMembers(teamId);
+    }
+
+    public List<TeamLidDTO> geefTeamLedenMetSupervisor(int teamId) {
+        return api.getTeamLedenMetSupervisor(teamId);
     }
 
     public List<WerknemerDTO> getBeschikbareWerknemers(int teamId) {
@@ -54,6 +55,10 @@ public class TeamFacade {
 
     public void verwijderLid(int teamId, int werknemerId) {
         api.verwijderLid(teamId, werknemerId);
+    }
+
+    public void verwijderTeam(int teamId){
+        api.verwijderTeam(teamId);
     }
 }
 

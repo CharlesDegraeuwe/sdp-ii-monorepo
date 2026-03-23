@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml">
     <children>
         <Label text="create users"/>
     </children>

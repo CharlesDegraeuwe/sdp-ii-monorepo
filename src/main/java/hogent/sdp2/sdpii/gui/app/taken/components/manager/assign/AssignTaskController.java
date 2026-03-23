@@ -1,10 +1,7 @@
 package hogent.sdp2.sdpii.gui.app.taken.components.manager.assign;
 
 import domain.auth.Sessie;
-import domain.dto.LocatieDTO;
-import domain.dto.TaakDTO;
-import domain.dto.TeamDTO;
-import domain.dto.WerknemerDTO;
+import domain.dto.*;
 import domain.facades.LocatieFacade;
 import domain.facades.TakenFacade;
 import domain.facades.TeamFacade;
@@ -26,7 +23,7 @@ import java.util.List;
 public class AssignTaskController extends BorderPane {
     @FXML ComboBox<LocatieDTO> Locatie;
     @FXML ComboBox<TeamDTO> Team;
-    @FXML ComboBox<WerknemerDTO> Werknemer;
+    @FXML ComboBox<TeamLidDTO> Werknemer;
     @FXML VBox taskListContainer;
     @FXML VBox teamListContainer;
     @FXML VBox memberListContainer;
@@ -34,7 +31,7 @@ public class AssignTaskController extends BorderPane {
     @FXML CheckBox toonToegewezenCheckbox;
 
     private TaakDTO geselecteerdeTaak;
-    private WerknemerDTO geselecteerdeLid;
+    private TeamLidDTO geselecteerdeLid;
     private List<TaakDTO> alleTaken;
 
     private final TeamFacade teamFacade = new TeamFacade();
@@ -61,23 +58,18 @@ public class AssignTaskController extends BorderPane {
             teamListContainer.setVisible(false); teamListContainer.setManaged(false);
         }
 
-        // Taken laden
         alleTaken = takenFacade.geefAlleTaken();
         vulTaakList();
 
-        // Checkbox: toon ook toegewezen taken
         toonToegewezenCheckbox.setOnAction(e -> vulTaakList());
 
-        // Dropdown converters
         setConverter(Locatie, l -> l.naam());
         setConverter(Team, t -> t.naam());
         setConverter(Werknemer, w -> w.voornaam() + " " + w.naam());
 
-        // Locaties laden
         LocatieFacade locatieFacade = new LocatieFacade();
         Locatie.getItems().setAll(locatieFacade.geefAlleLocaties());
 
-        // Cascade: locatie → teams + leden
         Locatie.setOnAction(e -> {
             LocatieDTO geselecteerdeLocatie = Locatie.getValue();
             Team.getItems().clear();
@@ -90,45 +82,42 @@ public class AssignTaskController extends BorderPane {
             }
             List<TeamDTO> teams = teamFacade.geefTeamsVanSite(geselecteerdeLocatie.id());
             Team.getItems().setAll(teams);
-            List<WerknemerDTO> leden = teams.stream()
-                    .flatMap(t -> teamFacade.geefWerknemersVanTeam(t.id()).stream())
+
+            List<TeamLidDTO> leden = teams.stream()
+                    .flatMap(t -> teamFacade.geefTeamLedenMetSupervisor(t.id()).stream())
                     .distinct().toList();
             vulMemberList(leden);
             Werknemer.getItems().setAll(leden);
         });
 
-        // Cascade: team → leden
         Team.setOnAction(e -> {
             TeamDTO geselecteerdTeam = Team.getValue();
             Werknemer.getItems().clear();
             Werknemer.setValue(null);
             if (geselecteerdTeam == null) return;
-            List<WerknemerDTO> leden = teamFacade.geefWerknemersVanTeam(geselecteerdTeam.id());
+            List<TeamLidDTO> leden = teamFacade.geefTeamLedenMetSupervisor(geselecteerdTeam.id());
             vulMemberList(leden);
             Werknemer.getItems().setAll(leden);
         });
 
-        // Filter: werknemer
         Werknemer.setOnAction(e -> {
-            WerknemerDTO geselecteerdeWerknemer = Werknemer.getValue();
+            TeamLidDTO geselecteerdeWerknemer = Werknemer.getValue();
             if (geselecteerdeWerknemer == null) return;
             vulMemberList(List.of(geselecteerdeWerknemer));
         });
 
-        // Toewijzen
         assignButton.setOnAction(e -> {
             if (geselecteerdeTaak == null || geselecteerdeLid == null) {
                 assignButton.setText("Selecteer eerst een taak en medewerker");
                 return;
             }
             try {
-                String resultaat = takenFacade.wijsTaakToe(geselecteerdeTaak.id(), geselecteerdeLid.id());
+                String resultaat = takenFacade.wijsTaakToe(geselecteerdeTaak.id(), geselecteerdeLid.werknemerId());
                 assignButton.setText(resultaat);
                 geselecteerdeTaak = null;
                 geselecteerdeLid = null;
                 taskListContainer.getChildren().forEach(n -> n.setStyle(""));
                 memberListContainer.getChildren().forEach(n -> n.setStyle(""));
-                // Herlaad takenlijst na toewijzen
                 alleTaken = takenFacade.geefAlleTaken();
                 vulTaakList();
             } catch (Exception ex) {
@@ -158,11 +147,13 @@ public class AssignTaskController extends BorderPane {
         }
     }
 
-    private void vulMemberList(List<WerknemerDTO> werknemers) {
+    private void vulMemberList(List<TeamLidDTO> werknemers) {
         memberListContainer.getChildren().clear();
-        for (WerknemerDTO w : werknemers) {
+        for (TeamLidDTO w : werknemers) {
+            String label = w.voornaam() + " " + w.naam();
+            if (w.isSupervisor()) label += " (supervisor)";
             AssignMemberItemController item = new AssignMemberItemController(
-                    w.voornaam() + " " + w.naam(), "rgba(240, 240, 240, 0.48)");
+                    label, "rgba(240, 240, 240, 0.48)");
             item.setOnMouseClicked(e -> {
                 memberListContainer.getChildren().forEach(n -> n.setStyle(""));
                 item.setStyle(SELECTED_STYLE);
