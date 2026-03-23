@@ -58,6 +58,11 @@ public class TeamController {
         return teamService.maakTeam(dto);
     }
 
+    @PutMapping("/{teamId}/{werknemerId}/supervisor")
+    public void maakSupervisor(@PathVariable Integer teamId, @PathVariable Integer werknemerId) {
+        teamService.maakSupervisor(teamId, werknemerId);
+    }
+
     @PutMapping("/{teamId}/{werknemerId}")
     public List<WerknemerResponseDTO> voegToeAanTeam(@PathVariable Integer teamId, @PathVariable Integer werknemerId) {
         return teamService.voegToeAanTeam(teamId, werknemerId);
@@ -66,5 +71,15 @@ public class TeamController {
     @GetMapping("/werknemer/{werknemerId}")
     public List<TeamResponseDTO> geefTeamsVanWerknemer(@PathVariable Integer werknemerId) {
         return teamService.geefTeamsVanWerknemer(werknemerId);
+    }
+
+    @DeleteMapping("/{teamId}/{werknemerId}")
+    public List<WerknemerResponseDTO> verwijderUitTeam(@PathVariable Integer teamId, @PathVariable Integer werknemerId) {
+        return teamService.verwijderUitTeam(teamId, werknemerId);
+    }
+
+    @DeleteMapping("/{teamId}")
+    public List<TeamResponseDTO> verwijderTeam(@PathVariable Integer teamId) {
+        return teamService.verwijderTeam(teamId);
     }
 }
