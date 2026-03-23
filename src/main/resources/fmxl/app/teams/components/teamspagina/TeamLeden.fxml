@@ -5,9 +5,36 @@
 <?import javafx.scene.layout.*?>
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
+<fx:root type="VBox" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         spacing="12">
+<padding>
+    <Insets top="0" right="16" bottom="16" left="16"/>
+</padding>
 
-<fx:root type="VBox" fx:id="container" VBox.vgrow="always"
-         xmlns="http://javafx.com/javafx"
-         xmlns:fx="http://javafx.com/fxml" spacing="10">
+    <HBox>
+        <Label fx:id="naam" styleClass="user-detail-name"/>
+    </HBox>
+    <HBox>
+        <Label text="Locatie: "/>
+        <Label fx:id="locatie" style="-fx-underline: true" styleClass="user-detail-value"/>
+    </HBox>
+    <HBox>
+        <Label text="Manager: "/>
+        <Label fx:id="manager" styleClass="user-detail-value"/>
+    </HBox>
 
+
+
+<Separator/>
+<Label text="Leden:" styleClass="section-title"/>
+    <ScrollPane styleClass="scroll-pane" VBox.vgrow="ALWAYS" fitToWidth="true">
+        <VBox fx:id="container" spacing="8" maxWidth="Infinity"/>
+    </ScrollPane>
+<Separator/>
+
+
+<Region VBox.vgrow="ALWAYS"/>
+
+<Button fx:id="deleteBtn" text="verwijderen" styleClass="btn-blokkeer" maxWidth="Infinity"/>
 </fx:root>

@@ -14,7 +14,7 @@
 
     <!-- Main card -->
     <HBox alignment="CENTER_RIGHT">
-        <VBox alignment="CENTER">
+        <VBox alignment="CENTER" fx:id="buttonContainer">
             <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">
                 <graphic>
                     <FontIcon iconLiteral="fas-plus" iconSize="16" iconColor="WHITE"/>

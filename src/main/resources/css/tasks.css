@@ -377,6 +377,11 @@
     -fx-icon-color: #E31B35;
 }
 
+.isSupervisorLabel {
+    -fx-font-size: 10px;
+    -fx-background-color: gray;
+}
+
 .taak_checkbox .box {
     -fx-background-radius: 999px;
     -fx-border-radius: 999px;

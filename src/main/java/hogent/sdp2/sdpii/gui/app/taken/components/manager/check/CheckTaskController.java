@@ -1,11 +1,8 @@
 package hogent.sdp2.sdpii.gui.app.taken.components.manager.check;
 
 import domain.auth.Sessie;
-import domain.dto.LocatieDTO;
+import domain.dto.*;
 import hogent.sdp2.sdpii.gui.router.Router;
-import domain.dto.TaakDTO;
-import domain.dto.TeamDTO;
-import domain.dto.WerknemerDTO;
 import domain.facades.LocatieFacade;
 import domain.facades.TakenFacade;
 import domain.facades.TeamFacade;
@@ -39,7 +36,7 @@ public class CheckTaskController extends BorderPane {
     @FXML ComboBox<String> Toegewezen;
     @FXML ComboBox<LocatieDTO> Locatie;
     @FXML ComboBox<TeamDTO> Team;
-    @FXML ComboBox<WerknemerDTO> Werknemer;
+    @FXML ComboBox<TeamLidDTO> Werknemer;
     @FXML VBox detail_card;
     @FXML Label detail_deadline;
     @FXML Label detail_locatie;
@@ -51,7 +48,7 @@ public class CheckTaskController extends BorderPane {
     private static final String ALLE_TOEGEWEZEN = "Alle taken";
     private static final LocatieDTO ALLE_LOCATIES = new LocatieDTO(-1, "Alle locaties", null, null, null);
     private static final TeamDTO ALLE_TEAMS = new TeamDTO(-1, "Alle teams", null, null, null, null, null);
-    private static final WerknemerDTO ALLE_WERKNEMERS = new WerknemerDTO(-1, "Alle werknemers", "", null, null, null, null, null);
+    private static final TeamLidDTO ALLE_WERKNEMERS = new TeamLidDTO(-1, "Alle werknemers", "", null, null, null, false, 0, null, null, null, null, null, null);
 
     private TaakDTO geselecteerdeTaak;
     private List<TaakDTO> alleTaken;
@@ -103,8 +100,7 @@ public class CheckTaskController extends BorderPane {
         // Converters
         setConverter(Locatie, l -> l.naam());
         setConverter(Team, t -> t.naam());
-        setConverter(Werknemer, w -> w.id() == -1 ? w.naam() : w.voornaam() + " " + w.naam());
-
+        setConverter(Werknemer, w -> w.werknemerId() == -1 ? w.naam() : w.voornaam() + " " + w.naam());
         // Toegewezen items
         Toegewezen.getItems().setAll(ALLE_TOEGEWEZEN, "Toegewezen", "Niet toegewezen");
         Toegewezen.setValue(ALLE_TOEGEWEZEN);
@@ -137,25 +133,25 @@ public class CheckTaskController extends BorderPane {
                 teamItems.add(ALLE_TEAMS);
                 teamItems.addAll(teams);
                 Team.getItems().setAll(teamItems);
-                List<WerknemerDTO> leden = teams.stream()
-                        .flatMap(t -> teamFacade.geefWerknemersVanTeam(t.id()).stream())
+
+                List<TeamLidDTO> leden = teams.stream()
+                        .flatMap(t -> teamFacade.geefTeamLedenMetSupervisor(t.id()).stream())
                         .distinct().toList();
-                List<WerknemerDTO> werkItems = new ArrayList<>();
+                List<TeamLidDTO> werkItems = new ArrayList<>();
                 werkItems.add(ALLE_WERKNEMERS);
                 werkItems.addAll(leden);
                 Werknemer.getItems().setAll(werkItems);
             }
             toonTaken();
         });
-
         // Cascade: Team → Werknemers
         Team.setOnAction(e -> {
             TeamDTO sel = Team.getValue();
             Werknemer.getItems().setAll(ALLE_WERKNEMERS);
             Werknemer.setValue(ALLE_WERKNEMERS);
             if (sel != null && sel.id() != -1) {
-                List<WerknemerDTO> leden = teamFacade.geefWerknemersVanTeam(sel.id());
-                List<WerknemerDTO> werkItems = new ArrayList<>();
+                List<TeamLidDTO> leden = teamFacade.geefWerknemersVanTeam(sel.id());
+                List<TeamLidDTO> werkItems = new ArrayList<>();
                 werkItems.add(ALLE_WERKNEMERS);
                 werkItems.addAll(leden);
                 Werknemer.getItems().setAll(werkItems);
@@ -188,8 +184,8 @@ public class CheckTaskController extends BorderPane {
                 ? Locatie.getValue().id() : null;
         Integer teamFilter = Team.getValue() != null && Team.getValue().id() != -1
                 ? Team.getValue().id() : null;
-        Integer werknemerFilter = Werknemer.getValue() != null && Werknemer.getValue().id() != -1
-                ? Werknemer.getValue().id() : null;
+        Integer werknemerFilter = Werknemer.getValue() != null && Werknemer.getValue().werknemerId() != -1
+                ? Werknemer.getValue().werknemerId() : null;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         int aantalTaken = 0;
