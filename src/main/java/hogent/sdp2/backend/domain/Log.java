@@ -16,9 +16,8 @@ public class Log {
     @Column(name = "Log_ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Werknemer_ID", nullable = false)
-    private Werknemer werknemer;
+    @Column(name = "Werknemer_ID", nullable = false)
+    private Integer werknemerId;
 
     @Column(name = "Type", nullable = false, length = 45)
     private String type;
@@ -26,13 +25,13 @@ public class Log {
     @Column(name = "Tabel", nullable = false, length = 45)
     private String tabel;
 
-    @Column(name = "Record_ID", nullable = false)
+    @Column(name = "Record_ID", nullable = true)
     private Integer recordId;
 
     @Column(name = "Timestamp", nullable = false)
     private LocalDate timestamp;
 
-    @Column(name = "test", nullable = false, length = 45)
-    private String test;
+    @Column(name = "test", nullable = true, length = 45)
+    private String beschrijving;
 
 }
