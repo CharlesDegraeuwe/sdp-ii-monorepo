@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class TakenFacade {
-    private final TakenApiService api = new TakenApiService();
+    private TakenApiService api = new TakenApiService();
 
     public List<TaakDTO> geefEigenTaken() {
         int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();

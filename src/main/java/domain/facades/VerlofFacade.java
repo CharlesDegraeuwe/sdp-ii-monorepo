@@ -7,7 +7,7 @@ import domain.services.VerlofApiService;
 import java.time.LocalDate;
 
 public class VerlofFacade {
-    private final VerlofApiService api = new VerlofApiService();
+    private VerlofApiService api = new VerlofApiService();
 
     public String vraagVerlofAan(int werknemerId, LocalDate startDatum, LocalDate eindDatum, String type) {
         if (startDatum == null)
