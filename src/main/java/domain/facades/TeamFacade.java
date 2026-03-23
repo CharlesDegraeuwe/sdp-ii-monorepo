@@ -60,5 +60,9 @@ public class TeamFacade {
     public void verwijderTeam(int teamId){
         api.verwijderTeam(teamId);
     }
+
+    public void maakSupervisor(int teamId, int werknemerId) {
+        api.maakSupervisor(teamId, werknemerId);
+    }
 }
 

@@ -181,4 +181,16 @@ public class TeamApiService {
             throw new RuntimeException("Fout bij ophalen teamleden", e);
         }
     }
+
+    public void maakSupervisor(int teamId, int werknemerId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + teamId + "/" + werknemerId + "/supervisor"))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij supervisor aanduiden", e);
+        }
+    }
 }

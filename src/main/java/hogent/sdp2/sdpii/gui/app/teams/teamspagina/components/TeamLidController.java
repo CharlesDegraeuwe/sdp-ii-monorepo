@@ -24,8 +24,9 @@ public class TeamLidController extends HBox {
     private TeamFacade facade;
     private Runnable onRefresh;
     private Consumer<Integer> onNavigeerNaarUser;
+    private int totaalLeden;
 
-    public TeamLidController(TeamLidDTO lid, int i, int teamId, TeamFacade facade, Runnable onRefresh, Consumer<Integer> onNavigeerNaarUser) {
+    public TeamLidController(TeamLidDTO lid, int i, int teamId, int totaalLeden, TeamFacade facade, Runnable onRefresh, Consumer<Integer> onNavigeerNaarUser) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/teams/components/teamspagina/TeamLid.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -40,6 +41,7 @@ public class TeamLidController extends HBox {
         this.facade = facade;
         this.onRefresh = onRefresh;
         this.onNavigeerNaarUser = onNavigeerNaarUser;
+        this.totaalLeden = totaalLeden;
         init();
     }
 
@@ -65,6 +67,7 @@ public class TeamLidController extends HBox {
 
     @FXML
     private void handleDelete() {
+        if (totaalLeden <= 1) return; // min 1 lid
         facade.verwijderLid(teamId, lid.werknemerId());
         if (onRefresh != null) onRefresh.run();
     }
