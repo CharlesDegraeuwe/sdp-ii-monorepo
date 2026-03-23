@@ -1,5 +1,6 @@
 package hogent.sdp2.sdpii.gui.app.teams;
 
+import domain.auth.Sessie;
 import domain.facades.TeamFacade;
 import domain.facades.WerknemersFacade;
 import hogent.sdp2.sdpii.gui.admin.creeerMedewerker.CreeerMedewerkerController;
@@ -23,6 +24,7 @@ public class TeamsLayoutController extends VBox {
     @FXML Button teamsPagina;
     @FXML Button usersPagina;
     @FXML HBox page_buttons;
+    @FXML HBox tab_buttons;
 
     private CheckTeamsController checkTeamsController;
     private CreateTeamsController createTeamsController;
@@ -53,12 +55,17 @@ public class TeamsLayoutController extends VBox {
     public void init() {
         checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
         outer_container.setCenter(checkTeamsController);
+
+        if(Sessie.getInstance().isSuperVisor()) {
+            tab_buttons.setVisible(false);
+            tab_buttons.setManaged(false);
+        }
         checkKnop.setOnMouseClicked(e -> {
             if (pagina.equals("teams")) {
                 checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
                 outer_container.setCenter(checkTeamsController);
             } else {
-                checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
+                checkUserpage = new CheckUserpage(wm, tm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
                 outer_container.setCenter(checkUserpage);
             }
             tab = "check";
@@ -88,7 +95,7 @@ public class TeamsLayoutController extends VBox {
         usersPagina.setOnMouseClicked(e -> {
             pagina = "users";
             tab = "check";
-            checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
+            checkUserpage = new CheckUserpage(wm, tm, this::navigeerNaarTeam, this::navigeerNaarCreateUser);
             outer_container.setCenter(checkUserpage);
             updatePages();
             updateTabs();
@@ -101,7 +108,7 @@ public class TeamsLayoutController extends VBox {
     private void navigeerNaarUser(int werknemerId) {
         pagina = "users";
         tab = "check";
-        checkUserpage = new CheckUserpage(wm, this::navigeerNaarTeam, this::navigeerNaarCreateUser, werknemerId);
+        checkUserpage = new CheckUserpage(wm, tm, this::navigeerNaarTeam, this::navigeerNaarCreateUser, werknemerId);
         outer_container.setCenter(checkUserpage);
         updatePages();
         updateTabs();
