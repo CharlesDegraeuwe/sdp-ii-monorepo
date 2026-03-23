@@ -31,8 +31,6 @@ public class LocatieFacade {
         return api.maakLocatie(nieuweLocatie);
     }
 
-    // ─── MACHINES ────────────────────────────────────────────────────────────────
-
     public boolean maakMachine(MachineAanmaakDTO dto) {
         if (dto.naam() == null || dto.naam().isBlank())
             throw new IllegalArgumentException("Machine naam is verplicht.");
@@ -54,8 +52,6 @@ public class LocatieFacade {
     public boolean verwijderMachine(Integer machineId) {
         return api.verwijderMachine(machineId);
     }
-
-    // ─── VALIDATIE ───────────────────────────────────────────────────────────────
 
     private void valideerLocatie(LocatieDTO locatie) {
         if (locatie.naam() == null || locatie.naam().isBlank())
