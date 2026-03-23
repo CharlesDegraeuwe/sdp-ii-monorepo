@@ -7,7 +7,7 @@ import domain.services.LocatieApiService;
 import java.util.List;
 
 public class LocatieFacade {
-    private final LocatieApiService api = new LocatieApiService();
+    private LocatieApiService api = new LocatieApiService();
 
     public List<LocatieDTO> geefAlleLocaties() {
         return api.geefAlleLocaties();

@@ -6,7 +6,7 @@ import domain.services.NotificatieApiService;
 import java.util.List;
 
 public class NotificatieFacade {
-    private final NotificatieApiService api = new NotificatieApiService();
+    private NotificatieApiService api = new NotificatieApiService();
 
     public List<NotificatieDTO> geefNotificaties(int werknemerId) {
         return api.geefNotificaties(werknemerId);

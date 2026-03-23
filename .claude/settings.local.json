@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-25.0.2\" \"/c/Program Files/JetBrains/IntelliJ IDEA 2025.3.2/plugins/maven/lib/maven3/bin/mvn.cmd\" test -Dtest=\"AuthFacadeTest,TakenFacadeTest,VerlofFacadeTest,AfwezigheidFacadeTest,WerknemersFacadeTest,LocatieFacadeTest,TeamFacadeTest,LogFacadeTest,PlanningFacadeTest,NotificatieFacadeTest\")",
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-25.0.2\" \"/c/Program Files/JetBrains/IntelliJ IDEA 2025.3.2/plugins/maven/lib/maven3/bin/mvn.cmd\" test -Dtest=\"AuthFacadeTest\")"
+    ]
+  }
+}

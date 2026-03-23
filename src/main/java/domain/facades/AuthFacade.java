@@ -5,7 +5,7 @@ import domain.dto.WerknemerDTO;
 import domain.services.AuthApiService;
 
 public class AuthFacade {
-    private final AuthApiService api = new AuthApiService();
+    private AuthApiService api = new AuthApiService();
 
     public WerknemerDTO login(String email, String wachtwoord) {
         if (email == null || email.isBlank())

@@ -9,7 +9,7 @@ import domain.services.WerknemersApiService;
 import java.util.List;
 
 public class LogFacade {
-    private final LogsApiService api = new LogsApiService();
+    private LogsApiService api = new LogsApiService();
 
     public List<LogDTO> geefAlleLogs() {
         return api.getAlleLogs();
