@@ -1,35 +1,27 @@
 package hogent.sdp2.sdpii.gui.app.teams.userspagina.components;
 
-import domain.Beheerder;
 import domain.facades.WerknemersFacade;
-import hogent.sdp2.sdpii.gui.MainFrameController;
-import hogent.sdp2.sdpii.gui.admin.formvalidatie.FormValidatie;
-import hogent.sdp2.sdpii.gui.router.Router;
-import hogent.sdp2.sdpii.gui.router.Scherm;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class CreateUserFormController extends VBox {
 
-    @FXML
-    private TextField nameField;
+    @FXML private TextField nameField;
     @FXML private TextField surnameField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
     @FXML private DatePicker dobField;
     @FXML private ComboBox<String> roleComboBox;
     @FXML private Label feedbackLabel;
+
     private WerknemersFacade facade;
 
     public CreateUserFormController(WerknemersFacade facade) {
@@ -47,7 +39,6 @@ public class CreateUserFormController extends VBox {
         roleComboBox.getSelectionModel().select("Werknemer");
     }
 
-
     @FXML
     private void handleRegistreer() {
         resetFieldStyles();
@@ -56,23 +47,9 @@ public class CreateUserFormController extends VBox {
         String voornaam = surnameField.getText();
         String email = emailField.getText();
         String telefoon = phoneField.getText();
-        LocalDate datum = dobField.getValue();
+        String geboortedatumStr = dobField.getValue() != null ? dobField.getValue().toString() : null;
         String rol = roleComboBox.getValue();
 
-        String fout = FormValidatie.valideer(naam, voornaam, email, telefoon, datum);
-        if (fout != null) {
-            feedbackLabel.setText(fout);
-            feedbackLabel.setStyle("-fx-text-fill: red;");
-            highlightFout(fout);
-            return;
-        }
-        if (rol == null) {
-            feedbackLabel.setText("Selecteer een rol.");
-            feedbackLabel.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        String geboortedatumStr = datum.toString();
         Task<Boolean> task = new Task<>() {
             @Override
             protected Boolean call() {
@@ -93,7 +70,13 @@ public class CreateUserFormController extends VBox {
         });
 
         task.setOnFailed(e -> {
-            feedbackLabel.setText("Netwerkfout.");
+            Throwable oorzaak = task.getException();
+            if (oorzaak instanceof IllegalArgumentException) {
+                feedbackLabel.setText(oorzaak.getMessage());
+                highlightFout(oorzaak.getMessage());
+            } else {
+                feedbackLabel.setText("Netwerkfout.");
+            }
             feedbackLabel.setStyle("-fx-text-fill: red;");
         });
 
