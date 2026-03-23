@@ -27,7 +27,7 @@
         <!-- RIGHT: Members list -->
         <VBox fx:id="rightColumn" spacing="12" HBox.hgrow="ALWAYS" minWidth="0">
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="members-header">
-                <Label text="Leden:" styleClass="section-title"/>
+                <Label text="TeamInfo:" styleClass="section-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <VBox styleClass="create-employee-box" fx:id="addMembersContainer">
                     <Button styleClass="icon-btn-lg" fx:id="addMemberBtn">

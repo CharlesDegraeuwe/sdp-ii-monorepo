@@ -4,10 +4,7 @@ package domain.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sun.javafx.binding.StringFormatter;
-import domain.dto.CreateTeamDTO;
-import domain.dto.SiteDTO;
-import domain.dto.TeamDTO;
-import domain.dto.WerknemerDTO;
+import domain.dto.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -60,18 +57,15 @@ public class TeamApiService {
     }
 
 
-    public List<WerknemerDTO> getTeamMembers(int teamId) {
+    public List<TeamLidDTO> getTeamMembers(int teamId) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/" + teamId + "/werknemers"))
-                    .GET()
-                    .build();
-
+                    .uri(URI.create(BASE_URL + "/" + teamId + "/leden"))
+                    .GET().build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            WerknemerDTO[] array = mapper.readValue(response.body(), WerknemerDTO[].class);
-            return Arrays.asList(array);
+            return Arrays.asList(mapper.readValue(response.body(), TeamLidDTO[].class));
         } catch (Exception e) {
-            throw new RuntimeException("Fout bij ophalen teams", e);
+            throw new RuntimeException("Fout bij ophalen teamleden", e);
         }
     }
 
@@ -161,6 +155,42 @@ public class TeamApiService {
             client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
             throw new RuntimeException("Fout bij verwijderen lid", e);
+        }
+    }
+
+    public void verwijderTeam(int teamId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + teamId))
+                    .DELETE()
+                    .build();
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        }catch (Exception e) {
+            throw new RuntimeException("Fout bij verwijderen team", e);
+        }
+    }
+
+    public List<TeamLidDTO> getTeamLedenMetSupervisor(int teamId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + teamId + "/leden"))
+                    .GET().build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return Arrays.asList(mapper.readValue(response.body(), TeamLidDTO[].class));
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij ophalen teamleden", e);
+        }
+    }
+
+    public void maakSupervisor(int teamId, int werknemerId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/" + teamId + "/" + werknemerId + "/supervisor"))
+                    .PUT(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij supervisor aanduiden", e);
         }
     }
 }

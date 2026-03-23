@@ -22,9 +22,10 @@ public class ProfilePopupController extends VBox {
         loader.setRoot(this);
         loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
+        settings_trigger.setVisible(false);
+        settings_trigger.setManaged(false);
 
-
-        if(!Sessie.getInstance().userRole().equals("Manager") && !Sessie.getInstance().isAdmin()) {
+        if(!Sessie.getInstance().isAdmin()) {
             admin_trigger.setVisible(false);
             admin_trigger.setManaged(false);
         }

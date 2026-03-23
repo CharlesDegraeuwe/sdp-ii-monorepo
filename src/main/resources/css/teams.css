@@ -112,6 +112,15 @@
     -fx-background-color: #eeeeee;
 }
 
+.input-area .content {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 12;
+}
+
+.input-area:focused .content {
+    -fx-background-color: #eeeeee;
+}
+
 .dropdown-row {
     -fx-spacing: 10;
 }

@@ -27,7 +27,8 @@ public class CreateTeamsController extends VBox {
 
     private TeamFacade facade;
     private List<WerknemerDTO> alleWerknemers;
-    private  List<WerknemerDTO> gefilterdeWerknemers;
+    private  List<WerknemerDTO> managers;
+    private  List<WerknemerDTO> werknemers;
     private List<SelectedLid> geselecteerdeLeden = new ArrayList<>();
 
     public CreateTeamsController(TeamFacade facade) {
@@ -44,7 +45,7 @@ public class CreateTeamsController extends VBox {
     }
 
     private void init() {
-        // Sites laden
+        // Sites enz laden
         List<SiteDTO> sites = facade.getAlleSites();
         plantCombo.getItems().addAll(sites);
         plantCombo.setConverter(new StringConverter<>() {
@@ -54,8 +55,9 @@ public class CreateTeamsController extends VBox {
 
         // Werknemers laden voor manager dropdown en ledenselectie
         alleWerknemers = facade.getAlleWerknemersVoorTeams();
-        gefilterdeWerknemers = alleWerknemers.stream().filter(werknemerDTO -> werknemerDTO.rol().equals("Manager")).toList();
-        managerCombo.getItems().addAll(gefilterdeWerknemers);
+        managers = alleWerknemers.stream().filter(werknemerDTO -> werknemerDTO.rol().equals("Manager")).toList();
+        werknemers = alleWerknemers.stream().filter(werknemerDTO -> !werknemerDTO.rol().equals("Manager") && !werknemerDTO.rol().equals("Admin")).toList();
+        managerCombo.getItems().addAll(managers);
         managerCombo.setConverter(new StringConverter<>() {
             @Override public String toString(WerknemerDTO w) { return w == null ? "" : w.voornaam() + " " + w.naam(); }
             @Override public WerknemerDTO fromString(String s) { return null; }
@@ -64,7 +66,6 @@ public class CreateTeamsController extends VBox {
         // Werknemerslijst tonen in rechterkolom
         buildEmployeeList();
 
-        // Create knop
         createTeamBtn.setOnAction(e -> handleCreate());
 
     }
@@ -73,14 +74,22 @@ public class CreateTeamsController extends VBox {
         employeeListContainer.getChildren().clear();
         geselecteerdeLeden.clear();
 
-        for (WerknemerDTO w : alleWerknemers) {
+        List<CheckBox> alleSelectCbs = new ArrayList<>();
+        List<CheckBox> alleSupervisorCbs = new ArrayList<>();
+
+        for (WerknemerDTO w : werknemers) {
             SelectedLid lid = new SelectedLid(w);
 
             CheckBox selectCb = new CheckBox();
+            alleSelectCbs.add(selectCb);
+
             Label naam = new Label(w.voornaam() + " " + w.naam());
-            naam.setStyle("-fx-font-size: 13px;");
+            naam.setStyle("-fx-font-size: 13px; -fx-text-fill: #1a1a1a;");
+            naam.setMinWidth(Region.USE_PREF_SIZE);
+
             CheckBox supervisorCb = new CheckBox("supervisor");
-            supervisorCb.setStyle("-fx-font-size: 12px; -fx-text-fill: #444444;");
+            alleSupervisorCbs.add(supervisorCb);
+            supervisorCb.setStyle("-fx-font-size: 11px; -fx-text-fill: #444444;");
             supervisorCb.setDisable(true);
 
             selectCb.setOnAction(e -> {
@@ -90,19 +99,53 @@ public class CreateTeamsController extends VBox {
                     supervisorCb.setSelected(false);
                     lid.supervisor = false;
                 }
+
+                long aantalGeselecteerd = geselecteerdeLeden.stream().filter(l -> l.selected).count();
+                alleSelectCbs.forEach(cb -> {
+                    if (!cb.isSelected()) cb.setDisable(aantalGeselecteerd >= 4);
+                });
+                updateSupervisorCheckboxes(alleSupervisorCbs);
             });
 
-            supervisorCb.setOnAction(e -> lid.supervisor = supervisorCb.isSelected());
+            supervisorCb.setOnAction(e -> {
+                lid.supervisor = supervisorCb.isSelected();
+                updateSupervisorCheckboxes(alleSupervisorCbs);
+            });
 
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
             HBox row = new HBox(10, selectCb, naam, spacer, supervisorCb);
             row.setAlignment(Pos.CENTER_LEFT);
+            row.setMaxWidth(Double.MAX_VALUE);
             row.setStyle("-fx-background-color: #f5f5f5; -fx-background-radius: 20; -fx-padding: 10 14;");
 
             employeeListContainer.getChildren().add(row);
             geselecteerdeLeden.add(lid);
+        }
+    }
+
+    private void updateSupervisorCheckboxes(List<CheckBox> alleSupervisorCbs) {
+        boolean heeftSupervisor = false;
+        for (int i = 0; i < geselecteerdeLeden.size(); i++) {
+            if (geselecteerdeLeden.get(i).supervisor) {
+                heeftSupervisor = true;
+                break;
+            }
+        }
+
+        for (int i = 0; i < alleSupervisorCbs.size(); i++) {
+            CheckBox cb = alleSupervisorCbs.get(i);
+            SelectedLid lid = geselecteerdeLeden.get(i);
+
+            if (!lid.selected) {
+                cb.setDisable(true);
+            } else if (heeftSupervisor && !lid.supervisor) {
+                // Er is al een supervisor, blokkeer de rest
+                cb.setDisable(true);
+            } else {
+                cb.setDisable(false);
+            }
         }
     }
 
@@ -118,16 +161,15 @@ public class CreateTeamsController extends VBox {
         Integer managerId = managerCombo.getValue() != null ? managerCombo.getValue().id() : null;
         Integer siteId = plantCombo.getValue() != null ? plantCombo.getValue().id() : null;
 
-        List<TeamLidDTO> leden = geselecteerdeLeden.stream()
+        List<CreateTeamLidDTO> leden = geselecteerdeLeden.stream()
                 .filter(l -> l.selected)
                 .limit(4)
-                .map(l -> new TeamLidDTO(l.werknemer.id(), l.supervisor))
+                .map(l -> new CreateTeamLidDTO(l.werknemer.id(), l.supervisor))
                 .toList();
 
         CreateTeamDTO dto = new CreateTeamDTO(naam, beschrijving, managerId, siteId, leden);
         facade.maakTeam(dto);
 
-        // Reset form
         nameField.clear();
         descriptionField.clear();
         managerCombo.setValue(null);

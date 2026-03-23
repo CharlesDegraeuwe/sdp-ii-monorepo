@@ -70,7 +70,7 @@ public class TeamsLayoutController extends VBox {
                 createTeamsController = new CreateTeamsController(tm);
                 outer_container.setCenter(createTeamsController);
             } else {
-                outer_container.setCenter(new CreeerMedewerkerController());
+                outer_container.setCenter(new CreateUserPage(wm));
             }
             tab = "create";
             updateTabs();
@@ -119,7 +119,7 @@ public class TeamsLayoutController extends VBox {
     private void navigeerNaarCreateUser() {
         pagina = "users";
         tab = "create";
-        outer_container.setCenter(new CreeerMedewerkerController());
+        outer_container.setCenter(new CreateUserPage(wm));
         updatePages();
         updateTabs();
     }
