@@ -7,5 +7,5 @@ public record CreateTeamDTO(
         String beschrijving,
         Integer managerId,
         Integer siteId,
-        List<TeamLidDTO> leden
+        List<CreateTeamLidDTO> leden
 ) {}

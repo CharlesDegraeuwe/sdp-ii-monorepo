@@ -7,8 +7,10 @@
 <?import javafx.scene.layout.*?>
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<fx:root type="HBox" fx:id="team_item" spacing="10"  styleClass="member_item" xmlns:fx="http://javafx.com/fxml">
-        <Label fx:id="naam"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <FontIcon iconLiteral="ion4-md-trash" iconSize="14" styleClass="taak_delete_icon" onMouseClicked="#handleDelete"/>
+<fx:root type="HBox" fx:id="team_item" spacing="10" styleClass="member_item"
+         xmlns:fx="http://javafx.com/fxml" maxWidth="Infinity">
+    <Label fx:id="naam"/>
+    <Region HBox.hgrow="ALWAYS"/>
+    <Label fx:id="isSupervisor" styleClass="isSupervisorLabel"/>
+    <FontIcon iconLiteral="ion4-md-trash" iconSize="14" styleClass="taak_delete_icon" onMouseClicked="#handleDelete"/>
 </fx:root>
