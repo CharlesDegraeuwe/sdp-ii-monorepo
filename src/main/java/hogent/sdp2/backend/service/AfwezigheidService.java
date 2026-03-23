@@ -3,11 +3,14 @@ package hogent.sdp2.backend.service;
 import hogent.sdp2.backend.domain.Afwezigheid;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.AfwezigheidAanmakenDTO;
+import hogent.sdp2.backend.dto.response.AfwezigheidsOverzichtDTO;
 import hogent.sdp2.backend.repository.AfwezigheidRepository;
 import hogent.sdp2.backend.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,5 +57,19 @@ public class AfwezigheidService {
                 });
 
         return "Afwezigheid succesvol gemeld.";
+    }
+
+    public List<AfwezigheidsOverzichtDTO> getAlleAfwezigheden() {
+        return afwezigheidRepository.findAllWithWerknemer().stream()
+                .map(a -> new AfwezigheidsOverzichtDTO(
+                        a.getWerknemer().getId(),
+                        a.getWerknemer().getVoornaam(),
+                        a.getWerknemer().getNaam(),
+                        "Ziekte",
+                        a.getStartDatum(),
+                        a.getEindDatum(),
+                        null
+                ))
+                .toList();
     }
 }
