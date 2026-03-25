@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="46ca976b-f9d4-446f-bc8c-183cd77812cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sdp2-react/app/(pages)/(app)/account/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/app/(pages)/(app)/locaties/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/app/(pages)/(app)/notificaties/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/app/(pages)/(app)/overzicht/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/app/(pages)/(app)/planner/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/app/(pages)/(app)/taken/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/app/(pages)/(auth)/activeer/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/app/(pages)/(auth)/login/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/components/app/structuur/header.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sdp2-react/components/app/structuur/sidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sdp2-react/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/sdp2-react/app/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sdp2-react/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/sdp2-react/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sdp2-react/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/sdp2-react/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sdp2-react/components/app/structuur/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/sdp2-react/components/app/structuur/sidebar.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +102,8 @@
       <updated>1774472751367</updated>
       <workItem from="1774472752514" duration="2262000" />
       <workItem from="1774475063712" duration="2045000" />
-      <workItem from="1774477541514" duration="1851000" />
+      <workItem from="1774477541514" duration="2285000" />
+      <workItem from="1774479847436" duration="1355000" />
     </task>
     <servers />
   </component>
