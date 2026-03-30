@@ -1,6 +1,2 @@
-export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
-  children?: React.ReactNode;
-  color?: string;
-  label?: string;
-  icon?: React.ReactNode;
-}
+export { default as Button } from './Button';
+export type { ButtonProps } from './Button.types';
