@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('../public/fonts/sfpro/SFPRODISPLAYREGULAR.OTF') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('../public/fonts/sfpro/SFPRODISPLAYBOLD.OTF') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@theme {
+    --color-bg-white: #F6F6F6;
+    --color-delaware_red: #E31B35;
+    --color-delaware_dark_red: rgba(174, 28, 48, 0.5);
+    --breakpoint-3xl: 1800px;
+    --font-sfpro: 'SF Pro Display', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+
+}
