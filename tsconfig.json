@@ -4,6 +4,12 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
+    "compilerOptions": {
+      "baseUrl": "./",
+      "paths": {
+        "@/*": ["./*"]
+      }
+    },
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -31,4 +37,5 @@
     "**/*.mts"
   ],
   "exclude": ["node_modules"]
+
 }

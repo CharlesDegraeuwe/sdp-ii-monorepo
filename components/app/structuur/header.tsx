@@ -47,7 +47,9 @@ export default function AppHeader() {
         <div className={"relative"}>
             <div onClick={handleToggle} ref={triggerRef} className={"relative w-35 h-10 bg-bg-white border cursor-pointer select-none drop-shadow-2xl active:scale-95 transition-all duration-300 border-zinc-300/30 rounded-full flex items-center justify-center px-5"}>
                 <span className={"w-full h-full flex items-center pointer-events-none font-bold"}>gebruiker</span>
-                <FaAngleDown className={`${isOpen ? "rotate-180" : "rotate-0"} transition-all duration-300`} size={20} />
+                <div className={`${isOpen ? "rotate-180" : "rotate-0"} transition-all duration-300`}>
+                    <FaAngleDown size={20} />
+                </div>
             </div>
             <div ref={popupRef}
                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-4

@@ -4,8 +4,6 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import {
-    MdMenu,                  // burger_button
-    MdDashboard,             // dashboard
     MdFormatListBulleted,    // planning
     MdCheck,                 // tasks (taken)
     MdOutlineMap,                   // plants (locaties)
