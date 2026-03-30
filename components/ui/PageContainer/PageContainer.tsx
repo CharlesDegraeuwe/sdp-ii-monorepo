@@ -4,7 +4,7 @@ const PageContainer = (props: PageContainerProps) => {
   const { color, children } = props;
   return (
     <div
-      className={`w-screen h-screen justify-center items-center ${color ? `bg-[${color}]` : 'bg-gray-100'}`}
+      className={`min-w-screen min-h-screen w-screen h-screen flex justify-center items-center ${color ? `bg-[${color}]` : 'bg-gray-100'}`}
     >
       {children}
     </div>
