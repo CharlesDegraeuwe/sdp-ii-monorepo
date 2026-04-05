@@ -2,8 +2,8 @@
 'use client';
 import { memo, ReactNode } from 'react';
 import { UserProvider } from '@/providers/UserProvider';
-import AppHeader from '@/components/app/structuur/header';
-import Sidebar from '@/components/app/structuur/sidebar';
+import AppHeader from '@/components/app/structuur/header/header';
+import Sidebar from '@/components/app/structuur/sidebar/sidebar';
 
 const MemoizedHeader = memo(AppHeader);
 const MemoizedBurger = memo(Sidebar);

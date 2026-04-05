@@ -1,10 +1,14 @@
 import { PageContainerProps } from '@/components/design system/PageContainer/PageContainer.types';
 
 const PageContainer = (props: PageContainerProps) => {
-  const { color, children } = props;
+  const { color, height, children, padding } = props;
   return (
     <div
-      className={`min-w-screen min-h-screen w-screen h-screen flex justify-center items-center ${color ? `bg-[${color}]` : 'bg-gray-100'}`}
+      className={`min-w-full min-h-full relative w-full h-full flex justify-center items-center 
+      ${color ? `bg-[${color}]` : 'bg-bg-white'}
+      ${padding ? `p-${padding}` : ''}
+      ${height ? `min-h-${padding}` : 'h-full'}
+      `}
     >
       {children}
     </div>
