@@ -5,45 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="46ca976b-f9d4-446f-bc8c-183cd77812cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/api/auth/[...nextauth]/route.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/design system/Button/Button.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/design system/Form/FormHelper.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/design system/Input/Input.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/design system/Toast/Toast.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/design system/Toast/Toast.types.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/design system/Toast/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/providers/ToastProvider.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/types/next.auth.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/types/types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(pages)/(auth)/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(pages)/(auth)/login/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/auth.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bun.lock" beforeDir="false" afterPath="$PROJECT_DIR$/bun.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/auth/login/LoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/auth/login/LoginForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Button/Button.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Button/Button.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Button/Button.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Button/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Button/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Container/Container.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Container/Container.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Container/Container.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Container/Container.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Container/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Container/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Form/FormHelper.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Form/FormHelper.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Form/FormHelper.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Form/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Form/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Input/Input.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Input/Input.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Input/Input.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Input/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Input/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Label/Label.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Label/Label.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Label/Label.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Label/Label.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Label/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Label/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Link/Link.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Link/Link.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Link/Link.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Link/Link.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/Link/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/Link/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/PageContainer/PageContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/PageContainer/PageContainer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/PageContainer/PageContainer.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/PageContainer/PageContainer.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/PageContainer/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/PageContainer/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ui/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/components/design system/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proxy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/proxy.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,26 +45,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/login&quot;,
-    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
-    &quot;js.debugger.nextJs.config.created.server&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-react-g01/sdp2-react/public&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/charlesdegreauwe/Development/2026-react-g01/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#8 on feature/login",
+    "js.debugger.nextJs.config.created.client": "true",
+    "js.debugger.nextJs.config.created.server": "true",
+    "last_opened_file_path": "/Users/charlesdegraeuwe/Desktop/Software Development/SDP II/2026-react-g01/sdp2-react/public",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "ts.external.directory.path": "/Users/charlesdegreauwe/Development/2026-react-g01/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/sdp2-react/public" />
