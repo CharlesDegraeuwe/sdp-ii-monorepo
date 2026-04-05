@@ -1,8 +1,8 @@
-import { PageContainer } from '@/components/ui/PageContainer';
-import { Container } from '@/components/ui/Container';
-import { Label } from '@/components/ui/Label';
-import { Input } from '@/components/ui/Input';
+import { PageContainer } from '@/components/design system/PageContainer';
+import { Container } from '@/components/design system/Container';
+import { Label } from '@/components/design system/Label';
 import LoginForm from '@/components/auth/login/LoginForm';
+import { Suspense } from 'react';
 
 export default function Page() {
   return (
@@ -19,7 +19,9 @@ export default function Page() {
         <div>
           <Label px={3} text="Login" />
         </div>
-        <LoginForm />
+        <Suspense fallback={<div>Laden...</div>}>
+          <LoginForm />
+        </Suspense>
       </Container>
     </PageContainer>
   );
