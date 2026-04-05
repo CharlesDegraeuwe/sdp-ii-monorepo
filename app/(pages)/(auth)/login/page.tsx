@@ -1,7 +1,6 @@
-import { PageContainer } from '@/components/ui/PageContainer';
-import { Container } from '@/components/ui/Container';
-import { Label } from '@/components/ui/Label';
-import { Input } from '@/components/ui/Input';
+import { PageContainer } from '@/components/design system/PageContainer';
+import { Container } from '@/components/design system/Container';
+import { Label } from '@/components/design system/Label';
 import LoginForm from '@/components/auth/login/LoginForm';
 
 export default function Page() {

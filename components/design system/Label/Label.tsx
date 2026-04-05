@@ -1,8 +1,7 @@
-import { LabelProps } from '@/components/ui/Label/Label.types';
+import { LabelProps } from '@/components/design system/Label/Label.types';
 
 const Label = (props: LabelProps) => {
-  const { text, className, size, weight, color, children, icon, p, px, py } =
-    props;
+  const { text, size, weight, color, icon, p, px, py } = props;
   return (
     <span
       className={`flex-1 

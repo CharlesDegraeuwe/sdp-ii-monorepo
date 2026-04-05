@@ -1,4 +1,4 @@
-import { ContainerProps } from '@/components/ui/Container/Container.types';
+import { ContainerProps } from '@/components/design system/Container/Container.types';
 
 const Container = (props: ContainerProps) => {
   const {

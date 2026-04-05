@@ -1,4 +1,4 @@
-import { PageContainerProps } from '@/components/ui/PageContainer/PageContainer.types';
+import { PageContainerProps } from '@/components/design system/PageContainer/PageContainer.types';
 
 const PageContainer = (props: PageContainerProps) => {
   const { color, children } = props;

@@ -9,4 +9,5 @@ export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   gradient?: boolean;
   from?: string;
   to?: string;
+  loading?: boolean;
 }
