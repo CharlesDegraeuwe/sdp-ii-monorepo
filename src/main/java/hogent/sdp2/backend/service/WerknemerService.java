@@ -5,8 +5,8 @@ import hogent.sdp2.backend.dto.request.*;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import hogent.sdp2.backend.config.JwtService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,8 +14,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class WerknemerService {
-
+    //fields
     private final WerknemerRepository werknemerRepository;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     public String maakWerknemer(WerknemerAanmakenDTO dto) {
         if (werknemerRepository.existsByEmail(dto.email())) {
@@ -27,7 +29,7 @@ public class WerknemerService {
         nieuweWerknemer.setNaam(dto.naam());
         nieuweWerknemer.setVoornaam(dto.voornaam());
         nieuweWerknemer.setEmail(dto.email());
-        nieuweWerknemer.setWachtwoord(dto.wachtwoord());
+        nieuweWerknemer.setWachtwoord(passwordEncoder.encode(dto.wachtwoord()));
         nieuweWerknemer.setTelefoonnummer(dto.telefoonnummer());
         nieuweWerknemer.setGeboortedatum(dto.geboortedatum());
         nieuweWerknemer.setRol(dto.rol());
@@ -55,20 +57,26 @@ public class WerknemerService {
         return "Account succesvol geactiveerd! Je kunt nu inloggen.";
     }
 
-    public WerknemerResponseDTO login(LoginRequestDTO dto) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(dto.email());
+    public LoginResponseDTO login(LoginRequestDTO dto) {
+        var werknemer = werknemerRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new RuntimeException("Ongeldige inloggegevens"));
 
-        if (werknemerOpt.isEmpty()) throw new RuntimeException("Ongeldige inloggegevens");
-
-        Werknemer werknemer = werknemerOpt.get();
-
-        if (!werknemer.getWachtwoord().equals(dto.wachtwoord()))
+        if (!dto.wachtwoord().equals(werknemer.getWachtwoord()))
             throw new RuntimeException("Ongeldige inloggegevens");
 
         if ("Inactief".equalsIgnoreCase(werknemer.getStatus()))
             throw new RuntimeException("Account nog niet geactiveerd");
 
-        return new WerknemerResponseDTO(
+        // Maak UserDetails aan voor token generatie
+        var userDetails = org.springframework.security.core.userdetails.User.builder()
+                .username(werknemer.getEmail())
+                .password(werknemer.getWachtwoord())
+                .roles(werknemer.getRol())
+                .build();
+
+        String token = jwtService.generateToken(userDetails);
+
+        return new LoginResponseDTO(token, new WerknemerResponseDTO(
                 werknemer.getId(),
                 werknemer.getNaam(),
                 werknemer.getVoornaam(),
@@ -77,7 +85,7 @@ public class WerknemerService {
                 werknemer.getGeboortedatum(),
                 werknemer.getRol(),
                 werknemer.getStatus()
-        );
+        ));
     }
 
     public String wijzigWachtwoord(WachtwoordWijzigenDTO dto) {

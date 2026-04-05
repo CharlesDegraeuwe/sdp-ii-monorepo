@@ -26,7 +26,7 @@ public class WerknemerController {
     }
 
     @PostMapping("/login")
-    public WerknemerResponseDTO login(@RequestBody LoginRequestDTO dto) {
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO dto) {
         return werknemerService.login(dto);
     }
 
