@@ -11,20 +11,38 @@ const Container = (props: ContainerProps) => {
     gap,
     flex,
     flexDirection,
+    className,
+    color,
+    label,
+    icon,
+    error,
+    style,
+    ...rest
   } = props;
 
   return (
     <div
-      onClick={onClick && onClick}
-      className={`border border-gray-300/30 rounded-4xl p-5 bg-gray-300/30 shadow-xl hover:border-gray-400/30 transition-all duration-300 
-      ${pointer && 'cursor-pointer'} 
-      ${width ? `min-w-${width} w-${width}` : 'w-full'} 
-      ${height ? `h-${height}` : 'h-full'}
-      ${padding ? `p-${padding}` : 'p-0'}
-      ${flex ? `${flex}` : ''}
-      ${flexDirection ? `flex-${flexDirection}` : ''}
-      ${gap ? `gap-${gap}` : ''}
-      `}
+      onClick={onClick}
+      className={`border border-gray-300/30 rounded-4xl bg-gray-300/30 shadow-xl 
+        hover:border-gray-400/30 transition-all duration-300 
+        ${pointer ? 'cursor-pointer' : ''} 
+        ${className ?? ''}`}
+      style={{
+        width: width ?? '100%',
+        height: height ?? '100%',
+        padding: padding ?? 20,
+        flex: flex ?? undefined,
+        flexDirection:
+          flexDirection === 'col'
+            ? 'column'
+            : flexDirection === 'row'
+              ? 'row'
+              : undefined,
+        gap: gap ?? undefined,
+        display: flexDirection || gap ? 'flex' : undefined,
+        ...style,
+      }}
+      {...rest}
     >
       {children}
     </div>

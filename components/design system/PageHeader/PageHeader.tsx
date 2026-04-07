@@ -11,7 +11,7 @@ const PageHeader = () => {
     .join('/');
   return (
     <div
-      className={`absolute gap-4  top-10 left-10 flex flex-row justify-center items-center`}
+      className={`z-[999] absolute gap-4 rounded-full py-1 backdrop-blur-2xl pl-5 top-9 left-5 flex flex-row justify-center items-center`}
     >
       <span className={'text-2xl font-bold first-letter:uppercase'}>
         {page.split('').splice(1, page.length).join('')}

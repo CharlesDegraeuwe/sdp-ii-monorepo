@@ -13,6 +13,7 @@ export default function Page() {
         pointer={true}
         padding="10"
         gap={5}
+        className={'px-5 py-10'}
         flexDirection="col"
         flex="flex"
       >
