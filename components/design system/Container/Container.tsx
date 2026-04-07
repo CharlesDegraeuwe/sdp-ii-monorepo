@@ -12,39 +12,37 @@ const Container = (props: ContainerProps) => {
     flex,
     flexDirection,
     className,
-    color,
     label,
-    icon,
-    error,
-    style,
-    ...rest
+    indent,
   } = props;
 
   return (
     <div
-      onClick={onClick}
-      className={`border border-gray-300/30 rounded-4xl bg-gray-300/30 shadow-xl 
-        hover:border-gray-400/30 transition-all duration-300 
-        ${pointer ? 'cursor-pointer' : ''} 
-        ${className ?? ''}`}
-      style={{
-        width: width ?? '100%',
-        height: height ?? '100%',
-        padding: padding ?? 20,
-        flex: flex ?? undefined,
-        flexDirection:
-          flexDirection === 'col'
-            ? 'column'
-            : flexDirection === 'row'
-              ? 'row'
-              : undefined,
-        gap: gap ?? undefined,
-        display: flexDirection || gap ? 'flex' : undefined,
-        ...style,
-      }}
-      {...rest}
+      className={`flex flex-col gap-2 w-full
+              ${className && className} 
+            ${height ? `h-${height}` : 'h-full'}
+             ${width ? `min-w-${width} w-${width}` : 'w-full'}
+            `}
     >
-      {children}
+      {(label || indent) && (
+        <span className={`font-bold text-sm px-5 ${!label ? 'invisible' : ''}`}>
+          {label || 'placeholder'}
+        </span>
+      )}
+      <div
+        onClick={onClick && onClick}
+        className={`border border-gray-300/30 rounded-4xl w-full h-full p-5 bg-gray-300/30 shadow-xl hover:border-gray-400/30 transition-all duration-300 
+                  ${pointer && 'cursor-pointer'} 
+             
+                
+                  ${padding ? `p-${padding}` : 'p-0'}
+                  ${flex ? `${flex}` : ''}
+                  ${flexDirection ? `flex-${flexDirection}` : ''}
+                  ${gap ? `gap-${gap}` : ''}
+                  `}
+      >
+        {children}
+      </div>
     </div>
   );
 };
