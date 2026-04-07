@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <div className={'relative z-0 w-full h-full flex'}>
       <div className="flex flex-col gap-5 absolute h-full max-w-1/5 w-1/5 z-40 left-5 top-30">
-        <Container className={'bg-white max-h-3/4 h-3/4 pt-5'}>
+        <Container bg={'zinc-50'} className={'max-h-3/4 h-3/4 pt-5'}>
           <Input placeholder={'zoeken...'} color={'white'} />
         </Container>
       </div>

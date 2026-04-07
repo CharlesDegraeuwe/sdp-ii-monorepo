@@ -8,12 +8,10 @@ export default function Page() {
   return (
     <PageContainer>
       <Container
-        width="1/2"
-        height="1/3"
         pointer={true}
         padding="10"
         gap={5}
-        className={'px-5 py-10'}
+        className={'p-5 max-w-1/4 max-h-1/3'}
         flexDirection="col"
         flex="flex"
       >

@@ -13,4 +13,5 @@ export interface ContainerProps extends React.HTMLProps<HTMLDivElement> {
   gap?: number | string;
   flexDirection?: 'row' | 'col';
   indent?: boolean;
+  bg?: string;
 }
