@@ -1,8 +1,11 @@
 import GoogleMaps from '@/app/(pages)/(app)/locaties/components/googlemaps';
 import { Container } from '@/components/design system/Container';
 import { Input } from '@/components/design system/Input';
-import { color } from 'listr2';
-import label from '@/components/design system/Label/Label';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Locaties | Delaware Suite',
+};
 
 export default function Page() {
   return (

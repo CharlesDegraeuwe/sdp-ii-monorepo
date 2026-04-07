@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Admin | Delaware Suite',
+  title: 'Instellingen | Delaware Suite',
 };
 
 export default function Page() {

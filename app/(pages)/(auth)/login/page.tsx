@@ -3,6 +3,11 @@ import { Container } from '@/components/design system/Container';
 import { Label } from '@/components/design system/Label';
 import LoginForm from '@/components/auth/login/LoginForm';
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Login | Delaware Suite',
+};
 
 export default function Page() {
   return (

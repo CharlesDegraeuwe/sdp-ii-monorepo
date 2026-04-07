@@ -1,4 +1,9 @@
 import { Container } from '@/components/design system/Container';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Overzicht | Delaware Suite',
+};
 
 export default function Page() {
   return (
