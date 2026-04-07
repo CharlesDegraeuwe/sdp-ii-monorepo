@@ -1,3 +1,4 @@
+'use client';
 import { InputProps } from './Input.types';
 import React from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
@@ -40,9 +41,11 @@ const Input = ({ type, label, error, id, ...props }: InputProps) => {
   }
   return (
     <div>
-      <label htmlFor={id} className={' text-zinc-400 text-sm px-3'}>
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={id} className={' text-zinc-400 text-sm px-3'}>
+          {label}
+        </label>
+      )}
       <input
         className={
           'w-full rounded-full outline-none ring-0 border border-gray-300/30 focus:border-gray-700/30 px-5 py-3 bg-gray-300/30 shadow-inner'

@@ -11,17 +11,11 @@ export default function AppLayout({
   return (
     <>
       <AppHeader />
-      <section
-        className={'flex flex-row w-full h-screen min-h-full bg-bg-white'}
-      >
+      <section className="flex flex-row w-full h-screen bg-bg-white">
         <Sidebar />
-        <div className="flex w-full h-full min-h-full bg-zinc-100 pr-2 pt-25 py-3">
-          <main
-            className={
-              'w-full min-h-full border border-zinc-200 overflow-hidden rounded-3xl'
-            }
-          >
-            <PageContainer>
+        <div className="flex flex-col w-full h-full bg-zinc-100 pr-2 pt-25 py-3">
+          <main className="w-full flex-1 border border-zinc-200 overflow-hidden rounded-3xl">
+            <PageContainer className="h-full">
               <PageHeader />
               {children}
             </PageContainer>
