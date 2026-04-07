@@ -9,7 +9,7 @@ const SidebarItem = (props: SidebarItemProps) => {
   return (
     <Link
       href={`/${url}`}
-      className={`w-full h-150 flex hover:bg-zinc-200  flex-col gap-1 justify-center items-center text-sm transition-all duration-300 rounded-3xl ${pathname == '/' + url ? 'bg-zinc-200' : ''}`}
+      className={`w-full h-150 flex hover:bg-zinc-200 text-zinc-800  flex-col gap-1 justify-center items-center text-sm transition-all duration-300 rounded-3xl ${pathname == '/' + url ? 'bg-zinc-200' : ''}`}
     >
       {icon}
       <span className={`${collapsed ? 'hidden' : 'block'} truncate`}>

@@ -19,32 +19,32 @@ const links = [
   {
     url: 'overzicht',
     title: 'overzicht',
-    icon: <LuLayoutDashboard size={25} />,
+    icon: <LuLayoutDashboard size={20} />,
   },
   {
     url: 'planner',
     title: 'planner',
-    icon: <MdFormatListBulleted size={25} />,
+    icon: <MdFormatListBulleted size={20} />,
   },
   {
     url: 'taken',
     title: 'taken',
-    icon: <MdCheck size={25} />,
+    icon: <MdCheck size={20} />,
   },
   {
     url: 'locaties',
     title: 'locaties',
-    icon: <MdOutlineMap size={25} />,
+    icon: <MdOutlineMap size={20} />,
   },
   {
     url: 'afwezigheden',
     title: 'afwezigheden',
-    icon: <MdOutlineCancel size={25} />,
+    icon: <MdOutlineCancel size={20} />,
   },
   {
     url: 'teams',
     title: 'teams',
-    icon: <MdGroups size={25} />,
+    icon: <MdGroups size={20} />,
   },
 ];
 export default function Sidebar() {
@@ -96,7 +96,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`${collapsed ? 'w-30' : 'w-50'} h-screen flex flex-col z-[998] transition-all duration-200 bg-zinc-100 ${ugly && 'bg-linear-180 from-rose-600 to-rose-500'} py-10`}
+      className={`${collapsed ? 'w-30' : 'w-50'} h-screen flex flex-col z-[999] transition-all duration-200 bg-zinc-100 ${ugly && 'bg-linear-180 from-rose-600 to-rose-500'} py-10`}
     >
       <div className="flex flex-col items-center justify-baseline h-full text-zinc-900 font-sfpro px-5 gap-20">
         {collapsed ? (
@@ -105,7 +105,7 @@ export default function Sidebar() {
               onClick={() => setCollapsed(!collapsed)}
               className={`p-2 ${collapsed ? 'cursor-e-resize' : 'cursor-w-resize'} transition-opacity duration-300 opacity-0 bg-zinc-100 hover:opacity-100 relative z-20`}
             >
-              <FiSidebar size={23} />
+              <FiSidebar size={20} />
             </button>
             <Image
               src={'./icon.svg'}
@@ -140,7 +140,7 @@ export default function Sidebar() {
             href="/admin"
             className={`w-full h-1/5 flex hover:bg-zinc-200 flex-col gap-1 justify-center items-center text-sm rounded-3xl ${pathname == '/admin' ? 'bg-zinc-200' : ''}`}
           >
-            <MdAdminPanelSettings size={25} />
+            <MdAdminPanelSettings size={20} />
             <span className={`${collapsed ? 'hidden' : 'block'} truncate`}>
               admin
             </span>

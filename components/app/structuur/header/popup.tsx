@@ -37,12 +37,12 @@ export default function Popup({ popupRef, isOpen }: PopupProps) {
         <span className={'w-full text-xs text-zinc-400'}>Account</span>
         <div className="w-full h-fit flex flex-col">
           <Link
-            href={'/settings'}
+            href={'/instellingen'}
             className={
               'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
             }
           >
-            <span>Settings</span>
+            <span>Instellingen</span>
             <IoIosSettings />
           </Link>
           <button
@@ -61,7 +61,7 @@ export default function Popup({ popupRef, isOpen }: PopupProps) {
         <span className={'w-full text-xs text-zinc-400'}>Admin</span>
         <div className="w-full h-fit flex flex-col">
           <Link
-            href={'/settings'}
+            href={'/instellingen'}
             className={
               'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
             }
@@ -70,7 +70,7 @@ export default function Popup({ popupRef, isOpen }: PopupProps) {
             <IoMdAddCircleOutline />
           </Link>
           <Link
-            href={'/settings'}
+            href={'/instellingen'}
             className={
               'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
             }
@@ -79,7 +79,7 @@ export default function Popup({ popupRef, isOpen }: PopupProps) {
             <IoMdAddCircle />
           </Link>
           <Link
-            href={'/settings'}
+            href={'/instellingen'}
             className={
               'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
             }
