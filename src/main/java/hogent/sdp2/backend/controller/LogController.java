@@ -1,10 +1,8 @@
 package hogent.sdp2.backend.controller;
 
-import hogent.sdp2.backend.dto.request.LogRequestDTO;
-import hogent.sdp2.backend.dto.response.LogResponseDTO;
+import hogent.sdp2.backend.dto.request.*;
 import hogent.sdp2.backend.service.LogService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,18 +15,19 @@ public class LogController {
     private final LogService logService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public LogResponseDTO slaLogOp(@RequestBody LogRequestDTO dto) {
-        return logService.slaLogOp(dto);
+    public String createLog(@RequestBody LogDTO dto) {
+        return logService.maakLog(dto);
     }
 
-    @GetMapping
-    public List<LogResponseDTO> geefAlleLogs() {
-        return logService.geefAlleLogs();
+    @GetMapping("/logs")
+    public List<LogDTO> getAlleLogs() {
+        return logService.getAlleLogs();
     }
 
-    @GetMapping("/werknemer/{werknemerId}")
-    public List<LogResponseDTO> geefLogsVanWerknemer(@PathVariable Integer werknemerId) {
-        return logService.geefLogsVanWerknemer(werknemerId);
+    @GetMapping("/byid")
+    public LogDTO getById(@RequestParam Integer id) {
+        return logService.getByID(id);
     }
+
 }
+

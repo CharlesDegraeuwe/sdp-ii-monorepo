@@ -2,12 +2,11 @@ package hogent.sdp2.backend.service;
 
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.*;
-import hogent.sdp2.backend.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.security.SecureRandom;
+import hogent.sdp2.backend.config.JwtService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,30 +14,22 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class WerknemerService {
-
+    //fields
     private final WerknemerRepository werknemerRepository;
-
-        public String genereerZesCijferigeCode() {
-            SecureRandom random = new SecureRandom();
-            // Genereer een willekeurig getal tussen 0 en 999999
-            int getal = random.nextInt(1000000);
-
-            // Formatteer het getal naar een String van precies 6 tekens, vul aan met nullen vooraan indien nodig
-            return String.format("%06d", getal);
-        }
-
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     public String maakWerknemer(WerknemerAanmakenDTO dto) {
         if (werknemerRepository.existsByEmail(dto.email())) {
             return "Fout: Er bestaat al een werknemer met e-mailadres " + dto.email();
         }
-        String uniekeCode = genereerZesCijferigeCode();
+        String uniekeCode = UUID.randomUUID().toString();
 
         Werknemer nieuweWerknemer = new Werknemer();
         nieuweWerknemer.setNaam(dto.naam());
         nieuweWerknemer.setVoornaam(dto.voornaam());
         nieuweWerknemer.setEmail(dto.email());
-        nieuweWerknemer.setWachtwoord(dto.wachtwoord());
+        nieuweWerknemer.setWachtwoord(passwordEncoder.encode(dto.wachtwoord()));
         nieuweWerknemer.setTelefoonnummer(dto.telefoonnummer());
         nieuweWerknemer.setGeboortedatum(dto.geboortedatum());
         nieuweWerknemer.setRol(dto.rol());
@@ -50,37 +41,42 @@ public class WerknemerService {
         return "Werknemer " + dto.voornaam() + " " + dto.naam() + " is succesvol aangemaakt met activatiecode " + uniekeCode;
     }
 
-    public String activeerAccount(int werknemerId, String activatieCode) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findById(werknemerId);
+    public String activeerAccount(String activatieCode) {
+
+        Optional<Werknemer> werknemerOpt = werknemerRepository.findByActivatieCode(activatieCode);
 
         if (werknemerOpt.isEmpty()) {
-            return "Fout: Gebruiker niet gevonden.";
+            return "Fout: Ongeldige of al gebruikte activatiecode.";
         }
 
         Werknemer werknemer = werknemerOpt.get();
-
-        if (werknemer.getActivatieCode() == null || !werknemer.getActivatieCode().equals(activatieCode)) {
-            return "Fout: Ongeldige activatiecode.";
-        }
         werknemer.setStatus("Actief");
         werknemer.setActivatieCode(null);
 
         werknemerRepository.save(werknemer);
-
         return "Account succesvol geactiveerd! Je kunt nu inloggen.";
     }
 
-    public WerknemerResponseDTO login(LoginRequestDTO dto) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(dto.email());
+    public LoginResponseDTO login(LoginRequestDTO dto) {
+        var werknemer = werknemerRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new RuntimeException("Ongeldige inloggegevens"));
 
-        if (werknemerOpt.isEmpty()) throw new RuntimeException("Ongeldige inloggegevens");
-
-        Werknemer werknemer = werknemerOpt.get();
-
-        if (!werknemer.getWachtwoord().equals(dto.wachtwoord()))
+        if (!dto.wachtwoord().equals(werknemer.getWachtwoord()))
             throw new RuntimeException("Ongeldige inloggegevens");
 
-        return new WerknemerResponseDTO(
+        if ("Inactief".equalsIgnoreCase(werknemer.getStatus()))
+            throw new RuntimeException("Account nog niet geactiveerd");
+
+        // Maak UserDetails aan voor token generatie
+        var userDetails = org.springframework.security.core.userdetails.User.builder()
+                .username(werknemer.getEmail())
+                .password(werknemer.getWachtwoord())
+                .roles(werknemer.getRol())
+                .build();
+
+        String token = jwtService.generateToken(userDetails);
+
+        return new LoginResponseDTO(token, new WerknemerResponseDTO(
                 werknemer.getId(),
                 werknemer.getNaam(),
                 werknemer.getVoornaam(),
@@ -89,7 +85,7 @@ public class WerknemerService {
                 werknemer.getGeboortedatum(),
                 werknemer.getRol(),
                 werknemer.getStatus()
-        );
+        ));
     }
 
     public String wijzigWachtwoord(WachtwoordWijzigenDTO dto) {
@@ -165,6 +161,7 @@ public class WerknemerService {
         werknemer.setNaam(dto.naam());
         werknemer.setVoornaam(dto.voornaam());
         werknemer.setEmail(dto.email());
+        werknemer.setStatus(dto.status());
         werknemer.setTelefoonnummer(dto.telefoonnummer());
         werknemer.setGeboortedatum(dto.geboortedatum());
 
@@ -213,58 +210,5 @@ public class WerknemerService {
                         w.getStatus()
                 ))
                 .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
-    }
-
-    public String blokkeerWerknemerAdmin(Integer id) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findById(id);
-
-        if (werknemerOpt.isEmpty()) {
-            return "Fout: De opgevraagde werknemer is niet gevonden.";
-        }
-        Werknemer werknemer = werknemerOpt.get();
-        werknemer.setStatus("Geblokkeerd");
-
-        werknemerRepository.save(werknemer);
-
-        return "Het account van " + werknemer.getEmail() + " is succesvol geblokkeerd!";
-    }
-
-    public String activeerWerknemerAdmin(Integer id) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findById(id);
-
-        if (werknemerOpt.isEmpty()) {
-            return "Fout: De opgevraagde werknemer is niet gevonden.";
-        }
-        Werknemer werknemer = werknemerOpt.get();
-        werknemer.setStatus("Actief");
-        werknemer.setActivatieCode(null);
-
-        werknemerRepository.save(werknemer);
-
-        return "Het account van " + werknemer.getEmail() + " is succesvol geactiveerd!";
-    }
-
-    public String deactiveerWerknemerAdmin(Integer id) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findById(id);
-
-        if (werknemerOpt.isEmpty()) {
-            return "Fout: De opgevraagde werknemer is niet gevonden.";
-        }
-        String uniekeCode = genereerZesCijferigeCode();
-        Werknemer werknemer = werknemerOpt.get();
-        werknemer.setStatus("Inactief");
-        werknemer.setActivatieCode(uniekeCode);
-
-        werknemerRepository.save(werknemer);
-
-        return "Het account van " + werknemer.getEmail() + " is succesvol gedeactiveerd!";
-    }
-
-    public String verwijderWerknemer(Integer id) {
-        if (!werknemerRepository.existsById(id)) {
-            return "Fout: De opgevraagde werknemer is niet gevonden.";
-        }
-        werknemerRepository.deleteById(id);
-        return "Werknemer succesvol verwijderd!";
     }
 }
