@@ -3,8 +3,10 @@ import { auth } from '@/auth';
 
 export async function GET(request: NextRequest) {
   const session = await auth();
+  console.log('[planning] session:', JSON.stringify(session, null, 2));
 
   if (!session?.accessToken || !session?.user?.id) {
+    console.log('[planning] No session/accessToken/userId — returning 401');
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -27,9 +29,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
   }
 
-  // 401/403/500 often means expired JWT on the backend side
-  if (!res.ok) {
+  if (res.status === 401 || res.status === 403) {
     return NextResponse.json({ error: 'token_expired' }, { status: 401 });
+  }
+
+  if (!res.ok) {
+    return NextResponse.json({ error: 'server_error' }, { status: res.status });
   }
 
   const data = await res.json();

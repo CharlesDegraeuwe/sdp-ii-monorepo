@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import type { Afwezigheid, View } from './types';
 import { getPeriodBounds } from './utils';
 
@@ -20,11 +20,7 @@ export function usePlanning(view: View, currentDate: Date) {
 
     fetch(`/api/planning?van=${van}&tot=${tot}`)
       .then(async (res) => {
-        if (res.status === 401) {
-          signOut({ callbackUrl: '/login' });
-          throw new Error('token_expired');
-        }
-        if (!res.ok) throw new Error('server_error');
+        if (!res.ok) throw new Error(`server_error_${res.status}`);
         return res.json();
       })
       .then((data) => {
