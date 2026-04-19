@@ -1,5 +1,9 @@
 import { Notificatie } from '@/types/types';
 
+export default function NotificatieRij() {
+  return <div></div>;
+}
+
 // ── Notificatie rij ───────────────────────────────────────────────────────────
 interface RijProps {
   n: Notificatie;
@@ -13,7 +17,7 @@ interface RijProps {
   formatDatum: (d: string) => string;
 }
 
-export default function NotificatiePage(props: RijProps) {
+function NotificatierRij(props: RijProps) {
   const {
     n,
     verlofStatus,
@@ -25,7 +29,8 @@ export default function NotificatiePage(props: RijProps) {
     onAnnuleer,
     formatDatum,
   } = props;
-  const isOngelezen = n.gelezen === 'Nee';
+  if (!n) return null;
+  const isOngelezen = n?.gelezen === 'Nee';
 
   return (
     <div
