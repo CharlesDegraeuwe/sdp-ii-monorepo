@@ -1,6 +1,7 @@
 package hogent.sdp2.backend.controller;
 
 import hogent.sdp2.backend.dto.request.*;
+import hogent.sdp2.backend.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.service.WerknemerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
