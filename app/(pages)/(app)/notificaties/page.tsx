@@ -1,4 +1,6 @@
-export default function Page() {
+import { Notificatie } from '@/types/types';
+
+export default function NotificatieRij() {
   return <div></div>;
 }
 
@@ -15,18 +17,20 @@ interface RijProps {
   formatDatum: (d: string) => string;
 }
 
-function NotificatieRij({
-  n,
-  verlofStatus,
-  bezig,
-  onGelezen,
-  onVerwijder,
-  onGoedkeuren,
-  onAfwijzen,
-  onAnnuleer,
-  formatDatum,
-}: RijProps) {
-  const isOngelezen = n.gelezen === 'Nee';
+function NotificatierRij(props: RijProps) {
+  const {
+    n,
+    verlofStatus,
+    bezig,
+    onGelezen,
+    onVerwijder,
+    onGoedkeuren,
+    onAfwijzen,
+    onAnnuleer,
+    formatDatum,
+  } = props;
+  if (!n) return null;
+  const isOngelezen = n?.gelezen === 'Nee';
 
   return (
     <div
