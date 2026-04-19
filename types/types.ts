@@ -9,3 +9,13 @@ export interface WerknemerUser {
   status: string;
   accessToken: string;
 }
+
+export interface Notificatie {
+  id: string;
+  werknemer: WerknemerUser;
+  titel: string;
+  bericht: string;
+  gelezen: string;
+  datum: string;
+  referentieId: string;
+}

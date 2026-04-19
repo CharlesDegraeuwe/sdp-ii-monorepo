@@ -3,10 +3,8 @@ import { auth } from '@/auth';
 
 export async function GET(request: NextRequest) {
   const session = await auth();
-  console.log('[planning] session:', JSON.stringify(session, null, 2));
 
   if (!session?.accessToken || !session?.user?.id) {
-    console.log('[planning] No session/accessToken/userId — returning 401');
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
