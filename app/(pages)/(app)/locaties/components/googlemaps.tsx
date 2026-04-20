@@ -17,14 +17,12 @@ function GoogleMaps() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
   });
 
-  const [map, setMap] = React.useState<google.maps.Map | null>(null);
-
-  const onLoad = React.useCallback((map: google.maps.Map) => {
-    setMap(map);
+  const onLoad = React.useCallback(() => {
+    // map loaded
   }, []);
 
-  const onUnmount = React.useCallback((_map: google.maps.Map) => {
-    setMap(null);
+  const onUnmount = React.useCallback(() => {
+    // map unmounted
   }, []);
 
   return isLoaded ? (
