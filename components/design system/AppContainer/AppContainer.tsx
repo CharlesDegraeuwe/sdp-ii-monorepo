@@ -5,7 +5,7 @@ const AppContainer = (props: AppContainerProps) => {
   return (
     <div
       className={
-        'relative w-full max-h-full min-h-full h-full px-20 pb-15 pt-28'
+        'relative w-full max-h-full min-h-full h-full px-20 pb-15 pt-28 items-center flex flex-col overflow-y-scroll scroll-hidden'
       }
     >
       {children}

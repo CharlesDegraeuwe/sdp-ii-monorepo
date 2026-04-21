@@ -23,7 +23,7 @@ const Container = (props: ContainerProps) => {
       bg-transparent
               ${className && className} 
             ${height ? `h-${height}` : 'h-full'}
-             ${width ? `min-w-${width} w-${width}` : 'w-full'}
+             ${width ? `min-w-${width} w-${width} max-w-${width}` : 'w-full'}
             `}
     >
       {(label || indent) && (

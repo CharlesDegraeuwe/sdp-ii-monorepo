@@ -6,6 +6,7 @@ import {
   badgeKleur,
   afwezigheidLabel,
 } from './utils';
+import { Container } from '@/components/design system/Container';
 
 interface DetailPanelProps {
   geselecteerdeDag: Date;
@@ -19,7 +20,7 @@ export default function DetailPanel({
   const opDag = afwezighedenOpDag(afwezigheden, geselecteerdeDag);
 
   return (
-    <div className="bg-white border border-gray-200/50 rounded-2xl p-5 flex flex-col gap-3 min-w-80">
+    <Container width={'80'}>
       <span className="text-sm font-bold text-zinc-900">
         {formatDag(geselecteerdeDag)}
       </span>
@@ -43,6 +44,6 @@ export default function DetailPanel({
           </span>
         </div>
       ))}
-    </div>
+    </Container>
   );
 }
