@@ -20,7 +20,6 @@ export default function Page() {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
   const { data: session, status } = useSession();
-
   useEffect(() => {
     if (status === 'loading') return;
 
@@ -59,13 +58,14 @@ export default function Page() {
       });
   }, [session, status]);
 
+  console.log(sites);
   const handleSiteClick = async (site: Site) => {
     setSelectedSite(site);
     setIsLoadingDetails(true);
 
     const currentSession = session as CustomSession | null;
     const jwtToken = currentSession?.user?.token || currentSession?.accessToken;
-
+    console.log('JWT token:', jwtToken);
     if (!jwtToken) {
       setIsLoadingDetails(false);
       return;
