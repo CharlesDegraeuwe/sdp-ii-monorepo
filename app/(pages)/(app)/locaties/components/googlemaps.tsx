@@ -6,6 +6,8 @@ import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 const containerStyle = {
   width: '100%',
   height: '100%',
+  maxHeight: '100%',
+  maxWidth: '100%',
 };
 
 const center = { lat: 50.503, lng: 4.47 };
@@ -92,11 +94,13 @@ export default function GoogleMaps({
   };
 
   return isLoaded ? (
-    <div className={'w-full h-full flex z-0'}>
+    <div className="w-full h-full flex z-0">
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
         zoom={8}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
         options={{
           minZoom: 2,
           mapTypeId: 'roadmap',

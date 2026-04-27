@@ -3,9 +3,11 @@ import FormHelper from '@/components/design system/Form/FormHelper';
 import { Input } from '@/components/design system/Input';
 import { Button } from '@/components/design system/Button';
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { FaArrowRight } from 'react-icons/fa';
+import { AnimateOnMount } from '@/components/design system/AnimateOnMount';
 
 interface Errors {
   email: string;
@@ -19,6 +21,7 @@ const initialErrors = {
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
+  const [submittedEmail, setSubmittedEmail] = useState(false);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Errors>(initialErrors);
@@ -27,30 +30,54 @@ const LoginForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || `/overzicht`;
 
-  //login functie
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors(initialErrors);
     setLoading(true);
 
-    try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-      console.log('signIn result:', JSON.stringify(result));
+    if (!submittedEmail) {
+      try {
+        const res = await fetch('/api/auth/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
 
-      if (result?.error) {
-        setErrors({ email: 'Ongeldige email', password: '' });
+        if (!res.ok) {
+          setErrors({ email: 'Email niet gevonden', password: '' });
+          setLoading(false);
+          return;
+        }
+
+        setSubmittedEmail(true);
         setLoading(false);
-      } else {
-        router.push(callbackUrl);
+      } catch {
+        setErrors({ email: 'Er ging iets mis', password: '' });
+        setLoading(false);
       }
-    } catch (err) {
-      console.error('Login error:', err);
-      setErrors({ email: 'Ongeldige email', password: '' });
-      setLoading(false);
+    } else {
+      try {
+        const result = await signIn('credentials', {
+          email,
+          code: password,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          setErrors({ email: '', password: 'Ongeldige code' });
+          setLoading(false);
+        } else {
+          const session = await getSession();
+          if (session?.user?.status !== 'Actief') {
+            router.push('/activeer');
+            return;
+          }
+          router.push(callbackUrl);
+        }
+      } catch {
+        setErrors({ email: '', password: 'Er ging iets mis' });
+        setLoading(false);
+      }
     }
   };
 
@@ -63,20 +90,23 @@ const LoginForm = () => {
         onChange={(e) => setEmail(e.target.value)}
       />
 
-      <Input
-        type="password"
-        placeholder="wachtwoord..."
-        error={errors.password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      {submittedEmail && (
+        <AnimateOnMount>
+          <Input
+            type="text"
+            placeholder="verificatiecode..."
+            error={errors.password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </AnimateOnMount>
+      )}
 
       <Button
-        gradient={true}
-        from={'rose-600'}
-        to={'rose-500'}
+        color={'delaware_red'}
         textColor={'white'}
         type="submit"
-        label="Login"
+        label={submittedEmail ? 'Login' : 'Verdergaan'}
+        iconRight={<FaArrowRight />}
         loading={loading}
       />
     </FormHelper>

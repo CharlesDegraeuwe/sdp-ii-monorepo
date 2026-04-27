@@ -6,18 +6,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       credentials: {
         email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        code: { label: 'Code', type: 'text' },
       },
       authorize: async (credentials) => {
         try {
           const loginResponse = await fetch(
-            `${process.env.AUTH_API_URL}/werknemers/login`,
+            `${process.env.AUTH_API_URL}/werknemers/login-token`,
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 email: credentials?.email,
-                wachtwoord: credentials?.password,
+                token: credentials?.code, // backend verwacht "token", niet "code"
               }),
             },
           );
@@ -85,12 +85,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.user = {
           id: user.id!,
           email: user.email!,
-          naam: user.naam,
-          voornaam: user.voornaam,
-          telefoonnummer: user.telefoonnummer,
-          geboortedatum: user.geboortedatum,
-          rol: user.rol,
-          status: user.status,
+          naam: user.naam!,
+          voornaam: user.voornaam!,
+          telefoonnummer: user.telefoonnummer!,
+          geboortedatum: user.geboortedatum!,
+          rol: user.rol!,
+          status: user.status!,
         };
       }
       return token;
