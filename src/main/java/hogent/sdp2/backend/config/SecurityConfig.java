@@ -27,7 +27,8 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/werknemers/login",
+                                "/api/werknemers/login-mail",
+                                "/api/werknemers/login-token",
                                 "/api/werknemers/activeer",
                                 "/api/werknemers/wachtwoord-vergeten",
                                 "/api/werknemers/wachtwoord-resetten"
