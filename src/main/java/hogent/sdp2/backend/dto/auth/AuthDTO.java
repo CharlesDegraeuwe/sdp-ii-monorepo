@@ -1,8 +1,8 @@
-package hogent.sdp2.backend.dto.request;
+package hogent.sdp2.backend.dto.auth;
 
 import java.time.LocalDate;
 
-public record WerknemerResponseDTO(
+public record AuthDTO(
         int id,
         String naam,
         String voornaam,
@@ -11,4 +11,5 @@ public record WerknemerResponseDTO(
         LocalDate geboortedatum,
         String rol,
         String status
-) {}
+) {
+}

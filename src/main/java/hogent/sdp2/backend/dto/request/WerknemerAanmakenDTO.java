@@ -9,6 +9,5 @@ public record WerknemerAanmakenDTO(
         String wachtwoord,
         String telefoonnummer,
         LocalDate geboortedatum,
-        String rol,
-        String status
+        String rol
 ) {}

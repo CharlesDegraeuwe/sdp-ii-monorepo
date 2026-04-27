@@ -2,6 +2,7 @@ package hogent.sdp2.backend.service;
 
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.*;
+import hogent.sdp2.backend.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
