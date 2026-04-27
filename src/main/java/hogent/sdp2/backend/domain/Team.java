@@ -17,4 +17,10 @@ public class Team {
     @Column(name = "Naam", nullable = false, length = 45)
     private String naam;
 
+    @Column(name = "Beschrijving", length = 255)
+    private String beschrijving;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Manager_ID")
+    private Werknemer manager;
 }

@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/werknemers/login-mail",
                                 "/api/werknemers/login-token",
+                                "/api/werknemers/activeer",
                                 "/api/werknemers/wachtwoord-vergeten",
                                 "/api/werknemers/wachtwoord-resetten"
                         ).permitAll()

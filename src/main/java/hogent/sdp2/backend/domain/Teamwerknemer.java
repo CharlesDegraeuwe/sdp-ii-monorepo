@@ -22,4 +22,6 @@ public class Teamwerknemer {
     @JoinColumn(name = "Werknemer_ID", nullable = false)
     private Werknemer werknemer;
 
+    @Column(name = "Is_Supervisor", nullable = false)
+    private Boolean isSupervisor = false;
 }

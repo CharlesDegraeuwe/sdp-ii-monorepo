@@ -1,6 +1,7 @@
 package hogent.sdp2.backend.controller;
 
 import hogent.sdp2.backend.dto.request.*;
+import hogent.sdp2.backend.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.service.WerknemerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ public class WerknemerController {
 
     private final WerknemerService werknemerService;
 
+
     @PostMapping("/login-mail")
     public ResponseEntity<Void> loginMail(@RequestBody EmailLoginDTO dto) {
         werknemerService.emailLogin(dto);
@@ -26,6 +28,12 @@ public class WerknemerController {
     public ResponseEntity<LoginResponseDTO> loginToken(@RequestBody TokenLoginDto dto) {
         return ResponseEntity.ok(werknemerService.tokenLogin(dto));
     }
+
+    @PostMapping("/activeer")
+    public ResponseEntity<String> activeerWerknemer(@RequestParam String code) {
+        return ResponseEntity.ok(werknemerService.activeerAccount(code));
+    }
+
 
     @PutMapping("/wachtwoord")
     public ResponseEntity<String> wijzigWachtwoord(@RequestBody WachtwoordWijzigenDTO dto) {
@@ -42,6 +50,7 @@ public class WerknemerController {
     public ResponseEntity<String> resetWachtwoord(@RequestBody WachtwoordResetDTO dto) {
         return ResponseEntity.ok(werknemerService.resetWachtwoord(dto));
     }
+
 
     @PostMapping
     public ResponseEntity<String> createWerknemer(@RequestBody WerknemerAanmakenDTO dto) {

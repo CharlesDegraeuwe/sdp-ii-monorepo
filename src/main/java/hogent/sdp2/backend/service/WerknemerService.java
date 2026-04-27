@@ -4,6 +4,7 @@ import com.resend.Resend;
 import com.resend.services.emails.model.CreateEmailOptions;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.*;
+import hogent.sdp2.backend.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.repository.WerknemerRepository;
 import hogent.sdp2.backend.config.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -184,6 +185,17 @@ public class WerknemerService {
             throw new RuntimeException("Email verzenden mislukt: " + e.getMessage());
         }
     }
+
+    public String activeerAccount(String activatieCode) {
+        var werknemer = werknemerRepository.findByActivatieCode(activatieCode)
+                .orElseThrow(() -> new RuntimeException("Ongeldige of al gebruikte activatiecode"));
+
+        werknemer.setStatus("Actief");
+        werknemer.setActivatieCode(null);
+        werknemerRepository.save(werknemer);
+        return "Account succesvol geactiveerd";
+    }
+
     private String buildEmailHtml(String code) {
         return """
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 40px; height: 100vh">
