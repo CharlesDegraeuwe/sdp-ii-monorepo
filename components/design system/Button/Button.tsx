@@ -1,4 +1,5 @@
 import { ButtonProps } from './Button.types';
+
 const Button = (props: ButtonProps) => {
   const {
     color,
@@ -10,7 +11,8 @@ const Button = (props: ButtonProps) => {
     from,
     to,
     loading,
-    absolute,
+    iconRight,
+    iconLeft,
   } = props;
   const bgClass = gradient ? '' : `bg-${color ?? 'rose-600'}`;
   const gradientClasses = gradient
@@ -25,8 +27,10 @@ const Button = (props: ButtonProps) => {
         `}
         onClick={props.onClick}
       >
-        {icon && icon}
+        {iconLeft}
+        {icon}
         {loading ? 'laden...' : label}
+        {iconRight}
       </button>
       {error && <span>{error}</span>}
     </div>
