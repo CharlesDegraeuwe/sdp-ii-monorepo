@@ -4,7 +4,7 @@ const PageSection = (props: PageSectionProps) => {
   const { children, title, icon, danger } = props;
   return (
     <div
-      className={`w-full rounded-3xl p-3 flex flex-col gap-3 border ${danger ? 'border-rose-700 text-rose-700 bg-rose-300/20' : 'border-zinc-600/30'} px-5`}
+      className={`w-full rounded-3xl p-5 flex flex-col gap-3 border ${danger ? 'border-rose-700 text-rose-700 bg-rose-300/20' : 'border-zinc-600/30'}`}
     >
       <div className={'flex flex-row gap-3 items-center w-full'}>
         {icon}

@@ -6,12 +6,11 @@ import { useUser } from '@/providers/UserProvider';
 
 const SettingsClient = () => {
   const { user } = useUser();
-  const userRole = user?.rol?.toLowerCase();
+  const currentUser = user?.rol?.toLowerCase();
 
-  const hasRole = (requiredRole?: string): boolean => {
-    if (!requiredRole) return true; // geen restrictie → iedereen mag
-    if (!userRole) return false; // user niet ingelogd of geen rol
-    return userRole === requiredRole.toLowerCase();
+  const hasRole = (required?: string[]): boolean => {
+    if (!required || required.length === 0) return true;
+    return required.some((r) => r.toLowerCase() === currentUser);
   };
 
   return (

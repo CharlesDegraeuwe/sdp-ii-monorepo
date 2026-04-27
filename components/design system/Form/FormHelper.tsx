@@ -4,7 +4,7 @@ import { FormHelperProps } from '@/components/design system/Form/FormHelper.type
 const FormHelper = (props: FormHelperProps) => {
   const { onSubmit, children } = props;
   return (
-    <form onSubmit={onSubmit} className={'flex flex-col gap-5'}>
+    <form onSubmit={onSubmit} className={'flex flex-col gap-5 w-full'}>
       {children}
     </form>
   );
