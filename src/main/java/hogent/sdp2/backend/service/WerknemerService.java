@@ -1,214 +1,189 @@
 package hogent.sdp2.backend.service;
 
+import com.resend.Resend;
+import com.resend.services.emails.model.CreateEmailOptions;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.*;
 import hogent.sdp2.backend.repository.WerknemerRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import hogent.sdp2.backend.config.JwtService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.List;
-import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class WerknemerService {
-    //fields
+
     private final WerknemerRepository werknemerRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    public String maakWerknemer(WerknemerAanmakenDTO dto) {
-        if (werknemerRepository.existsByEmail(dto.email())) {
-            return "Fout: Er bestaat al een werknemer met e-mailadres " + dto.email();
-        }
-        String uniekeCode = UUID.randomUUID().toString();
+    @Value("${resend.api-key}")
+    private String resendApiKey;
 
-        Werknemer nieuweWerknemer = new Werknemer();
-        nieuweWerknemer.setNaam(dto.naam());
-        nieuweWerknemer.setVoornaam(dto.voornaam());
-        nieuweWerknemer.setEmail(dto.email());
-        nieuweWerknemer.setWachtwoord(passwordEncoder.encode(dto.wachtwoord()));
-        nieuweWerknemer.setTelefoonnummer(dto.telefoonnummer());
-        nieuweWerknemer.setGeboortedatum(dto.geboortedatum());
-        nieuweWerknemer.setRol(dto.rol());
-        nieuweWerknemer.setStatus("Inactief");
-        nieuweWerknemer.setActivatieCode(uniekeCode);
+    @Value("${resend.from:delaware suite <no-reply@delaware-suite.com>}")
+    private String emailFrom;
 
-        werknemerRepository.save(nieuweWerknemer);
+    // ==================== AUTH ====================
 
-        return "Werknemer " + dto.voornaam() + " " + dto.naam() + " is succesvol aangemaakt met activatiecode " + uniekeCode;
-    }
+    public void emailLogin(EmailLoginDTO dto) {
+        var werknemer = findByEmailOrThrow(dto.email());
 
-    public String activeerAccount(String activatieCode) {
-
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByActivatieCode(activatieCode);
-
-        if (werknemerOpt.isEmpty()) {
-            return "Fout: Ongeldige of al gebruikte activatiecode.";
-        }
-
-        Werknemer werknemer = werknemerOpt.get();
-        werknemer.setStatus("Actief");
-        werknemer.setActivatieCode(null);
-
+        String code = String.format("%06d", new Random().nextInt(999999));
+        werknemer.setActivatieCode(code);
         werknemerRepository.save(werknemer);
-        return "Account succesvol geactiveerd! Je kunt nu inloggen.";
+
+        sendEmail(
+                dto.email(),
+                "Je verificatiecode",
+                "<h1>Je code: " + code + "</h1><p>Deze code is 10 minuten geldig.</p>"
+        );
     }
 
-    public LoginResponseDTO login(LoginRequestDTO dto) {
-        var werknemer = werknemerRepository.findByEmail(dto.email())
-                .orElseThrow(() -> new RuntimeException("Ongeldige inloggegevens"));
+    public LoginResponseDTO tokenLogin(TokenLoginDto dto) {
+        var werknemer = findByEmailOrThrow(dto.email());
 
-        if (!dto.wachtwoord().equals(werknemer.getWachtwoord()))
-            throw new RuntimeException("Ongeldige inloggegevens");
+        if (!dto.token().equals(werknemer.getActivatieCode()))
+            throw new RuntimeException("Ongeldige code");
 
-        if ("Inactief".equalsIgnoreCase(werknemer.getStatus()))
-            throw new RuntimeException("Account nog niet geactiveerd");
+        if ("Inactief".equalsIgnoreCase(werknemer.getStatus())) {
+            werknemer.setStatus("Actief");
+        }
 
-        // Maak UserDetails aan voor token generatie
-        var userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(werknemer.getEmail())
-                .password(werknemer.getWachtwoord())
-                .roles(werknemer.getRol())
-                .build();
+        werknemer.setActivatieCode(null);
+        werknemerRepository.save(werknemer);
 
-        String token = jwtService.generateToken(userDetails);
-
-        return new LoginResponseDTO(token, new WerknemerResponseDTO(
-                werknemer.getId(),
-                werknemer.getNaam(),
-                werknemer.getVoornaam(),
-                werknemer.getEmail(),
-                werknemer.getTelefoonnummer(),
-                werknemer.getGeboortedatum(),
-                werknemer.getRol(),
-                werknemer.getStatus()
-        ));
+        String token = generateToken(werknemer);
+        return new LoginResponseDTO(token, toDTO(werknemer));
     }
+
+    // ==================== WACHTWOORD ====================
 
     public String wijzigWachtwoord(WachtwoordWijzigenDTO dto) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(dto.email());
+        var werknemer = findByEmailOrThrow(dto.email());
 
-        if (werknemerOpt.isEmpty()) {
-            return "Fout: Gebruiker niet gevonden.";
-        }
-        Werknemer werknemer = werknemerOpt.get();
+        if (!passwordEncoder.matches(dto.oudWachtwoord(), werknemer.getWachtwoord()))
+            throw new RuntimeException("Het huidige wachtwoord is onjuist");
 
-        if (!werknemer.getWachtwoord().equals(dto.oudWachtwoord())) {
-            return "Fout: Het huidige wachtwoord is onjuist.";
-        }
+        if (dto.oudWachtwoord().equals(dto.nieuwWachtwoord()))
+            throw new RuntimeException("Nieuw wachtwoord mag niet hetzelfde zijn");
 
-        if (dto.oudWachtwoord().equals(dto.nieuwWachtwoord())) {
-            return "Fout: Het nieuwe wachtwoord mag niet hetzelfde zijn als het huidige wachtwoord.";
-        }
-
-        werknemer.setWachtwoord(dto.nieuwWachtwoord());
+        werknemer.setWachtwoord(passwordEncoder.encode(dto.nieuwWachtwoord()));
         werknemerRepository.save(werknemer);
-        return "Wachtwoord succesvol gewijzigd!";
+        return "Wachtwoord succesvol gewijzigd";
     }
 
-    public String wachtwoordVergetenAanvragen(WachtwoordVergetenDTO dto) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(dto.email());
-        if (werknemerOpt.isPresent()) {
-            Werknemer werknemer = werknemerOpt.get();
-            String resetToken = java.util.UUID.randomUUID().toString();
-            werknemer.setActivatieCode(resetToken);
-            werknemerRepository.save(werknemer);
+    public void wachtwoordVergetenAanvragen(WachtwoordVergetenDTO dto) {
+        var werknemer = findByEmailOrThrow(dto.email());
 
-            return "Je code is: " + resetToken;
-        }
-        return "Email niet gevonden.";
+        String resetToken = UUID.randomUUID().toString();
+        werknemer.setActivatieCode(resetToken);
+        werknemerRepository.save(werknemer);
+
+        sendEmail(
+                dto.email(),
+                "Wachtwoord resetten",
+                "<h1>Je reset code: " + resetToken + "</h1>"
+        );
     }
 
     public String resetWachtwoord(WachtwoordResetDTO dto) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByActivatieCode(dto.resetCode());
+        var werknemer = werknemerRepository.findByActivatieCode(dto.resetCode())
+                .orElseThrow(() -> new RuntimeException("Ongeldige reset-code"));
 
-        if (werknemerOpt.isEmpty()) {
-            return "Fout: De reset-code is ongeldig.";
-        }
-        Werknemer werknemer = werknemerOpt.get();
-        werknemer.setWachtwoord(dto.nieuwWachtwoord());
+        werknemer.setWachtwoord(passwordEncoder.encode(dto.nieuwWachtwoord()));
         werknemer.setActivatieCode(null);
         werknemerRepository.save(werknemer);
-        return "Je wachtwoord is succesvol gereset! Je kunt nu inloggen.";
+        return "Wachtwoord succesvol gereset";
     }
 
-    public List<WerknemerResponseDTO> getAlleUsers() {
-        return werknemerRepository.findAll().stream()
-                .map(w -> new WerknemerResponseDTO(
-                        w.getId(),
-                        w.getNaam(),
-                        w.getVoornaam(),
-                        w.getEmail(),
-                        w.getTelefoonnummer(),
-                        w.getGeboortedatum(),
-                        w.getRol(),
-                        w.getStatus()
-                ))
-                .toList();
-    }
+    // ==================== CRUD ====================
 
-    public WerknemerResponseDTO updateUser(UpdateUserDTO dto) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(dto.email());
+    public String maakWerknemer(WerknemerAanmakenDTO dto) {
+        if (werknemerRepository.existsByEmail(dto.email()))
+            throw new RuntimeException("Er bestaat al een werknemer met email " + dto.email());
 
-        if (werknemerOpt.isEmpty()) {
-            throw new RuntimeException("Fout: Gebruiker niet gevonden.");
-        }
-        Werknemer werknemer = werknemerOpt.get();
-
+        Werknemer werknemer = new Werknemer();
         werknemer.setNaam(dto.naam());
         werknemer.setVoornaam(dto.voornaam());
         werknemer.setEmail(dto.email());
+        werknemer.setWachtwoord(passwordEncoder.encode(dto.wachtwoord()));
+        werknemer.setTelefoonnummer(dto.telefoonnummer());
+        werknemer.setGeboortedatum(dto.geboortedatum());
+        werknemer.setRol(dto.rol());
+        werknemer.setStatus("Inactief");
+
+        werknemerRepository.save(werknemer);
+        return "Werknemer " + dto.voornaam() + " " + dto.naam() + " succesvol aangemaakt";
+    }
+
+    public WerknemerResponseDTO updateUser(UpdateUserDTO dto) {
+        var werknemer = findByEmailOrThrow(dto.email());
+
+        werknemer.setNaam(dto.naam());
+        werknemer.setVoornaam(dto.voornaam());
         werknemer.setStatus(dto.status());
         werknemer.setTelefoonnummer(dto.telefoonnummer());
         werknemer.setGeboortedatum(dto.geboortedatum());
 
         werknemerRepository.save(werknemer);
-        return new WerknemerResponseDTO(
-                werknemer.getId(),
-                werknemer.getNaam(),
-                werknemer.getVoornaam(),
-                werknemer.getEmail(),
-                werknemer.getStatus(),
-                werknemer.getGeboortedatum(),
-                werknemer.getTelefoonnummer(),
-                werknemer.getRol()
-        );
+        return toDTO(werknemer);
+    }
+
+    public List<WerknemerResponseDTO> getAlleUsers() {
+        return werknemerRepository.findAll().stream()
+                .map(this::toDTO)
+                .toList();
     }
 
     public WerknemerResponseDTO getByEmail(String email) {
-        Optional<Werknemer> werknemerOpt = werknemerRepository.findByEmail(email);
-        if (werknemerOpt.isEmpty()) {
-            throw new RuntimeException("Fout: Gebruiker niet gevonden.");
-        }
-        Werknemer werknemer = werknemerOpt.get();
-
-        return new WerknemerResponseDTO(
-                werknemer.getId(),
-                werknemer.getNaam(),
-                werknemer.getVoornaam(),
-                werknemer.getEmail(),
-                werknemer.getStatus(),
-                werknemer.getGeboortedatum(),
-                werknemer.getTelefoonnummer(),
-                werknemer.getRol()
-        );
+        return toDTO(findByEmailOrThrow(email));
     }
 
     public WerknemerResponseDTO getByID(Integer id) {
         return werknemerRepository.findById(id)
-                .map(w -> new WerknemerResponseDTO(
-                        w.getId(),
-                        w.getNaam(),
-                        w.getVoornaam(),
-                        w.getEmail(),
-                        w.getTelefoonnummer(),
-                        w.getGeboortedatum(),
-                        w.getRol(),
-                        w.getStatus()
-                ))
+                .map(this::toDTO)
                 .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
+    }
+
+    private Werknemer findByEmailOrThrow(String email) {
+        return werknemerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
+    }
+
+    private WerknemerResponseDTO toDTO(Werknemer w) {
+        return new WerknemerResponseDTO(
+                w.getId(), w.getNaam(), w.getVoornaam(), w.getEmail(),
+                w.getTelefoonnummer(), w.getGeboortedatum(), w.getRol(), w.getStatus()
+        );
+    }
+
+    private String generateToken(Werknemer werknemer) {
+        var userDetails = org.springframework.security.core.userdetails.User.builder()
+                .username(werknemer.getEmail())
+                .password(werknemer.getWachtwoord())
+                .roles(werknemer.getRol())
+                .build();
+        return jwtService.generateToken(userDetails);
+    }
+
+    private void sendEmail(String to, String subject, String html) {
+        try {
+            Resend resend = new Resend(resendApiKey);
+            CreateEmailOptions params = CreateEmailOptions.builder()
+                    .from(emailFrom)
+                    .to(to)
+                    .subject(subject)
+                    .html(html)
+                    .build();
+            resend.emails().send(params);
+        } catch (Exception e) {
+            throw new RuntimeException("Email verzenden mislukt: " + e.getMessage());
+        }
     }
 }
