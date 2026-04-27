@@ -2,7 +2,6 @@ import Sidebar from '@/components/app/structuur/sidebar/sidebar';
 import AppHeader from '@/components/app/structuur/header/header';
 import PageHeader from '../../../components/design system/PageHeader/PageHeader';
 import { PageContainer } from '@/components/design system/PageContainer';
-import SplashOverlay from '@/components/app/splash/Splash';
 
 export default function AppLayout({
   children,

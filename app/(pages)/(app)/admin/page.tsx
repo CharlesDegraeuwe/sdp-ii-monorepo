@@ -1,3 +1,4 @@
+import { AppContainer } from '@/components/design system/AppContainer';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -5,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <div></div>;
+  return <AppContainer></AppContainer>;
 }

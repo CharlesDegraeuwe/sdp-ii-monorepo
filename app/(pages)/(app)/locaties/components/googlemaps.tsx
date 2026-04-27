@@ -99,8 +99,6 @@ export default function GoogleMaps({
         mapContainerStyle={containerStyle}
         center={center}
         zoom={8}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
         options={{
           minZoom: 2,
           mapTypeId: 'roadmap',

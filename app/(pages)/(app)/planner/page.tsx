@@ -55,8 +55,6 @@ export default function PlannerPage() {
   return (
     <AppContainer>
       <div className="w-full h-full flex flex-col gap-6">
-        <PageHeader />
-
         <div className="flex items-center gap-4 w-full">
           <div className="w-full flex flex-row gap-3 items-center">
             <Button icon={<FaChevronLeft />} onClick={() => navigeer(-1)} />

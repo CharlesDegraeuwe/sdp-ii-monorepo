@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import PageHeader from '@/components/design system/PageHeader/PageHeader';
 import Container from '@/components/design system/Container/Container';
 import Button from '@/components/design system/Button/Button';
+import { AppContainer } from '@/components/design system/AppContainer';
 
 type Tab = 'verlof' | 'ziekte' | 'geschiedenis';
 
@@ -165,10 +166,8 @@ export default function AfwezighedenPage() {
   ];
 
   return (
-    <div className="w-full min-h-screen overflow-y-auto">
-      <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 pt-36 px-8 pb-16">
-        <PageHeader />
-
+    <AppContainer>
+      <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
         {/* Feedback */}
         {feedback && (
           <div
@@ -457,6 +456,6 @@ export default function AfwezighedenPage() {
           </div>
         )}
       </div>
-    </div>
+    </AppContainer>
   );
 }
