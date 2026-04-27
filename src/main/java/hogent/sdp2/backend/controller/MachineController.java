@@ -4,7 +4,10 @@ import hogent.sdp2.backend.dto.request.MachineAanmakenDTO;
 import hogent.sdp2.backend.dto.request.MachineWijzigenDTO;
 import hogent.sdp2.backend.service.MachineService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/machines")
@@ -32,4 +35,5 @@ public class MachineController {
     public String getMachineStatus(@PathVariable Integer id) {
         return machineService.getMachineStatus(id);
     }
+
 }

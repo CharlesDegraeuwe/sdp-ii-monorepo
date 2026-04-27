@@ -32,4 +32,7 @@ public class Notificaty {
     @Column(name = "Datum", nullable = false)
     private LocalDate datum;
 
+    @Column(name = "Referentie_ID", nullable = true)
+    private Integer referentieId;
+
 }
