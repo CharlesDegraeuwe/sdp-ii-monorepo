@@ -40,8 +40,8 @@ public class WerknemerService {
 
         sendEmail(
                 dto.email(),
-                "Je verificatiecode",
-                "<h1>Je code: " + code + "</h1><p>Deze code is 10 minuten geldig.</p>"
+                "Login code voor delware suite",
+                buildEmailHtml(code)
         );
     }
 
@@ -61,8 +61,6 @@ public class WerknemerService {
         String token = generateToken(werknemer);
         return new LoginResponseDTO(token, toDTO(werknemer));
     }
-
-    // ==================== WACHTWOORD ====================
 
     public String wijzigWachtwoord(WachtwoordWijzigenDTO dto) {
         var werknemer = findByEmailOrThrow(dto.email());
@@ -185,5 +183,20 @@ public class WerknemerService {
         } catch (Exception e) {
             throw new RuntimeException("Email verzenden mislukt: " + e.getMessage());
         }
+    }
+    private String buildEmailHtml(String code) {
+        return """
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 40px; height: 100vh">
+            <img src="https://i.ibb.co/ksS3Wh05/logo-dark.png" alt="logo" style="height: 50px; margin-bottom: 20px;" />
+            <hr style="border: 1px solid #eee;" />
+            <div style="margin-top: 20px;">
+                <h1 style="font-size: 24px; font-weight: bold;">Login code voor Delaware Suite</h1>
+                <p style="color: #555;">Dit is je unieke logincode. Deze blijft 10 minuten geldig, deel dit met niemand.</p>
+                <span style="display: inline-block; background: #f4f4f5; border-radius: 12px; padding: 12px 20px; font-size: 28px; font-weight: bold; letter-spacing: 4px;">
+                    %s
+                </span>
+            </div>
+        </div>
+        """.formatted(code);
     }
 }
