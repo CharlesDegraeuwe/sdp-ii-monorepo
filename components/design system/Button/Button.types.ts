@@ -10,4 +10,5 @@ export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   from?: string;
   to?: string;
   loading?: boolean;
+  absolute?: boolean;
 }

@@ -85,12 +85,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.user = {
           id: user.id!,
           email: user.email!,
-          naam: user.naam,
-          voornaam: user.voornaam,
-          telefoonnummer: user.telefoonnummer,
-          geboortedatum: user.geboortedatum,
-          rol: user.rol,
-          status: user.status,
+          naam: user.naam!,
+          voornaam: user.voornaam!,
+          telefoonnummer: user.telefoonnummer!,
+          geboortedatum: user.geboortedatum!,
+          rol: user.rol!,
+          status: user.status!,
         };
       }
       return token;

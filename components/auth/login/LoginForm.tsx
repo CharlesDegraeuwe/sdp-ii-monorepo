@@ -3,7 +3,7 @@ import FormHelper from '@/components/design system/Form/FormHelper';
 import { Input } from '@/components/design system/Input';
 import { Button } from '@/components/design system/Button';
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
@@ -39,12 +39,19 @@ const LoginForm = () => {
         password,
         redirect: false,
       });
-      console.log('signIn result:', JSON.stringify(result));
+      console.log('signIn result:', result);
 
       if (result?.error) {
         setErrors({ email: 'Ongeldige email', password: '' });
         setLoading(false);
       } else {
+        const session = await getSession();
+
+        if (session?.user?.status !== 'Actief') {
+          router.push('/activeer');
+          return;
+        }
+
         router.push(callbackUrl);
       }
     } catch (err) {

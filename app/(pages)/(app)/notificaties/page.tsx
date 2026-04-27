@@ -267,7 +267,7 @@ interface RijProps {
   formatDatum: (d: string) => string;
 }
 
-function NotificatierRij(props: RijProps) {
+function NotificatieRij(props: RijProps) {
   const {
     n,
     verlofStatus,
