@@ -30,7 +30,6 @@ export function SiteDetail(props: SiteDetailProps) {
   };
   return (
     <div className="flex flex-col h-full">
-      <BreadcrumbInit pages={['locaties', site.naam]} />
       <div className="p-4 border-b border-gray-100 gap-3 bg-gray-50/50 shrink-0 flex flex-row justify-between items-center">
         <div className={'flex items-center gap-3'}>
           <Button

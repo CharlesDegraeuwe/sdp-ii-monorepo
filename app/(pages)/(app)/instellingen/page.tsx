@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <PageContainer className="h-full">
-      <AppContainer>
-        <BreadcrumbInit pages={['instellingen']} />
+    <PageContainer className="h-full scroll-hidden">
+      <BreadcrumbInit pages={['instellingen']} />
+      <div className="flex flex-col w-full h-full items-center overflow-y-auto scroll-hidden py-20">
         <SettingsClient />
-      </AppContainer>
+      </div>
     </PageContainer>
   );
 }
