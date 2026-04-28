@@ -5,13 +5,7 @@ import { useSession } from 'next-auth/react';
 import GoogleMaps from '@/app/(pages)/(app)/locaties/components/googlemaps';
 import { SiteList } from '@/app/(pages)/(app)/locaties/components/SiteList';
 import { SiteDetail } from '@/app/(pages)/(app)/locaties/components/SiteDetail';
-import {
-  CustomSession,
-  Machine,
-  Site,
-  SiteTeamResponse,
-  Team,
-} from '@/types/types';
+import { Machine, Site, SiteTeamResponse, Team } from '@/types/types';
 
 export default function Page() {
   const [sites, setSites] = useState<Site[]>([]);
@@ -28,9 +22,11 @@ export default function Page() {
       return;
     }
 
-    const currentSession = session as CustomSession | null;
-    const jwtToken = currentSession?.user?.token || currentSession?.accessToken;
-    const werknemerId = currentSession?.user?.id;
+    const jwtToken = session?.accessToken;
+    const werknemerId = session?.user?.id;
+
+    console.log('TOKEN:', jwtToken);
+    console.log('WERKNEMER ID:', werknemerId);
 
     if (!jwtToken || !werknemerId) {
       setIsLoading(false);
@@ -58,19 +54,17 @@ export default function Page() {
       });
   }, [session, status]);
 
-  console.log(sites);
   const handleSiteClick = async (site: Site) => {
     setSelectedSite(site);
     setIsLoadingDetails(true);
 
-    const currentSession = session as CustomSession | null;
-    const jwtToken = currentSession?.user?.token || currentSession?.accessToken;
-    console.log('JWT token:', jwtToken);
+    const jwtToken = session?.accessToken;
     if (!jwtToken) {
       setIsLoadingDetails(false);
       return;
     }
 
+    console.log(jwtToken);
     try {
       const [machineRes, siteteamRes] = await Promise.all([
         fetch('http://localhost:8080/api/machines', {

@@ -18,7 +18,7 @@ const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
 export default function PlannerPage() {
   const { data: session } = useSession();
 
-  const token = session?.expires;
+  const token = session?.accessToken;
   const user = session?.user;
 
   const [view, setView] = useState<View>('maand');
