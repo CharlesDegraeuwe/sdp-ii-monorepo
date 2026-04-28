@@ -1,37 +1,59 @@
 import { Site } from '@/types/types';
 import { StatusBadge } from './StatusBadge';
+import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import { Button } from '@/components/design system/Button';
+import { IoArrowBack, IoChevronDown, IoChevronUp } from 'react-icons/io5';
+import { useState } from 'react';
 
-export function SiteDetail({
-  site,
-  isLoading,
-  onBack,
-}: {
+interface SiteDetailProps {
   site: Site;
+  sites: Site[];
+  setSelectedSite: (selectedSite: Site) => void;
   isLoading: boolean;
   onBack: () => void;
-}) {
+}
+export function SiteDetail(props: SiteDetailProps) {
+  const { site, sites, setSelectedSite, isLoading, onBack } = props;
+  const [currentIndex, setCurrentIndex] = useState(sites.indexOf(site));
+  const toggleDown = () => {
+    if (currentIndex < sites.length - 1) {
+      setSelectedSite(sites[currentIndex + 1]);
+      setCurrentIndex((prev) => prev + 1);
+    }
+  };
+
+  const toggleUp = () => {
+    if (currentIndex > 0) {
+      setSelectedSite(sites[currentIndex - 1]);
+      setCurrentIndex((prev) => prev - 1);
+    }
+  };
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50 shrink-0">
-        <button
-          onClick={onBack}
-          className="p-2 hover:bg-gray-200 rounded-full transition-colors flex items-center justify-center"
-        >
-          <svg
-            className="w-5 h-5 text-gray-700"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-        </button>
-        <h2 className="font-bold text-gray-800 text-lg">Locatie Details</h2>
+      <BreadcrumbInit pages={['locaties', site.naam]} />
+      <div className="p-4 border-b border-gray-100 gap-3 bg-gray-50/50 shrink-0 flex flex-row justify-between items-center">
+        <div className={'flex items-center gap-3'}>
+          <Button
+            icon={<IoArrowBack />}
+            onClick={onBack}
+            className="p-2 hover:bg-gray-200 rounded-full transition-colors flex items-center justify-center"
+          />
+          <h2 className="font-bold text-gray-800 text-lg">Locatie Details</h2>
+        </div>
+        <div className={'flex flex-row items-center gap-3'}>
+          <Button
+            disabled={currentIndex === 0}
+            px={'px-3'}
+            icon={<IoChevronUp />}
+            onClick={toggleUp}
+          />
+          <Button
+            disabled={currentIndex === sites.length - 1}
+            px={'px-3'}
+            icon={<IoChevronDown />}
+            onClick={toggleDown}
+          />
+        </div>
       </div>
 
       <div className="p-6 flex-1 overflow-y-auto flex flex-col gap-6">

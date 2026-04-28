@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { Site } from '@/types/types';
 
 const containerStyle = {
   width: '100%',
@@ -26,19 +27,21 @@ export interface MarkerData extends MapSite {
   position: google.maps.LatLng | google.maps.LatLngLiteral;
 }
 
-export default function GoogleMaps({
-  sites = [],
-  onMarkerClick,
-}: {
+interface GoogleMapsProps {
+  selectedSite: Site | null;
   sites?: MapSite[];
   onMarkerClick?: (site: MapSite) => void;
-}) {
+}
+
+export default function GoogleMaps(props: GoogleMapsProps) {
+  const { selectedSite, sites = [], onMarkerClick } = props;
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
   });
 
   const [markers, setMarkers] = useState<MarkerData[]>([]);
+  const mapRef = useRef<google.maps.Map | null>(null);
 
   useEffect(() => {
     if (!isLoaded || sites.length === 0) return;
@@ -51,10 +54,7 @@ export default function GoogleMaps({
           return new Promise<MarkerData | null>((resolve) => {
             geocoder.geocode({ address: site.locatie }, (results, status) => {
               if (status === 'OK' && results && results[0]) {
-                resolve({
-                  ...site,
-                  position: results[0].geometry.location,
-                });
+                resolve({ ...site, position: results[0].geometry.location });
               } else {
                 console.error(site.locatie);
                 resolve(null);
@@ -68,6 +68,21 @@ export default function GoogleMaps({
 
     fetchCoordinates();
   }, [isLoaded, sites]);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    if (selectedSite) {
+      const marker = markers.find((m) => m.id === selectedSite.id);
+      if (marker) {
+        mapRef.current.panTo(marker.position);
+        mapRef.current.setZoom(13);
+      }
+    } else {
+      mapRef.current.panTo(center);
+      mapRef.current.setZoom(8);
+    }
+  }, [selectedSite, markers]);
 
   const getCustomPin = (status: string, naam: string) => {
     const color =
@@ -99,6 +114,12 @@ export default function GoogleMaps({
         mapContainerStyle={containerStyle}
         center={center}
         zoom={8}
+        onLoad={(map) => {
+          mapRef.current = map;
+        }}
+        onUnmount={() => {
+          mapRef.current = null;
+        }}
         options={{
           minZoom: 2,
           mapTypeId: 'roadmap',
@@ -172,11 +193,7 @@ export default function GoogleMaps({
               url: getCustomPin(marker.status, marker.naam),
               anchor: new window.google.maps.Point(26, 62),
             }}
-            onClick={() => {
-              if (onMarkerClick) {
-                onMarkerClick(marker);
-              }
-            }}
+            onClick={() => onMarkerClick?.(marker)}
           />
         ))}
       </GoogleMap>

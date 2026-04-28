@@ -1,5 +1,6 @@
 import { Input } from '@/components/design system/Input';
 import { Site } from '@/types/types';
+import { StatusBadge } from '@/app/(pages)/(app)/locaties/components/StatusBadge';
 
 export function SiteList({
   sites,
@@ -26,37 +27,14 @@ export function SiteList({
             <div
               key={site.id}
               onClick={() => onSiteClick(site)}
-              className="p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-blue-200 transition-all shadow-sm bg-white group"
+              className="p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 hover:border-zinc-300 transition-all bg-white group"
             >
               <div className="flex justify-between items-center">
-                <h3 className="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">
+                <h3 className="font-bold text-gray-800 text-base group-hover:text-zinc-600 transition-colors">
                   {site.naam}
                 </h3>
-                <svg
-                  className="w-4 h-4 text-gray-300 group-hover:text-blue-500 transition-colors"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
               </div>
-              <p
-                className={`text-sm mt-1 font-medium ${
-                  site.status === 'Actief'
-                    ? 'text-green-600'
-                    : site.status === 'In onderhoud'
-                      ? 'text-orange-500'
-                      : 'text-red-500'
-                }`}
-              >
-                {site.status}
-              </p>
+              <StatusBadge status={site.status} size="xs" />
             </div>
           ))
         )}

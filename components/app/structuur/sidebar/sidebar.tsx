@@ -1,10 +1,8 @@
 'use client';
-import { FiSidebar } from 'react-icons/fi';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  MdFormatListBulleted, // planning
   MdCheck, // tasks (taken)
   MdOutlineMap, // plants (locaties)
   MdOutlineCancel, // absense (afwezigheid)
@@ -14,6 +12,7 @@ import {
 import { usePathname } from 'next/navigation';
 import SidebarItem from '@/components/app/structuur/sidebar/sidebarItem';
 import Image from 'next/image';
+import { IoCalendarOutline } from 'react-icons/io5';
 
 const links = [
   {
@@ -24,7 +23,7 @@ const links = [
   {
     url: 'planner',
     title: 'planner',
-    icon: <MdFormatListBulleted size={20} />,
+    icon: <IoCalendarOutline size={20} />,
   },
   {
     url: 'taken',
@@ -54,7 +53,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`w-50 h-screen flex flex-col z-[999] transition-all duration-200 bg-zinc-100 ${ugly && 'bg-linear-180 from-rose-600 to-rose-500'} py-10`}
+      className={`w-50 h-screen flex flex-col z-[999] transition-all duration-200 bg-zinc-300/40 ${ugly && 'bg-linear-180 from-rose-600 to-rose-500'} py-10`}
     >
       <div className="flex flex-col items-center justify-baseline h-full text-zinc-900 font-sfpro px-5 gap-20">
         <div className="relative justify-center flex items-center group">

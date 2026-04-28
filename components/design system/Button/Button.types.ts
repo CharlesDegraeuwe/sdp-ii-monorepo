@@ -13,4 +13,5 @@ export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   absolute?: boolean;
   iconRight?: React.ReactNode;
   iconLeft?: React.ReactNode;
+  px?: string;
 }

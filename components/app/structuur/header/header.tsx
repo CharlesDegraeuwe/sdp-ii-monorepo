@@ -7,6 +7,7 @@ import { HiOutlineChevronUpDown } from 'react-icons/hi2';
 import Popup from '@/components/app/structuur/header/popup';
 import { useUser } from '@/providers/UserProvider';
 import Image from 'next/image';
+import BreadCrumbs from '@/components/design system/BreadCrumbs/BreadCrumbs';
 
 export default function AppHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +48,7 @@ export default function AppHeader() {
         'absolute top-0 w-screen z-[9999] flex h-25 flex-row justify-between items-center pl-5 pr-14 gap-5'
       }
     >
-      <div className={'h-full flex items-center'}>
+      <div className={'h-full flex flex-row gap-2 items-center'}>
         <Link
           href={'/overzicht'}
           className={

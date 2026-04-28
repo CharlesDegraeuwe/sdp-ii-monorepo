@@ -6,6 +6,7 @@ import GoogleMaps from '@/app/(pages)/(app)/locaties/components/googlemaps';
 import { SiteList } from '@/app/(pages)/(app)/locaties/components/SiteList';
 import { SiteDetail } from '@/app/(pages)/(app)/locaties/components/SiteDetail';
 import { Machine, Site, SiteTeamResponse, Team } from '@/types/types';
+import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
 export default function Page() {
   const [sites, setSites] = useState<Site[]>([]);
@@ -102,34 +103,36 @@ export default function Page() {
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="relative w-full h-full z-999 pointer-events-none">
-        <div className="absolute top-6 left-6 w-80 bottom-6 bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col pointer-events-auto">
-          <div
-            className={`absolute inset-0 bg-white z-20 flex flex-col rounded-2xl transition-transform duration-300 ease-in-out ${selectedSite ? 'translate-x-0' : '-translate-x-[calc(100%+2rem)]'}`}
-          >
-            {selectedSite && (
-              <SiteDetail
-                site={selectedSite}
-                isLoading={isLoadingDetails}
-                onBack={() => setSelectedSite(null)}
-              />
-            )}
-          </div>
-
-          <SiteList
-            sites={sites}
-            isLoading={isLoading}
-            onSiteClick={handleSiteClick}
-          />
+    <main className="w-full h-full flex flex-row gap-5">
+      <div className="w-1/4 border border-zinc-300 overflow-hidden rounded-3xl relative bg-white">
+        <div
+          className={`absolute inset-0 bg-white z-20 flex flex-col rounded-2xl transition-transform duration-300 ease-in-out ${selectedSite ? 'translate-x-0' : '-translate-x-full'}`}
+        >
+          <BreadcrumbInit pages={['locaties']} />
+          {selectedSite && (
+            <SiteDetail
+              site={selectedSite}
+              setSelectedSite={setSelectedSite}
+              sites={sites}
+              isLoading={isLoadingDetails}
+              onBack={() => setSelectedSite(null)}
+            />
+          )}
         </div>
+
+        <SiteList
+          sites={sites}
+          isLoading={isLoading}
+          onSiteClick={handleSiteClick}
+        />
       </div>
-      <div className="absolute inset-0 z-10">
+      <div className="w-3/4 border border-zinc-300 overflow-hidden rounded-3xl">
         <GoogleMaps
+          selectedSite={selectedSite}
           sites={sites}
           onMarkerClick={(site) => handleSiteClick(site as Site)}
         />
       </div>
-    </div>
+    </main>
   );
 }

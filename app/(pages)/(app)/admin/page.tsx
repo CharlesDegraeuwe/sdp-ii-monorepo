@@ -1,10 +1,12 @@
 import { AppContainer } from '@/components/design system/AppContainer';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Admin | Delaware Suite',
-};
+import { PageContainer } from '@/components/design system/PageContainer';
+import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
 export default function Page() {
-  return <AppContainer></AppContainer>;
+  return (
+    <PageContainer className="h-full">
+      <BreadcrumbInit pages={['admin']} />
+      <AppContainer></AppContainer>
+    </PageContainer>
+  );
 }
