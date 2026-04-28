@@ -1,78 +1,97 @@
-import { Container } from '@/components/design system/Container';
-import { DAYS_NL, TYPE_COLORS } from './constants';
-import { getMonthDays, isSameDay, dayInRange } from './utils';
-import type { Afwezigheid } from './types';
+import type { Afwezigheid } from './components/types';
+import { DAGEN_KORT } from './components/constants';
+import { afwezighedenOpDag, isVandaag, badgeKleur } from './components/utils';
 
-interface Props {
-  currentDate: Date;
-  selectedDate: Date;
-  today: Date;
+interface MonthViewProps {
+  huidigeDatum: Date;
   afwezigheden: Afwezigheid[];
-  onSelectDay: (day: Date) => void;
+  geselecteerdeDag: Date | null;
+  onSelectDag: (datum: Date) => void;
 }
 
-export function MonthView({
-  currentDate,
-  selectedDate,
-  today,
+export default function MonthView({
+  huidigeDatum,
   afwezigheden,
-  onSelectDay,
-}: Props) {
-  const afwezighedenOpDag = (day: Date) =>
-    afwezigheden.filter((a) => dayInRange(day, a));
+  geselecteerdeDag,
+  onSelectDag,
+}: MonthViewProps) {
+  const eersteVanMaand = new Date(
+    huidigeDatum.getFullYear(),
+    huidigeDatum.getMonth(),
+    1,
+  );
+  const startKolom =
+    eersteVanMaand.getDay() === 0 ? 6 : eersteVanMaand.getDay() - 1;
+  const aantalDagen = new Date(
+    huidigeDatum.getFullYear(),
+    huidigeDatum.getMonth() + 1,
+    0,
+  ).getDate();
+
+  const cellen: (Date | null)[] = Array(startKolom).fill(null);
+  for (let i = 1; i <= aantalDagen; i++)
+    cellen.push(
+      new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), i),
+    );
+  while (cellen.length % 7 !== 0) cellen.push(null);
 
   return (
-    <Container className="h-full">
-      <div className="p-3 h-full flex flex-col">
-        <div className="grid grid-cols-7 mb-1">
-          {DAYS_NL.map((d) => (
-            <div
-              key={d}
-              className="text-center text-xs font-semibold text-gray-500 py-1.5"
-            >
-              {d}
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 gap-1 flex-1">
-          {getMonthDays(currentDate).map((day, i) => {
-            const dagAfwezigheid = day ? afwezighedenOpDag(day) : [];
-            const isSelected = day ? isSameDay(day, selectedDate) : false;
-            const isVandaag = day ? isSameDay(day, today) : false;
+    <div className="flex flex-col gap-1 w-full h-full">
+      <div className="grid grid-cols-7 gap-1">
+        {DAGEN_KORT.map((d) => (
+          <div
+            key={d}
+            className="text-center text-xs font-bold text-zinc-400 uppercase py-2"
+          >
+            {d}
+          </div>
+        ))}
+      </div>
 
-            return (
-              <div
-                key={i}
-                onClick={() => day && onSelectDay(day)}
-                className={`flex flex-col items-center justify-center gap-0.5 rounded-lg text-sm transition-all select-none
-                  ${day ? 'cursor-pointer' : ''}
-                  ${
-                    isSelected
-                      ? 'bg-delaware_red text-white'
-                      : dagAfwezigheid.length > 0
-                        ? 'bg-delaware_red/15 hover:bg-delaware_red/25 text-delaware_red font-medium'
-                        : 'hover:bg-gray-400/30'
-                  }
-                  ${isVandaag && !isSelected ? 'ring-2 ring-delaware_red font-bold' : ''}
-                  ${isVandaag && isSelected ? 'ring-2 ring-white' : ''}
-                `}
+      <div className="grid grid-cols-7 grid-rows-6 gap-1 flex-1">
+        {cellen.map((datum, i) => {
+          if (!datum) return <div key={i} className="min-h-20" />;
+
+          const opDag = afwezighedenOpDag(afwezigheden, datum);
+          const weekend = datum.getDay() === 0 || datum.getDay() === 6;
+          const geselecteerd =
+            geselecteerdeDag &&
+            datum.toDateString() === geselecteerdeDag.toDateString();
+
+          return (
+            <div
+              key={i}
+              onClick={() => onSelectDag(datum)}
+              className={`min-h-25 max-h-25 rounded-2xl p-2 cursor-pointer transition-all duration-200 border
+                ${weekend ? 'bg-zinc-50 border-zinc-100' : 'bg-white border-gray-200/50'}
+                ${isVandaag(datum) ? 'border-zinc-900 border-2' : ''}
+                ${geselecteerd ? 'ring-2 ring-zinc-400' : ''}
+                hover:shadow-md hover:border-zinc-300`}
+            >
+              <span
+                className={`text-xs font-bold ${isVandaag(datum) ? 'text-zinc-900' : 'text-zinc-500'}`}
               >
-                {day?.getDate()}
-                {dagAfwezigheid.length > 0 && (
-                  <div className="flex gap-0.5">
-                    {dagAfwezigheid.slice(0, 3).map((a, j) => (
-                      <span
-                        key={j}
-                        className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white' : (TYPE_COLORS[a.type] ?? 'bg-gray-400')}`}
-                      />
-                    ))}
-                  </div>
+                {datum.getDate()}
+              </span>
+              <div className="flex flex-col gap-0.5 mt-1">
+                {opDag.slice(0, 2).map((a, j) => (
+                  <span
+                    key={j}
+                    className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full truncate ${badgeKleur(a)}`}
+                  >
+                    {a.voornaam}
+                  </span>
+                ))}
+                {opDag.length > 2 && (
+                  <span className="text-[9px] text-zinc-400 font-bold">
+                    +{opDag.length - 2}
+                  </span>
                 )}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
-    </Container>
+    </div>
   );
 }

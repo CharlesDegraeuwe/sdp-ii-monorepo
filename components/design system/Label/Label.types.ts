@@ -2,7 +2,7 @@ export interface LabelProps extends React.HTMLAttributes<HTMLSpanElement> {
   text?: string;
   weight?: number;
   color?: string;
-  size?: number;
+  size?: string | number;
   className?: string;
   children?: React.ReactNode;
   icon?: React.ReactNode;

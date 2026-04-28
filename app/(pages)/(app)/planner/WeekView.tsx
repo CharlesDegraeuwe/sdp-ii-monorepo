@@ -1,75 +1,81 @@
-import { Fragment } from 'react';
-import { Container } from '@/components/design system/Container';
-import { DAYS_NL, HOURS, TYPE_COLORS } from './constants';
-import { getWeekDays, isSameDay, dayInRange } from './utils';
-import type { Afwezigheid } from './types';
+import type { Afwezigheid } from './components/types';
+import { DAGEN_KORT } from './components/constants';
+import {
+  afwezighedenOpDag,
+  getMaandag,
+  isVandaag,
+  badgeKleur,
+  afwezigheidLabel,
+} from './components/utils';
 
-interface Props {
-  currentDate: Date;
-  selectedDate: Date;
-  today: Date;
+interface WeekViewProps {
+  huidigeDatum: Date;
   afwezigheden: Afwezigheid[];
-  onSelectDay: (day: Date) => void;
+  geselecteerdeDag: Date | null;
+  onSelectDag: (datum: Date) => void;
 }
 
-export function WeekView({
-  currentDate,
-  selectedDate,
-  today,
+export default function WeekView({
+  huidigeDatum,
   afwezigheden,
-  onSelectDay,
-}: Props) {
-  const weekDays = getWeekDays(currentDate);
-  const afwezighedenOpDag = (day: Date) =>
-    afwezigheden.filter((a) => dayInRange(day, a));
+  geselecteerdeDag,
+  onSelectDag,
+}: WeekViewProps) {
+  const maandag = getMaandag(huidigeDatum);
+  const dagen = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(maandag);
+    d.setDate(d.getDate() + i);
+    return d;
+  });
 
   return (
-    <Container className="h-full">
-      <div className="h-full overflow-auto">
-        <div className="grid grid-cols-8 min-w-[500px]">
-          <div className="sticky top-0 z-10 bg-white/5" />
-          {weekDays.map((day, i) => {
-            const dagAfwezigheid = afwezighedenOpDag(day);
-            return (
-              <div
-                key={i}
-                onClick={() => onSelectDay(day)}
-                className={`sticky top-0 z-10 text-center py-2 text-xs font-semibold cursor-pointer select-none backdrop-blur-sm rounded-xl
-                  ${isSameDay(day, selectedDate) || dagAfwezigheid.length > 0 ? 'bg-delaware_red/10' : ''}
-                  ${isSameDay(day, today) ? 'text-delaware_red' : 'text-gray-600'}
-                `}
+    <div className="grid grid-cols-7 gap-2 min-h-64">
+      {dagen.map((datum, i) => {
+        const opDag = afwezighedenOpDag(afwezigheden, datum);
+        const weekend = datum.getDay() === 0 || datum.getDay() === 6;
+        const geselecteerd =
+          geselecteerdeDag &&
+          datum.toDateString() === geselecteerdeDag.toDateString();
+
+        return (
+          <div
+            key={i}
+            onClick={() => onSelectDag(datum)}
+            className={`flex flex-col gap-2 rounded-2xl p-3 cursor-pointer transition-all duration-200 border
+              ${weekend ? 'bg-zinc-50 border-zinc-100' : 'bg-white border-gray-200/50'}
+              ${isVandaag(datum) ? 'border-zinc-900 border-2' : ''}
+              ${geselecteerd ? 'ring-2 ring-zinc-400' : ''}
+              hover:shadow-md`}
+          >
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-zinc-400 uppercase">
+                {DAGEN_KORT[i]}
+              </span>
+              <span
+                className={`text-lg font-bold ${isVandaag(datum) ? 'text-zinc-900' : 'text-zinc-600'}`}
               >
-                <div>{DAYS_NL[i]}</div>
-                <div
-                  className={`text-sm mt-0.5 ${isSameDay(day, today) ? 'font-bold' : ''}`}
-                >
-                  {day.getDate()}
-                </div>
-                {dagAfwezigheid.length > 0 && (
-                  <div className="flex justify-center gap-0.5 mt-0.5">
-                    {dagAfwezigheid.slice(0, 3).map((a, j) => (
-                      <span
-                        key={j}
-                        className={`w-1 h-1 rounded-full ${TYPE_COLORS[a.type] ?? 'bg-gray-400'}`}
-                      />
-                    ))}
-                  </div>
-                )}
+                {datum.getDate()}
+              </span>
+            </div>
+
+            {opDag.length === 0 && (
+              <span className="text-xs text-zinc-300">–</span>
+            )}
+
+            {opDag.map((a, j) => (
+              <div
+                key={j}
+                className={`rounded-xl px-2 py-1.5 h-full ${badgeKleur(a)}`}
+              >
+                <span className="text-[10px] font-bold block truncate">
+                  {a.voornaam} {a.naam}
+                </span>
+                <span className="text-[9px] block">{afwezigheidLabel(a)}</span>
               </div>
-            );
-          })}
-          {HOURS.map((hour) => (
-            <Fragment key={hour}>
-              <div className="text-xs text-gray-400 pr-2 text-right py-2 border-t border-gray-200/30 leading-tight">
-                {String(hour).padStart(2, '0')}:00
-              </div>
-              {weekDays.map((_, di) => (
-                <div key={di} className="border-t border-gray-200/30 h-10" />
-              ))}
-            </Fragment>
-          ))}
-        </div>
-      </div>
-    </Container>
+            ))}
+          </div>
+        );
+      })}
+    </div>
   );
 }

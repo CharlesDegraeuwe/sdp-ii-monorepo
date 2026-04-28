@@ -8,15 +8,13 @@ import { getPeriodBounds } from './utils';
 export function usePlanning(view: View, currentDate: Date) {
   const { status } = useSession();
   const [afwezigheden, setAfwezigheden] = useState<Afwezigheid[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (status !== 'authenticated') return;
 
     const { van, tot } = getPeriodBounds(view, currentDate);
     let cancelled = false;
-
-    setLoading(true); // eslint-disable-line react-hooks/set-state-in-effect
 
     fetch(`/api/planning?van=${van}&tot=${tot}`)
       .then(async (res) => {

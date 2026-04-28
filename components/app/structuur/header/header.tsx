@@ -6,6 +6,8 @@ import { PiBell } from 'react-icons/pi';
 import { HiOutlineChevronUpDown } from 'react-icons/hi2';
 import Popup from '@/components/app/structuur/header/popup';
 import { useUser } from '@/providers/UserProvider';
+import Image from 'next/image';
+import BreadCrumbs from '@/components/design system/BreadCrumbs/BreadCrumbs';
 
 export default function AppHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,46 +45,64 @@ export default function AppHeader() {
   return (
     <div
       className={
-        'absolute top-0 w-screen h-fit pt-10 flex flex-row justify-end px-14 gap-5'
+        'absolute top-0 w-screen z-[9999] flex h-25 flex-row justify-between items-center pl-5 pr-14 gap-5'
       }
     >
-      <div className={'w-fit flex flex-row gap-2'}>
+      <div className={'h-full flex flex-row gap-2 items-center'}>
         <Link
-          href={'/notificaties'}
+          href={'/overzicht'}
           className={
-            'w-8 h-8 active:scale-95 flex items-center justify-center rounded-full border border-transparent transition-all duration-300 hover:border-zinc-300'
+            'font-delaware text-zinc-900 text-xl flex flex-row gap-0 items-center'
           }
         >
-          <PiBell size={20} />
+          <Image
+            src={'/logo.svg'}
+            width={0}
+            height={0}
+            alt={'logo'}
+            className={'h-13 w-fit '}
+          />
         </Link>
       </div>
-      <div className={'relative flex flex-row'}>
-        <div
-          onClick={handleToggle}
-          ref={triggerRef}
-          className={
-            'relative gap-2 cursor-pointer select-none  active:scale-95 transition-all duration-300 flex items-center justify-end'
-          }
-        >
-          <div
+      <div className={'w-fit flex justify-end gap-5 items-center'}>
+        <div className={'w-fit flex flex-row gap-2'}>
+          <Link
+            href={'/notificaties'}
             className={
-              'min-w-8 min-h-8 text-white overflow-hidden active:scale-95 transition-all duration-300 flex items-center justify-center rounded-full border border-zinc-50 bg-linear-0 from-rose-500 to-rose-600 hover:border-zinc-300'
+              'w-8 h-8 active:scale-95 flex items-center justify-center rounded-full border border-transparent transition-all duration-300 hover:border-zinc-300'
             }
           >
-            {user.user?.voornaam.split('')[0] || <FaUser size={12} />}
-          </div>
-          <div className={'w-fit flex flex-row items-center justify-center'}>
-            <span
+            <PiBell size={20} />
+          </Link>
+        </div>
+        <div className={'relative flex flex-row'}>
+          <div
+            onClick={handleToggle}
+            ref={triggerRef}
+            className={
+              'relative gap-2 cursor-pointer select-none  active:scale-95 transition-all duration-300 flex items-center justify-end'
+            }
+          >
+            <div
               className={
-                'w-full h-full flex items-center pointer-events-none font-bold truncate'
+                'min-w-8 min-h-8 text-white overflow-hidden active:scale-95 transition-all duration-300 flex items-center justify-center rounded-full border border-zinc-50 bg-linear-0 from-rose-500 to-rose-600 hover:border-zinc-300'
               }
             >
-              {user.user?.voornaam + ' ' + user.user?.naam}
-            </span>
-            <HiOutlineChevronUpDown size={20} />
+              {user.user?.voornaam.split('')[0] || <FaUser size={12} />}
+            </div>
+            <div className={'w-fit flex flex-row items-center justify-center'}>
+              <span
+                className={
+                  'w-full h-full flex items-center pointer-events-none font-bold truncate'
+                }
+              >
+                {user.user?.voornaam + ' ' + user.user?.naam}
+              </span>
+              <HiOutlineChevronUpDown size={20} />
+            </div>
           </div>
+          <Popup isOpen={isOpen} popupRef={popupRef} />
         </div>
-        <Popup isOpen={isOpen} popupRef={popupRef} />
       </div>
     </div>
   );
