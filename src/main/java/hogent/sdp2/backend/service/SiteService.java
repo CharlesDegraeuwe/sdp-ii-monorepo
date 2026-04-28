@@ -89,4 +89,9 @@ public class SiteService {
         log.info("Audit: Site met ID {} wordt opgevraagd.", id);
         return siteRepository.findById(id).orElse(null);
     }
+
+    public List<Site> haalSitesVanWerknemer(Integer werknemerId) {
+        log.info("Audit: Sites voor werknemer {} worden opgevraagd.", werknemerId);
+        return siteRepository.findAll();
+    }
 }
