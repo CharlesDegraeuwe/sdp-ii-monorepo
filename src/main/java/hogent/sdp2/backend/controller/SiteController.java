@@ -55,4 +55,10 @@ public class SiteController {
 
         return ResponseEntity.ok(machines);
     }
+
+    @GetMapping("/werknemer/{werknemerId}")
+    public ResponseEntity<List<Site>> getSitesVanWerknemer(@PathVariable Integer werknemerId) {
+        List<Site> sites = siteService.haalSitesVanWerknemer(werknemerId);
+        return ResponseEntity.ok(sites);
+    }
 }

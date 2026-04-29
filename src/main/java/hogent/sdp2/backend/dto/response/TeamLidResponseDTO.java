@@ -1,9 +1,18 @@
 package hogent.sdp2.backend.dto.response;
 
 public record TeamLidResponseDTO(
-        int id,
+        int werknemerId,
         String naam,
         String voornaam,
         String email,
-        boolean isSupervisor
+        String telefoonnummer,
+        String rol,
+        boolean isSupervisor,
+        int teamId,
+        String teamNaam,
+        String teamBeschrijving,
+        Integer managerId,
+        String managerNaam,
+        Integer siteId,
+        String siteNaam
 ) {}

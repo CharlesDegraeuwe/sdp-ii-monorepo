@@ -47,11 +47,40 @@ public class TeamService {
     }
 
     public List<TeamLidResponseDTO> geefTeamLedenMetSupervisor(Integer teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Team niet gevonden"));
+
+        String managerNaam = null;
+        Integer managerId = null;
+        if (team.getManager() != null) {
+            managerId = team.getManager().getId();
+            managerNaam = team.getManager().getVoornaam() + " " + team.getManager().getNaam();
+        }
+
+        Integer siteId = null;
+        String siteNaam = null;
+        List<Siteteam> sitelinks = siteteamRepository.findByTeamId(teamId);
+        if (!sitelinks.isEmpty()) {
+            Site site = sitelinks.get(0).getSite();
+            siteId = site.getId();
+            siteNaam = site.getNaam();
+        }
+
+        final String mNaam = managerNaam;
+        final Integer mId = managerId;
+        final Integer sId = siteId;
+        final String sNaam = siteNaam;
+
         return teamwerknemerRepository.findByTeamId(teamId).stream()
                 .map(tw -> {
                     Werknemer w = tw.getWerknemer();
-                    return new TeamLidResponseDTO(w.getId(), w.getNaam(), w.getVoornaam(),
-                            w.getEmail(), tw.getIsSupervisor());
+                    return new TeamLidResponseDTO(
+                            w.getId(), w.getNaam(), w.getVoornaam(),
+                            w.getEmail(), w.getTelefoonnummer(), w.getRol(),
+                            tw.getIsSupervisor(),
+                            team.getId(), team.getNaam(), team.getBeschrijving(),
+                            mId, mNaam, sId, sNaam
+                    );
                 })
                 .toList();
     }
@@ -110,7 +139,7 @@ public class TeamService {
             siteteamRepository.save(siteteam);
         }
 
-        //aantal check 
+        //aantal check
         if (dto.leden() != null) {
             int count = 0;
             for (var lid : dto.leden()) {
@@ -126,6 +155,12 @@ public class TeamService {
                 tw.setWerknemer(w);
                 tw.setIsSupervisor(lid.isSupervisor());
                 teamwerknemerRepository.save(tw);
+
+                if (lid.isSupervisor() && !"Supervisor".equals(w.getRol())) {
+                    w.setRol("Supervisor");
+                    werknemerRepository.save(w);
+                }
+
                 count++;
             }
         }
@@ -187,4 +222,68 @@ public class TeamService {
                 .map(tw -> toTeamResponse(tw.getTeam()))
                 .toList();
     }
+
+    @Transactional
+    public List<WerknemerResponseDTO> verwijderUitTeam(int teamId, int werknemerId) {
+        TeamwerknemerId twId = new TeamwerknemerId();
+        twId.setTeamId(teamId);
+        twId.setWerknemerId(werknemerId);
+
+        boolean wasSupervisor = false;
+
+        var optTw = teamwerknemerRepository.findById(twId);
+        if (optTw.isPresent() && optTw.get().getIsSupervisor()) {
+            wasSupervisor = true;
+            Werknemer w = optTw.get().getWerknemer();
+            w.setRol("Werknemer");
+            werknemerRepository.save(w);
+        }
+
+        teamwerknemerRepository.deleteById(twId);
+
+        if (wasSupervisor) {
+            List<Teamwerknemer> overigeLeden = teamwerknemerRepository.findByTeamId(teamId);
+            if (!overigeLeden.isEmpty()) {
+                Teamwerknemer nieuweSupervisor = overigeLeden.get(0);
+                nieuweSupervisor.setIsSupervisor(true);
+                teamwerknemerRepository.save(nieuweSupervisor);
+
+                Werknemer w = nieuweSupervisor.getWerknemer();
+                w.setRol("Supervisor");
+                werknemerRepository.save(w);
+            }
+        }
+
+        return geefWerknemersVanTeam(teamId);
+    }
+
+    @Transactional
+    public List<TeamResponseDTO> verwijderTeam(int teamId) {
+        teamRepository.deleteById(teamId);
+        return geefTeams();
+    }
+
+    @Transactional
+    public void maakSupervisor(int teamId, int werknemerId) {
+        teamwerknemerRepository.findByTeamId(teamId).forEach(tw -> {
+            if (tw.getIsSupervisor()) {
+                tw.setIsSupervisor(false);
+                teamwerknemerRepository.save(tw);
+                tw.getWerknemer().setRol("Werknemer");
+                werknemerRepository.save(tw.getWerknemer());
+            }
+        });
+
+        TeamwerknemerId twId = new TeamwerknemerId();
+        twId.setTeamId(teamId);
+        twId.setWerknemerId(werknemerId);
+        teamwerknemerRepository.findById(twId).ifPresent(tw -> {
+            tw.setIsSupervisor(true);
+            teamwerknemerRepository.save(tw);
+            tw.getWerknemer().setRol("Supervisor");
+            werknemerRepository.save(tw.getWerknemer());
+        });
+    }
+
+
 }
