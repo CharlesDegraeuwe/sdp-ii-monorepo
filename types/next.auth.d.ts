@@ -1,18 +1,71 @@
-import { WerknemerUser } from './types';
+import 'next-auth';
+import 'next-auth/jwt';
+import '@auth/core/types';
 
-declare module 'next-auth' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface User extends WerknemerUser {}
+declare module '@auth/core/types' {
+  interface User {
+    naam?: string;
+    voornaam?: string;
+    telefoonnummer?: string;
+    geboortedatum?: string;
+    rol?: string;
+    status?: string;
+    accessToken?: string;
+  }
 
   interface Session {
-    user: Omit<WerknemerUser, 'accessToken'>;
+    user: {
+      id: string;
+      email: string;
+      naam: string;
+      voornaam: string;
+      telefoonnummer: string;
+      geboortedatum: string;
+      rol: string;
+      status: string;
+    };
+    accessToken: string;
+  }
+}
+
+declare module 'next-auth' {
+  interface User {
+    naam?: string;
+    voornaam?: string;
+    telefoonnummer?: string;
+    geboortedatum?: string;
+    rol?: string;
+    status?: string;
+    accessToken?: string;
+  }
+
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      naam: string;
+      voornaam: string;
+      telefoonnummer: string;
+      geboortedatum: string;
+      rol: string;
+      status: string;
+    };
     accessToken: string;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    accessToken: string;
-    user: Omit<WerknemerUser, 'accessToken'>;
+    accessToken?: string;
+    user?: {
+      id: string;
+      email: string;
+      naam: string;
+      voornaam: string;
+      telefoonnummer: string;
+      geboortedatum: string;
+      rol: string;
+      status: string;
+    };
   }
 }
