@@ -105,7 +105,7 @@ const SettingOptions: SettingSection[] = [
         type: 'input',
         label: 'E-mailadres',
         description: 'Voor login en meldingen',
-        icon: 'mail',
+        icon: '(mail)',
         value: '',
       },
       {

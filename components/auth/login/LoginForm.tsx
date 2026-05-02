@@ -86,16 +86,14 @@ const LoginForm = () => {
       <Input
         type="text"
         placeholder="email..."
-        error={errors.email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       {submittedEmail && (
-        <AnimateOnMount>
+        <AnimateOnMount className={'flex flex-col gap-3'}>
           <Input
             type="text"
             placeholder="verificatiecode..."
-            error={errors.password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </AnimateOnMount>
