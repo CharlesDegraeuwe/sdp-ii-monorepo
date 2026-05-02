@@ -3,7 +3,14 @@ import { InputProps } from './Input.types';
 import React from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
-const Input = ({ type, label, error, id, ...props }: InputProps) => {
+const Input = ({
+  type,
+  label,
+  error,
+  errorOption,
+  id,
+  ...props
+}: InputProps) => {
   const [show, setShow] = React.useState(false);
   const toggleShow = () => setShow((prev) => !prev);
   if (type === 'password') {
@@ -32,13 +39,15 @@ const Input = ({ type, label, error, id, ...props }: InputProps) => {
             <FaRegEye opacity={0.5} onClick={toggleShow} />
           )}
         </div>
-        <div className={'w-full h-7 items-end flex'}>
-          {error && (
-            <span className={'text-rose-600 text-sm w-fit max-w-1/2'}>
-              {error}
-            </span>
-          )}
-        </div>
+        {errorOption && (
+          <div className={'w-full h-7 items-end flex'}>
+            {error && (
+              <span className={'text-rose-600 text-sm w-fit max-w-1/2'}>
+                {error}
+              </span>
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -59,10 +68,14 @@ const Input = ({ type, label, error, id, ...props }: InputProps) => {
         {...props}
       />
       <div className={'w-full h-7 items-end flex'}>
-        {error && (
-          <span className={'text-rose-600 text-sm w-fit max-w-1/2'}>
-            {error}
-          </span>
+        {errorOption && (
+          <div className={'w-full h-7 items-end flex'}>
+            {error && (
+              <span className={'text-rose-600 text-sm w-fit max-w-1/2'}>
+                {error}
+              </span>
+            )}
+          </div>
         )}
       </div>
     </div>
