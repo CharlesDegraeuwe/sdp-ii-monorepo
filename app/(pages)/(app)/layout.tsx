@@ -18,7 +18,6 @@ export default function AppLayout({
             <div className={'min-h-10 w-full flex flex-row items-center'}>
               <BreadCrumbs />
             </div>
-
             {children}
           </div>
         </section>
