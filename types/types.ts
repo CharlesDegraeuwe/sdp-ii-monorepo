@@ -19,3 +19,35 @@ export interface Notificatie {
   datum: string;
   referentieId: string;
 }
+
+export interface Machine {
+  id: number;
+  naam: string;
+  status: string;
+  site?: { id: number };
+}
+
+export interface Team {
+  id: number;
+  naam: string;
+}
+
+export interface Site {
+  id: number;
+  naam: string;
+  locatie: string;
+  capaciteit: number;
+  status: string;
+  machines?: Machine[];
+  teams?: Team[];
+}
+
+export interface CustomSession {
+  user?: { token?: string; id?: number };
+  accessToken?: string;
+}
+
+export interface SiteTeamResponse {
+  site?: { id: number };
+  team: Team;
+}

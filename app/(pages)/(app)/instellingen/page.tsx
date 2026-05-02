@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { AppContainer } from '@/components/design system/AppContainer';
 import SettingsClient from '@/app/(pages)/(app)/instellingen/components/SettingsClient';
+import { PageContainer } from '@/components/design system/PageContainer';
+import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
 export const metadata: Metadata = {
   title: 'Instellingen | Delaware Suite',
@@ -8,8 +10,11 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <AppContainer>
-      <SettingsClient />
-    </AppContainer>
+    <PageContainer className="h-full scroll-hidden">
+      <BreadcrumbInit pages={['instellingen']} />
+      <div className="flex flex-col w-full h-full items-center overflow-y-auto scroll-hidden py-20">
+        <SettingsClient />
+      </div>
+    </PageContainer>
   );
 }

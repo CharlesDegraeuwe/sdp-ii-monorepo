@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <PageContainer>
+    <main className="w-full flex-1 bg-delaware_red">
       <div
         className={
           'relative flex flex-row p-10 items-center justify-end w-full h-full bg-linear-180 from-delaware_red to-rose-700'
@@ -72,6 +72,6 @@ export default function Page() {
           </span>
         </div>
       </div>
-    </PageContainer>
+    </main>
   );
 }

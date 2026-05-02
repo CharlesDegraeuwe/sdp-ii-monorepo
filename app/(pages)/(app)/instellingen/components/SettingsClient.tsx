@@ -14,7 +14,7 @@ const SettingsClient = () => {
   };
 
   return (
-    <div className="w-1/2 flex flex-col gap-5 items-center">
+    <div className="w-1/2 flex flex-col gap-5 items-center ">
       {SettingOptions.filter((section) => hasRole(section.requiresRole)).map(
         (section, i) => {
           const visibleOptions = section.options.filter((opt) =>

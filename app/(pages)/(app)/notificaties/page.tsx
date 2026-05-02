@@ -3,6 +3,9 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import PageHeader from '@/components/design system/PageHeader/PageHeader';
+import { AppContainer } from '@/components/design system/AppContainer';
+import { PageContainer } from '@/components/design system/PageContainer';
+import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
 type Filter = 'Alles' | 'Werk' | 'Afwezigheid' | 'Verlof';
 
@@ -181,32 +184,58 @@ export default function NotificatiesPage() {
   const filters: Filter[] = ['Alles', 'Werk', 'Afwezigheid', 'Verlof'];
 
   return (
-    <div className="w-full min-h-screen overflow-y-auto">
-      <div className="w-full max-w-3xl mx-auto flex flex-col gap-6 pt-36 px-8 pb-16">
-        <PageHeader />
-
-        {/* Filters — gecentreerd */}
-        <div className="flex justify-center">
-          <div className="flex gap-1 bg-gray-300/30 border border-gray-300/30 rounded-full p-1 shadow-sm">
-            {filters.map((f) => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${filter === f ? 'bg-zinc-900 text-white shadow' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200/50'}`}
-              >
-                {f}
-              </button>
-            ))}
+    <PageContainer className="h-full">
+      <AppContainer>
+        <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
+          <BreadcrumbInit pages={['notificaties']} />
+          <div className="flex justify-center">
+            <div className="flex gap-1 bg-gray-300/30 border border-gray-300/30 rounded-full p-1 shadow-sm">
+              {filters.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${filter === f ? 'bg-zinc-900 text-white shadow' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200/50'}`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Ongelezen */}
-        {ongelezen.length > 0 && (
+          {/* Ongelezen */}
+          {ongelezen.length > 0 && (
+            <div className="flex flex-col gap-3">
+              <span className="text-xs font-bold text-zinc-400 uppercase tracking-wide">
+                Ongelezen ({ongelezen.length})
+              </span>
+              {ongelezen.map((n) => (
+                <NotificatieRij
+                  key={n.id}
+                  n={n}
+                  verlofStatus={
+                    n.referentieId ? verlofStatussen[n.referentieId] : undefined
+                  }
+                  bezig={bezig.includes(n.id)}
+                  onGelezen={() => markeerGelezen(n.id)}
+                  onVerwijder={() => verwijder(n.id)}
+                  onGoedkeuren={() => keurGoed(n)}
+                  onAfwijzen={() => wijsAf(n)}
+                  onAnnuleer={() => annuleer(n)}
+                  formatDatum={formatDatum}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Alle */}
           <div className="flex flex-col gap-3">
             <span className="text-xs font-bold text-zinc-400 uppercase tracking-wide">
-              Ongelezen ({ongelezen.length})
+              Alle notificaties
             </span>
-            {ongelezen.map((n) => (
+            {alle.length === 0 && (
+              <p className="text-sm text-zinc-400">Geen notificaties.</p>
+            )}
+            {alle.map((n) => (
               <NotificatieRij
                 key={n.id}
                 n={n}
@@ -223,35 +252,9 @@ export default function NotificatiesPage() {
               />
             ))}
           </div>
-        )}
-
-        {/* Alle */}
-        <div className="flex flex-col gap-3">
-          <span className="text-xs font-bold text-zinc-400 uppercase tracking-wide">
-            Alle notificaties
-          </span>
-          {alle.length === 0 && (
-            <p className="text-sm text-zinc-400">Geen notificaties.</p>
-          )}
-          {alle.map((n) => (
-            <NotificatieRij
-              key={n.id}
-              n={n}
-              verlofStatus={
-                n.referentieId ? verlofStatussen[n.referentieId] : undefined
-              }
-              bezig={bezig.includes(n.id)}
-              onGelezen={() => markeerGelezen(n.id)}
-              onVerwijder={() => verwijder(n.id)}
-              onGoedkeuren={() => keurGoed(n)}
-              onAfwijzen={() => wijsAf(n)}
-              onAnnuleer={() => annuleer(n)}
-              formatDatum={formatDatum}
-            />
-          ))}
         </div>
-      </div>
-    </div>
+      </AppContainer>
+    </PageContainer>
   );
 }
 
@@ -287,7 +290,7 @@ function NotificatieRij(props: RijProps) {
       className={`flex items-start gap-4 px-5 py-4 rounded-4xl border transition-all duration-300 bg-gray-300/20 hover:border-gray-400/30 ${isOngelezen ? 'border-gray-300/40 shadow-sm' : 'border-gray-300/20'}`}
     >
       <div
-        className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${isOngelezen ? 'bg-red-400' : 'bg-emerald-400'}`}
+        className={`mt-1.5 w-2 h-2 rounded-full ${isOngelezen ? 'bg-red-400' : 'bg-emerald-400'}`}
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">

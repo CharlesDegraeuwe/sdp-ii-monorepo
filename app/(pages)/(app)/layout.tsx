@@ -1,8 +1,7 @@
 import Sidebar from '@/components/app/structuur/sidebar/sidebar';
 import AppHeader from '@/components/app/structuur/header/header';
-import PageHeader from '../../../components/design system/PageHeader/PageHeader';
-import { PageContainer } from '@/components/design system/PageContainer';
-import SplashOverlay from '@/components/app/splash/Splash';
+import BreadCrumbProvider from '@/providers/BreadCrumbProvider';
+import BreadCrumbs from '@/components/design system/BreadCrumbs/BreadCrumbs';
 
 export default function AppLayout({
   children,
@@ -11,18 +10,19 @@ export default function AppLayout({
 }>) {
   return (
     <>
-      <AppHeader />
-      <section className="flex flex-row w-full h-screen bg-bg-white">
-        <Sidebar />
-        <div className="flex flex-col w-full h-full bg-zinc-100 pr-2 pt-25 py-3">
-          <main className="w-full flex-1 border border-zinc-200 overflow-hidden rounded-3xl">
-            <PageContainer className="h-full">
-              <PageHeader />
-              {children}
-            </PageContainer>
-          </main>
-        </div>
-      </section>
+      <BreadCrumbProvider>
+        <AppHeader />
+        <section className="flex flex-row w-full h-screen bg-white">
+          <Sidebar />
+          <div className="flex flex-col w-full h-full bg-zinc-300/40 pr-7 pt-20 py-7 scroll-hidden">
+            <div className={'min-h-10 w-full flex flex-row items-center'}>
+              <BreadCrumbs />
+            </div>
+
+            {children}
+          </div>
+        </section>
+      </BreadCrumbProvider>
     </>
   );
 }
