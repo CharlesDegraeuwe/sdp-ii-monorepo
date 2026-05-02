@@ -47,7 +47,7 @@ export function useOverzichtData() {
     }
 
     laadData();
-  }, [user?.id, authHeader]);
+  }, [user?.id, authHeader, user]);
 
   return { afwezigheden, notificaties };
 }

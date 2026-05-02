@@ -206,22 +206,6 @@ export default function NotificatiesPage() {
             <span className="text-xs font-bold text-zinc-400 uppercase tracking-wide">
               Ongelezen ({ongelezen.length})
             </span>
-            {ongelezen.map((n) => (
-              <NotificatieRij
-                key={n.id}
-                n={n}
-                verlofStatus={
-                  n.referentieId ? verlofStatussen[n.referentieId] : undefined
-                }
-                bezig={bezig.includes(n.id)}
-                onGelezen={() => markeerGelezen(n.id)}
-                onVerwijder={() => verwijder(n.id)}
-                onGoedkeuren={() => keurGoed(n)}
-                onAfwijzen={() => wijsAf(n)}
-                onAnnuleer={() => annuleer(n)}
-                formatDatum={formatDatum}
-              />
-            ))}
           </div>
         )}
 
@@ -233,22 +217,6 @@ export default function NotificatiesPage() {
           {alle.length === 0 && (
             <p className="text-sm text-zinc-400">Geen notificaties.</p>
           )}
-          {alle.map((n) => (
-            <NotificatieRij
-              key={n.id}
-              n={n}
-              verlofStatus={
-                n.referentieId ? verlofStatussen[n.referentieId] : undefined
-              }
-              bezig={bezig.includes(n.id)}
-              onGelezen={() => markeerGelezen(n.id)}
-              onVerwijder={() => verwijder(n.id)}
-              onGoedkeuren={() => keurGoed(n)}
-              onAfwijzen={() => wijsAf(n)}
-              onAnnuleer={() => annuleer(n)}
-              formatDatum={formatDatum}
-            />
-          ))}
         </div>
       </div>
     </div>
