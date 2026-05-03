@@ -19,6 +19,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const showToast = false;
   return (
     <html
       lang="en"
@@ -27,7 +28,7 @@ export default function RootLayout({
       <body className="relative flex flex-col h-screen w-screen">
         <SessionProvider>
           <UserProvider>
-            <Toast />
+            {showToast && <Toast />}
             {children}
           </UserProvider>
         </SessionProvider>

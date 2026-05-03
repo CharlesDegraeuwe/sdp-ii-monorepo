@@ -67,17 +67,15 @@ const Input = ({
         id={id}
         {...props}
       />
-      <div className={'w-full h-7 items-end flex'}>
-        {errorOption && (
-          <div className={'w-full h-7 items-end flex'}>
-            {error && (
-              <span className={'text-rose-600 text-sm w-fit max-w-1/2'}>
-                {error}
-              </span>
-            )}
-          </div>
-        )}
-      </div>
+      {errorOption && (
+        <div className={'w-full h-7 items-end flex'}>
+          {error && (
+            <span className={'text-rose-600 text-sm w-fit max-w-1/2'}>
+              {error}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };
