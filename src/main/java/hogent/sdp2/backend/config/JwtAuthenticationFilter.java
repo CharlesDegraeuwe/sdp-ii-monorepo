@@ -1,5 +1,6 @@
 package hogent.sdp2.backend.config;
 
+import hogent.sdp2.backend.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

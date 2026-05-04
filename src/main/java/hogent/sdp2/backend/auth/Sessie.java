@@ -1,6 +1,6 @@
 package hogent.sdp2.backend.auth;
 
-import hogent.sdp2.backend.dto.auth.AuthDTO;
+import hogent.sdp2.backend.REST.dto.auth.AuthDTO;
 
 public class Sessie {
 
