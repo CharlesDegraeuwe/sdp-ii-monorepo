@@ -1,12 +1,15 @@
 package hogent.sdp2.backend.service;
 
 import hogent.sdp2.backend.domain.Site;
+import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.dto.request.SiteAanmakenDTO;
 import hogent.sdp2.backend.dto.request.SiteWijzigenDTO;
 import hogent.sdp2.backend.repository.SiteRepository;
+import hogent.sdp2.backend.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +20,7 @@ import java.util.Optional;
 public class SiteService {
 
     private final SiteRepository siteRepository;
+    private final WerknemerRepository werknemerRepository;
 
     public String maakSite(SiteAanmakenDTO dto) {
         log.info("Audit: Poging tot aanmaken nieuwe site: {}", dto.naam());
@@ -91,7 +95,14 @@ public class SiteService {
     }
 
     public List<Site> haalSitesVanWerknemer(Integer werknemerId) {
-        log.info("Audit: Sites voor werknemer {} worden opgevraagd.", werknemerId);
-        return siteRepository.findAll();
+        Werknemer werknemer = werknemerRepository.findById(werknemerId)
+                .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
+
+        if ("Admin".equalsIgnoreCase(werknemer.getRol())) {
+            return siteRepository.findAll();
+        }
+        else {
+            return siteRepository.findSitesByWerknemerId(werknemerId);
+        }
     }
 }
