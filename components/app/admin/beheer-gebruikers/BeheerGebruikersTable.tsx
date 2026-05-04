@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react';
 import { useWerknemerStore } from '@/stores/werknemerStore';
 import EditableCell from '@/components/app/admin/beheer-gebruikers/EditableCell';
 import { WerknemerUser } from '@/types/types';
-import { useBeheerGebruikers } from '@/components/app/admin/beheer-gebruikers/useBeheerGebruikers';
 import { Container } from '@/components/design system/Container';
 import { User } from 'next-auth';
+import { useBeheerGebruikers } from '@/hooks/useBeheerGebruikers';
 
 const BeheerGebruikersTable = () => {
   const fetched = useBeheerGebruikers();

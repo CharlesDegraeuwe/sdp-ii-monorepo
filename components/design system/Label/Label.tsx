@@ -1,22 +1,29 @@
 import { LabelProps } from '@/components/design system/Label/Label.types';
 
+const variantStyles = {
+  title: 'text-2xl font-bold text-gray-900',
+  subtitle: 'text-lg font-medium text-gray-600',
+  body: 'text-base text-gray-800',
+  caption: 'text-sm text-gray-500',
+  emptystate: 'text-gray-400 text-sm text-center',
+  inputLabel: 'text-sm text-gray-400 text-base',
+};
+
 const Label = (props: LabelProps) => {
-  const { text, size, weight, color, icon, p, px, py } = props;
+  const { text, variant = 'body', icon, center } = props;
+
+  const className = [
+    variantStyles[variant],
+    center && 'flex justify-center items-center text-center',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <span
-      className={`flex-1 
-                ${size ? `text-${size}` : 'text-lg'} 
-                ${weight ? `font-${weight}` : 'font-bold'}
-                ${color ? `text-${color}` : 'text-gray-900'}
-                ${p ? `p-${p}` : ''}
-                ${px ? `px-${px}` : ''}
-                ${py ? `py-${py}` : ''}
-                `}
-    >
+    <span className={className}>
       {icon} {text}
     </span>
   );
 };
 
-Label.displayName = 'Label';
 export default Label;

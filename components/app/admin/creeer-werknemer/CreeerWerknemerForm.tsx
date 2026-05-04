@@ -1,11 +1,11 @@
 'use client';
-import FormHelper from '../../../design system/Form/FormHelper';
-import { Input } from '@/components/design system/Input';
-import { Button } from '@/components/design system/Button';
-import { Container } from '@/components/design system/Container';
 import { useState } from 'react';
+import { Input } from '@/components/design system/Input';
+import { FormHelper } from '@/components/design system/Form';
+import { Container } from '@/components/design system/Container';
+import { Button } from '@/components/design system/Button';
 
-const CreeerManagerForm = () => {
+const CreeerWerknemerForm = () => {
   //states
   const [surName, setSurName] = useState<string>('');
   const [name, setName] = useState<string>('');
@@ -23,7 +23,7 @@ const CreeerManagerForm = () => {
       <Container>
         <FormHelper onSubmit={handleSubmit} noHeight>
           <div className={'w-full h-full py-2 px-1 flex flex-col gap-5'}>
-            <h1 className={'text-xl font-bold'}>Creëer Manager</h1>
+            <h1 className={'text-xl font-bold'}>Creëer Werknemer</h1>
             <div className={'w-full flex flex-col gap-5'}>
               <span>Persoonlijke info</span>
               <Input
@@ -77,5 +77,5 @@ const CreeerManagerForm = () => {
   );
 };
 
-CreeerManagerForm.displayName = 'CreeerManagerForm';
-export default CreeerManagerForm;
+CreeerWerknemerForm.displayName = 'CreeerWerknemerForm';
+export default CreeerWerknemerForm;

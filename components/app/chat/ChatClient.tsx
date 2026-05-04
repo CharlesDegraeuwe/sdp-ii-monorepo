@@ -63,7 +63,7 @@ const ChatClient = () => {
             }
           >
             <Image
-              alt="ben-logo"
+              alt="Gerard Logo"
               src={'ben.svg'}
               width={100}
               height={100}

@@ -1,7 +1,6 @@
 'use client';
 
 import { afwezighedenOpDag } from '../planner/utils';
-import { useOverzichtData } from './useOverzichtData';
 import { SnelleActies } from './SnelleActies';
 import { GeplandUren } from './GeplandUren';
 import { MiniKalender } from './MiniKalender';
@@ -9,6 +8,7 @@ import { NotificatiesWidget } from './NotificatiesWidget';
 import { OpenTaken } from './OpenTaken';
 import { AfwezighedenWidget } from './AfwezighedenWidget';
 import { LocatieInfo } from './LocatieInfo';
+import { useOverzichtData } from '@/hooks/useOverzichtData';
 
 export default function OverzichtClient() {
   const { afwezigheden, notificaties } = useOverzichtData();
@@ -22,13 +22,11 @@ export default function OverzichtClient() {
 
   return (
     <div className="flex flex-row gap-4 w-full h-full p-4 overflow-hidden">
-      {/* LINKER KOLOM */}
       <div className="flex flex-col gap-4 flex-1 min-w-0 overflow-hidden">
         <SnelleActies />
         <GeplandUren afwezigheden={afwezigheden} />
       </div>
 
-      {/* RECHTER KOLOM */}
       <div className="flex flex-col gap-4 flex-1 min-w-0 overflow-hidden">
         {/* Rij 1: Kalender + Notificaties */}
         <div className="grid grid-cols-2 gap-4">

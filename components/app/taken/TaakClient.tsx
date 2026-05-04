@@ -1,24 +1,28 @@
 'use client';
 import { TabSwitcher } from '@/components/design system/TabSwitcher/TabSwitcher';
 import { useState } from 'react';
+import { CheckView } from '@/components/app/taken/CheckView/CheckView';
+import { AssignView } from '@/components/app/taken/AssignView/AssignView';
+import { CreateView } from '@/components/app/taken/CreateView/CreateView';
 
-type Mode = 'check' | 'creëer' | 'toewijzen';
-type Team = 'jouw_taken' | 'team_taken';
+type Mode = 'check' | 'creëer' | 'assign';
+type Team = 'teams' | 'users';
 
 const modes: { key: Mode; label: string }[] = [
   { key: 'check', label: 'Check' },
   { key: 'creëer', label: 'Creëer' },
-  { key: 'toewijzen', label: 'Toewijzen' },
+  { key: 'assign', label: 'Toekennen' },
 ];
 
 const tabs: { key: Team; label: string }[] = [
-  { key: 'jouw_taken', label: 'Jouw taken' },
-  { key: 'team_taken', label: "Team's taken" },
+  { key: 'teams', label: 'Teams' },
+  { key: 'users', label: 'Werknemers' },
 ];
 
 const TaakClient = () => {
   const [mode, setMode] = useState<Mode>('check');
-  const [team, setTeam] = useState<Team>('jouw_taken');
+  const [team, setTeam] = useState<Team>('teams');
+
   return (
     <div className={'w-1/2 h-full flex items-center flex-col gap-3'}>
       <div className={'w-full h-fit justify-between flex flex-row'}>
@@ -27,12 +31,17 @@ const TaakClient = () => {
           value={mode}
           onChange={(key) => setMode(key as Mode)}
         />
-        <TabSwitcher
-          tabs={tabs}
-          value={team}
-          onChange={(key) => setTeam(key as Team)}
-        />
+        {mode === 'check' && (
+          <TabSwitcher
+            tabs={tabs}
+            value={team}
+            onChange={(key) => setTeam(key as Team)}
+          />
+        )}
       </div>
+      {mode === 'check' && <CheckView scope={team} />}
+      {mode === 'assign' && <AssignView />}
+      {mode === 'creëer' && <CreateView />}
     </div>
   );
 };
