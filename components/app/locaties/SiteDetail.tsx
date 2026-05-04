@@ -12,6 +12,7 @@ interface SiteDetailProps {
   isLoading: boolean;
   onBack: () => void;
 }
+
 export function SiteDetail(props: SiteDetailProps) {
   const { site, sites, setSelectedSite, isLoading, onBack } = props;
   const [currentIndex, setCurrentIndex] = useState(sites.indexOf(site));
@@ -33,6 +34,7 @@ export function SiteDetail(props: SiteDetailProps) {
       <div className="p-4 border-b border-gray-100 gap-3 bg-gray-50/50 shrink-0 flex flex-row justify-between items-center">
         <div className={'flex items-center gap-3'}>
           <Button
+            variant={'outline'}
             icon={<IoArrowBack />}
             onClick={onBack}
             className="p-2 hover:bg-gray-200 rounded-full transition-colors flex items-center justify-center"
@@ -41,12 +43,14 @@ export function SiteDetail(props: SiteDetailProps) {
         </div>
         <div className={'flex flex-row items-center gap-3'}>
           <Button
+            variant={'outline'}
             disabled={currentIndex === 0}
             px={'px-3'}
             icon={<IoChevronUp />}
             onClick={toggleUp}
           />
           <Button
+            variant={'outline'}
             disabled={currentIndex === sites.length - 1}
             px={'px-3'}
             icon={<IoChevronDown />}

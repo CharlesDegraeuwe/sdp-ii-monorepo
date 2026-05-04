@@ -27,7 +27,7 @@ const TeamsOverview = () => {
   }, [teams, filterSiteId]);
 
   return (
-    <div className={'w-full h-3/4 grid grid-cols-2 gap-5 pt-5'}>
+    <div className={'grid grid-cols-2 gap-5 w-full h-3/4 pt-5'}>
       <Container label={'Teams'}>
         {filtered.length === 0 && (
           <div

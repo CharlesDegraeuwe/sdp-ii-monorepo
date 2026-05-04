@@ -34,7 +34,7 @@ export function GeplandUren({ afwezigheden }: GeplandUrenProps) {
               <div
                 key={i}
                 className={`flex flex-col gap-1.5 px-3 py-2.5 rounded-2xl border transition-all duration-200
-                  ${isVandaag(dag) ? 'border-zinc-900 bg-zinc-900/5' : 'border-gray-200/40 bg-white/30'}
+                  ${isVandaag(dag) ? 'border-zinc-900 bg-bg-white' : 'border-gray-300/40 bg-bg-white/30'}
                   ${weekend ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center justify-between">
@@ -46,7 +46,7 @@ export function GeplandUren({ afwezigheden }: GeplandUrenProps) {
                   <span className="text-[10px] text-zinc-400">{dagNummer}</span>
                 </div>
                 {opDag.length === 0 ? (
-                  <span className="text-[10px] text-zinc-300">
+                  <span className="text-[10px] text-zinc-500">
                     Niemand afwezig
                   </span>
                 ) : (

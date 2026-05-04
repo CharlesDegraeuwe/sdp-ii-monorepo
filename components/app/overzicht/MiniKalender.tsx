@@ -28,7 +28,7 @@ function KalenderGrid({ afwezigheden }: { afwezigheden: Afwezigheid[] }) {
         {DAGEN_KORT.map((d) => (
           <div
             key={d}
-            className="text-center text-[9px] font-bold text-zinc-400 uppercase py-0.5"
+            className="text-center text-[9px] font-bold text-zinc-400 uppercase py-0.5 flex items-center justify-center"
           >
             {d}
           </div>
@@ -43,9 +43,9 @@ function KalenderGrid({ afwezigheden }: { afwezigheden: Afwezigheid[] }) {
           return (
             <div
               key={i}
-              className={`flex flex-col items-center justify-start pt-0.5 rounded-lg
+              className={`relative flex flex-col items-center justify-center
                 ${weekend ? 'opacity-40' : ''}
-                ${vandaagDag ? 'bg-zinc-900' : ''}`}
+                ${vandaagDag ? 'bg-zinc-900 rounded-full' : ''}`}
             >
               <span
                 className={`text-[9px] font-bold ${vandaagDag ? 'text-white' : 'text-zinc-600'}`}
@@ -54,7 +54,7 @@ function KalenderGrid({ afwezigheden }: { afwezigheden: Afwezigheid[] }) {
               </span>
               {opDag.length > 0 && (
                 <div
-                  className={`w-1 h-1 rounded-full mt-0.5 ${opDag[0].type === 'Ziekte' ? 'bg-red-400' : 'bg-emerald-400'}`}
+                  className={`absolute bottom-1 left-1/2 -translate-1/2 w-1 h-1 rounded-full mt-0.5 ${opDag[0].type === 'Ziekte' ? 'bg-red-400' : 'bg-emerald-400'}`}
                 />
               )}
             </div>

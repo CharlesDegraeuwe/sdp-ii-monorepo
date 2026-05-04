@@ -100,7 +100,6 @@ const CreateTeamForm = ({ scope }: CreateTeamFormProps) => {
               <div className={'flex flex-col gap-4'}>
                 <Label text={'Basis informatie'} size={'sm'} weight={600} />
                 <Input
-                  label={'Naam'}
                   type={'text'}
                   placeholder={'Teamnaam'}
                   value={naam}
@@ -117,12 +116,6 @@ const CreateTeamForm = ({ scope }: CreateTeamFormProps) => {
                 />
 
                 <div className={'flex flex-col gap-1'}>
-                  <Label
-                    text={'Manager'}
-                    size={'sm'}
-                    weight={400}
-                    color={'zinc-400'}
-                  />
                   <select
                     value={managerId}
                     onChange={(e) =>
@@ -142,12 +135,6 @@ const CreateTeamForm = ({ scope }: CreateTeamFormProps) => {
                 </div>
 
                 <div className={'flex flex-col gap-1'}>
-                  <Label
-                    text={'Site'}
-                    size={'sm'}
-                    weight={400}
-                    color={'zinc-400'}
-                  />
                   <select
                     value={siteId}
                     onChange={(e) =>

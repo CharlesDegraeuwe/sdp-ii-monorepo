@@ -44,7 +44,7 @@ const EmployeeModal = ({ onClose }: Props) => {
   return (
     <div
       className={
-        'fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-6'
+        'fixed inset-0 bg-black/40 z-[99999] flex items-center justify-center p-6'
       }
       onClick={onClose}
     >

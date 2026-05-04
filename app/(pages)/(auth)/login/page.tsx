@@ -53,11 +53,11 @@ export default function Page() {
         </div>
         <div
           className={
-            'relative max-w-[50rem] w-1/2 gap-5 p-10 lg:p-40 h-full flex-col flex items-center rounded-4xl bg-white justify-center'
+            'relative max-w-[50rem] w-1/2 gap-5 p-10 lg:p-40 h-full shadow-2xl flex-col flex items-center rounded-4xl bg-white justify-center'
           }
         >
           <div className={'flex flex-col gap-3'}>
-            <Label size={'2xl'} text="Log in op je account " />
+            <Label text="Log in op je account " variant={'title'} />
           </div>
           <Suspense fallback={<div>Laden...</div>}>
             <LoginForm />

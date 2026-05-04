@@ -73,11 +73,19 @@ export default function PlannerPage() {
         <div className="w-full h-full flex flex-col gap-6">
           <div className="flex items-center gap-4 w-full">
             <div className="w-full flex flex-row gap-3 items-center">
-              <Button icon={<FaChevronLeft />} onClick={() => navigeer(-1)} />
+              <Button
+                variant={'outline'}
+                icon={<FaChevronLeft />}
+                onClick={() => navigeer(-1)}
+              />
               <span className="text-sm font-bold text-zinc-800 min-w-52 text-center capitalize">
                 {periodeLabel(view, huidigeDatum)}
               </span>
-              <Button icon={<FaChevronRight />} onClick={() => navigeer(1)} />
+              <Button
+                variant={'outline'}
+                icon={<FaChevronRight />}
+                onClick={() => navigeer(1)}
+              />
             </div>
 
             <div className="w-fit flex flex-row gap-3 items-center">
