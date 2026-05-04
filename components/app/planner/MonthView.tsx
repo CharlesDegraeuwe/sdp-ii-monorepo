@@ -1,6 +1,6 @@
-import type { Afwezigheid } from './components/types';
-import { DAGEN_KORT } from './components/constants';
-import { afwezighedenOpDag, isVandaag, badgeKleur } from './components/utils';
+import type { Afwezigheid } from './types';
+import { DAGEN_KORT } from './constants';
+import { afwezighedenOpDag, isVandaag, badgeKleur } from './utils';
 
 interface MonthViewProps {
   huidigeDatum: Date;

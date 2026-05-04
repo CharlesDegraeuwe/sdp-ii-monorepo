@@ -1,6 +1,6 @@
 import { Input } from '@/components/design system/Input';
 import { Site } from '@/types/types';
-import { StatusBadge } from '@/app/(pages)/(app)/locaties/components/StatusBadge';
+import { StatusBadge } from '@/components/app/locaties/StatusBadge';
 
 export function SiteList({
   sites,

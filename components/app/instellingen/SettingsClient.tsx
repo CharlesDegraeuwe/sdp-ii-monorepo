@@ -1,6 +1,6 @@
 'use client';
 
-import SettingOptions from '@/app/(pages)/(app)/instellingen/components/options';
+import SettingOptions from '@/components/app/instellingen/options';
 import PageSection from '@/components/design system/PageSection/PageSection';
 import { useUser } from '@/providers/UserProvider';
 

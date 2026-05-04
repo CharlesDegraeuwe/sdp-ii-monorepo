@@ -1,14 +1,14 @@
 'use client';
 
-import { afwezighedenOpDag } from '../planner/components/utils';
-import { useOverzichtData } from './components/useOverzichtData';
-import { SnelleActies } from './components/SnelleActies';
-import { GeplandUren } from './components/GeplandUren';
-import { MiniKalender } from './components/MiniKalender';
-import { NotificatiesWidget } from './components/NotificatiesWidget';
-import { OpenTaken } from './components/OpenTaken';
-import { AfwezighedenWidget } from './components/AfwezighedenWidget';
-import { LocatieInfo } from './components/LocatieInfo';
+import { afwezighedenOpDag } from '../planner/utils';
+import { useOverzichtData } from './useOverzichtData';
+import { SnelleActies } from './SnelleActies';
+import { GeplandUren } from './GeplandUren';
+import { MiniKalender } from './MiniKalender';
+import { NotificatiesWidget } from './NotificatiesWidget';
+import { OpenTaken } from './OpenTaken';
+import { AfwezighedenWidget } from './AfwezighedenWidget';
+import { LocatieInfo } from './LocatieInfo';
 
 export default function OverzichtClient() {
   const { afwezigheden, notificaties } = useOverzichtData();

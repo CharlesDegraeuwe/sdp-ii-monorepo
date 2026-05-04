@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import GoogleMaps from '@/app/(pages)/(app)/locaties/components/googlemaps';
-import { SiteList } from '@/app/(pages)/(app)/locaties/components/SiteList';
-import { SiteDetail } from '@/app/(pages)/(app)/locaties/components/SiteDetail';
+import GoogleMaps from '@/components/app/locaties/googlemaps';
+import { SiteList } from '@/components/app/locaties/SiteList';
+import { SiteDetail } from '@/components/app/locaties/SiteDetail';
 import { Machine, Site, SiteTeamResponse, Team } from '@/types/types';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 

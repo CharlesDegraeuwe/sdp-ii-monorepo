@@ -1,12 +1,12 @@
-import type { Afwezigheid } from './components/types';
-import { DAGEN_KORT } from './components/constants';
+import type { Afwezigheid } from './types';
+import { DAGEN_KORT } from './constants';
 import {
   afwezighedenOpDag,
   getMaandag,
   isVandaag,
   badgeKleur,
   afwezigheidLabel,
-} from './components/utils';
+} from './utils';
 
 interface WeekViewProps {
   huidigeDatum: Date;

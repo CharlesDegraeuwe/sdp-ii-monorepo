@@ -3,19 +3,31 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import PageHeader from '@/components/design system/PageHeader/PageHeader';
 import { AppContainer } from '@/components/design system/AppContainer';
 import { Button } from '@/components/design system/Button';
-import MonthView from './MonthView';
-import WeekView from './WeekView';
-import DayView from './DayView';
-import DetailPanel from './components/DetailPanel';
-import type { Afwezigheid, View } from './components/types';
-import { periodeLabel, getPeriodBounds } from './components/utils';
+import MonthView from '../../../../components/app/planner/MonthView';
+import WeekView from '../../../../components/app/planner/WeekView';
+import DayView from '../../../../components/app/planner/DayView';
+import DetailPanel from '../../../../components/app/planner/DetailPanel';
+import type {
+  Afwezigheid,
+  View,
+} from '../../../../components/app/planner/types';
+import {
+  periodeLabel,
+  getPeriodBounds,
+} from '../../../../components/app/planner/utils';
 import { PageContainer } from '@/components/design system/PageContainer';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import { TabSwitcher } from '@/components/design system/TabSwitcher/TabSwitcher';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
+
+const views: { key: View; label: string }[] = [
+  { key: 'maand', label: 'maand' },
+  { key: 'week', label: 'week' },
+  { key: 'dag', label: 'dag' },
+];
 
 export default function PlannerPage() {
   const { data: session } = useSession();
@@ -69,21 +81,11 @@ export default function PlannerPage() {
             </div>
 
             <div className="w-fit flex flex-row gap-3 items-center">
-              <div className="flex gap-1 bg-gray-300/30 border border-gray-300/30 rounded-full p-1 shadow-sm">
-                {(['maand', 'week', 'dag'] as View[]).map((v) => (
-                  <button
-                    key={v}
-                    onClick={() => setView(v)}
-                    className={`px-5 py-2 rounded-full text-sm font-bold capitalize transition-all duration-300 ${
-                      view === v
-                        ? 'bg-zinc-900 text-white shadow'
-                        : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200/50'
-                    }`}
-                  >
-                    {v}
-                  </button>
-                ))}
-              </div>
+              <TabSwitcher
+                tabs={views}
+                value={view}
+                onChange={(key) => setView(key as View)}
+              />
 
               <Button
                 onClick={() => {

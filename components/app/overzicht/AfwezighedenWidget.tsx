@@ -1,5 +1,5 @@
-import type { Afwezigheid } from '../../planner/components/types';
-import { badgeKleur, afwezigheidLabel } from '../../planner/components/utils';
+import type { Afwezigheid } from '../planner/types';
+import { badgeKleur, afwezigheidLabel } from '../planner/utils';
 import { Card } from './Card';
 
 interface AfwezighedenWidgetProps {

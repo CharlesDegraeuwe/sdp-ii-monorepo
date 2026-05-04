@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
-import type { Afwezigheid } from '../../planner/components/types';
+import type { Afwezigheid } from '../planner/types';
 import type { Notificatie } from './types';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';

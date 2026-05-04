@@ -1,5 +1,5 @@
-import type { Afwezigheid } from './components/types';
-import { afwezighedenOpDag, badgeKleur, rijKleur } from './components/utils';
+import type { Afwezigheid } from './types';
+import { afwezighedenOpDag, badgeKleur, rijKleur } from './utils';
 
 interface DayViewProps {
   huidigeDatum: Date;

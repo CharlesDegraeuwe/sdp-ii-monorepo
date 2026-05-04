@@ -1,4 +1,4 @@
-import type { Afwezigheid } from '../../planner/components/types';
+import type { Afwezigheid } from '../planner/types';
 import { Card } from './Card';
 
 interface OpenTakenProps {

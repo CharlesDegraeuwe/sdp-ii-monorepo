@@ -1,9 +1,5 @@
-import type { Afwezigheid } from '../../planner/components/types';
-import {
-  afwezighedenOpDag,
-  badgeKleur,
-  isVandaag,
-} from '../../planner/components/utils';
+import type { Afwezigheid } from '../planner/types';
+import { afwezighedenOpDag, badgeKleur, isVandaag } from '../planner/utils';
 import { Card, SectionTitle } from './Card';
 
 interface GeplandUrenProps {

@@ -1,6 +1,6 @@
-import type { Afwezigheid } from '../../planner/components/types';
-import { afwezighedenOpDag, isVandaag } from '../../planner/components/utils';
-import { DAGEN_KORT, MAANDEN } from '../../planner/components/constants';
+import type { Afwezigheid } from '../planner/types';
+import { afwezighedenOpDag, isVandaag } from '../planner/utils';
+import { DAGEN_KORT, MAANDEN } from '../planner/constants';
 import { Card, SectionTitle } from './Card';
 
 function KalenderGrid({ afwezigheden }: { afwezigheden: Afwezigheid[] }) {

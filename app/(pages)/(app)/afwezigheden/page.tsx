@@ -9,6 +9,7 @@ import { AppContainer } from '@/components/design system/AppContainer';
 import { PageContainer } from '@/components/design system/PageContainer';
 import { useBreadCrumbs } from '@/providers/BreadCrumbProvider';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import { TabSwitcher } from '@/components/design system/TabSwitcher/TabSwitcher';
 
 type Tab = 'verlof' | 'ziekte' | 'geschiedenis';
 
@@ -183,19 +184,11 @@ export default function AfwezighedenPage() {
           )}
 
           {/* Tabs — gecentreerd */}
-          <div className="flex justify-center">
-            <div className="flex gap-1 bg-gray-300/30 border border-gray-300/30 rounded-full p-1 shadow-sm">
-              {tabs.map((t) => (
-                <button
-                  key={t.key}
-                  onClick={() => setTab(t.key)}
-                  className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 ${tab === t.key ? 'bg-zinc-900 text-white shadow' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200/50'}`}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <TabSwitcher
+            tabs={tabs}
+            value={tab}
+            onChange={(key) => setTab(key as Tab)}
+          />
 
           {/* ── VERLOF ── */}
           {tab === 'verlof' && (
