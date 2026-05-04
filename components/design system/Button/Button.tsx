@@ -44,6 +44,7 @@ const Button = ({
   px = 'px-5',
   disabled,
   onClick,
+  type,
 }: ButtonProps) => {
   const classes = [
     'flex items-center w-full rounded-full active:scale-95',
@@ -60,7 +61,12 @@ const Button = ({
 
   return (
     <div>
-      <button disabled={disabled} onClick={onClick} className={classes}>
+      <button
+        type={type}
+        disabled={disabled}
+        onClick={onClick}
+        className={classes}
+      >
         {iconLeft}
         {icon}
         {loading ? 'laden...' : label}

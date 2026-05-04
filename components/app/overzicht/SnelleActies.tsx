@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import {
   MdOutlineAddCircleOutline,
   MdOutlineCheckCircleOutline,
@@ -6,6 +5,7 @@ import {
   MdOutlineWarningAmber,
 } from 'react-icons/md';
 import { Card, SectionTitle } from './Card';
+import Link from '@/components/design system/Link/Link';
 
 const acties = [
   {
@@ -42,15 +42,12 @@ export function SnelleActies() {
         <div className="grid grid-cols-2 gap-2.5">
           {acties.map((actie) => (
             <Link
-              key={actie.label}
               href={actie.href}
-              className="flex items-center gap-2.5 px-4 py-3 rounded-2xl border border-gray-200/40 bg-white/40 hover:bg-white/70 hover:border-gray-300/60 transition-all duration-200 active:scale-[0.98]"
-            >
-              <span className={actie.iconClass}>{actie.icon}</span>
-              <span className="text-sm font-semibold text-zinc-700">
-                {actie.label}
-              </span>
-            </Link>
+              key={actie.label}
+              label={actie.label}
+              icon={actie.icon}
+              rounded={'2xl'}
+            />
           ))}
         </div>
       </Card>

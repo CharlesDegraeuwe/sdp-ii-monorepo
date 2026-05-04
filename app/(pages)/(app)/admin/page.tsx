@@ -1,12 +1,46 @@
-import { AppContainer } from '@/components/design system/AppContainer';
-import { PageContainer } from '@/components/design system/PageContainer';
+import { Container } from '@/components/design system/Container';
+import {
+  IoAddCircleOutline,
+  IoAddCircleSharp,
+  IoServerOutline,
+} from 'react-icons/io5';
+import Link from '@/components/design system/Link/Link';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
+const links = [
+  {
+    href: '/admin/creeer-werknemer',
+    label: 'Creëer werknemer',
+    icon: <IoAddCircleOutline />,
+  },
+  {
+    href: '/admin/creeer-manager',
+    label: 'Creëer manager',
+    icon: <IoAddCircleSharp />,
+  },
+  {
+    href: '/admin/beheer-gebruikers',
+    label: 'Beheer werknemers',
+    icon: <IoServerOutline />,
+  },
+];
 export default function Page() {
   return (
-    <PageContainer className="h-full">
+    <div className="w-1/2 h-full flex items-center justify-center">
       <BreadcrumbInit pages={['admin']} />
-      <AppContainer></AppContainer>
-    </PageContainer>
+      <Container label={'Back Office'} width={'1/2'} height={'fit'}>
+        <span></span>
+        <div className="flex flex-col gap-5 w-full">
+          {links.map((link, index) => (
+            <Link
+              href={link.href}
+              key={index}
+              label={link.label}
+              icon={link.icon}
+            />
+          ))}
+        </div>
+      </Container>
+    </div>
   );
 }

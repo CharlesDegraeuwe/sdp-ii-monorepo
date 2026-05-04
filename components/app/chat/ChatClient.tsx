@@ -1,33 +1,62 @@
 'use client';
 import Image from 'next/image';
 import { Input } from '@/components/design system/Input';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/design system/Button';
 import { MdCheck } from 'react-icons/md';
 import { IoCalendarOutline } from 'react-icons/io5';
 import { IoIosAirplane } from 'react-icons/io';
 import { FormHelper } from '@/components/design system/Form';
+import ChatMessage from '@/components/app/chat/Message';
 
-interface Question {
-  date: Date;
-  message: string;
-  index: number;
+interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
 }
 
-const ChatClient = () => {
-  const [questionAsked, setQuestionAsked] = useState(false);
-  const [newQuestion, setNewQuestion] = useState('');
-  const [questions, setQuestions] = useState<Question[]>([]);
+const SUGGESTIONS = [
+  { icon: <MdCheck />, label: 'Wat zijn mijn taken?' },
+  { icon: <IoCalendarOutline />, label: 'Wat is mijn planning?' },
+  { icon: <IoIosAirplane />, label: 'Hoeveel verlof heb ik?' },
+];
 
-  const askQuestion = async (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setQuestionAsked(true);
+const ChatClient = () => {
+  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const hasMessages = messages.length > 0;
+
+  const sendMessage = async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+
+    const userMessage: Message = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: trimmed,
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput('');
   };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    sendMessage(input);
+  };
+
+  const handleSuggestion = (label: string) => {
+    sendMessage(label);
+  };
+
   return (
-    <FormHelper onSubmit={askQuestion}>
+    <FormHelper onSubmit={handleSubmit}>
       <div className="flex flex-col items-center justify-center w-full h-full">
-        {!questionAsked && (
+        {!hasMessages && (
           <div
             className={
               'min-w-full h-full flex items-center pt-75 flex-col gap-5'
@@ -57,52 +86,50 @@ const ChatClient = () => {
               </div>
               <div className={'w-full'}>
                 <Input
+                  ref={inputRef}
                   width={'full'}
                   placeholder={'Stel een vraag'}
                   errorOption={false}
-                  onChange={(e) => setNewQuestion(e.target.value)}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
                 />
               </div>
               <div className={'w-full flex flex-row gap-3 mt-3'}>
-                <Button
-                  iconLeft={<MdCheck />}
-                  variant="prompt"
-                  textSize={'sm'}
-                  label={'Wat zijn mijn taken?'}
-                  color={'zinc-400'}
-                />
-                <Button
-                  iconLeft={<IoCalendarOutline />}
-                  variant="prompt"
-                  textSize={'sm'}
-                  label={'Wat is mijn planning?'}
-                  color={'zinc-400'}
-                />
-                <Button
-                  iconLeft={<IoIosAirplane />}
-                  variant="prompt"
-                  textSize={'sm'}
-                  label={'Hoeveel verlof heb ik?'}
-                  color={'zinc-400'}
-                />
+                {SUGGESTIONS.map((s) => (
+                  <Button
+                    key={s.label}
+                    type="button"
+                    iconLeft={s.icon}
+                    variant="prompt"
+                    textSize="sm"
+                    label={s.label}
+                    color="zinc-400"
+                    onClick={() => handleSuggestion(s.label)}
+                  />
+                ))}
               </div>
             </div>
           </div>
         )}
 
-        {questionAsked && (
-          <div className="w-full h-full flex flex-col items-center justify-between pb-10">
+        {hasMessages && (
+          <div className="w-full h-full flex flex-col items-center justify-between py-10">
             <div className="flex flex-col w-1/3 flex-1 overflow-y-auto">
-              test
+              {messages.map((message) => (
+                <ChatMessage key={message.id} message={message} />
+              ))}
             </div>
             <div className="w-1/3 flex flex-col gap-1">
               <Input
+                ref={inputRef}
+                autoFocus={true}
                 width={'full'}
                 placeholder={'Stel een vraag'}
                 errorOption={false}
-                onChange={(e) => setNewQuestion(e.target.value)}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
               />
-              <span className="px-6 w-full text-xs text-zinc-300">
+              <span className="px-6 w-full text-xs text-zinc-400">
                 Gerard kan fouten maken*
               </span>
             </div>
