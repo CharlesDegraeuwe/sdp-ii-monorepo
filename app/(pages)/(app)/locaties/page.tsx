@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import GoogleMaps from '@/app/(pages)/(app)/locaties/components/googlemaps';
 import { SiteList } from '@/app/(pages)/(app)/locaties/components/SiteList';
 import { SiteDetail } from '@/app/(pages)/(app)/locaties/components/SiteDetail';
-import { Machine, Site, SiteTeamResponse, Team } from '@/types/types';
+import { Machine, Site, Team } from '@/types/types';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
 export default function Page() {
@@ -15,6 +15,7 @@ export default function Page() {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
   const { data: session, status } = useSession();
+
   useEffect(() => {
     if (status === 'loading') return;
 
@@ -25,9 +26,6 @@ export default function Page() {
 
     const jwtToken = session?.accessToken;
     const werknemerId = session?.user?.id;
-
-    console.log('TOKEN:', jwtToken);
-    console.log('WERKNEMER ID:', werknemerId);
 
     if (!jwtToken || !werknemerId) {
       setIsLoading(false);
@@ -55,51 +53,73 @@ export default function Page() {
       });
   }, [session, status]);
 
-  const handleSiteClick = async (site: Site) => {
-    setSelectedSite(site);
-    setIsLoadingDetails(true);
+  useEffect(() => {
+    if (!selectedSite || selectedSite.machines !== undefined) return;
 
     const jwtToken = session?.accessToken;
-    if (!jwtToken) {
-      setIsLoadingDetails(false);
-      return;
-    }
+    const werknemerId = session?.user?.id;
 
-    console.log(jwtToken);
-    try {
-      const [machineRes, siteteamRes] = await Promise.all([
-        fetch('http://localhost:8080/api/machines', {
-          headers: { Authorization: `Bearer ${jwtToken}` },
-        }),
-        fetch('http://localhost:8080/api/siteteams', {
-          headers: { Authorization: `Bearer ${jwtToken}` },
-        }),
-      ]);
+    if (!jwtToken || !werknemerId) return;
 
-      let machinesForThisSite: Machine[] = [];
-      if (machineRes.ok) {
-        const allMachines: Machine[] = await machineRes.json();
-        machinesForThisSite = allMachines.filter((m) => m.site?.id === site.id);
+    let isMounted = true;
+    setIsLoadingDetails(true);
+
+    const fetchDetails = async () => {
+      try {
+        const [machineRes, teamRes, werknemerTeamsRes] = await Promise.all([
+          fetch(`http://localhost:8080/api/sites/${selectedSite.id}/machines`, {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+          }),
+          fetch(`http://localhost:8080/api/teams/site/${selectedSite.id}`, {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+          }),
+          fetch(`http://localhost:8080/api/teams/werknemer/${werknemerId}`, {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+          }),
+        ]);
+
+        let machinesForThisSite: Machine[] = [];
+        if (machineRes.ok) {
+          machinesForThisSite = await machineRes.json();
+        }
+
+        let teamsForThisSite: Team[] = [];
+        if (teamRes.ok && werknemerTeamsRes.ok) {
+          const siteTeams: Team[] = await teamRes.json();
+          const werknemerTeams: Team[] = await werknemerTeamsRes.json();
+
+          teamsForThisSite = siteTeams.filter((st) =>
+            werknemerTeams.some((wt) => wt.id === st.id),
+          );
+        }
+
+        if (isMounted) {
+          setSelectedSite((prev) =>
+            prev && prev.id === selectedSite.id
+              ? {
+                  ...prev,
+                  machines: machinesForThisSite,
+                  teams: teamsForThisSite,
+                }
+              : prev,
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        if (isMounted) setIsLoadingDetails(false);
       }
+    };
 
-      let teamsForThisSite: Team[] = [];
-      if (siteteamRes.ok) {
-        const allSiteteams: SiteTeamResponse[] = await siteteamRes.json();
-        teamsForThisSite = allSiteteams
-          .filter((st) => st.site?.id === site.id)
-          .map((st) => st.team);
-      }
+    fetchDetails();
 
-      setSelectedSite((prev) =>
-        prev
-          ? { ...prev, machines: machinesForThisSite, teams: teamsForThisSite }
-          : null,
-      );
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoadingDetails(false);
-    }
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedSite?.id, session?.accessToken, session?.user?.id]);
+
+  const handleSiteClick = (site: Site) => {
+    setSelectedSite(site);
   };
 
   return (
