@@ -24,6 +24,7 @@ const LoginForm = () => {
   const [submittedEmail, setSubmittedEmail] = useState(false);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errors, setErrors] = useState<Errors>(initialErrors);
 
   const router = useRouter();
@@ -82,20 +83,18 @@ const LoginForm = () => {
   };
 
   return (
-    <FormHelper onSubmit={handleSubmit}>
+    <FormHelper onSubmit={handleSubmit} noHeight gap={5}>
       <Input
         type="text"
         placeholder="email..."
-        error={errors.email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       {submittedEmail && (
-        <AnimateOnMount>
+        <AnimateOnMount className={'flex flex-col gap-3'}>
           <Input
             type="text"
             placeholder="verificatiecode..."
-            error={errors.password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </AnimateOnMount>

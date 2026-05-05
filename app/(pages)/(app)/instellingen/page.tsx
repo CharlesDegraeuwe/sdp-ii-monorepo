@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { AppContainer } from '@/components/design system/AppContainer';
-import SettingsClient from '@/app/(pages)/(app)/instellingen/components/SettingsClient';
+import SettingsClient from '@/components/app/instellingen/SettingsClient';
 import { PageContainer } from '@/components/design system/PageContainer';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <PageContainer className="h-full">
-      <AppContainer>
-        <BreadcrumbInit pages={['instellingen']} />
+    <PageContainer className="h-full scroll-hidden">
+      <BreadcrumbInit pages={['instellingen']} />
+      <div className="absolute flex flex-col min-w-full min-h-full items-center scroll-hidden">
         <SettingsClient />
-      </AppContainer>
+      </div>
     </PageContainer>
   );
 }

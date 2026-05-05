@@ -1,17 +1,18 @@
-export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
-  color?: string;
   label?: string;
   icon?: React.ReactNode;
   error?: string;
-  onClick?: () => void;
-  textColor?: string;
-  gradient?: boolean;
-  from?: string;
-  to?: string;
   loading?: boolean;
-  absolute?: boolean;
+
+  variant?: 'primary' | 'secondary' | 'outline' | 'prompt';
+  textColor?: 'white' | 'black';
+  textSize?: 'sm' | 'md' | 'lg';
+  borderColor?: 'default' | 'red';
+  gradient?: 'rose-blue' | 'purple-pink';
+
   iconRight?: React.ReactNode;
   iconLeft?: React.ReactNode;
-  px?: string;
+
+  px?: 'px-3' | 'px-5' | 'px-8';
 }

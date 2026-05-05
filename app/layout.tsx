@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import SessionProvider from '@/providers/SessionProvider';
 import { UserProvider } from '@/providers/UserProvider';
+import Toast from '../components/design system/Toast/Toast';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,14 +19,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const showToast = false;
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex flex-col h-screen w-screen">
+      <body className="relative flex flex-col h-screen w-screen">
         <SessionProvider>
-          <UserProvider>{children}</UserProvider>
+          <UserProvider>
+            {showToast && <Toast />}
+            {children}
+          </UserProvider>
         </SessionProvider>
       </body>
     </html>

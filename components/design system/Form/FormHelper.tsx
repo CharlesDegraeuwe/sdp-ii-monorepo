@@ -2,9 +2,12 @@
 import { FormHelperProps } from '@/components/design system/Form/FormHelper.types';
 
 const FormHelper = (props: FormHelperProps) => {
-  const { onSubmit, children } = props;
+  const { onSubmit, children, noHeight } = props;
   return (
-    <form onSubmit={onSubmit} className={'flex flex-col gap-5 w-full'}>
+    <form
+      onSubmit={onSubmit}
+      className={` flex flex-col gap-3 ${noHeight ? 'min-h-fit' : 'min-h-full'} w-full`}
+    >
       {children}
     </form>
   );
