@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import AppContainer from '../../../../components/design system/AppContainer/AppContainer';
-import OverzichtClient from './OverzichtClient';
+import OverzichtClient from '../../../../components/app/overzicht/OverzichtClient';
 import { PageContainer } from '@/components/design system/PageContainer';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 import { Container } from '@/components/design system/Container'; // <-- MISSENDE IMPORT TOEGEVOEGD
@@ -11,8 +11,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <>
+    <PageContainer>
       <AppContainer>
+        <BreadcrumbInit pages={['overzicht']} />
         <OverzichtClient />
       </AppContainer>
 

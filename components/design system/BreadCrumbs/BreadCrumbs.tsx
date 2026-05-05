@@ -8,7 +8,7 @@ const BreadCrumbs = () => {
   return (
     <div
       className={
-        'py-1 text-xs font-bold flex items-center px-3 h-fit   truncate w-fit'
+        'py-1 text-xs flex font-bold items-center px-3 h-fit   truncate w-fit'
       }
     >
       {pages.map((page, i) => (

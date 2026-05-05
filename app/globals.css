@@ -37,3 +37,13 @@ input:-webkit-autofill:focus {
 
 @media (prefers-color-scheme: dark) {
 }
+
+.scroll-hidden {
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}

@@ -9,4 +9,12 @@ export interface LabelProps extends React.HTMLAttributes<HTMLSpanElement> {
   px?: number;
   py?: number;
   p?: number;
+  center?: boolean;
+  variant?:
+    | 'title'
+    | 'subtitle'
+    | 'body'
+    | 'caption'
+    | 'emptystate'
+    | 'inputLabel';
 }

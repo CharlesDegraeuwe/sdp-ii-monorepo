@@ -1,55 +1,72 @@
 'use client';
 import { LuLayoutDashboard } from 'react-icons/lu';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import {
-  MdCheck, // tasks (taken)
-  MdOutlineMap, // plants (locaties)
-  MdOutlineCancel, // absense (afwezigheid)
-  MdGroups, // teams
-  MdAdminPanelSettings, // admin
+  MdCheck,
+  MdOutlineMap,
+  MdOutlineCancel,
+  MdGroups,
+  MdAdminPanelSettings,
 } from 'react-icons/md';
 import { usePathname } from 'next/navigation';
 import SidebarItem from '@/components/app/structuur/sidebar/sidebarItem';
 import Image from 'next/image';
 import { IoCalendarOutline } from 'react-icons/io5';
+import { RiChatAiLine } from 'react-icons/ri';
+import { useSession } from 'next-auth/react';
 
 const links = [
   {
     url: 'overzicht',
     title: 'overzicht',
     icon: <LuLayoutDashboard size={20} />,
+    role: ['Admin', 'Manager', 'Supervisor', 'Werknemer'],
   },
   {
     url: 'planner',
     title: 'planner',
     icon: <IoCalendarOutline size={20} />,
+    role: ['Admin', 'Manager', 'Supervisor', 'Werknemer'],
   },
   {
     url: 'taken',
     title: 'taken',
     icon: <MdCheck size={20} />,
+    role: ['Admin', 'Manager', 'Supervisor', 'Werknemer'],
   },
   {
     url: 'locaties',
     title: 'locaties',
     icon: <MdOutlineMap size={20} />,
+    role: ['Admin', 'Manager', 'Supervisor'],
   },
   {
     url: 'afwezigheden',
     title: 'afwezigheden',
     icon: <MdOutlineCancel size={20} />,
+    role: ['Admin', 'Manager', 'Supervisor', 'Werknemer'],
   },
   {
     url: 'teams',
     title: 'teams',
     icon: <MdGroups size={20} />,
+    role: ['Admin', 'Manager', 'Supervisor'],
+  },
+  {
+    url: 'chat',
+    title: 'chat',
+    icon: <RiChatAiLine size={20} />,
+    role: ['Admin', 'Manager', 'Supervisor', 'Werknemer'],
   },
 ];
+
 export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed] = useState(true);
   const ugly = false;
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const userRole = session?.user?.rol;
 
   return (
     <div
@@ -67,16 +84,19 @@ export default function Sidebar() {
         </div>
 
         <div className={'w-full h-1/2 flex flex-col gap-5'}>
-          {links.map((link, key) => (
-            <SidebarItem
-              key={key}
-              url={link.url}
-              title={link.title}
-              icon={link.icon}
-              collapsed={false}
-            />
-          ))}
+          {links
+            .filter((link) => userRole && link.role.includes(userRole))
+            .map((link) => (
+              <SidebarItem
+                key={link.url}
+                url={link.url}
+                title={link.title}
+                icon={link.icon}
+                collapsed={false}
+              />
+            ))}
         </div>
+
         <div className={'w-full h-1/2 flex flex-col justify-end'}>
           <Link
             href="/admin"

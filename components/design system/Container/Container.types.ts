@@ -14,4 +14,5 @@ export interface ContainerProps extends React.HTMLProps<HTMLDivElement> {
   flexDirection?: 'row' | 'col';
   indent?: boolean;
   bg?: string;
+  visible?: boolean;
 }
