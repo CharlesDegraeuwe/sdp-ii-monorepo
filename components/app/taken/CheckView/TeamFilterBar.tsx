@@ -1,10 +1,10 @@
 'use client';
-import { useTeamStore } from '@/stores/taakStore';
+import { useTaakStore } from '@/stores/taakStore';
 
 export const TeamFilterBar = () => {
-  const teams = useTeamStore((s) => s.teams);
-  const selectedTeamId = useTeamStore((s) => s.selectedTeamId);
-  const selectTeam = useTeamStore((s) => s.selectTeam);
+  const teams = useTaakStore((s) => s.teams);
+  const selectedTeamId = useTaakStore((s) => s.selectedTeamId);
+  const selectTeam = useTaakStore((s) => s.selectTeam);
 
   return (
     <div className={'flex flex-row gap-2 flex-wrap'}>

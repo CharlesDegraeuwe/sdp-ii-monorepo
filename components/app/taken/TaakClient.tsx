@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CheckView } from '@/components/app/taken/CheckView/CheckView';
 import { AssignView } from '@/components/app/taken/AssignView/AssignView';
 import { CreateView } from '@/components/app/taken/CreateView/CreateView';
+import { useTaakData } from '@/hooks/useTaakData';
 
 type Mode = 'check' | 'creëer' | 'assign';
 type Team = 'teams' | 'users';
@@ -22,6 +23,11 @@ const tabs: { key: Team; label: string }[] = [
 const TaakClient = () => {
   const [mode, setMode] = useState<Mode>('check');
   const [team, setTeam] = useState<Team>('teams');
+  const { loaded } = useTaakData();
+
+  if (!loaded) {
+    return <div className={'p-6 text-zinc-500'}>Laden...</div>;
+  }
 
   return (
     <div className={'w-1/2 h-full flex items-center flex-col gap-3'}>

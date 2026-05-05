@@ -11,6 +11,7 @@ import DayView from '../../../../components/app/planner/DayView';
 import DetailPanel from '../../../../components/app/planner/DetailPanel';
 import type {
   Afwezigheid,
+  PlannerTaak,
   View,
 } from '../../../../components/app/planner/types';
 import {
@@ -38,6 +39,7 @@ export default function PlannerPage() {
   const [view, setView] = useState<View>('maand');
   const [huidigeDatum, setHuidigeDatum] = useState(new Date());
   const [afwezigheden, setAfwezigheden] = useState<Afwezigheid[]>([]);
+  const [taken, setTaken] = useState<PlannerTaak[]>([]);
   const [geselecteerdeDag, setGeselecteerdeDag] = useState<Date | null>(
     new Date(),
   );
@@ -57,6 +59,17 @@ export default function PlannerPage() {
       .then(setAfwezigheden)
       .catch(console.error);
   }, [user, authHeader, huidigeDatum, view]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    fetch(`/api/taken/werknemer/${user.id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed');
+        return res.json();
+      })
+      .then(setTaken)
+      .catch(console.error);
+  }, [user]);
 
   function navigeer(richting: 1 | -1) {
     const d = new Date(huidigeDatum);
@@ -100,8 +113,7 @@ export default function PlannerPage() {
                   setHuidigeDatum(new Date());
                   setGeselecteerdeDag(new Date());
                 }}
-                textColor="white"
-                color="delaware_red"
+                variant="primary"
                 label="Vandaag"
               />
               <div className="flex items-center gap-4 w-80" />
@@ -114,6 +126,7 @@ export default function PlannerPage() {
                 <MonthView
                   huidigeDatum={huidigeDatum}
                   afwezigheden={afwezigheden}
+                  taken={taken}
                   geselecteerdeDag={geselecteerdeDag}
                   onSelectDag={setGeselecteerdeDag}
                 />
@@ -122,6 +135,7 @@ export default function PlannerPage() {
                 <WeekView
                   huidigeDatum={huidigeDatum}
                   afwezigheden={afwezigheden}
+                  taken={taken}
                   geselecteerdeDag={geselecteerdeDag}
                   onSelectDag={setGeselecteerdeDag}
                 />
@@ -130,6 +144,7 @@ export default function PlannerPage() {
                 <DayView
                   huidigeDatum={huidigeDatum}
                   afwezigheden={afwezigheden}
+                  taken={taken}
                 />
               )}
             </div>
@@ -138,6 +153,7 @@ export default function PlannerPage() {
               <DetailPanel
                 geselecteerdeDag={geselecteerdeDag}
                 afwezigheden={afwezigheden}
+                taken={taken}
               />
             )}
           </div>

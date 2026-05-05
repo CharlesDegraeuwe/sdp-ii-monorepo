@@ -1,10 +1,17 @@
-import type { Afwezigheid } from './types';
+import type { Afwezigheid, PlannerTaak } from './types';
 import { DAGEN_KORT } from './constants';
-import { afwezighedenOpDag, isVandaag, badgeKleur } from './utils';
+import {
+  afwezighedenOpDag,
+  isVandaag,
+  badgeKleur,
+  takenOpDag,
+  taakBadgeKleur,
+} from './utils';
 
 interface MonthViewProps {
   huidigeDatum: Date;
   afwezigheden: Afwezigheid[];
+  taken: PlannerTaak[];
   geselecteerdeDag: Date | null;
   onSelectDag: (datum: Date) => void;
 }
@@ -12,6 +19,7 @@ interface MonthViewProps {
 export default function MonthView({
   huidigeDatum,
   afwezigheden,
+  taken,
   geselecteerdeDag,
   onSelectDag,
 }: MonthViewProps) {
@@ -53,6 +61,12 @@ export default function MonthView({
           if (!datum) return <div key={i} className="min-h-20" />;
 
           const opDag = afwezighedenOpDag(afwezigheden, datum);
+          const dagTaken = takenOpDag(taken, datum).filter((t) => !t.afgewerkt);
+          const items = [
+            ...opDag.slice(0, 2),
+            ...dagTaken.slice(0, 2 - Math.min(opDag.length, 2)),
+          ];
+          const totaal = opDag.length + dagTaken.length;
           const weekend = datum.getDay() === 0 || datum.getDay() === 6;
           const geselecteerd =
             geselecteerdeDag &&
@@ -76,15 +90,25 @@ export default function MonthView({
               <div className="flex flex-col gap-0.5 mt-1">
                 {opDag.slice(0, 2).map((a, j) => (
                   <span
-                    key={j}
+                    key={`a-${j}`}
                     className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full truncate ${badgeKleur(a)}`}
                   >
                     {a.voornaam}
                   </span>
                 ))}
-                {opDag.length > 2 && (
+                {dagTaken
+                  .slice(0, 2 - Math.min(opDag.length, 2))
+                  .map((t, j) => (
+                    <span
+                      key={`t-${j}`}
+                      className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full truncate ${taakBadgeKleur(t)}`}
+                    >
+                      {t.naam}
+                    </span>
+                  ))}
+                {totaal > 2 && (
                   <span className="text-[9px] text-zinc-400 font-bold">
-                    +{opDag.length - 2}
+                    +{totaal - items.length}
                   </span>
                 )}
               </div>

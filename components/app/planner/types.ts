@@ -9,3 +9,16 @@ export interface Afwezigheid {
   eindDatum: string;
   status: string | null;
 }
+
+export interface PlannerTaak {
+  id: number;
+  naam: string;
+  specificaties?: string;
+  deadline: string;
+  duur?: string;
+  locatie: string;
+  belangrijk: boolean;
+  afgewerkt: boolean;
+  afgewerktOp?: string;
+  werknemerId?: number;
+}

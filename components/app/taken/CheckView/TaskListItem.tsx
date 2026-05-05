@@ -17,6 +17,32 @@ export const TaskListItem = ({ task }: { task: Task }) => {
 
   const active = selectedTaskId === task.id;
 
+  const handleFinish = async (checked: boolean) => {
+    updateTask(task.id, {
+      finished: checked,
+      finishedAt: checked ? new Date().toISOString() : undefined,
+    });
+    if (checked) {
+      try {
+        await fetch(`/api/taken/${task.id}/afgewerkt`, { method: 'PUT' });
+      } catch (e) {
+        updateTask(task.id, { finished: false, finishedAt: undefined });
+        console.error(e);
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    const backup = { ...task };
+    removeTask(task.id);
+    try {
+      await fetch(`/api/taken/${task.id}`, { method: 'DELETE' });
+    } catch (e) {
+      useTaakStore.getState().addTask(backup);
+      console.error(e);
+    }
+  };
+
   return (
     <div className={'flex flex-row items-center gap-2'}>
       <button
@@ -28,24 +54,17 @@ export const TaskListItem = ({ task }: { task: Task }) => {
         <input
           type={'checkbox'}
           checked={task.finished}
-          onChange={(e) =>
-            updateTask(task.id, {
-              finished: e.target.checked,
-              finishedAt: e.target.checked
-                ? new Date().toISOString()
-                : undefined,
-            })
-          }
+          onChange={(e) => handleFinish(e.target.checked)}
           className={'w-4 h-4 rounded-full'}
           onClick={(e) => e.stopPropagation()}
         />
         <span className={'text-sm flex-1 text-left'}>{task.name}</span>
         <span className={'text-xs text-zinc-500'}>
-          Due today {formatDue(task.dueDate)}
+          {formatDue(task.dueDate)}
         </span>
       </button>
       <button
-        onClick={() => removeTask(task.id)}
+        onClick={handleDelete}
         className={'p-2 rounded-full hover:bg-zinc-100'}
       >
         <FaRegTrashCan className={'w-4 h-4'} />

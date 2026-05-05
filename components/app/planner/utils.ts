@@ -1,4 +1,4 @@
-import type { Afwezigheid, View } from './types';
+import type { Afwezigheid, PlannerTaak, View } from './types';
 import { MAANDEN } from './constants';
 
 export function afwezighedenOpDag(
@@ -79,4 +79,21 @@ export function getPeriodBounds(
     .toISOString()
     .split('T')[0];
   return { van, tot };
+}
+
+export function takenOpDag(taken: PlannerTaak[], datum: Date): PlannerTaak[] {
+  return taken.filter((t) => {
+    const d = new Date(t.deadline);
+    return (
+      d.getDate() === datum.getDate() &&
+      d.getMonth() === datum.getMonth() &&
+      d.getFullYear() === datum.getFullYear()
+    );
+  });
+}
+
+export function taakBadgeKleur(t: PlannerTaak): string {
+  if (t.afgewerkt) return 'bg-zinc-100 text-zinc-500';
+  if (t.belangrijk) return 'bg-rose-100 text-rose-700';
+  return 'bg-blue-100 text-blue-700';
 }

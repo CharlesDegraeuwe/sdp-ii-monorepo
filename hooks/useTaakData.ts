@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useTaakStore } from '@/stores/taakStore';
+import { mapBackendTask } from '@/lib/taakMapper';
 
 const STALE_MS = 5 * 60 * 1000;
 
@@ -22,17 +23,37 @@ export const useTaakData = () => {
       }
 
       try {
-        const [teamsRes, membersRes, tasksRes] = await Promise.all([
+        const [teamsRes, werknemersRes, takenRes] = await Promise.all([
           fetch('/api/teams'),
-          fetch('/api/members'),
-          fetch('/api/tasks'),
+          fetch('/api/teams/werknemers'),
+          fetch('/api/taken/alle'),
         ]);
 
-        const [teams, members, tasks] = await Promise.all([
+        const [teamsData, werknemersData, takenData] = await Promise.all([
           teamsRes.json(),
-          membersRes.json(),
-          tasksRes.json(),
+          werknemersRes.json(),
+          takenRes.json(),
         ]);
+
+        const teams = (teamsData as Record<string, unknown>[]).map((t) => ({
+          id: String(t.id),
+          name: (t.naam as string) ?? '',
+          plant: (t.siteNaam as string) ?? '',
+          members: [],
+        }));
+
+        const members = (werknemersData as Record<string, unknown>[]).map(
+          (w) => ({
+            id: String(w.id),
+            firstName: (w.voornaam as string) ?? '',
+            lastName: (w.naam as string) ?? '',
+            email: (w.email as string) ?? '',
+          }),
+        );
+
+        const tasks = (takenData as Record<string, unknown>[]).map(
+          mapBackendTask,
+        );
 
         setTeams(teams);
         setMembers(members);
@@ -40,7 +61,7 @@ export const useTaakData = () => {
         setLastSynced(Date.now());
         setLoaded(true);
       } catch (e) {
-        console.error('Failed to fetch team data', e);
+        console.error('Kon taakdata niet ophalen', e);
         setLoaded(true);
       }
     };

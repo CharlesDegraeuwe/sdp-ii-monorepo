@@ -1,4 +1,4 @@
-import type { Afwezigheid } from './types';
+import type { Afwezigheid, PlannerTaak } from './types';
 import { DAGEN_KORT } from './constants';
 import {
   afwezighedenOpDag,
@@ -6,11 +6,14 @@ import {
   isVandaag,
   badgeKleur,
   afwezigheidLabel,
+  takenOpDag,
+  taakBadgeKleur,
 } from './utils';
 
 interface WeekViewProps {
   huidigeDatum: Date;
   afwezigheden: Afwezigheid[];
+  taken: PlannerTaak[];
   geselecteerdeDag: Date | null;
   onSelectDag: (datum: Date) => void;
 }
@@ -18,6 +21,7 @@ interface WeekViewProps {
 export default function WeekView({
   huidigeDatum,
   afwezigheden,
+  taken,
   geselecteerdeDag,
   onSelectDag,
 }: WeekViewProps) {
@@ -32,6 +36,7 @@ export default function WeekView({
     <div className="grid grid-cols-7 gap-2 min-h-64">
       {dagen.map((datum, i) => {
         const opDag = afwezighedenOpDag(afwezigheden, datum);
+        const dagTaken = takenOpDag(taken, datum).filter((t) => !t.afgewerkt);
         const weekend = datum.getDay() === 0 || datum.getDay() === 6;
         const geselecteerd =
           geselecteerdeDag &&
@@ -58,19 +63,31 @@ export default function WeekView({
               </span>
             </div>
 
-            {opDag.length === 0 && (
+            {opDag.length === 0 && dagTaken.length === 0 && (
               <span className="text-xs text-zinc-300">–</span>
             )}
 
             {opDag.map((a, j) => (
               <div
-                key={j}
-                className={`rounded-xl px-2 py-1.5 h-full ${badgeKleur(a)}`}
+                key={`a-${j}`}
+                className={`rounded-xl px-2 py-1.5 ${badgeKleur(a)}`}
               >
                 <span className="text-[10px] font-bold block truncate">
                   {a.voornaam} {a.naam}
                 </span>
                 <span className="text-[9px] block">{afwezigheidLabel(a)}</span>
+              </div>
+            ))}
+
+            {dagTaken.map((t, j) => (
+              <div
+                key={`t-${j}`}
+                className={`rounded-xl px-2 py-1.5 ${taakBadgeKleur(t)}`}
+              >
+                <span className="text-[10px] font-bold block truncate">
+                  {t.naam}
+                </span>
+                <span className="text-[9px] block">{t.locatie}</span>
               </div>
             ))}
           </div>

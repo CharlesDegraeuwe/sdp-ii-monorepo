@@ -1,4 +1,5 @@
 import { useTaakStore, Task } from '@/stores/taakStore';
+import { mapTaskToBackend, mapBackendTask } from '@/lib/taakMapper';
 
 export const useCreateTask = () => {
   const addTask = useTaakStore((s) => s.addTask);
@@ -10,16 +11,18 @@ export const useCreateTask = () => {
     addTask(optimistic);
 
     try {
-      const res = await fetch('/api/tasks', {
+      const res = await fetch('/api/taken', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(input),
+        body: JSON.stringify(mapTaskToBackend(input)),
       });
       if (!res.ok) throw new Error('Create failed');
-      const saved: Task = await res.json();
+      const data = await res.json();
       removeTask(tempId);
-      addTask(saved);
-      return saved;
+      if (typeof data === 'object' && data.id) {
+        addTask(mapBackendTask(data));
+      }
+      return data;
     } catch (e) {
       removeTask(tempId);
       throw e;

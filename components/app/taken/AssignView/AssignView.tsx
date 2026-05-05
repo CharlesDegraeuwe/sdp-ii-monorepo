@@ -31,10 +31,10 @@ export const AssignView = () => {
     assignTask(selectedTaskId, selectedMemberId);
 
     try {
-      await fetch(`/api/tasks/${selectedTaskId}/assign`, {
-        method: 'POST',
+      await fetch(`/api/taken/${selectedTaskId}/toewijzen`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ memberId: selectedMemberId }),
+        body: JSON.stringify({ werknemerId: Number(selectedMemberId) }),
       });
     } catch (e) {
       console.error(e);
