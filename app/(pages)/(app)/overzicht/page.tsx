@@ -55,6 +55,6 @@ export default function Page() {
           </div>
         </AppContainer>
       </PageContainer>
-    </>
+    </PageContainer>
   );
 }

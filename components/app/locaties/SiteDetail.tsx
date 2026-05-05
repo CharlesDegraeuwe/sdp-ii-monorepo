@@ -1,6 +1,5 @@
 import { Site } from '@/types/types';
 import { StatusBadge } from './StatusBadge';
-import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 import { Button } from '@/components/design system/Button';
 import { IoArrowBack, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { useState } from 'react';
@@ -104,9 +103,9 @@ export function SiteDetail(props: SiteDetailProps) {
                 </p>
               ) : site.machines && site.machines.length > 0 ? (
                 <div className="flex flex-col gap-2">
-                  {site.machines.map((machine) => (
+                  {site.machines.map((machine, idx) => (
                     <div
-                      key={machine.id}
+                      key={machine.id || `machine-${idx}`}
                       className="flex justify-between items-center bg-gray-50 border border-gray-100 p-2.5 rounded-lg shadow-sm"
                     >
                       <span className="text-sm font-semibold text-gray-700">
