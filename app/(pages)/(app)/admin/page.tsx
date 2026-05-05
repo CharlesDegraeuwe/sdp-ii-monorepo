@@ -9,12 +9,12 @@ import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit
 
 const links = [
   {
-    href: '/admin/creeer-werknemer',
+    href: '/admin/werknemer-aanmaken',
     label: 'Creëer werknemer',
     icon: <IoAddCircleOutline />,
   },
   {
-    href: '/admin/creeer-manager',
+    href: '/admin/manager-aanmaken',
     label: 'Creëer manager',
     icon: <IoAddCircleSharp />,
   },

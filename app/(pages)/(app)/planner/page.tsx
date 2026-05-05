@@ -83,7 +83,7 @@ export default function PlannerPage() {
     <PageContainer className="h-full">
       <AppContainer>
         <BreadcrumbInit pages={['planner']} />
-        <div className="w-full h-full flex flex-col gap-6">
+        <div className="w-full h-full flex flex-col gap-6 relative">
           <div className="flex items-center gap-4 w-full">
             <div className="w-full flex flex-row gap-3 items-center">
               <Button
@@ -119,7 +119,6 @@ export default function PlannerPage() {
               <div className="flex items-center gap-4 w-80" />
             </div>
           </div>
-
           <div className="flex gap-4 w-full h-full">
             <div className="w-full min-h-full">
               {view === 'maand' && (

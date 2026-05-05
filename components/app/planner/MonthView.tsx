@@ -76,7 +76,7 @@ export default function MonthView({
             <div
               key={i}
               onClick={() => onSelectDag(datum)}
-              className={`min-h-25 max-h-25 rounded-2xl p-2 cursor-pointer transition-all duration-200 border
+              className={`min-h-25 rounded-2xl p-2 cursor-pointer transition-all duration-200 border
                 ${weekend ? 'bg-zinc-50 border-zinc-100' : 'bg-white border-gray-200/50'}
                 ${isVandaag(datum) ? 'border-zinc-900 border-2' : ''}
                 ${geselecteerd ? 'ring-2 ring-zinc-400' : ''}
@@ -87,7 +87,7 @@ export default function MonthView({
               >
                 {datum.getDate()}
               </span>
-              <div className="flex flex-col gap-0.5 mt-1">
+              <div className="flex flex-col gap-0.5 mt-1 h-full">
                 {opDag.slice(0, 2).map((a, j) => (
                   <span
                     key={`a-${j}`}
