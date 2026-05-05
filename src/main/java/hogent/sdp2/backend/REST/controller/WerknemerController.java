@@ -62,7 +62,7 @@ public class WerknemerController {
         return ResponseEntity.ok(werknemerService.updateUser(dto));
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<WerknemerResponseDTO>> getAlleUsers() {
         return ResponseEntity.ok(werknemerService.getAlleUsers());
     }
