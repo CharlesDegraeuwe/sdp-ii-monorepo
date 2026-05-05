@@ -1,12 +1,12 @@
 'use client';
 import { useState } from 'react';
 import { useCreateTask } from '@/hooks/useCreateTask';
-import { Input } from '@/components/design system/Input';
-import { Container } from '@/components/design system/Container';
-import { Button } from '@/components/design system/Button';
-import { FormHelper } from '@/components/design system/Form';
-import { Label } from '@/components/design system/Label';
-import { TextArea } from '@/components/design system/TextArea';
+import { Input } from '@/components/design-system/Input';
+import { Container } from '@/components/design-system/Container';
+import { Button } from '@/components/design-system/Button';
+import { FormHelper } from '@/components/design-system/Form';
+import { Label } from '@/components/design-system/Label';
+import { TextArea } from '@/components/design-system/TextArea';
 
 export const CreateView = () => {
   const createTask = useCreateTask();

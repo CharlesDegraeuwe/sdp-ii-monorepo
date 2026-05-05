@@ -1,10 +1,10 @@
-import { PageContainer } from '@/components/design system/PageContainer';
-import { Label } from '@/components/design system/Label';
+import { PageContainer } from '@/components/design-system/PageContainer';
+import { Label } from '@/components/design-system/Label';
 import LoginForm from '@/components/auth/login/LoginForm';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { AnimateOnMount } from '@/components/design system/AnimateOnMount';
+import { AnimateOnMount } from '@/components/design-system/AnimateOnMount';
 
 export const metadata: Metadata = {
   title: 'Login | Delaware Suite',

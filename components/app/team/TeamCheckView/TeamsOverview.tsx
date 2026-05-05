@@ -1,7 +1,7 @@
 'use client';
-import { Container } from '@/components/design system/Container';
-import { Label } from '@/components/design system/Label';
-import { Button } from '@/components/design system/Button';
+import { Container } from '@/components/design-system/Container';
+import { Label } from '@/components/design-system/Label';
+import { Button } from '@/components/design-system/Button';
 import { useTeamsStore } from '@/stores/teamStore';
 import { useTeamLeden } from '@/hooks/useTeamleden';
 import { useDeleteTeam } from '@/hooks/useDeleteTeam';

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Input } from '@/components/design system/Input';
+import { Input } from '@/components/design-system/Input';
 import { Site } from '@/types/types';
 import { StatusBadge } from '@/components/app/locaties/StatusBadge';
 import { FaArrowRight } from 'react-icons/fa';

@@ -1,8 +1,8 @@
 'use client';
 import { useMemo, useState } from 'react';
-import { Container } from '@/components/design system/Container';
-import { Label } from '@/components/design system/Label';
-import { Button } from '@/components/design system/Button';
+import { Container } from '@/components/design-system/Container';
+import { Label } from '@/components/design-system/Label';
+import { Button } from '@/components/design-system/Button';
 import { useTaakStore } from '@/stores/taakStore';
 
 interface Props {

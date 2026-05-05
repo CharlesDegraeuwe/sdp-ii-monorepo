@@ -8,7 +8,7 @@ import {
   takenOpDag,
   taakBadgeKleur,
 } from './utils';
-import { Container } from '@/components/design system/Container';
+import { Container } from '@/components/design-system/Container';
 
 interface DetailPanelProps {
   geselecteerdeDag: Date;

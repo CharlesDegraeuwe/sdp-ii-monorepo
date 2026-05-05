@@ -1,5 +1,5 @@
 'use client';
-import { TabSwitcher } from '@/components/design system/TabSwitcher/TabSwitcher';
+import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
 import { useState } from 'react';
 import { CheckView } from '@/components/app/taken/CheckView/CheckView';
 import { AssignView } from '@/components/app/taken/AssignView/AssignView';

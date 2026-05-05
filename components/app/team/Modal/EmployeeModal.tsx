@@ -1,9 +1,9 @@
 'use client';
-import { FormHelper } from '@/components/design system/Form';
-import { Container } from '@/components/design system/Container';
-import { Input } from '@/components/design system/Input';
-import { Button } from '@/components/design system/Button';
-import { Label } from '@/components/design system/Label';
+import { FormHelper } from '@/components/design-system/Form';
+import { Container } from '@/components/design-system/Container';
+import { Input } from '@/components/design-system/Input';
+import { Button } from '@/components/design-system/Button';
+import { Label } from '@/components/design-system/Label';
 import { useState } from 'react';
 import { useCreateEmployee } from '@/hooks/useCreateEmployee';
 import { IoClose } from 'react-icons/io5';

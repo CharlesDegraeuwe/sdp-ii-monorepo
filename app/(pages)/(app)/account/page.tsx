@@ -1,6 +1,6 @@
-import { AppContainer } from '@/components/design system/AppContainer';
+import { AppContainer } from '@/components/design-system/AppContainer';
 import type { Metadata } from 'next';
-import { PageContainer } from '@/components/design system/PageContainer';
+import { PageContainer } from '@/components/design-system/PageContainer';
 import { useBreadCrumbs } from '@/providers/BreadCrumbProvider';
 
 export const metadata: Metadata = {

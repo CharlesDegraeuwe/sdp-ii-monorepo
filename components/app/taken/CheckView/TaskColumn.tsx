@@ -2,8 +2,8 @@
 import { Task, useTaakStore } from '@/stores/taakStore';
 import { useMemo } from 'react';
 import { TaskListItem } from './TaskListItem';
-import { Container } from '@/components/design system/Container';
-import { Label } from '@/components/design system/Label';
+import { Container } from '@/components/design-system/Container';
+import { Label } from '@/components/design-system/Label';
 
 interface TaskColumnProps {
   targetId: string | null;

@@ -1,7 +1,7 @@
 'use client';
 
 import SettingOptions from '@/components/app/instellingen/options';
-import PageSection from '@/components/design system/PageSection/PageSection';
+import PageSection from '@/components/design-system/PageSection/PageSection';
 import { useUser } from '@/providers/UserProvider';
 
 const SettingsClient = () => {

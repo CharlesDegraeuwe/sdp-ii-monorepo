@@ -2,14 +2,14 @@
 
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
-import PageHeader from '@/components/design system/PageHeader/PageHeader';
-import Container from '@/components/design system/Container/Container';
-import Button from '@/components/design system/Button/Button';
-import { AppContainer } from '@/components/design system/AppContainer';
-import { PageContainer } from '@/components/design system/PageContainer';
+import PageHeader from '@/components/design-system/PageHeader/PageHeader';
+import Container from '@/components/design-system/Container/Container';
+import Button from '@/components/design-system/Button/Button';
+import { AppContainer } from '@/components/design-system/AppContainer';
+import { PageContainer } from '@/components/design-system/PageContainer';
 import { useBreadCrumbs } from '@/providers/BreadCrumbProvider';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
-import { TabSwitcher } from '@/components/design system/TabSwitcher/TabSwitcher';
+import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
 
 type Tab = 'verlof' | 'ziekte' | 'geschiedenis';
 

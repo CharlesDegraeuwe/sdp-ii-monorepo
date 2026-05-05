@@ -1,8 +1,8 @@
 'use client';
-import { Container } from '@/components/design system/Container';
-import { Input } from '@/components/design system/Input';
-import { Button } from '@/components/design system/Button';
-import { Label } from '@/components/design system/Label';
+import { Container } from '@/components/design-system/Container';
+import { Input } from '@/components/design-system/Input';
+import { Button } from '@/components/design-system/Button';
+import { Label } from '@/components/design-system/Label';
 import { useState, useMemo } from 'react';
 import { useTeamsStore } from '@/stores/teamStore';
 import EmployeeModal from '@/components/app/team/Modal/EmployeeModal';

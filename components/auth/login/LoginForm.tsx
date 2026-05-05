@@ -1,13 +1,13 @@
 'use client';
-import FormHelper from '@/components/design system/Form/FormHelper';
-import { Input } from '@/components/design system/Input';
-import { Button } from '@/components/design system/Button';
+import FormHelper from '@/components/design-system/Form/FormHelper';
+import { Input } from '@/components/design-system/Input';
+import { Button } from '@/components/design-system/Button';
 import { useState } from 'react';
 import { getSession, signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { FaArrowRight } from 'react-icons/fa';
-import { AnimateOnMount } from '@/components/design system/AnimateOnMount';
+import { AnimateOnMount } from '@/components/design-system/AnimateOnMount';
 
 interface Errors {
   email: string;

@@ -1,14 +1,15 @@
 'use client';
 import Image from 'next/image';
-import { Input } from '@/components/design system/Input';
+import { Input } from '@/components/design-system/Input';
 import { useRef, useState } from 'react';
-import { Button } from '@/components/design system/Button';
+import { Button } from '@/components/design-system/Button';
 import { MdCheck } from 'react-icons/md';
 import { IoCalendarOutline } from 'react-icons/io5';
 import { IoIosAirplane } from 'react-icons/io';
-import { FormHelper } from '@/components/design system/Form';
+import { FormHelper } from '@/components/design-system/Form';
 import ChatMessage from '@/components/app/chat/Message';
 import { FaPlus } from 'react-icons/fa6';
+import ChatInput from '@/components/app/chat/ChatInput';
 
 interface Message {
   id: string;
@@ -26,7 +27,7 @@ const SUGGESTIONS = [
 const ChatClient = () => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const hasMessages = messages.length > 0;
 
@@ -86,13 +87,13 @@ const ChatClient = () => {
                 </span>
               </div>
               <div className={'w-full'}>
-                <Input
-                  ref={inputRef}
-                  width={'full'}
+                <ChatInput
+                  autoFocus={true}
                   placeholder={'Stel een vraag'}
-                  errorOption={false}
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onValueChange={setInput}
+                  onSubmit={() => sendMessage(input)}
+                  textareaRef={inputRef}
                 />
               </div>
               <div className={'w-full flex flex-row gap-3 mt-3'}>
@@ -120,21 +121,15 @@ const ChatClient = () => {
                 <ChatMessage key={message.id} message={message} />
               ))}
             </div>
-            <div className="w-1/3 flex flex-col gap-1">
-              <div className="w-full flex flex-row gap-3 items-center justify-between">
-                <div className={'w-full'}>
-                  <Input
-                    ref={inputRef}
-                    autoFocus={true}
-                    width={'full'}
-                    placeholder={'Stel een vraag'}
-                    errorOption={false}
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                  />
-                </div>
-                <Button icon={<FaPlus />} variant={'outline'} />
-              </div>
+            <div className="min-w-2/5 flex flex-col gap-1">
+              <ChatInput
+                autoFocus={true}
+                placeholder={'Stel een vraag'}
+                value={input}
+                onValueChange={setInput}
+                onSubmit={() => sendMessage(input)}
+                textareaRef={inputRef}
+              />
 
               <span className="px-6 w-full text-xs text-zinc-400">
                 Benoit kan fouten maken*

@@ -1,5 +1,5 @@
-import { PageContainer } from '@/components/design system/PageContainer';
-import { AppContainer } from '@/components/design system/AppContainer';
+import { PageContainer } from '@/components/design-system/PageContainer';
+import { AppContainer } from '@/components/design-system/AppContainer';
 
 export default function AdminLayout({
   children,

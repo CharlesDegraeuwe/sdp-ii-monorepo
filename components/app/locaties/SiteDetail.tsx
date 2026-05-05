@@ -1,6 +1,6 @@
 import { Site } from '@/types/types';
 import { StatusBadge } from './StatusBadge';
-import { Button } from '@/components/design system/Button';
+import { Button } from '@/components/design-system/Button';
 import { IoArrowBack, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { useState } from 'react';
 

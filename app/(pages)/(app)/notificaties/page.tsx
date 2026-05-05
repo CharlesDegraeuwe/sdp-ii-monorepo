@@ -2,9 +2,9 @@
 
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import PageHeader from '@/components/design system/PageHeader/PageHeader';
-import { AppContainer } from '@/components/design system/AppContainer';
-import { PageContainer } from '@/components/design system/PageContainer';
+import PageHeader from '@/components/design-system/PageHeader/PageHeader';
+import { AppContainer } from '@/components/design-system/AppContainer';
+import { PageContainer } from '@/components/design-system/PageContainer';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
 type Filter = 'Alles' | 'Werk' | 'Afwezigheid' | 'Verlof';
