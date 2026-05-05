@@ -8,6 +8,7 @@ import { IoCalendarOutline } from 'react-icons/io5';
 import { IoIosAirplane } from 'react-icons/io';
 import { FormHelper } from '@/components/design system/Form';
 import ChatMessage from '@/components/app/chat/Message';
+import { FaPlus } from 'react-icons/fa6';
 
 interface Message {
   id: string;
@@ -63,7 +64,7 @@ const ChatClient = () => {
             }
           >
             <Image
-              alt="Gerard Logo"
+              alt="Benoit Logo"
               src={'ben.svg'}
               width={100}
               height={100}
@@ -79,7 +80,7 @@ const ChatClient = () => {
                   'w-fit flex flex-col gap-0 items-center justify-center mb-3'
                 }
               >
-                <span className={'font-bold'}>Chat met Gerard</span>
+                <span className={'font-bold'}>Chat met Benoit</span>
                 <span className={'text-sm text-zinc-400'}>
                   je rechterhand binnen Delaware Suite
                 </span>
@@ -120,17 +121,23 @@ const ChatClient = () => {
               ))}
             </div>
             <div className="w-1/3 flex flex-col gap-1">
-              <Input
-                ref={inputRef}
-                autoFocus={true}
-                width={'full'}
-                placeholder={'Stel een vraag'}
-                errorOption={false}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-              />
+              <div className="w-full flex flex-row gap-3 items-center justify-between">
+                <div className={'w-full'}>
+                  <Input
+                    ref={inputRef}
+                    autoFocus={true}
+                    width={'full'}
+                    placeholder={'Stel een vraag'}
+                    errorOption={false}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                  />
+                </div>
+                <Button icon={<FaPlus />} variant={'outline'} />
+              </div>
+
               <span className="px-6 w-full text-xs text-zinc-400">
-                Gerard kan fouten maken*
+                Benoit kan fouten maken*
               </span>
             </div>
           </div>
