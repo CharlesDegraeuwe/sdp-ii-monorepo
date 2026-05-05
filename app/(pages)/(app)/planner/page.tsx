@@ -116,11 +116,12 @@ export default function PlannerPage() {
                 variant="primary"
                 label="Vandaag"
               />
-              <div className="flex items-center gap-4 w-80" />
+              <div className="flex items-center gap-4 w-90" />
             </div>
           </div>
-          <div className="flex gap-4 w-full h-full">
-            <div className="w-full min-h-full">
+          {view != 'dag' && <div className={'w-full h-10'}></div>}
+          <div className="flex gap-4 w-full h-full min-h-0">
+            <div className="flex-1 min-w-0 rounded-xl h-full overflow-y-auto scroll-hidden">
               {view === 'maand' && (
                 <MonthView
                   huidigeDatum={huidigeDatum}

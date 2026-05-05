@@ -87,7 +87,7 @@ export default function MonthView({
               >
                 {datum.getDate()}
               </span>
-              <div className="flex flex-col gap-0.5 mt-1 h-full">
+              <div className="flex flex-col gap-0.5 mt-1 h-fit">
                 {opDag.slice(0, 2).map((a, j) => (
                   <span
                     key={`a-${j}`}
