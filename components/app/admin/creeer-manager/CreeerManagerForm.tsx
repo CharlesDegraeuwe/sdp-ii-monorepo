@@ -1,8 +1,8 @@
 'use client';
-import FormHelper from '../../../design system/Form/FormHelper';
-import { Input } from '@/components/design system/Input';
-import { Button } from '@/components/design system/Button';
-import { Container } from '@/components/design system/Container';
+import FormHelper from '@/components/design-system/Form/FormHelper';
+import { Input } from '@/components/design-system/Input';
+import { Button } from '@/components/design-system/Button';
+import { Container } from '@/components/design-system/Container';
 import { useState } from 'react';
 
 const CreeerManagerForm = () => {

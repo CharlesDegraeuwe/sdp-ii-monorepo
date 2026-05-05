@@ -8,7 +8,7 @@ import {
   takenOpDag,
   taakBadgeKleur,
 } from './utils';
-import { Container } from '@/components/design system/Container';
+import { Container } from '@/components/design-system/Container';
 
 interface DetailPanelProps {
   geselecteerdeDag: Date;
@@ -27,8 +27,8 @@ export default function DetailPanel({
   );
 
   return (
-    <div className={'w-80'}>
-      <Container width={'80'}>
+    <div className={'w-90 max-h-full'}>
+      <Container width={'90'}>
         <span className="text-sm font-bold text-zinc-900">
           {formatDag(geselecteerdeDag)}
         </span>

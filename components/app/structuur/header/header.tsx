@@ -7,7 +7,8 @@ import { HiOutlineChevronUpDown } from 'react-icons/hi2';
 import Popup from '@/components/app/structuur/header/popup';
 import { useUser } from '@/providers/UserProvider';
 import Image from 'next/image';
-import BreadCrumbs from '@/components/design system/BreadCrumbs/BreadCrumbs';
+import BreadCrumbs from '@/components/design-system/BreadCrumbs/BreadCrumbs';
+import { RiWifiOffLine } from 'react-icons/ri';
 
 export default function AppHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +42,6 @@ export default function AppHeader() {
     };
   }, [isOpen, setIsOpen, triggerRef]);
 
-  console.log(user);
   return (
     <div
       className={
@@ -65,6 +65,16 @@ export default function AppHeader() {
         </Link>
       </div>
       <div className={'w-fit flex justify-end gap-5 items-center'}>
+        {!window.navigator.onLine && (
+          <div
+            className={
+              'truncate text-rose-700 font-medium text-sm flex flex-row gap-2 items-center'
+            }
+          >
+            <RiWifiOffLine />
+            <span>je bent offline</span>
+          </div>
+        )}
         <div className={'w-fit flex flex-row gap-2'}>
           <Link
             href={'/notificaties'}

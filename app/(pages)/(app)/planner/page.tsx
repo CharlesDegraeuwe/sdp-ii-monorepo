@@ -3,8 +3,8 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { AppContainer } from '@/components/design system/AppContainer';
-import { Button } from '@/components/design system/Button';
+import { AppContainer } from '@/components/design-system/AppContainer';
+import { Button } from '@/components/design-system/Button';
 import MonthView from '../../../../components/app/planner/MonthView';
 import WeekView from '../../../../components/app/planner/WeekView';
 import DayView from '../../../../components/app/planner/DayView';
@@ -18,9 +18,9 @@ import {
   periodeLabel,
   getPeriodBounds,
 } from '../../../../components/app/planner/utils';
-import { PageContainer } from '@/components/design system/PageContainer';
+import { PageContainer } from '@/components/design-system/PageContainer';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
-import { TabSwitcher } from '@/components/design system/TabSwitcher/TabSwitcher';
+import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
 
@@ -28,6 +28,12 @@ const views: { key: View; label: string }[] = [
   { key: 'maand', label: 'maand' },
   { key: 'week', label: 'week' },
   { key: 'dag', label: 'dag' },
+];
+
+type Tab = 'team' | 'you';
+const tabs: { key: Tab; label: string }[] = [
+  { key: 'you', label: 'Jouw planning' },
+  { key: 'team', label: 'Teamplanning' },
 ];
 
 export default function PlannerPage() {
@@ -40,6 +46,7 @@ export default function PlannerPage() {
   const [huidigeDatum, setHuidigeDatum] = useState(new Date());
   const [afwezigheden, setAfwezigheden] = useState<Afwezigheid[]>([]);
   const [taken, setTaken] = useState<PlannerTaak[]>([]);
+  const [tab, setTab] = useState<Tab>('you');
   const [geselecteerdeDag, setGeselecteerdeDag] = useState<Date | null>(
     new Date(),
   );
@@ -83,7 +90,7 @@ export default function PlannerPage() {
     <PageContainer className="h-full">
       <AppContainer>
         <BreadcrumbInit pages={['planner']} />
-        <div className="w-full h-full flex flex-col gap-6">
+        <div className="w-full h-full flex flex-col gap-6 relative">
           <div className="flex items-center gap-4 w-full">
             <div className="w-full flex flex-row gap-3 items-center">
               <Button
@@ -116,12 +123,18 @@ export default function PlannerPage() {
                 variant="primary"
                 label="Vandaag"
               />
-              <div className="flex items-center gap-4 w-80" />
+              <div className="flex items-center gap-4 w-90 justify-center">
+                <TabSwitcher
+                  tabs={tabs}
+                  value={tab}
+                  onChange={(key) => setTab(key as Tab)}
+                />
+              </div>
             </div>
           </div>
-
-          <div className="flex gap-4 w-full h-full">
-            <div className="w-full min-h-full">
+          <div className={'w-full h-fit flex justify-end'}></div>
+          <div className="flex gap-4 w-full h-full min-h-0">
+            <div className="flex-1 min-w-0 rounded-xl h-full overflow-y-auto scroll-hidden">
               {view === 'maand' && (
                 <MonthView
                   huidigeDatum={huidigeDatum}

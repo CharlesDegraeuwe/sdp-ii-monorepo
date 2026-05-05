@@ -1,9 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { Input } from '@/components/design system/Input';
-import { FormHelper } from '@/components/design system/Form';
-import { Container } from '@/components/design system/Container';
-import { Button } from '@/components/design system/Button';
+import { Input } from '@/components/design-system/Input';
+import { FormHelper } from '@/components/design-system/Form';
+import { Container } from '@/components/design-system/Container';
+import { Button } from '@/components/design-system/Button';
 
 const CreeerWerknemerForm = () => {
   //states

@@ -5,7 +5,7 @@ import {
   MdOutlineWarningAmber,
 } from 'react-icons/md';
 import { Card, SectionTitle } from './Card';
-import Link from '@/components/design system/Link/Link';
+import Link from '@/components/design-system/Link/Link';
 
 const acties = [
   {

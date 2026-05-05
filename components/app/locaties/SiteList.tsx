@@ -1,4 +1,7 @@
-import { Input } from '@/components/design system/Input';
+'use client';
+
+import React, { useState } from 'react';
+import { Input } from '@/components/design-system/Input';
 import { Site } from '@/types/types';
 import { StatusBadge } from '@/components/app/locaties/StatusBadge';
 import { FaArrowRight } from 'react-icons/fa';
@@ -12,10 +15,23 @@ export function SiteList({
   isLoading: boolean;
   onSiteClick: (site: Site) => void;
 }) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredSites = sites.filter((site) =>
+    site.naam.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <>
       <div className="p-4 border-b border-gray-100 shrink-0 bg-bg-white">
-        <Input placeholder={'zoeken...'} color={'white'} />
+        <Input
+          placeholder={'zoeken...'}
+          color={'white'}
+          value={searchQuery}
+          onChange={(e: React.ChangeEvent<HTMLInputElement> | string) =>
+            setSearchQuery(typeof e === 'string' ? e : e.target.value)
+          }
+        />
       </div>
 
       <div className="flex-1 overflow-y-auto h-full p-4 flex flex-col gap-3 bg-bg-white">
@@ -24,7 +40,7 @@ export function SiteList({
             Locaties laden...
           </p>
         ) : (
-          sites.map((site) => (
+          filteredSites.map((site) => (
             <div
               key={site.id}
               onClick={() => onSiteClick(site)}

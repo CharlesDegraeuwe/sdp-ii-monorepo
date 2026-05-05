@@ -1,7 +1,7 @@
 import Sidebar from '@/components/app/structuur/sidebar/sidebar';
 import AppHeader from '@/components/app/structuur/header/header';
 import BreadCrumbProvider from '@/providers/BreadCrumbProvider';
-import BreadCrumbs from '@/components/design system/BreadCrumbs/BreadCrumbs';
+import BreadCrumbs from '@/components/design-system/BreadCrumbs/BreadCrumbs';
 
 export default function AppLayout({
   children,

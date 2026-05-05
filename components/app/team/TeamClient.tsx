@@ -1,5 +1,5 @@
 'use client';
-import { TabSwitcher } from '@/components/design system/TabSwitcher/TabSwitcher';
+import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
 import { useState } from 'react';
 import TeamsOverview from './TeamCheckView/TeamsOverview';
 import CreateTeamForm from './TeamCreateView/CreateTeamForm';

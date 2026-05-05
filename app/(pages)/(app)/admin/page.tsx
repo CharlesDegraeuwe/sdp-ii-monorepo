@@ -1,20 +1,20 @@
-import { Container } from '@/components/design system/Container';
+import { Container } from '@/components/design-system/Container';
 import {
   IoAddCircleOutline,
   IoAddCircleSharp,
   IoServerOutline,
 } from 'react-icons/io5';
-import Link from '@/components/design system/Link/Link';
+import Link from '@/components/design-system/Link/Link';
 import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
 const links = [
   {
-    href: '/admin/creeer-werknemer',
+    href: '/admin/werknemer-aanmaken',
     label: 'Creëer werknemer',
     icon: <IoAddCircleOutline />,
   },
   {
-    href: '/admin/creeer-manager',
+    href: '/admin/manager-aanmaken',
     label: 'Creëer manager',
     icon: <IoAddCircleSharp />,
   },
