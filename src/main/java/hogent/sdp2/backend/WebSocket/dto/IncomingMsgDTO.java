@@ -1,4 +1,4 @@
 package hogent.sdp2.backend.WebSocket.dto;
 
-public record IncomingMsgDTO() {
+public record IncomingMsgDTO(String content) {
 }

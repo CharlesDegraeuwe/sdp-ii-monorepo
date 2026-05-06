@@ -31,7 +31,7 @@ public class VerlofService {
                 .findByWerknemerId(dto.werknemerId())
                 .stream()
                 .findFirst()
-                .flatMap(tw -> teamwerknemerRepository.findGoedkeurderVanTeam(tw.getTeam().getId()))
+                .flatMap(tw -> teamwerknemerRepository.findGoedkeurderVanTeam(tw.getTeam().getId()).stream().findFirst())
                 .map(tw -> tw.getWerknemer().getId())
                 .orElse(null);
 

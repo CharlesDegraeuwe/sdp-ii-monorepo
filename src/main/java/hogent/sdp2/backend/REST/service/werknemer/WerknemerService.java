@@ -168,7 +168,7 @@ public class WerknemerService {
                 .password(werknemer.getWachtwoord())
                 .roles(werknemer.getRol())
                 .build();
-        return jwtService.generateToken(userDetails);
+        return jwtService.generateToken(userDetails, werknemer.getId());
     }
 
     private void sendEmail(String to, String subject, String html) {

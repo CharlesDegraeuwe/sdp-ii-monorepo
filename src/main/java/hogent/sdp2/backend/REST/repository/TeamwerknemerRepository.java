@@ -18,5 +18,5 @@ public interface TeamwerknemerRepository extends JpaRepository<Teamwerknemer, Te
     boolean existsByTeamIdAndWerknemerId(Integer teamId, Integer werknemerId);
 
     @Query("SELECT tw FROM Teamwerknemer tw WHERE tw.team.id = :teamId AND tw.werknemer.rol = 'Manager'")
-    Optional<Teamwerknemer> findGoedkeurderVanTeam(@Param("teamId") Integer teamId);
+    List<Teamwerknemer> findGoedkeurderVanTeam(@Param("teamId") Integer teamId);
 }
