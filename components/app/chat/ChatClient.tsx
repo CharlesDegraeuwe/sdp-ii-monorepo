@@ -1,22 +1,14 @@
 'use client';
 import Image from 'next/image';
-import { Input } from '@/components/design-system/Input';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/design-system/Button';
 import { MdCheck } from 'react-icons/md';
 import { IoCalendarOutline } from 'react-icons/io5';
 import { IoIosAirplane } from 'react-icons/io';
 import { FormHelper } from '@/components/design-system/Form';
 import ChatMessage from '@/components/app/chat/Message';
-import { FaPlus } from 'react-icons/fa6';
 import ChatInput from '@/components/app/chat/ChatInput';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-}
+import { useChatSocket } from '@/hooks/useChatSocket';
 
 const SUGGESTIONS = [
   { icon: <MdCheck />, label: 'Wat zijn mijn taken?' },
@@ -26,33 +18,32 @@ const SUGGESTIONS = [
 
 const ChatClient = () => {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { messages, fileList, setFileList, sendMessage } = useChatSocket();
 
   const hasMessages = messages.length > 0;
 
-  const sendMessage = async (text: string) => {
-    const trimmed = text.trim();
-    if (!trimmed) return;
+  useEffect(() => {
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
 
-    const userMessage: Message = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: trimmed,
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
+  const handleMessage = async (text: string) => {
+    sendMessage(text);
     setInput('');
+    setFileList([]);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    sendMessage(input);
+    handleMessage(input);
   };
 
   const handleSuggestion = (label: string) => {
-    sendMessage(label);
+    handleMessage(label);
   };
 
   return (
@@ -88,11 +79,13 @@ const ChatClient = () => {
               </div>
               <div className={'w-full'}>
                 <ChatInput
-                  autoFocus={true}
+                  autoFocus
                   placeholder={'Stel een vraag'}
                   value={input}
+                  files={fileList}
+                  setFiles={setFileList}
                   onValueChange={setInput}
-                  onSubmit={() => sendMessage(input)}
+                  onSubmit={() => handleMessage(input)}
                   textareaRef={inputRef}
                 />
               </div>
@@ -116,18 +109,23 @@ const ChatClient = () => {
 
         {hasMessages && (
           <div className="w-full h-full flex flex-col items-center justify-between py-10">
-            <div className="flex flex-col w-1/3 flex-1 overflow-y-auto">
+            <div
+              ref={scrollRef}
+              className="flex flex-col w-2/5 flex-1 overflow-y-auto"
+            >
               {messages.map((message) => (
                 <ChatMessage key={message.id} message={message} />
               ))}
             </div>
             <div className="min-w-2/5 flex flex-col gap-1">
               <ChatInput
-                autoFocus={true}
+                autoFocus
                 placeholder={'Stel een vraag'}
                 value={input}
+                files={fileList}
+                setFiles={setFileList}
                 onValueChange={setInput}
-                onSubmit={() => sendMessage(input)}
+                onSubmit={() => handleMessage(input)}
                 textareaRef={inputRef}
               />
 

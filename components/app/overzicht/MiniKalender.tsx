@@ -1,7 +1,7 @@
 import type { Afwezigheid } from '../planner/types';
 import { afwezighedenOpDag, isVandaag } from '../planner/utils';
 import { DAGEN_KORT, MAANDEN } from '../planner/constants';
-import { Card, SectionTitle } from './Card';
+import { Container } from '@/components/design-system/Container';
 
 function KalenderGrid({ afwezigheden }: { afwezigheden: Afwezigheid[] }) {
   const vandaag = new Date();
@@ -71,11 +71,11 @@ export function MiniKalender({
   afwezigheden: Afwezigheid[];
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      <SectionTitle>Kalender</SectionTitle>
-      <Card className="h-[230px]">
-        <KalenderGrid afwezigheden={afwezigheden} />
-      </Card>
-    </div>
+    <Container
+      label={'Kalender'}
+      className="col-start-3 col-end-4 row-start-1 row-end-3"
+    >
+      <KalenderGrid afwezigheden={afwezigheden} />
+    </Container>
   );
 }

@@ -16,13 +16,16 @@ const mimeToExt: Record<string, string> = {
 
 interface FileItemProps {
   file: File;
-  fileList: File[];
-  setFileList: (fileList: File[]) => void;
+  fileList?: File[];
+  setFileList?: (fileList: File[]) => void;
+  display?: boolean;
 }
 
-const FileItem = ({ file, fileList, setFileList }: FileItemProps) => {
+const FileItem = ({ file, fileList, setFileList, display }: FileItemProps) => {
   const handleDelete = () => {
-    setFileList(fileList.filter((f) => f !== file));
+    if (fileList && setFileList) {
+      setFileList(fileList.filter((f) => f !== file));
+    }
   };
 
   const previewUrl = useMemo(
@@ -40,19 +43,32 @@ const FileItem = ({ file, fileList, setFileList }: FileItemProps) => {
 
   return (
     <div className="relative drop-shadow-xs cursor-pointer min-h-12 group min-w-12 max-w-12 max-h-12 border bg-zinc-300 border-zinc-400/30 rounded-xl">
-      {previewUrl ? (
-        <Image src={previewUrl} alt={file.name} fill className="object-cover" />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase text-zinc-600">
-          {ext ?? 'file'}
+      <div
+        className={
+          'relative w-full h-full overflow-hidden rounded-xl object-cover'
+        }
+      >
+        {previewUrl ? (
+          <Image
+            src={previewUrl}
+            alt={file.name}
+            fill
+            className="object-cover overflow-hidden"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase text-zinc-600">
+            {ext ?? 'file'}
+          </div>
+        )}
+      </div>
+      {!display && (
+        <div
+          onClick={handleDelete}
+          className="absolute w-4 h-4 rounded-full group-hover:opacity-100 opacity-0 transition-opacity duration-300 border-rose-400 border -right-2 text-white flex items-center justify-center text-xs cursor-pointer bg-rose-500 -top-2"
+        >
+          <IoClose size={10} />
         </div>
       )}
-      <div
-        onClick={handleDelete}
-        className="absolute w-4 h-4 rounded-full group-hover:opacity-100 opacity-0 transition-opacity duration-300 border-rose-400 border -right-2 text-white flex items-center justify-center text-xs cursor-pointer bg-rose-500 -top-2"
-      >
-        <IoClose size={10} />
-      </div>
     </div>
   );
 };

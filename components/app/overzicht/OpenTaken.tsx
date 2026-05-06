@@ -1,5 +1,5 @@
 import type { Afwezigheid } from '../planner/types';
-import { Card } from './Card';
+import { Container } from '@/components/design-system/Container';
 
 interface OpenTakenProps {
   inAfwachting: Afwezigheid[];
@@ -7,11 +7,11 @@ interface OpenTakenProps {
 
 export function OpenTaken({ inAfwachting }: OpenTakenProps) {
   return (
-    <Card className="p-4">
+    <Container
+      label={'Snelle statistieken:'}
+      className="col-start-3 col-end-4 row-start-3 row-end-4"
+    >
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-bold text-zinc-500 uppercase tracking-wide">
-          Open Taken
-        </span>
         <div className="flex flex-col gap-1.5 mt-1">
           {inAfwachting.length === 0 ? (
             <p className="text-xs text-zinc-400">Geen openstaande taken.</p>
@@ -37,6 +37,6 @@ export function OpenTaken({ inAfwachting }: OpenTakenProps) {
           )}
         </div>
       </div>
-    </Card>
+    </Container>
   );
 }
