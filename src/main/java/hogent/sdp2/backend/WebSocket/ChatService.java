@@ -16,31 +16,30 @@ public class ChatService {
     private final ChatClient chatClient;
     private final ChatMemory chatMemory;
     private final TakenTools takenTools;
-
     private final UserTools userTools;
-
 
     public ChatService(
             ChatClient.Builder chatClientBuilder,
             ChatMemory chatMemory,
-             TakenTools takenTools,
+            TakenTools takenTools,
             UserTools userTools
     ) {
+        System.out.println("=== API KEY LOADED === " + (System.getenv("GEMINI_API_KEY") != null ? "yes" : "NO"));
         this.chatMemory = chatMemory;
         this.takenTools = takenTools;
         this.userTools = userTools;
         this.chatClient = chatClientBuilder
                 .defaultSystem("""
-                         Je bent Benoit, een vriendelijke assistent binnen Delaware Suite,
-                         een workforce management tool. Je beantwoordt enkel vragen over
-                         taken, planning en afwezigheden van de ingelogde gebruiker.
-                         Antwoord altijd in het Nederlands.
-                         
-                         BELANGRIJK: voor vragen over taken, planning of afwezigheden MOET je
-                         altijd een tool gebruiken om actuele data op te halen. Verzin nooit
-                         zelf taken of data.
-                         
-                         Voor vragen buiten deze scope, verwijs beleefd terug naar je expertisegebied.
+                        Je bent Benoit, een vriendelijke assistent binnen Delaware Suite,
+                        een workforce management tool. Je beantwoordt enkel vragen over
+                        taken, planning en afwezigheden van de ingelogde gebruiker.
+                        Antwoord altijd in het Nederlands.
+
+                        BELANGRIJK: voor vragen over taken, planning of afwezigheden MOET je
+                        altijd een tool gebruiken om actuele data op te halen. Verzin nooit
+                        zelf taken of data.
+
+                        Voor vragen buiten deze scope, verwijs beleefd terug naar je expertisegebied.
                         """)
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
@@ -58,6 +57,7 @@ public class ChatService {
                     .call()
                     .content();
 
+            System.out.println("=== MODEL RESPONSE === " + response);
             onChunk.accept(response);
         } catch (Exception e) {
             System.err.println("Chat error: " + e.getMessage());

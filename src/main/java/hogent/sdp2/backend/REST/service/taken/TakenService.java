@@ -13,12 +13,14 @@ import hogent.sdp2.backend.REST.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class TakenService {
 
     private final TakenRepository takenRepository;
@@ -32,6 +34,7 @@ public class TakenService {
                 .toList();
     }
 
+    @Transactional
     public String maakTaakAan(TaakAanmakenDTO dto) {
         Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
                 .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
@@ -47,6 +50,7 @@ public class TakenService {
         return "Taak '" + dto.titel() + "' succesvol aangemaakt";
     }
 
+    @Transactional
     public String markeerAfgewerkt(int taakId) {
         Taken taak = takenRepository.findById(taakId)
                 .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
@@ -61,6 +65,7 @@ public class TakenService {
                 .toList();
     }
 
+    @Transactional
     public String wijsTaakToe(int taakId, int werknemerId) {
         Taken taak = takenRepository.findById(taakId)
                 .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
@@ -71,6 +76,7 @@ public class TakenService {
         return "Taak '" + taak.getTitel() + "' toegewezen aan " + werknemer.getVoornaam() + " " + werknemer.getNaam();
     }
 
+    @Transactional
     public String verwijderTaak(int taakId) {
         Taken taak = takenRepository.findById(taakId)
                 .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));

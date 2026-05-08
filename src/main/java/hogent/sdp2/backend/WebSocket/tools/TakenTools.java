@@ -24,9 +24,12 @@ public class TakenTools {
         List<TaakResponseDTO> taken = takenService.geefTakenVanWerknemer(userId);
 
         if (taken.isEmpty()) {
+            System.out.println("Geen taken gevonden");
             return " heeft momenteel geen taken.";
         }
-        StringBuilder sb = new StringBuilder("gebruiker heeft de volgende taken:\n");
+
+        System.out.println("Strinb builder gestart");
+        StringBuilder sb = new StringBuilder("De gebruiker heeft de volgende taken:\n");
         for (TaakResponseDTO t : taken) {
             sb.append("- ")
                     .append(t.titel())
@@ -38,6 +41,8 @@ public class TakenTools {
             }
             sb.append("\n");
         }
-        return sb.toString();
+        String result = sb.toString();
+        System.out.println("=== TOOL RESULT === " + result);
+        return result;
     }
 }
