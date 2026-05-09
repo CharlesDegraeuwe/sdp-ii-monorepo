@@ -1,8 +1,7 @@
 package hogent.sdp2.backend.WebSocket.tools;
 
-import hogent.sdp2.backend.REST.dto.auth.AuthDTO;
+import hogent.sdp2.backend.REST.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.REST.service.werknemer.WerknemerService;
-import hogent.sdp2.backend.auth.Sessie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;
@@ -21,7 +20,7 @@ public class UserTools {
         System.out.println("=== TOOL CTX === " + ctx.getContext());
 
         Integer userId = (Integer) ctx.getContext().get("userId");
-        AuthDTO werknemer = Sessie.getInstance().getIngelogdeWerknemer();
+        WerknemerResponseDTO werknemer = werknemerService.getByID(userId);
         Date date = new Date();
         if (werknemer == null) {
             return "er ging iets grondig mis, user niet ingelogd.";

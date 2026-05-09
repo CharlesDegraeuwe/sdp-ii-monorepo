@@ -2,7 +2,6 @@ package hogent.sdp2.backend.WebSocket.tools;
 
 import hogent.sdp2.backend.REST.dto.request.TaakResponseDTO;
 import hogent.sdp2.backend.REST.service.taken.TakenService;
-import hogent.sdp2.backend.auth.Sessie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;

@@ -69,6 +69,7 @@
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/REST/service/werknemer/CustomUserDetailsService.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/REST/service/werknemer/WerknemerService.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/ChatHandler.java
+/Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/ChatMemoryConfig.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/ChatService.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/JwtHandshakeInterceptor.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/WebSocketConfig.java
@@ -76,9 +77,10 @@
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/dto/OutGoingMsgDTO.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/tools/AfwezigheidTools.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/tools/PlanningTools.java
-/Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/tools/TaakTools.java
+/Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/tools/TakenTools.java
+/Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/WebSocket/tools/UserTools.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/auth/JwtService.java
-/Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/auth/Sessie.java
+/Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/auth/SessieService.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/config/JwtAuthenticationFilter.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/config/SecurityConfig.java
 /Users/charlesdegreauwe/IdeaProjects/2026-backend-g01/src/main/java/hogent/sdp2/backend/domain/Afwezigheid.java

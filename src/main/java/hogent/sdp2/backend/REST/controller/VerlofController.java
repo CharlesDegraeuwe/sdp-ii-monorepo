@@ -3,6 +3,7 @@ package hogent.sdp2.backend.REST.controller;
 import hogent.sdp2.backend.REST.dto.request.VerlofAanvragenDTO;
 import hogent.sdp2.backend.REST.service.afwezigheid.VerlofService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,11 +23,13 @@ public class VerlofController {
         return verlofService.geefVerlofStatus(verlofId);
     }
 
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'Supervisor')")
     @PutMapping("/{verlofId}/goedkeuren")
     public String keurVerlofGoed(@PathVariable Integer verlofId) {
         return verlofService.keurVerlofGoed(verlofId);
     }
 
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'Supervisor')")
     @PutMapping("/{verlofId}/afwijzen")
     public String wijsVerlofAf(@PathVariable Integer verlofId) {
         return verlofService.wijsVerlofAf(verlofId);

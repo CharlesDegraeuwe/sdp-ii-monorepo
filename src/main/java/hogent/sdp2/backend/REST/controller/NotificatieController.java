@@ -2,6 +2,7 @@ package hogent.sdp2.backend.REST.controller;
 
 import hogent.sdp2.backend.REST.dto.request.NotificatieDTO;
 import hogent.sdp2.backend.REST.service.notificatie.NotificatieService;
+import hogent.sdp2.backend.auth.SessieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,14 +14,17 @@ import java.util.List;
 public class NotificatieController {
 
     private final NotificatieService notificatieService;
+    private final SessieService sessieService;
 
     @GetMapping("/{werknemerId}")
     public List<NotificatieDTO> geefNotificaties(@PathVariable Integer werknemerId) {
+        sessieService.assertToegangTotWerknemer(werknemerId);
         return notificatieService.geefNotificatiesVanWerknemer(werknemerId);
     }
 
     @GetMapping("/{werknemerId}/ongelezen")
     public long geefAantalOngelezen(@PathVariable Integer werknemerId) {
+        sessieService.assertToegangTotWerknemer(werknemerId);
         return notificatieService.geefAantalOngelezenNotificaties(werknemerId);
     }
 

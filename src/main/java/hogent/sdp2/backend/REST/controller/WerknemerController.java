@@ -3,9 +3,11 @@ package hogent.sdp2.backend.REST.controller;
 import hogent.sdp2.backend.REST.dto.request.*;
 import hogent.sdp2.backend.REST.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.REST.service.werknemer.WerknemerService;
+import hogent.sdp2.backend.auth.SessieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class WerknemerController {
 
     private final WerknemerService werknemerService;
+    private final SessieService sessieService;
 
 
     @PostMapping("/login-mail")
@@ -51,17 +54,27 @@ public class WerknemerController {
         return ResponseEntity.ok(werknemerService.resetWachtwoord(dto));
     }
 
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PostMapping
     public ResponseEntity<String> createWerknemer(@RequestBody WerknemerAanmakenDTO dto) {
+        // Alleen admins mogen Admin/Manager rollen aanmaken
+        if (("Admin".equals(dto.rol()) || "Manager".equals(dto.rol())) && !sessieService.isAdmin()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Alleen admins mogen admins of managers aanmaken");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(werknemerService.maakWerknemer(dto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<WerknemerResponseDTO> update(@PathVariable Integer id, @RequestBody UpdateUserDTO dto) {
+        // Admin/Manager mag iedereen updaten, anders alleen jezelf
+        if (!sessieService.isAdminOfManager() && !sessieService.getIngelogdeWerknemerId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(werknemerService.updateUser(dto));
     }
 
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping()
     public ResponseEntity<List<WerknemerResponseDTO>> getAlleUsers() {
         return ResponseEntity.ok(werknemerService.getAlleUsers());
@@ -69,11 +82,19 @@ public class WerknemerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<WerknemerResponseDTO> getById(@PathVariable Integer id) {
+        sessieService.assertToegangTotWerknemer(id);
         return ResponseEntity.ok(werknemerService.getByID(id));
     }
 
     @GetMapping("/email/{email}")
     public ResponseEntity<WerknemerResponseDTO> getByEmail(@PathVariable String email) {
+        // Admin/Manager mag iedereen opzoeken, anders alleen jezelf
+        if (!sessieService.isAdminOfManager()) {
+            String ingelogdeEmail = sessieService.getIngelogdeWerknemer().getEmail();
+            if (!ingelogdeEmail.equals(email)) {
+                sessieService.assertAdminOfManager(); // gooit AccessDeniedException
+            }
+        }
         return ResponseEntity.ok(werknemerService.getByEmail(email));
     }
 }

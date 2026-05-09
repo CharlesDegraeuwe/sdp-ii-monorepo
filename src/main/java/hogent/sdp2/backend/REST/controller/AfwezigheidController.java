@@ -4,6 +4,7 @@ import hogent.sdp2.backend.REST.dto.request.AfwezigheidAanmakenDTO;
 import hogent.sdp2.backend.REST.dto.response.AfwezigheidsOverzichtDTO;
 import hogent.sdp2.backend.REST.service.afwezigheid.AfwezigheidService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class AfwezigheidController {
 
     private final AfwezigheidService afwezigheidService;
 
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping
     public List<AfwezigheidsOverzichtDTO> getAlleAfwezigheden() {
         return afwezigheidService.getAlleAfwezigheden();
