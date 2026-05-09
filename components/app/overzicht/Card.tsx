@@ -16,6 +16,8 @@ export function Card({
 
 export function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-sm font-bold text-zinc-600 px-1">{children}</span>
+    <span className="text-xs font-bold text-zinc-500 px-1 uppercase tracking-wide">
+      {children}
+    </span>
   );
 }

@@ -20,7 +20,7 @@ function KalenderGrid({ afwezigheden }: { afwezigheden: Afwezigheid[] }) {
   while (cellen.length % 7 !== 0) cellen.push(null);
 
   return (
-    <div className="flex flex-col gap-1 p-4 h-full">
+    <div className="flex flex-col gap-1 p-2.5 h-full">
       <span className="text-xs font-bold text-zinc-500 capitalize mb-1">
         {MAANDEN[vandaag.getMonth()]} {vandaag.getFullYear()}
       </span>
@@ -71,7 +71,7 @@ export function MiniKalender({
   afwezigheden: Afwezigheid[];
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       <SectionTitle>Kalender</SectionTitle>
       <Card className="h-[230px]">
         <KalenderGrid afwezigheden={afwezigheden} />

@@ -11,7 +11,8 @@ import { LocatieInfo } from './LocatieInfo';
 import { useOverzichtData } from '@/hooks/useOverzichtData';
 
 export default function OverzichtClient() {
-  const { afwezigheden, notificaties } = useOverzichtData();
+  const { afwezigheden, notificaties, taken, refreshNotificaties } =
+    useOverzichtData();
 
   const vandaag = new Date();
   const afwezigVandaag = afwezighedenOpDag(afwezigheden, vandaag);
@@ -21,22 +22,25 @@ export default function OverzichtClient() {
   ).length;
 
   return (
-    <div className="flex flex-row gap-4 w-full h-full p-4 overflow-hidden">
-      <div className="flex flex-col gap-4 flex-1 min-w-0 overflow-hidden">
+    <div className="flex flex-row gap-3 w-full h-full p-3 overflow-hidden">
+      <div className="flex flex-col gap-3 flex-1 min-w-0 overflow-hidden scroll-hidden">
         <SnelleActies />
         <GeplandUren afwezigheden={afwezigheden} />
       </div>
 
-      <div className="flex flex-col gap-4 flex-1 min-w-0 overflow-hidden">
+      <div className="flex flex-col gap-3 flex-1 min-w-0 overflow-hidden scroll-hidden">
         {/* Rij 1: Kalender + Notificaties */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <MiniKalender afwezigheden={afwezigheden} />
-          <NotificatiesWidget notificaties={notificaties} />
+          <NotificatiesWidget
+            notificaties={notificaties}
+            onRefresh={refreshNotificaties}
+          />
         </div>
 
         {/* Rij 2: Open Taken + Afwezigheden */}
-        <div className="grid grid-cols-2 gap-4">
-          <OpenTaken inAfwachting={inAfwachting} />
+        <div className="grid grid-cols-2 gap-3">
+          <OpenTaken taken={taken} />
           <AfwezighedenWidget
             afwezigVandaag={afwezigVandaag}
             inAfwachting={inAfwachting}

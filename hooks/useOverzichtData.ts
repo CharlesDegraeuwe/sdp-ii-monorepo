@@ -1,9 +1,11 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Afwezigheid } from '../components/app/planner/types';
 import type { Notificatie } from '../components/app/overzicht/types';
+import type { Task } from '../stores/taakStore';
+import { mapBackendTask } from '../lib/taakMapper';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
 
@@ -14,10 +16,24 @@ export function useOverzichtData() {
 
   const [afwezigheden, setAfwezigheden] = useState<Afwezigheid[]>([]);
   const [notificaties, setNotificaties] = useState<Notificatie[]>([]);
+  const [taken, setTaken] = useState<Task[]>([]);
 
   const authHeader = useMemo(
-    () => ({ Authorization: `Bearer ${token}` }),
+    () => ({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }),
     [token],
+  );
+
+  const laadNotificaties = useCallback(
+    async (userId: string) => {
+      const res = await fetch(`${BASE}/notificaties/${userId}`, {
+        headers: authHeader,
+      });
+      if (res.ok) setNotificaties(await res.json());
+    },
+    [authHeader],
   );
 
   useEffect(() => {
@@ -33,21 +49,33 @@ export function useOverzichtData() {
 
     async function laadData() {
       try {
-        const [planRes, notifRes] = await Promise.all([
+        const [planRes, takenRes] = await Promise.all([
           fetch(`${BASE}/planning/team/${user!.id}?van=${van}&tot=${tot}`, {
             headers: authHeader,
           }),
-          fetch(`${BASE}/notificaties/${user!.id}`, { headers: authHeader }),
+          fetch(`${BASE}/taken/werknemer/${user!.id}`, { headers: authHeader }),
         ]);
+
         if (planRes.ok) setAfwezigheden(await planRes.json());
-        if (notifRes.ok) setNotificaties(await notifRes.json());
+
+        if (takenRes.ok) {
+          const data: Record<string, unknown>[] = await takenRes.json();
+          setTaken(data.map(mapBackendTask).filter((t) => !t.finished));
+        }
+
+        await laadNotificaties(user!.id);
       } catch {
-        // silent fail
+        // Verbindingsfout — pagina toont lege staat
       }
     }
 
     laadData();
-  }, [user?.id, authHeader, user]);
+  }, [user?.id, authHeader, user, laadNotificaties]);
 
-  return { afwezigheden, notificaties };
+  function refreshNotificaties() {
+    if (!user?.id) return;
+    laadNotificaties(user.id).catch(() => {});
+  }
+
+  return { afwezigheden, notificaties, taken, refreshNotificaties };
 }

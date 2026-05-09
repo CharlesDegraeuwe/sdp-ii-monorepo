@@ -36,17 +36,17 @@ const acties = [
 
 export function SnelleActies() {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       <SectionTitle>Snelle Acties</SectionTitle>
-      <Card className="p-4">
-        <div className="grid grid-cols-2 gap-2.5">
+      <Card className="p-2.5">
+        <div className="grid grid-cols-2 gap-1.5">
           {acties.map((actie) => (
             <Link
               href={actie.href}
               key={actie.label}
               label={actie.label}
               icon={actie.icon}
-              rounded={'2xl'}
+              rounded={'xl'}
             />
           ))}
         </div>

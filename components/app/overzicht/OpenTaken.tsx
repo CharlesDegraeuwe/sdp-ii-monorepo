@@ -1,42 +1,95 @@
-import type { Afwezigheid } from '../planner/types';
-import { Card } from './Card';
+'use client';
+
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import type { Task } from '@/stores/taakStore';
+import { Label } from '@/components/design-system/Label';
+import { Card, SectionTitle } from './Card';
 
 interface OpenTakenProps {
-  inAfwachting: Afwezigheid[];
+  taken: Task[];
 }
 
-export function OpenTaken({ inAfwachting }: OpenTakenProps) {
+function formatDeadline(dueDate: string) {
+  const d = new Date(dueDate);
+  return d.toLocaleDateString('nl-BE', { day: 'numeric', month: 'short' });
+}
+
+export function OpenTaken({ taken }: OpenTakenProps) {
+  const router = useRouter();
+  const openTaken = taken.filter((t) => !t.finished);
+
   return (
-    <Card className="p-4">
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-bold text-zinc-500 uppercase tracking-wide">
-          Open Taken
-        </span>
-        <div className="flex flex-col gap-1.5 mt-1">
-          {inAfwachting.length === 0 ? (
-            <p className="text-xs text-zinc-400">Geen openstaande taken.</p>
-          ) : (
-            inAfwachting.slice(0, 4).map((a, i) => (
-              <div
-                key={i}
-                className="flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50/60 border border-amber-100"
-              >
-                <span className="text-xs font-semibold text-zinc-700 truncate">
-                  {a.voornaam} {a.naam}
-                </span>
-                <span className="text-[10px] font-bold text-amber-600 ml-2 flex-shrink-0">
-                  Verlof
-                </span>
-              </div>
-            ))
-          )}
-          {inAfwachting.length > 4 && (
-            <span className="text-[10px] text-zinc-400 font-bold text-center">
-              + {inAfwachting.length - 4} meer
-            </span>
-          )}
-        </div>
+    <div className="flex flex-col gap-1 self-start">
+      <div className="flex items-center justify-between px-1">
+        <SectionTitle>Open Taken</SectionTitle>
+        {openTaken.length > 0 && (
+          <span className="text-[10px] font-bold text-zinc-400">
+            {openTaken.length} open
+          </span>
+        )}
       </div>
-    </Card>
+
+      <div
+        onClick={() => router.push('/taken')}
+        className="cursor-pointer self-start w-full"
+      >
+        <Card>
+          <div className="flex flex-col">
+            {/* Scrollbare lijst — overflow beheerd op dit niveau, niet op Card */}
+            <div className="max-h-[160px] overflow-y-auto scroll-hidden flex flex-col gap-1 p-2.5 rounded-t-3xl">
+              {openTaken.length === 0 && (
+                <div className="flex items-center justify-center py-4">
+                  <Label text="Geen openstaande taken." variant="emptystate" />
+                </div>
+              )}
+
+              {openTaken.map((taak) => (
+                <NextLink
+                  key={taak.id}
+                  href={`/taken?taakId=${taak.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className={`flex items-center gap-2 px-2.5 py-2 rounded-xl border transition-all duration-200 hover:brightness-95
+                  ${
+                    taak.important
+                      ? 'border-red-200/60 bg-red-50/60'
+                      : 'border-gray-300/40 bg-white/40'
+                  }`}
+                >
+                  {/* Prioriteitsindicator */}
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${taak.important ? 'bg-red-400' : 'bg-zinc-300'}`}
+                  />
+
+                  <div className="flex-1 min-w-0">
+                    <span
+                      className={`text-[11px] font-bold truncate block ${taak.important ? 'text-red-700' : 'text-zinc-800'}`}
+                    >
+                      {taak.name}
+                    </span>
+                    <span className="text-[9px] text-zinc-400">
+                      {taak.location}
+                    </span>
+                  </div>
+
+                  <span
+                    className={`text-[9px] font-bold flex-shrink-0 ${taak.important ? 'text-red-400' : 'text-zinc-400'}`}
+                  >
+                    {formatDeadline(taak.dueDate)}
+                  </span>
+                </NextLink>
+              ))}
+            </div>
+
+            {/* Vaste footer — rounded-b-3xl zodat de onderste hoeken van de Card vrij blijven */}
+            <div className="border-t border-gray-300/30 py-2 flex items-center justify-center pointer-events-none rounded-b-3xl">
+              <span className="text-[10px] font-bold text-zinc-400">
+                Bekijk alle taken
+              </span>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
   );
 }

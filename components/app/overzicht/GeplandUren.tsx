@@ -15,10 +15,10 @@ export function GeplandUren({ afwezigheden }: GeplandUrenProps) {
   });
 
   return (
-    <div className="flex flex-col gap-2 flex-1 min-h-0">
+    <div className="flex flex-col gap-1 flex-1 min-h-0">
       <SectionTitle>Geplande Uren</SectionTitle>
       <Card className="flex-1 overflow-hidden">
-        <div className="flex flex-col gap-2 p-4 h-full overflow-y-auto">
+        <div className="flex flex-col gap-1.5 p-2.5 h-full overflow-y-auto scroll-hidden">
           {komendeDagen.map((dag, i) => {
             const opDag = afwezighedenOpDag(afwezigheden, dag);
             const dagNaam = dag.toLocaleDateString('nl-BE', {
@@ -33,7 +33,7 @@ export function GeplandUren({ afwezigheden }: GeplandUrenProps) {
             return (
               <div
                 key={i}
-                className={`flex flex-col gap-1.5 px-3 py-2.5 rounded-2xl border transition-all duration-200
+                className={`flex flex-col gap-1.5 px-3 py-2.5 rounded-xl border transition-all duration-200
                   ${isVandaag(dag) ? 'border-zinc-900 bg-bg-white' : 'border-gray-300/40 bg-bg-white/30'}
                   ${weekend ? 'opacity-50' : ''}`}
               >
