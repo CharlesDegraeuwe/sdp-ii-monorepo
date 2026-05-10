@@ -2,14 +2,16 @@
 import { useState } from 'react';
 import { Container } from '@/components/design-system/Container';
 import { Button } from '@/components/design-system/Button';
-import { useTeamsStore } from '@/stores/teamStore';
 import EmployeeModal from '@/components/app/team/Modal/EmployeeModal';
 import { IoIosAdd } from 'react-icons/io';
 import { EmployeeList } from '@/components/app/team/UserCheckView/components/EmployeeList';
 import { EmployeeDetails } from '@/components/app/team/UserCheckView/components/EmployeeDetails';
 
-const UsersOverview = () => {
-  const selectedWerknemerId = useTeamsStore((s) => s.selectedWerknemerId);
+type Props = {
+  selectedWerknemerId?: number | null;
+};
+
+const UsersOverview = ({ selectedWerknemerId = null }: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -29,7 +31,7 @@ const UsersOverview = () => {
 
       <div className="w-full grid grid-cols-2 gap-5 min-h-full">
         <Container label="Werknemers" height="full" padding="0">
-          <EmployeeList />
+          <EmployeeList selectedWerknemerId={selectedWerknemerId} />
         </Container>
 
         <Container label="Details" height="full">

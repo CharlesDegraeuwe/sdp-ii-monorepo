@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import { HiOutlineUserGroup } from 'react-icons/hi2';
 import { useTeamsStore, Werknemer } from '@/stores/teamStore';
 
@@ -6,6 +7,7 @@ type Props = {
 };
 
 export const EmployeeTeamInfo = ({ employee }: Props) => {
+  const router = useRouter();
   const team = useTeamsStore((s) =>
     employee.siteId
       ? Object.values(s.teams).find((t) => t.siteId === employee.siteId)
@@ -16,7 +18,10 @@ export const EmployeeTeamInfo = ({ employee }: Props) => {
 
   return (
     <div className="flex justify-between items-center">
-      <span className="flex items-center gap-2 text-zinc-600">
+      <span
+        onClick={() => router.push(`/teams/${team.id}`)}
+        className="flex items-center gap-2 text-zinc-600 cursor-pointer hover:text-zinc-900 transition"
+      >
         <HiOutlineUserGroup className="w-4 h-4" />
         {team.naam}
         {employee.role !== 'Werknemer' && (

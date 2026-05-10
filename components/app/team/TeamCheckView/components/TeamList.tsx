@@ -1,17 +1,20 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from '@/components/design-system/Input';
 import { Label } from '@/components/design-system/Label';
-import { useTeamsStore } from '@/stores/teamStore';
 
 import { TeamListItem } from './TeamListItem';
 import { useFilteredTeams } from '@/hooks/useFilteredTeams';
 
-export const TeamList = () => {
+type Props = {
+  selectedTeamId?: number | null;
+};
+
+export const TeamList = ({ selectedTeamId = null }: Props) => {
   const [search, setSearch] = useState('');
   const filtered = useFilteredTeams(search);
-  const selectedTeamId = useTeamsStore((s) => s.selectedTeamId);
-  const selectTeam = useTeamsStore((s) => s.selectTeam);
+  const router = useRouter();
 
   return (
     <div className="flex flex-col gap-3">
@@ -34,7 +37,7 @@ export const TeamList = () => {
                 key={t.id}
                 team={t}
                 active={selectedTeamId === t.id}
-                onClick={() => selectTeam(t.id)}
+                onClick={() => router.push(`/teams/${t.id}`)}
               />
             ))
           )}

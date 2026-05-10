@@ -1,16 +1,19 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from '@/components/design-system/Input';
 import { Label } from '@/components/design-system/Label';
-import { useTeamsStore } from '@/stores/teamStore';
 import { EmployeeListItem } from './EmployeeListItem';
 import { useFilteredWerknemers } from '@/hooks/useFilteredWerknemers';
 
-export const EmployeeList = () => {
+type Props = {
+  selectedWerknemerId?: number | null;
+};
+
+export const EmployeeList = ({ selectedWerknemerId = null }: Props) => {
   const [search, setSearch] = useState('');
   const filtered = useFilteredWerknemers(search);
-  const selectedWerknemerId = useTeamsStore((s) => s.selectedWerknemerId);
-  const selectWerknemer = useTeamsStore((s) => s.selectWerknemer);
+  const router = useRouter();
 
   return (
     <div className="flex flex-col gap-3">
@@ -33,7 +36,7 @@ export const EmployeeList = () => {
                 key={e.id}
                 werknemer={e}
                 active={selectedWerknemerId === e.id}
-                onClick={() => selectWerknemer(e.id)}
+                onClick={() => router.push(`/teams/werknemers/${e.id}`)}
               />
             ))
           )}
