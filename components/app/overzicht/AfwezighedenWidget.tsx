@@ -1,6 +1,6 @@
 import type { Afwezigheid } from '../planner/types';
 import { badgeKleur, afwezigheidLabel } from '../planner/utils';
-import { Card, SectionTitle } from './Card';
+import { Container } from '@/components/design-system/Container';
 
 interface AfwezighedenWidgetProps {
   afwezigVandaag: Afwezigheid[];
@@ -14,10 +14,12 @@ export function AfwezighedenWidget({
   aantalOngelezen,
 }: AfwezighedenWidgetProps) {
   return (
-    <div className="flex flex-col gap-1">
-      <SectionTitle>Afwezigheden Vandaag</SectionTitle>
-      <Card className="p-2.5">
-        <div className="flex flex-col gap-1.5">
+    <Container
+      indent={true}
+      className="col-start-4 col-end-5 row-start-3 row-end-4"
+    >
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5 mt-1">
           {afwezigVandaag.length === 0 ? (
             <p className="text-xs text-zinc-400 px-1 py-0.5">
               Niemand afwezig vandaag.
@@ -66,7 +68,7 @@ export function AfwezighedenWidget({
             <p className="text-[10px] text-zinc-400">Ongelezen</p>
           </div>
         </div>
-      </Card>
-    </div>
+      </div>
+    </Container>
   );
 }

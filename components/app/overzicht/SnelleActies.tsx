@@ -4,8 +4,8 @@ import {
   MdOutlineCalendarMonth,
   MdOutlineWarningAmber,
 } from 'react-icons/md';
-import { Card, SectionTitle } from './Card';
 import Link from '@/components/design-system/Link/Link';
+import { Container } from '@/components/design-system/Container';
 
 const acties = [
   {

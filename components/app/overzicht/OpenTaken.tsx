@@ -20,21 +20,16 @@ export function OpenTaken({ taken }: OpenTakenProps) {
   const openTaken = taken.filter((t) => !t.finished);
 
   return (
-    <div className="flex flex-col gap-1 self-start">
-      <div className="flex items-center justify-between px-1">
-        <SectionTitle>Open Taken</SectionTitle>
+    <Container
+       onClick={() => router.push('/taken')}
+      label={'Snelle statistieken:'}
+      className="col-start-3 col-end-4 row-start-3 row-end-4"
+    >
         {openTaken.length > 0 && (
           <span className="text-[10px] font-bold text-zinc-400">
             {openTaken.length} open
           </span>
         )}
-      </div>
-
-      <div
-        onClick={() => router.push('/taken')}
-        className="cursor-pointer self-start w-full"
-      >
-        <Card>
           <div className="flex flex-col">
             {/* Scrollbare lijst — overflow beheerd op dit niveau, niet op Card */}
             <div className="max-h-[160px] overflow-y-auto scroll-hidden flex flex-col gap-1 p-2.5 rounded-t-3xl">
@@ -88,8 +83,6 @@ export function OpenTaken({ taken }: OpenTakenProps) {
               </span>
             </div>
           </div>
-        </Card>
-      </div>
-    </div>
+</Container>
   );
 }

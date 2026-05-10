@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import NextLink from 'next/link';
 import type { Notificatie } from './types';
-import { Card, SectionTitle } from './Card';
+import { Container } from '@/components/design-system/Container';
 
 interface NotificatiesWidgetProps {
   notificaties: Notificatie[];
@@ -109,17 +109,16 @@ export function NotificatiesWidget({
   }
 
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between px-1">
-        <SectionTitle>Notificaties</SectionTitle>
+    <Container
+      label={'Notificaties'}
+      className="col-start-4 col-end-5 row-start-1 row-end-3"
+    >
         {aantalOngelezen > 0 && (
           <span className="text-[10px] font-bold bg-[var(--color-delaware_red)] text-white rounded-full px-2 py-0.5 leading-none">
             {aantalOngelezen}
           </span>
         )}
-      </div>
 
-      <Card className="h-[230px] overflow-hidden">
         <div className="flex flex-col h-full">
           {/* Scrollbare lijst */}
           <div className="flex-1 min-h-0 overflow-y-auto scroll-hidden flex flex-col gap-1 p-2.5">
@@ -216,7 +215,6 @@ export function NotificatiesWidget({
             )}
           </NextLink>
         </div>
-      </Card>
-    </div>
+      </Container>
   );
 }
