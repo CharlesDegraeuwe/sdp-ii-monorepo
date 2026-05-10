@@ -1,10 +1,10 @@
 'use client';
 import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
 import { useState } from 'react';
-import TeamsOverview from './TeamCheckView/TeamsOverview';
+import TeamsOverview from './TeamCheckView/components/TeamsOverview';
 import CreateTeamForm from './TeamCreateView/CreateTeamForm';
 import { useTeamsData } from '@/hooks/useTeamData';
-import UsersOverview from '@/components/app/team/TeamCheckView/UserOverview';
+import UsersOverview from '@/components/app/team/UserCheckView/UserOverview';
 
 type Mode = 'check' | 'creëer';
 type Scope = 'teams' | 'users';

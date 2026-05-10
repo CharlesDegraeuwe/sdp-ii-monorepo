@@ -1,5 +1,6 @@
 import FileItem from '@/components/app/chat/FileItem';
 import { MdOutlineReplay } from 'react-icons/md';
+import ReactMarkdown from 'react-markdown';
 
 interface Chat {
   id: string;
@@ -28,7 +29,7 @@ const ChatMessage = (props: ChatMessageProps) => {
           <div
             className={`w-fit px-4 min-w-fit py-2 rounded-3xl bg-zinc-900 text-white`}
           >
-            <p>{message.content}</p>
+            {message.content}
           </div>
           <span className={'w-full text-xs text-zinc-400 text-end px-4'}>
             {hour}
@@ -43,7 +44,7 @@ const ChatMessage = (props: ChatMessageProps) => {
       <div className="flex flex-col items-start gap-1 max-w-[80%]">
         <div className="w-fit px-1 py-2 text-zinc-900">
           <p className="whitespace-pre-wrap">
-            {message.content}
+            <ReactMarkdown>{message.content}</ReactMarkdown>
             {message.content === '' && (
               <span className="inline-block w-4 h-4 bg-zinc-400 rounded-full align-middle animate-pulse ml-0.5" />
             )}

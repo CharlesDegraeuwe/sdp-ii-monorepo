@@ -19,6 +19,7 @@ type ChatInputProps = Omit<
   textareaRef?: React.RefObject<HTMLTextAreaElement | null>;
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  isReceiving: boolean;
 };
 
 const ChatInput = ({
@@ -30,6 +31,7 @@ const ChatInput = ({
   autoFocus,
   files,
   setFiles,
+  isReceiving,
   ...props
 }: ChatInputProps) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -176,7 +178,7 @@ const ChatInput = ({
             onClick={() => fileInputRef.current?.click()}
           />
           <Button
-            disabled={!isUploaded}
+            disabled={!isUploaded || isReceiving}
             px={'px-0'}
             icon={<LuSend size={14} />}
             variant={'submit'}
