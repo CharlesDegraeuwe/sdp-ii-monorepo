@@ -22,9 +22,10 @@ const variantMap = {
   secondary: 'bg-blue-600 text-white py-3 ',
   outline: 'border border-gray-300 text-black py-3 ',
   prompt: 'border border-zinc-300 text-zinc-500 py-2 px-2',
-  ghost: 'text-zinc-500 py-2 px-2',
+  ghost:
+    'text-zinc-500 py-2 px-2 hover:bg-gray-200 transition-colors duration-200',
   submit:
-    'bg-rose-500 text-white py-1 px-3 p-0 min-h-full rounded-xl max-w-fit',
+    'bg-rose-500 text-white py-1 px-3 p-0 min-h-full rounded-xl max-w-fit disabled:cursor-not-allowed disabled:active:scale-100',
 } as const;
 
 const gradientMap = {

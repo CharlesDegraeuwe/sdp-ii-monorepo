@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type Role = 'employee' | 'supervisor' | 'manager';
+export type Role = 'Werknemer' | 'Supervisor' | 'Manager';
 export type Status = 'Actief' | 'Geblokkeerd' | 'Inactief';
 
 export interface Werknemer {
