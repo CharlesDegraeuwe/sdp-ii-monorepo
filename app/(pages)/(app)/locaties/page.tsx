@@ -6,7 +6,7 @@ import GoogleMaps from '@/components/app/locaties/googlemaps';
 import { SiteList } from '@/components/app/locaties/SiteList';
 import { SiteDetail } from '@/components/app/locaties/SiteDetail';
 import { Machine, Site, Team } from '@/types/types';
-import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
 
 export default function Page() {
   const [sites, setSites] = useState<Site[]>([]);

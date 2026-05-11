@@ -46,13 +46,16 @@ export default function GoogleMaps(props: GoogleMapsProps) {
   useEffect(() => {
     if (!isLoaded || sites.length === 0) return;
 
+    let cancelled = false;
     const geocoder = new window.google.maps.Geocoder();
 
     const fetchCoordinates = async () => {
       const resolvedMarkers = await Promise.all(
         sites.map((site) => {
           return new Promise<MarkerData | null>((resolve) => {
+            const timeout = setTimeout(() => resolve(null), 5000);
             geocoder.geocode({ address: site.locatie }, (results, status) => {
+              clearTimeout(timeout);
               if (status === 'OK' && results && results[0]) {
                 resolve({ ...site, position: results[0].geometry.location });
               } else {
@@ -63,10 +66,15 @@ export default function GoogleMaps(props: GoogleMapsProps) {
           });
         }),
       );
-      setMarkers(resolvedMarkers.filter((m): m is MarkerData => m !== null));
+      if (!cancelled) {
+        setMarkers(resolvedMarkers.filter((m): m is MarkerData => m !== null));
+      }
     };
 
     fetchCoordinates();
+    return () => {
+      cancelled = true;
+    };
   }, [isLoaded, sites]);
 
   useEffect(() => {

@@ -15,7 +15,7 @@ import type {
 } from '../../../../components/app/planner/types';
 import { getPeriodBounds } from '../../../../components/app/planner/utils';
 import { PageContainer } from '@/components/design-system/PageContainer';
-import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
 import {
   PlannerToolbar,
   type Tab,

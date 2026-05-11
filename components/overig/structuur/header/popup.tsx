@@ -1,6 +1,6 @@
 'use client';
 
-import { PopupProps } from '@/components/app/structuur/header/popupprops';
+import { PopupProps } from '@/components/overig/structuur/header/popupprops';
 import { IoServerOutline } from 'react-icons/io5';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';

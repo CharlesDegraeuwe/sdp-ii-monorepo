@@ -10,7 +10,7 @@ import {
   MdAdminPanelSettings,
 } from 'react-icons/md';
 import { usePathname } from 'next/navigation';
-import SidebarItem from '@/components/app/structuur/sidebar/sidebarItem';
+import SidebarItem from '@/components/overig/structuur/sidebar/sidebarItem';
 import Image from 'next/image';
 import { IoCalendarOutline } from 'react-icons/io5';
 import { RiChatAiLine } from 'react-icons/ri';
@@ -43,7 +43,7 @@ const links = [
     role: ['Admin', 'Manager', 'Supervisor'],
   },
   {
-    url: 'afwezigheden',
+    url: 'afwezigheden/melden',
     title: 'afwezigheden',
     icon: <MdOutlineCancel size={20} />,
     role: ['Admin', 'Manager', 'Supervisor', 'Werknemer'],

@@ -13,17 +13,19 @@ const Input = ({
 }: InputProps) => {
   const [show, setShow] = React.useState(false);
   const toggleShow = () => setShow((prev) => !prev);
+  const dateInputRef = React.useRef<HTMLInputElement>(null);
+
   if (type === 'password') {
     return (
       <div>
         {label && (
-          <label htmlFor={id} className={' text-zinc-400 text-sm px-3'}>
+          <label htmlFor={id} className={'text-zinc-400 text-sm px-3'}>
             {label}
           </label>
         )}
         <div
           className={
-            'w-full rounded-full flex flex-row items-center focus-within:border-gray-700/30 justify-between outline-none ring-0 border border-gray-300/30  px-5 bg-gray-300/30 shadow-inner'
+            'w-full rounded-full flex flex-row items-center focus-within:border-gray-700/30 justify-between outline-none ring-0 border border-gray-300/30 px-5 bg-gray-300/30 shadow-inner'
           }
         >
           <input
@@ -51,10 +53,48 @@ const Input = ({
       </div>
     );
   }
+
+  if (type === 'date') {
+    return (
+      <div>
+        {label && (
+          <label htmlFor={id} className={'text-zinc-400 text-sm px-3'}>
+            {label}
+          </label>
+        )}
+        <div
+          className={
+            'w-full rounded-full flex flex-row items-center focus-within:border-gray-700/30 justify-between outline-none ring-0 border border-gray-300/30 px-5 bg-gray-300/30 shadow-inner'
+          }
+        >
+          <input
+            ref={dateInputRef}
+            className={
+              'w-full outline-none ring-0 py-3 bg-transparent [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
+            }
+            type={'date'}
+            id={id}
+            autoComplete={'off'}
+            {...props}
+          />
+        </div>
+        {errorOption && (
+          <div className={'w-full h-7 items-end flex'}>
+            {error && (
+              <span className={'text-rose-600 text-sm w-fit max-w-1/2'}>
+                {error}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div>
       {label && (
-        <label htmlFor={id} className={' text-zinc-400 text-sm px-3'}>
+        <label htmlFor={id} className={'text-zinc-400 text-sm px-3'}>
           {label}
         </label>
       )}
