@@ -59,7 +59,7 @@ const EmployeeModal = ({ onClose }: Props) => {
                   variant={'ghost'}
                   type={'button'}
                   onClick={onClose}
-                  px={0}
+                  px={'px-0'}
                 />
               </div>
 

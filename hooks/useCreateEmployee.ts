@@ -16,7 +16,7 @@ export const useCreateEmployee = () => {
       id: tempId,
       siteId: 0,
       siteNaam: '',
-      role: 'employee',
+      role: 'Werknemer',
       status: 'Actief',
     };
     addWerknemer(optimistic);
