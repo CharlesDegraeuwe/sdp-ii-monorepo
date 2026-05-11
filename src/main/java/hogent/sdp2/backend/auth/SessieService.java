@@ -1,8 +1,7 @@
 package hogent.sdp2.backend.auth;
 
-import hogent.sdp2.backend.REST.repository.TeamwerknemerRepository;
-import hogent.sdp2.backend.REST.repository.WerknemerRepository;
-import hogent.sdp2.backend.domain.Teamwerknemer;
+import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
+import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.domain.Werknemer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -10,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -104,14 +102,23 @@ public class SessieService {
 
     /**
      * Controleert of de ingelogde gebruiker toegang heeft tot de data van een specifieke werknemer.
-     * Admin/Manager: altijd toegang
+     * Admin: altijd toegang
+     * Manager: toegang behalve tot andere managers (tenzij admin)
      * Supervisor: alleen als ze in hetzelfde team zitten
      * Werknemer: alleen eigen data
      */
     public void assertToegangTotWerknemer(Integer werknemerId) {
-        if (isAdminOfManager()) return;
         Werknemer ingelogd = getIngelogdeWerknemer();
         if (ingelogd.getId().equals(werknemerId)) return;
+        if (isAdmin()) return;
+        if ("Manager".equals(ingelogd.getRol())) {
+            Werknemer doelWerknemer = werknemerRepository.findById(werknemerId)
+                    .orElseThrow(() -> new AccessDeniedException("Werknemer niet gevonden"));
+            if ("Manager".equals(doelWerknemer.getRol()) || "Admin".equals(doelWerknemer.getRol())) {
+                throw new AccessDeniedException("Managers hebben geen toegang tot andere managers of admins");
+            }
+            return;
+        }
         if (isSupervisor() && isInZelfdeTeam(werknemerId)) return;
         throw new AccessDeniedException("Geen toegang tot deze werknemer");
     }
@@ -143,5 +150,51 @@ public class SessieService {
         if (!isAdmin()) {
             throw new AccessDeniedException("Alleen admins hebben toegang");
         }
+    }
+
+    /**
+     * Controleert of de ingelogde gebruiker supervisor is van de opgegeven werknemer.
+     * D.w.z. de ingelogde gebruiker is supervisor in een team waar de werknemer ook lid van is.
+     */
+    public boolean isSupervisorVanWerknemer(Integer werknemerId) {
+        if (!isSupervisor()) return false;
+        Integer ingelogdId = getIngelogdeWerknemerId();
+        return teamwerknemerRepository.findByWerknemerId(ingelogdId).stream()
+                .filter(tw -> tw.getIsSupervisor())
+                .anyMatch(tw -> teamwerknemerRepository.existsByTeamIdAndWerknemerId(tw.getTeam().getId(), werknemerId));
+    }
+
+    /**
+     * Controleert of de ingelogde gebruiker verlof/afwezigheid mag goedkeuren voor een werknemer.
+     * Admin: altijd
+     * Manager: altijd behalve voor andere managers (hun verlof moet door een andere manager goedgekeurd worden)
+     * Supervisor: alleen voor teamleden waar ze supervisor van zijn
+     */
+    public void assertMagGoedkeuren(Integer werknemerId) {
+        if (isAdmin()) return;
+        Werknemer ingelogd = getIngelogdeWerknemer();
+        if ("Manager".equals(ingelogd.getRol())) {
+            // Managers mogen niet hun eigen verlof goedkeuren
+            if (ingelogd.getId().equals(werknemerId)) {
+                throw new AccessDeniedException("Je kunt je eigen verlof niet goedkeuren");
+            }
+            return;
+        }
+        if (isSupervisor() && isSupervisorVanWerknemer(werknemerId)) {
+            // Supervisors mogen niet hun eigen verlof goedkeuren
+            if (ingelogd.getId().equals(werknemerId)) {
+                throw new AccessDeniedException("Je kunt je eigen verlof niet goedkeuren");
+            }
+            return;
+        }
+        throw new AccessDeniedException("Geen rechten om verlof goed te keuren voor deze werknemer");
+    }
+
+    public boolean isManager() {
+        return "Manager".equals(getIngelogdeWerknemer().getRol());
+    }
+
+    public boolean isWerknemer() {
+        return "Werknemer".equals(getIngelogdeWerknemer().getRol());
     }
 }
