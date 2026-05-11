@@ -19,7 +19,7 @@ import {
   getPeriodBounds,
 } from '../../../../components/app/planner/utils';
 import { PageContainer } from '@/components/design-system/PageContainer';
-import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
 import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';

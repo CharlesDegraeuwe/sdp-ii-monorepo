@@ -5,7 +5,7 @@ import {
   IoServerOutline,
 } from 'react-icons/io5';
 import Link from '@/components/design-system/Link/Link';
-import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
 
 const links = [
   {

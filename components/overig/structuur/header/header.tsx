@@ -4,25 +4,23 @@ import { FaUser } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
 import { PiBell } from 'react-icons/pi';
 import { HiOutlineChevronUpDown } from 'react-icons/hi2';
-import { MdMenu } from 'react-icons/md';
-import Popup from '@/components/app/structuur/header/popup';
+import Popup from '@/components/overig/structuur/header/popup';
 import { useUser } from '@/providers/UserProvider';
 import Image from 'next/image';
-import { RiWifiOffLine } from 'react-icons/ri';
-import { useSidebarStore } from '@/stores/sidebarStore';
+import OnlineScanner from '@/components/overig/structuur/header/OnlineScanner';
 
 export default function AppHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const user = useUser();
-  const { toggle } = useSidebarStore();
-
   const handleToggle = () => {
     setIsOpen((prevState) => !prevState);
   };
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (e: MouseEvent) => {
       if (
         popupRef.current &&
@@ -34,35 +32,19 @@ export default function AppHeader() {
       }
     };
 
-    if (isOpen) {
-      setTimeout(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-      }, 0);
-    }
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, setIsOpen, triggerRef]);
+  }, [isOpen]);
 
   return (
     <div
       className={
-        'absolute top-0 w-screen z-[9999] flex h-25 flex-row justify-between items-center pl-3 pr-4 sm:pl-5 sm:pr-14 gap-2 sm:gap-5'
+        'absolute top-0 w-screen z-[9999] flex h-25 flex-row justify-between items-center pl-5 pr-14 gap-5'
       }
     >
-      <div className={'h-full flex flex-row gap-1 sm:gap-2 items-center'}>
-        {/* Hamburger button – hidden on large screens where sidebar is always visible */}
-        <button
-          className={
-            'lg:hidden p-2 rounded-full hover:bg-zinc-200 active:scale-95 transition-all duration-300 flex items-center justify-center'
-          }
-          onClick={toggle}
-          aria-label="Menu openen"
-        >
-          <MdMenu size={22} />
-        </button>
-
+      <div className={'h-full flex flex-row gap-2 items-center'}>
         <Link
           href={'/overzicht'}
           className={
@@ -74,23 +56,12 @@ export default function AppHeader() {
             width={0}
             height={0}
             alt={'logo'}
-            className={'h-13 w-fit'}
+            className={'h-13 w-fit '}
           />
         </Link>
       </div>
-
-      <div className={'w-fit flex justify-end gap-2 sm:gap-5 items-center'}>
-        {!window.navigator.onLine && (
-          <div
-            className={
-              'truncate text-rose-700 font-medium text-sm flex flex-row gap-2 items-center'
-            }
-          >
-            <RiWifiOffLine />
-            <span className={'hidden sm:inline'}>je bent offline</span>
-          </div>
-        )}
-
+      <div className={'w-fit flex justify-end gap-5 items-center'}>
+        <OnlineScanner />
         <div className={'w-fit flex flex-row gap-2'}>
           <Link
             href={'/notificaties'}
@@ -101,13 +72,12 @@ export default function AppHeader() {
             <PiBell size={20} />
           </Link>
         </div>
-
         <div className={'relative flex flex-row'}>
           <div
             onClick={handleToggle}
             ref={triggerRef}
             className={
-              'relative gap-2 cursor-pointer select-none active:scale-95 transition-all duration-300 flex items-center justify-end'
+              'relative gap-2 cursor-pointer select-none  active:scale-95 transition-all duration-300 flex items-center justify-end'
             }
           >
             <div
@@ -117,12 +87,7 @@ export default function AppHeader() {
             >
               {user.user?.voornaam.split('')[0] || <FaUser size={12} />}
             </div>
-            {/* Full name – hidden on small screens to save space */}
-            <div
-              className={
-                'hidden sm:flex w-fit flex-row items-center justify-center'
-              }
-            >
+            <div className={'w-fit flex flex-row items-center justify-center'}>
               <span
                 className={
                   'w-full h-full flex items-center pointer-events-none font-bold truncate'

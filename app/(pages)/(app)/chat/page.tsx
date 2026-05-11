@@ -1,7 +1,7 @@
 import { AppContainer } from '@/components/design-system/AppContainer';
 import { PageContainer } from '@/components/design-system/PageContainer';
 import ChatClient from '@/components/app/chat/ChatClient';
-import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
 
 export default function ChatPage() {
   return (
