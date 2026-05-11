@@ -40,7 +40,11 @@ const TaakClient = () => {
   }
 
   return (
-    <div className={'w-1/2 h-full flex items-center flex-col gap-3'}>
+    <div
+      className={
+        'w-full md:w-3/4 lg:w-1/2 h-full flex items-center flex-col gap-3'
+      }
+    >
       <div className={'w-full h-fit justify-between flex flex-row'}>
         <TabSwitcher
           tabs={modes}

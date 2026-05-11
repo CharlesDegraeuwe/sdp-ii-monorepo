@@ -15,28 +15,28 @@ export function GeplandUren({ afwezigheden }: GeplandUrenProps) {
   });
 
   return (
-       <Container
+    <Container
       label={'Geplande Uren'}
       className="col-start-1 col-end-3 row-start-2 row-end-6"
     >
-        <div className="flex flex-col gap-1.5 p-2.5 h-full overflow-y-auto scroll-hidden">
-          {komendeDagen.map((dag, i) => {
-            const opDag = afwezighedenOpDag(afwezigheden, dag);
-            const dagNaam = dag.toLocaleDateString('nl-BE', {
-              weekday: 'long',
-            });
-            const dagNummer = dag.toLocaleDateString('nl-BE', {
-              day: 'numeric',
-              month: 'short',
-            });
-            const weekend = dag.getDay() === 0 || dag.getDay() === 6;
+      <div className="flex flex-col gap-1.5 p-2.5 h-full overflow-y-auto scroll-hidden">
+        {komendeDagen.map((dag, i) => {
+          const opDag = afwezighedenOpDag(afwezigheden, dag);
+          const dagNaam = dag.toLocaleDateString('nl-BE', {
+            weekday: 'long',
+          });
+          const dagNummer = dag.toLocaleDateString('nl-BE', {
+            day: 'numeric',
+            month: 'short',
+          });
+          const weekend = dag.getDay() === 0 || dag.getDay() === 6;
 
-            return (
-              <div
-                key={i}
-                className={`flex flex-col gap-1.5 px-3 py-2.5 rounded-xl border transition-all duration-200
-                  ${isVandaag(dag) ? 'border-zinc-900 bg-bg-white' : 'border-gray-300/40 bg-bg-white/30'}
-                  ${weekend ? 'opacity-50' : ''}`}
+          return (
+            <div
+              key={i}
+              className={`flex flex-col gap-1.5 px-3 py-2.5 rounded-xl border transition-all duration-200
+                ${isVandaag(dag) ? 'border-zinc-900 bg-bg-white' : 'border-gray-300/40 bg-bg-white/30'}
+                ${weekend ? 'opacity-50' : ''}`}
             >
               <div className="flex items-center justify-between">
                 <span

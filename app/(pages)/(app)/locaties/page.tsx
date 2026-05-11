@@ -123,11 +123,11 @@ export default function Page() {
   };
 
   return (
-    <main className="w-full h-full flex flex-row gap-5">
+    <main className="w-full h-full flex flex-col md:flex-row gap-5">
       <BreadcrumbInit
         pages={selectedSite ? ['locaties', selectedSite.naam] : ['locaties']}
       />
-      <div className="w-1/4 border border-zinc-300 overflow-hidden rounded-3xl relative bg-white">
+      <div className="w-full md:w-1/4 h-64 md:h-full border border-zinc-300 overflow-hidden rounded-3xl relative bg-white flex-shrink-0">
         <div
           className={`absolute inset-0 bg-white z-20 flex flex-col rounded-2xl transition-transform duration-300 ease-in-out ${selectedSite ? 'translate-x-0' : '-translate-x-full'}`}
         >
@@ -148,7 +148,7 @@ export default function Page() {
           onSiteClick={handleSiteClick}
         />
       </div>
-      <div className="w-3/4 border border-zinc-300 overflow-hidden rounded-3xl">
+      <div className="w-full md:w-3/4 h-72 md:h-full border border-zinc-300 overflow-hidden rounded-3xl">
         <GoogleMaps
           selectedSite={selectedSite}
           sites={sites}

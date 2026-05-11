@@ -12,7 +12,7 @@ export default function Page() {
   return (
     <PageContainer className="h-full scroll-hidden">
       <BreadcrumbInit pages={['instellingen']} />
-      <div className="absolute flex flex-col min-w-full min-h-full items-center scroll-hidden">
+      <div className="flex flex-col w-full h-full items-center overflow-y-auto scroll-hidden">
         <SettingsClient />
       </div>
     </PageContainer>

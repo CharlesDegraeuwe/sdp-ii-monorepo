@@ -3,6 +3,13 @@ import './globals.css';
 import SessionProvider from '@/providers/SessionProvider';
 import { UserProvider } from '@/providers/UserProvider';
 import Toast from '@/components/design-system/Toast/Toast';
+import type { Viewport } from 'next';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -25,7 +32,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="relative flex flex-col h-screen w-screen">
+      <body className="relative flex flex-col h-screen w-screen overflow-x-hidden">
         <SessionProvider>
           <UserProvider>
             {showToast && <Toast />}

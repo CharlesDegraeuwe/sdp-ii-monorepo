@@ -90,15 +90,17 @@ export default function PlannerPage() {
     <PageContainer className="h-full">
       <AppContainer>
         <BreadcrumbInit pages={['planner']} />
-        <div className="w-full h-full flex flex-col gap-6 relative">
-          <div className="flex items-center gap-4 w-full">
-            <div className="w-full flex flex-row gap-3 items-center">
+        <div className="w-full h-full flex flex-col gap-4 relative">
+          {/* Toolbar – wraps on smaller screens */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full flex-wrap">
+            {/* Navigation arrows + period label */}
+            <div className="flex flex-row gap-3 items-center flex-shrink-0">
               <Button
                 variant={'outline'}
                 icon={<FaChevronLeft />}
                 onClick={() => navigeer(-1)}
               />
-              <span className="text-sm font-bold text-zinc-800 min-w-52 text-center capitalize">
+              <span className="text-sm font-bold text-zinc-800 min-w-32 sm:min-w-52 text-center capitalize">
                 {periodeLabel(view, huidigeDatum)}
               </span>
               <Button
@@ -108,7 +110,8 @@ export default function PlannerPage() {
               />
             </div>
 
-            <div className="w-fit flex flex-row gap-3 items-center">
+            {/* View controls – wrap on small screens */}
+            <div className="flex flex-wrap gap-2 sm:gap-3 items-center">
               <TabSwitcher
                 tabs={views}
                 value={view}
@@ -123,18 +126,18 @@ export default function PlannerPage() {
                 variant="primary"
                 label="Vandaag"
               />
-              <div className="flex items-center gap-4 w-90 justify-center">
-                <TabSwitcher
-                  tabs={tabs}
-                  value={tab}
-                  onChange={(key) => setTab(key as Tab)}
-                />
-              </div>
+
+              <TabSwitcher
+                tabs={tabs}
+                value={tab}
+                onChange={(key) => setTab(key as Tab)}
+              />
             </div>
           </div>
-          <div className={'w-full h-fit flex justify-end'}></div>
-          <div className="flex gap-4 w-full h-full min-h-0">
-            <div className="flex-1 min-w-0 rounded-xl h-full overflow-y-auto scroll-hidden">
+
+          {/* Calendar + detail panel – detail panel stacks below on small screens */}
+          <div className="flex flex-col lg:flex-row gap-4 w-full flex-1 min-h-0">
+            <div className="flex-1 min-w-0 rounded-xl h-full min-h-64 overflow-y-auto scroll-hidden">
               {view === 'maand' && (
                 <MonthView
                   huidigeDatum={huidigeDatum}

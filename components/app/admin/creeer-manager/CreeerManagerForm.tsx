@@ -19,7 +19,7 @@ const CreeerManagerForm = () => {
   };
 
   return (
-    <div className="w-1/4 h-3/4">
+    <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 xl:w-1/4 h-fit lg:h-3/4">
       <Container>
         <FormHelper onSubmit={handleSubmit} noHeight>
           <div className={'w-full h-full py-2 px-1 flex flex-col gap-5'}>
