@@ -12,8 +12,8 @@ type Mode = 'check' | 'creëer' | 'assign';
 type Team = 'teams' | 'users';
 
 const modes: { key: Mode; label: string }[] = [
-  { key: 'check', label: 'Check' },
-  { key: 'creëer', label: 'Creëer' },
+  { key: 'check', label: 'Bekijken' },
+  { key: 'creëer', label: 'Aanmaken' },
   { key: 'assign', label: 'Toekennen' },
 ];
 
@@ -40,7 +40,11 @@ const TaakClient = () => {
   }
 
   return (
-    <div className={'w-1/2 h-full flex items-center flex-col gap-3'}>
+    <div
+      className={
+        'w-full md:w-3/4 lg:w-1/2 h-full flex items-center flex-col gap-3'
+      }
+    >
       <div className={'w-full h-fit justify-between flex flex-row'}>
         <TabSwitcher
           tabs={modes}

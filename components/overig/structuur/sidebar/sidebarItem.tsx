@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { SidebarItemProps } from '@/components/app/structuur/sidebar/SidebarItemProps';
+import { SidebarItemProps } from '@/components/overig/structuur/sidebar/SidebarItemProps';
 import { usePathname } from 'next/navigation';
 
 const SidebarItem = (props: SidebarItemProps) => {

@@ -27,8 +27,8 @@ export default function DetailPanel({
   );
 
   return (
-    <div className={'w-90 max-h-full'}>
-      <Container width={'90'}>
+    <div className={'w-full lg:w-90 max-h-full'}>
+      <Container>
         <span className="text-sm font-bold text-zinc-900">
           {formatDag(geselecteerdeDag)}
         </span>

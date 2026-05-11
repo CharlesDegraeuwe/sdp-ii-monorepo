@@ -4,7 +4,7 @@ const AppContainer = (props: AppContainerProps) => {
   const { children, ai, px, py } = props;
   return (
     <div
-      className={`relative w-full max-h-full min-h-full h-full ${px ? px : 'px-20'} ${py ? py : 'py-15'} items-center flex flex-col scroll-hidden`}
+      className={`relative w-full h-full min-h-full ${px ? px : 'px-4 sm:px-8 lg:px-20'} ${py ? py : 'py-6 lg:py-15'} items-center flex flex-col overflow-x-hidden scroll-hidden`}
     >
       {children}
     </div>

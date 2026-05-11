@@ -13,7 +13,7 @@ const BreadcrumbInit = (props: BreadCrumbInitProps) => {
   useEffect(() => {
     setPages((prev) => [...prev, ...pages]);
     return () => setPages((prev) => prev.filter((p) => !pages.includes(p)));
-  }, []);
+  }, [pages, setPages]);
 
   return null;
 };

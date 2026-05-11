@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import SessionProvider from '@/providers/SessionProvider';
 import { UserProvider } from '@/providers/UserProvider';
-import Toast from '@/components/design-system/Toast/Toast';
+import { ToastProvider } from '@/providers/ToastProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -19,7 +19,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const showToast = false;
   return (
     <html
       lang="en"
@@ -28,8 +27,7 @@ export default function RootLayout({
       <body className="relative flex flex-col h-screen w-screen">
         <SessionProvider>
           <UserProvider>
-            {showToast && <Toast />}
-            {children}
+            <ToastProvider>{children}</ToastProvider>
           </UserProvider>
         </SessionProvider>
       </body>

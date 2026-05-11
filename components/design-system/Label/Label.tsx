@@ -10,7 +10,7 @@ const variantStyles = {
 };
 
 const Label = (props: LabelProps) => {
-  const { text, variant = 'body', icon, center } = props;
+  const { text, variant = 'body', icon, center, verplicht } = props;
 
   const className = [
     variantStyles[variant],
@@ -20,9 +20,13 @@ const Label = (props: LabelProps) => {
     .join(' ');
 
   return (
-    <span className={className}>
-      {icon} {text}
-    </span>
+    <div className={className}>
+      {icon}{' '}
+      <span>
+        {text}
+        {verplicht && <span className={'text-red-600'}>*</span>}
+      </span>
+    </div>
   );
 };
 

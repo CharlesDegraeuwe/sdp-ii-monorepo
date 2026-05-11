@@ -17,4 +17,5 @@ export interface LabelProps extends React.HTMLAttributes<HTMLSpanElement> {
     | 'caption'
     | 'emptystate'
     | 'inputLabel';
+  verplicht?: boolean;
 }

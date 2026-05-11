@@ -5,9 +5,9 @@ const PageContainer = (props: PageContainerProps) => {
   const { color, height, children, padding } = props;
   return (
     <>
-      <main className="w-full flex-1 border border-zinc-300 overflow-hidden scroll-hidden rounded-3xl">
+      <main className="w-full flex-1 border border-zinc-300 overflow-y-auto overflow-x-hidden scroll-hidden rounded-3xl">
         <div
-          className={`min-w-full min-h-full relative w-full h-full flex justify-center items-center 
+          className={`min-w-full min-h-full relative w-full h-full flex flex-col justify-start items-stretch
                               ${color ? `bg-[${color}]` : 'bg-bg-white'}
                               ${padding ? `p-${padding}` : ''}
                               ${height ? `min-h-${padding}` : 'h-full'}

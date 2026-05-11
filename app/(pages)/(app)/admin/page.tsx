@@ -5,7 +5,7 @@ import {
   IoServerOutline,
 } from 'react-icons/io5';
 import Link from '@/components/design-system/Link/Link';
-import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
+import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
 
 const links = [
   {
@@ -26,7 +26,7 @@ const links = [
 ];
 export default function Page() {
   return (
-    <div className="w-1/2 h-full flex items-center justify-center">
+    <div className="w-full sm:w-3/4 md:w-1/2 h-full flex items-center justify-center">
       <BreadcrumbInit pages={['admin']} />
       <Container label={'Back Office'} width={'1/2'} height={'fit'}>
         <span></span>

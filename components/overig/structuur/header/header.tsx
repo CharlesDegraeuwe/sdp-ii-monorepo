@@ -4,10 +4,10 @@ import { FaUser } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
 import { PiBell } from 'react-icons/pi';
 import { HiOutlineChevronUpDown } from 'react-icons/hi2';
-import Popup from '@/components/app/structuur/header/popup';
+import Popup from '@/components/overig/structuur/header/popup';
 import { useUser } from '@/providers/UserProvider';
 import Image from 'next/image';
-import { RiWifiOffLine } from 'react-icons/ri';
+import OnlineScanner from '@/components/overig/structuur/header/OnlineScanner';
 
 export default function AppHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +19,8 @@ export default function AppHeader() {
   };
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (e: MouseEvent) => {
       if (
         popupRef.current &&
@@ -30,16 +32,11 @@ export default function AppHeader() {
       }
     };
 
-    if (isOpen) {
-      setTimeout(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-      }, 0);
-    }
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, setIsOpen, triggerRef]);
+  }, [isOpen]);
 
   return (
     <div
@@ -64,16 +61,7 @@ export default function AppHeader() {
         </Link>
       </div>
       <div className={'w-fit flex justify-end gap-5 items-center'}>
-        {!window.navigator.onLine && (
-          <div
-            className={
-              'truncate text-rose-700 font-medium text-sm flex flex-row gap-2 items-center'
-            }
-          >
-            <RiWifiOffLine />
-            <span>je bent offline</span>
-          </div>
-        )}
+        <OnlineScanner />
         <div className={'w-fit flex flex-row gap-2'}>
           <Link
             href={'/notificaties'}
