@@ -8,6 +8,7 @@ interface UpdateWerknemerPayload {
   telefoonnummer?: string;
   geboortedatum?: string;
   status?: string;
+  rol?: string;
 }
 
 interface WerknemerStore {
@@ -29,30 +30,28 @@ export const useWerknemerStore = create<WerknemerStore>((set, get) => ({
     const target = previous.find((w) => w.id === id);
     if (!target) return;
 
-    // optimistic
     set({
       werknemers: previous.map((w) => (w.id === id ? { ...w, ...patch } : w)),
     });
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/werknemers/${id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            naam: patch.naam ?? target.naam,
-            voornaam: patch.voornaam ?? target.voornaam,
-            email: patch.email ?? target.email,
-            telefoonnummer: patch.telefoonnummer ?? target.telefoonnummer,
-            geboortedatum: patch.geboortedatum ?? target.geboortedatum,
-            status: patch.status ?? target.status,
-          }),
+      const res = await fetch(`http://localhost:8080/api/werknemers/${id}`, {
+        method: 'PUT',
+
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
-      );
+        body: JSON.stringify({
+          naam: patch.naam ?? target.naam,
+          voornaam: patch.voornaam ?? target.voornaam,
+          email: patch.email ?? target.email,
+          telefoonnummer: patch.telefoonnummer ?? target.telefoonnummer,
+          geboortedatum: patch.geboortedatum ?? target.geboortedatum,
+          status: patch.status ?? target.status,
+          rol: patch.rol ?? target.rol,
+        }),
+      });
 
       if (!res.ok) throw new Error(`PUT failed: ${res.status}`);
 
@@ -63,7 +62,6 @@ export const useWerknemerStore = create<WerknemerStore>((set, get) => ({
         ),
       });
     } catch (err) {
-      // rollback
       console.error('updateWerknemer failed, rolling back', err);
       set({ werknemers: previous });
       throw err;
