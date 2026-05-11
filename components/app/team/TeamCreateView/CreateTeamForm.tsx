@@ -88,7 +88,7 @@ const CreateTeamForm = ({ scope }: CreateTeamFormProps) => {
   };
 
   const managers = Object.values(werknemers).filter(
-    (w) => w.role === 'manager',
+    (w) => w.role === 'Manager',
   );
 
   return (

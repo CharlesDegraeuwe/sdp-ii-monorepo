@@ -16,6 +16,7 @@ export function AfwezighedenWidget({
   return (
     <Container
       indent={true}
+      label={'Afwezigheden'}
       className="col-start-4 col-end-5 row-start-3 row-end-4"
     >
       <div className="flex flex-col gap-2">

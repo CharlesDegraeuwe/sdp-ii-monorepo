@@ -28,9 +28,7 @@ export function SiteList({
           placeholder={'zoeken...'}
           color={'white'}
           value={searchQuery}
-          onChange={(e: React.ChangeEvent<HTMLInputElement> | string) =>
-            setSearchQuery(typeof e === 'string' ? e : e.target.value)
-          }
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
 

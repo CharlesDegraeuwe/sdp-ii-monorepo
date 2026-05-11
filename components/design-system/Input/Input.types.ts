@@ -1,4 +1,4 @@
-export interface InputProps extends React.HTMLProps<HTMLTextAreaElement> {
+export interface InputProps extends React.HTMLProps<HTMLInputElement> {
   placeholder?: string;
   error?: string;
   errorOption?: boolean;

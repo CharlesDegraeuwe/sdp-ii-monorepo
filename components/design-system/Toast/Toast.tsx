@@ -8,6 +8,7 @@ const variantStyles = {
   error: 'bg-red-500/20 border-red-400/30',
   warning: 'bg-yellow-500/20 border-yellow-400/30',
   info: 'bg-blue-500/20 border-blue-400/30',
+  ghost: '',
 };
 
 const Toast = (props: ToastProps) => {
@@ -20,7 +21,7 @@ const Toast = (props: ToastProps) => {
       }
     >
       <span className={'w-full text-center'}>{message}</span>
-      <Button px={'px-2 opacity-70'} icon={<IoClose size={15} />} />
+      <Button px={'px-0'} icon={<IoClose size={15} />} />
     </div>
   );
 };
