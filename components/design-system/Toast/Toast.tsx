@@ -11,16 +11,21 @@ const variantStyles = {
 };
 
 const Toast = (props: ToastProps) => {
-  const { message, error, variant } = props;
+  const { message, error, variant, onDismiss } = props;
   return (
     <div
       className={
-        'border shadow-2xl z-[9999] bg-white/50 backdrop-blur-2xl rounded-lg border-zinc-400/30 ' +
-        `h-10 w-35 flex items-center justify-center absolute bottom-7 right-7 ${variant && variantStyles[variant]}`
+        'border shadow-2xl bg-white/50 backdrop-blur-2xl rounded-lg border-zinc-400/30 ' +
+        `min-w-48 max-w-72 h-10 flex items-center justify-between px-3 gap-2 ${variant && variantStyles[variant]}`
       }
     >
-      <span className={'w-full text-center'}>{message}</span>
-      <Button px={'px-2 opacity-70'} icon={<IoClose size={15} />} />
+      <span className={'flex-1 text-sm truncate'}>{message}</span>
+      <Button
+        px={'px-0'}
+        variant="ghost"
+        icon={<IoClose size={15} />}
+        onClick={onDismiss}
+      />
     </div>
   );
 };
