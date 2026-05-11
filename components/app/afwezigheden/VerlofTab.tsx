@@ -47,7 +47,7 @@ const VerlofTab = (props: VerlofTabProps) => {
         <Label text={'Type Verlof'} verplicht />
         <Select
           value={verlofType}
-          onChange={setVerlofType}
+          onChange={(v) => setVerlofType(String(v))}
           placeholder="Kies een land"
           options={[
             { value: 'jaarlijks_verlof', label: 'Jaarlijks verlof' },

@@ -38,7 +38,7 @@ export function SnelleActies() {
   return (
     <Container
       label={'Snelle acties'}
-      className="col-start-1 col-end-3 row-start-1 row-end-2"
+      className="col-start-1 col-end-3 row-start-1 row-end-2 flex items-center justify-center"
     >
       <div className="grid grid-cols-2 gap-2.5">
         {acties.map((actie) => (

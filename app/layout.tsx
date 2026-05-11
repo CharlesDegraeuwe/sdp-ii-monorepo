@@ -3,6 +3,7 @@ import './globals.css';
 import SessionProvider from '@/providers/SessionProvider';
 import { UserProvider } from '@/providers/UserProvider';
 import { ToastProvider } from '@/providers/ToastProvider';
+import { SplashProvider } from '@/providers/SplashProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,7 +28,9 @@ export default function RootLayout({
       <body className="relative flex flex-col h-screen w-screen">
         <SessionProvider>
           <UserProvider>
-            <ToastProvider>{children}</ToastProvider>
+            <SplashProvider>
+              <ToastProvider>{children}</ToastProvider>
+            </SplashProvider>
           </UserProvider>
         </SessionProvider>
       </body>

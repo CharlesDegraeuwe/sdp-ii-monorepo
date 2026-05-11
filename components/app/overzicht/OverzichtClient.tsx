@@ -22,10 +22,7 @@ export default function OverzichtClient() {
   ).length;
 
   return (
-    <div
-      className="w-full grid grid-cols-4 gap-5"
-      style={{ gridTemplateRows: 'repeat(5, minmax(180px, auto))' }}
-    >
+    <div className="w-full h-full grid grid-cols-4 gap-5">
       <SnelleActies />
       <GeplandUren />
       <MiniKalender afwezigheden={afwezigheden} />

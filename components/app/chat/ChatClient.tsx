@@ -50,7 +50,7 @@ const ChatClient = () => {
     <FormHelper onSubmit={handleSubmit}>
       <div className={'relative w-full h-full'}>
         <div
-          className={`absolute animate-pulse ${isAgentic ? 'opacity-100' : 'opacity-0'} transition-opacity duration-250 w-full h-full rounded-3xl overflow-hidden flex items-center justify-center bg-white`}
+          className={`absolute ${isAgentic ? 'opacity-100 animate-pulse' : 'opacity-0'} transition-opacity duration-250 w-full h-full rounded-3xl overflow-hidden flex items-center justify-center bg-white`}
           style={{
             boxShadow: `
             inset 200px 200px 250px -150px #60a5fa,

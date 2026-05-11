@@ -11,6 +11,7 @@ import type {
   TeamOptie,
   WerknemerOptie,
 } from '@/hooks/usePlanningFilters';
+import { AnimateOnMount } from '@/components/design-system/AnimateOnMount';
 
 export type Tab = 'team' | 'you';
 
@@ -56,8 +57,8 @@ export function PlannerToolbar({
 }: PlannerToolbarProps) {
   return (
     <div className="flex flex-col gap-2.5 w-full">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full flex-wrap">
-        <div className="flex flex-row gap-3 items-center flex-shrink-0">
+      <div className="flex flex-row sm:flex-row items-start sm:items-center gap-3 w-full">
+        <div className="flex flex-row w-full gap-3 items-center">
           <Button
             variant={'outline'}
             icon={<FaChevronLeft />}
@@ -72,8 +73,7 @@ export function PlannerToolbar({
             onClick={() => onNavigate(1)}
           />
         </div>
-
-        <div className="flex flex-wrap gap-2 sm:gap-3 items-center">
+        <div className="flex w-fit gap-2 sm:gap-3 items-center">
           <TabSwitcher
             tabs={views}
             value={view}
@@ -81,7 +81,8 @@ export function PlannerToolbar({
           />
 
           <Button onClick={onVandaag} variant="primary" label="Vandaag" />
-
+        </div>
+        <div className={' min-w-fit  w-fit lg:min-w-90 flex justify-end'}>
           <TabSwitcher
             tabs={tabs}
             value={tab}
