@@ -1,10 +1,12 @@
 'use client';
 import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { CheckView } from '@/components/app/taken/CheckView/CheckView';
 import { AssignView } from '@/components/app/taken/AssignView/AssignView';
 import { CreateView } from '@/components/app/taken/CreateView/CreateView';
 import { useTaakData } from '@/hooks/useTaakData';
+import { useTaakStore } from '@/stores/taakStore';
 
 type Mode = 'check' | 'creëer' | 'assign';
 type Team = 'teams' | 'users';
@@ -24,6 +26,14 @@ const TaakClient = () => {
   const [mode, setMode] = useState<Mode>('check');
   const [team, setTeam] = useState<Team>('teams');
   const { loaded } = useTaakData();
+  const searchParams = useSearchParams();
+  const selectTask = useTaakStore((s) => s.selectTask);
+
+  useEffect(() => {
+    if (!loaded) return;
+    const taakId = searchParams.get('taakId');
+    if (taakId) selectTask(taakId);
+  }, [loaded, searchParams, selectTask]);
 
   if (!loaded) {
     return <div className={'p-6 text-zinc-500'}>Laden...</div>;

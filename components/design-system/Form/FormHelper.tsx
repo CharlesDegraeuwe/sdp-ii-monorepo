@@ -6,7 +6,7 @@ const FormHelper = (props: FormHelperProps) => {
   return (
     <form
       onSubmit={onSubmit}
-      className={` flex flex-col gap-3 ${noHeight ? 'min-h-fit' : 'min-h-full'} w-full`}
+      className={`relative flex flex-col gap-3 ${noHeight ? 'min-h-fit' : 'min-h-full'} w-full`}
     >
       {children}
     </form>

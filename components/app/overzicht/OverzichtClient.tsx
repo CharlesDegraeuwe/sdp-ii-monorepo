@@ -11,7 +11,8 @@ import { LocatieInfo } from './LocatieInfo';
 import { useOverzichtData } from '@/hooks/useOverzichtData';
 
 export default function OverzichtClient() {
-  const { afwezigheden, notificaties } = useOverzichtData();
+  const { afwezigheden, notificaties, taken, refreshNotificaties } =
+    useOverzichtData();
 
   const vandaag = new Date();
   const afwezigVandaag = afwezighedenOpDag(afwezigheden, vandaag);
@@ -21,32 +22,21 @@ export default function OverzichtClient() {
   ).length;
 
   return (
-    <div className="flex flex-row gap-4 w-full h-full p-4 overflow-hidden">
-      <div className="flex flex-col gap-4 flex-1 min-w-0 overflow-hidden">
-        <SnelleActies />
-        <GeplandUren afwezigheden={afwezigheden} />
-      </div>
-
-      <div className="flex flex-col gap-4 flex-1 min-w-0 overflow-hidden">
-        {/* Rij 1: Kalender + Notificaties */}
-        <div className="grid grid-cols-2 gap-4">
-          <MiniKalender afwezigheden={afwezigheden} />
-          <NotificatiesWidget notificaties={notificaties} />
-        </div>
-
-        {/* Rij 2: Open Taken + Afwezigheden */}
-        <div className="grid grid-cols-2 gap-4">
-          <OpenTaken inAfwachting={inAfwachting} />
-          <AfwezighedenWidget
-            afwezigVandaag={afwezigVandaag}
-            inAfwachting={inAfwachting}
-            aantalOngelezen={aantalOngelezen}
-          />
-        </div>
-
-        {/* Rij 3: Locatie Info */}
-        <LocatieInfo />
-      </div>
+    <div className="w-full min-h-full grid grid-cols-4 grid-rows-5 gap-5">
+      <SnelleActies />
+      <GeplandUren afwezigheden={afwezigheden} />
+      <MiniKalender afwezigheden={afwezigheden} />
+      <NotificatiesWidget
+        notificaties={notificaties}
+        onRefresh={refreshNotificaties}
+      />
+      <OpenTaken taken={taken} />
+      <AfwezighedenWidget
+        afwezigVandaag={afwezigVandaag}
+        inAfwachting={inAfwachting}
+        aantalOngelezen={aantalOngelezen}
+      />
+      <LocatieInfo />
     </div>
   );
 }

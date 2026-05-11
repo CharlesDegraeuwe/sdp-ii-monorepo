@@ -7,7 +7,6 @@ import { HiOutlineChevronUpDown } from 'react-icons/hi2';
 import Popup from '@/components/app/structuur/header/popup';
 import { useUser } from '@/providers/UserProvider';
 import Image from 'next/image';
-import BreadCrumbs from '@/components/design-system/BreadCrumbs/BreadCrumbs';
 import { RiWifiOffLine } from 'react-icons/ri';
 
 export default function AppHeader() {

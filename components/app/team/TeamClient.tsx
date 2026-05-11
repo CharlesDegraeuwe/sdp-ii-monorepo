@@ -1,10 +1,10 @@
 'use client';
 import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
 import { useState } from 'react';
-import TeamsOverview from './TeamCheckView/TeamsOverview';
+import TeamsOverview from './TeamCheckView/components/TeamsOverview';
 import CreateTeamForm from './TeamCreateView/CreateTeamForm';
 import { useTeamsData } from '@/hooks/useTeamData';
-import UsersOverview from '@/components/app/team/TeamCheckView/UserOverview';
+import UsersOverview from '@/components/app/team/UserCheckView/UserOverview';
 
 type Mode = 'check' | 'creëer';
 type Scope = 'teams' | 'users';
@@ -19,9 +19,19 @@ const scopes: { key: Scope; label: string }[] = [
   { key: 'users', label: 'Werknemers' },
 ];
 
-const TeamsClient = () => {
+type Props = {
+  selectedTeamId?: number | null;
+  selectedWerknemerId?: number | null;
+  defaultScope?: Scope;
+};
+
+const TeamsClient = ({
+  selectedTeamId,
+  selectedWerknemerId,
+  defaultScope,
+}: Props) => {
   const [mode, setMode] = useState<Mode>('check');
-  const [scope, setScope] = useState<Scope>('teams');
+  const [scope, setScope] = useState<Scope>(defaultScope ?? 'teams');
   const { loaded } = useTeamsData();
 
   if (!loaded) {
@@ -45,8 +55,15 @@ const TeamsClient = () => {
         )}
       </div>
 
-      {mode === 'check' && scope === 'teams' && <TeamsOverview />}
-      {mode === 'check' && scope === 'users' && <UsersOverview />}
+      {mode === 'check' && scope === 'teams' && (
+        <TeamsOverview
+          selectedTeamId={selectedTeamId}
+          selectedWerknemerId={selectedWerknemerId}
+        />
+      )}
+      {mode === 'check' && scope === 'users' && (
+        <UsersOverview selectedWerknemerId={selectedWerknemerId} />
+      )}
       {mode === 'creëer' && <CreateTeamForm scope={scope} />}
     </div>
   );
