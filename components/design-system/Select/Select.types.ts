@@ -3,14 +3,15 @@ export interface SelectOption {
   label: string;
 }
 
-export interface SelectProps {
+export type SelectProps = {
   options: SelectOption[];
-  value?: string;
-  onChange?: (value: string) => void;
+  value?: string | number;
+  onChange?: (value: string | number) => void;
   placeholder?: string;
   label?: string;
   error?: string;
   errorOption?: boolean;
   id?: string;
   disabled?: boolean;
-}
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+};

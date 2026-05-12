@@ -1,6 +1,7 @@
 'use client';
 import { Task, useTaakStore } from '@/stores/taakStore';
 import { FaRegTrashCan } from 'react-icons/fa6';
+import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 
 const formatDue = (iso: string) => {
   const d = new Date(iso);
@@ -44,31 +45,39 @@ export const TaskListItem = ({ task }: { task: Task }) => {
   };
 
   return (
-    <div className={'flex flex-row items-center gap-2'}>
-      <button
+    <div className="p-0.5">
+      <div
         onClick={() => selectTask(task.id)}
-        className={`flex-1 flex flex-row items-center gap-3 px-4 py-2 rounded-full bg-zinc-100 hover:bg-zinc-200 transition ${
-          active ? 'ring-2 ring-blue-400' : ''
+        className={`group px-4 py-2 shadow-sm rounded-full text-sm flex flex-row gap-2 items-center min-h-13 cursor-pointer transition ${
+          active
+            ? 'bg-white ring ring-zinc-50'
+            : 'bg-zinc-100 hover:bg-zinc-200'
         }`}
       >
+        <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center shrink-0">
+          <HiOutlineClipboardDocumentList className="w-4 h-4 text-zinc-600" />
+        </div>
         <input
-          type={'checkbox'}
+          type="checkbox"
           checked={task.finished}
           onChange={(e) => handleFinish(e.target.checked)}
-          className={'w-4 h-4 rounded-full'}
+          className="w-4 h-4 rounded-full shrink-0"
           onClick={(e) => e.stopPropagation()}
         />
-        <span className={'text-sm flex-1 text-left'}>{task.name}</span>
-        <span className={'text-xs text-zinc-500'}>
+        <span className="flex-1 text-left truncate">{task.name}</span>
+        <span className="text-xs text-zinc-500 shrink-0">
           {formatDue(task.dueDate)}
         </span>
-      </button>
-      <button
-        onClick={handleDelete}
-        className={'p-2 rounded-full hover:bg-zinc-100'}
-      >
-        <FaRegTrashCan className={'w-4 h-4'} />
-      </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete();
+          }}
+          className="p-1.5 rounded-full text-zinc-500 hover:text-rose-500 hover:bg-white/60 transition opacity-0 group-hover:opacity-100 duration-300"
+        >
+          <FaRegTrashCan className="w-3.5 h-3.5" />
+        </button>
+      </div>
     </div>
   );
 };

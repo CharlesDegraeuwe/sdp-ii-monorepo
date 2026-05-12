@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { FaArrowRight } from 'react-icons/fa';
 import { AnimateOnMount } from '@/components/design-system/AnimateOnMount';
 import { useToast } from '@/providers/ToastProvider';
+import { useSplash } from '@/providers/SplashProvider';
 
 interface Errors {
   email: string;
@@ -29,6 +30,8 @@ const EmailForm = (props: emailFormProps) => {
   const [submittedEmail, setSubmittedEmail] = useState(false);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const { splashOpen, setSplashOpen } = useSplash();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errors, setErrors] = useState<Errors>(initialErrors);
 
@@ -80,6 +83,7 @@ const EmailForm = (props: emailFormProps) => {
             router.push('/activeer');
             return;
           }
+          setSplashOpen(true);
           router.push(callbackUrl);
         }
       } catch {

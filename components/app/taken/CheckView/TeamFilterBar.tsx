@@ -1,26 +1,27 @@
 'use client';
 import { useTaakStore } from '@/stores/taakStore';
+import Select from '@/components/design-system/Select/Select';
 
 export const TeamFilterBar = () => {
   const teams = useTaakStore((s) => s.teams);
   const selectedTeamId = useTaakStore((s) => s.selectedTeamId);
   const selectTeam = useTaakStore((s) => s.selectTeam);
 
+  const options = [
+    { value: '', label: 'Alle teams' },
+    ...Object.values(teams).map((t) => ({ value: t.id, label: t.name })),
+  ];
+
   return (
-    <div className={'flex flex-row gap-2 flex-wrap'}>
-      {Object.values(teams).map((t) => (
-        <button
-          key={t.id}
-          onClick={() => selectTeam(t.id)}
-          className={`px-4 py-2 rounded-full text-sm ${
-            selectedTeamId === t.id
-              ? 'bg-blue-200'
-              : 'bg-white hover:bg-zinc-100'
-          }`}
-        >
-          {t.name}
-        </button>
-      ))}
+    <div className="w-1/4">
+      <Select
+        size={'sm'}
+        label="Team"
+        options={options}
+        value={selectedTeamId ?? ''}
+        placeholder="Alle teams"
+        onChange={(val) => selectTeam(val ? String(val) : null)}
+      />
     </div>
   );
 };
