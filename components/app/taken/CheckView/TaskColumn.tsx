@@ -1,8 +1,8 @@
 'use client';
 import { Task, useTaakStore } from '@/stores/taakStore';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { TaskListItem } from './TaskListItem';
-import { Container } from '@/components/design-system/Container';
+import { Input } from '@/components/design-system/Input';
 import { Label } from '@/components/design-system/Label';
 
 interface TaskColumnProps {
@@ -32,17 +32,26 @@ const isTomorrow = (d: Date) => {
 export const TaskColumn = ({ targetId, scope }: TaskColumnProps) => {
   const tasks = useTaakStore((s) => s.tasks);
   const teams = useTaakStore((s) => s.teams);
+  const [search, setSearch] = useState('');
 
   const filtered = useMemo(() => {
-    const all = Object.values(tasks).filter((t) => !t.finished);
-    if (!targetId) return all;
-
-    if (scope === 'users') {
-      return all.filter((t) => t.assigneeId === targetId);
+    let all = Object.values(tasks).filter((t) => !t.finished);
+    if (targetId) {
+      if (scope === 'users') {
+        all = all.filter((t) => t.assigneeId === targetId);
+      } else {
+        const memberIds = teams[targetId]?.members.map((m) => m.id) ?? [];
+        all = all.filter(
+          (t) => t.assigneeId && memberIds.includes(t.assigneeId),
+        );
+      }
     }
-    const memberIds = teams[targetId]?.members.map((m) => m.id) ?? [];
-    return all.filter((t) => t.assigneeId && memberIds.includes(t.assigneeId));
-  }, [tasks, teams, targetId, scope]);
+    if (search) {
+      const q = search.toLowerCase();
+      all = all.filter((t) => t.name.toLowerCase().includes(q));
+    }
+    return all;
+  }, [tasks, teams, targetId, scope, search]);
 
   const important = filtered.filter((t) => t.important);
   const today = filtered.filter(
@@ -52,21 +61,32 @@ export const TaskColumn = ({ targetId, scope }: TaskColumnProps) => {
     (t) => !t.important && isTomorrow(new Date(t.dueDate)),
   );
 
-  if (filtered.length === 0) {
-    return (
-      <Container label={'Taken'}>
-        <div className={'w-full h-full flex items-center justify-center'}>
-          <Label text={'Geen taken'} variant={'emptystate'} />
-        </div>
-      </Container>
-    );
-  }
   return (
-    <Container label={'Taken'}>
-      <Section title={'Belangrijk:'} tasks={important} />
-      <Section title={'Taken tegen vandaag:'} tasks={today} />
-      <Section title={'Tasks due tomorrow:'} tasks={tomorrow} />
-    </Container>
+    <div className="flex flex-col gap-3">
+      <Input
+        type="text"
+        placeholder="Zoek taken..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        errorOption={false}
+      />
+      <div className="flex flex-col gap-2 max-h-150 min-h-150 relative pr-1 overflow-x-visible scroll-hidden">
+        <div className="flex flex-col gap-2 h-full pb-10 overflow-y-auto overflow-x-visible scroll-hidden">
+          {filtered.length === 0 ? (
+            <div className="w-full py-8 flex items-center justify-center">
+              <Label text="Geen taken gevonden" variant="emptystate" />
+            </div>
+          ) : (
+            <>
+              <Section title="Belangrijk:" tasks={important} />
+              <Section title="Taken tegen vandaag:" tasks={today} />
+              <Section title="Taken tegen morgen:" tasks={tomorrow} />
+            </>
+          )}
+        </div>
+        <div className="absolute bottom-0 w-full h-10 bg-linear-0 from-gray-200 to-transparent" />
+      </div>
+    </div>
   );
 };
 
@@ -75,11 +95,11 @@ interface SectionProps {
   tasks: Task[];
 }
 
-const Section = (props: SectionProps) => {
-  const { title, tasks } = props;
+const Section = ({ title, tasks }: SectionProps) => {
+  if (tasks.length === 0) return null;
   return (
-    <div className={'flex flex-col gap-2'}>
-      <Label text={title} size={'sm'} weight={600} />
+    <div className="flex flex-col gap-2">
+      <Label text={title} size="sm" weight={600} />
       {tasks.map((t) => (
         <TaskListItem key={t.id} task={t} />
       ))}

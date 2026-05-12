@@ -12,8 +12,8 @@ type Mode = 'check' | 'creëer' | 'assign';
 type Team = 'teams' | 'users';
 
 const modes: { key: Mode; label: string }[] = [
-  { key: 'check', label: 'Check' },
-  { key: 'creëer', label: 'Creëer' },
+  { key: 'check', label: 'Bekijken' },
+  { key: 'creëer', label: 'Aanmaken' },
   { key: 'assign', label: 'Toekennen' },
 ];
 

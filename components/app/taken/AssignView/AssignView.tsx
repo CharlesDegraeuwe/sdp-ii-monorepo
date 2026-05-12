@@ -158,7 +158,7 @@ export const AssignView = () => {
                             : 'border-zinc-300 bg-white'
                         }`}
                       />
-                      <span>{team.naam ?? team.name}</span>
+                      <span>{team.name}</span>
                     </button>
                   );
                 })
@@ -201,8 +201,7 @@ export const AssignView = () => {
                         }`}
                       />
                       <span>
-                        {member.firstName ?? member.voornaam}{' '}
-                        {member.lastName ?? member.naam}
+                        {member.firstName} {member.lastName}
                       </span>
                     </button>
                   );

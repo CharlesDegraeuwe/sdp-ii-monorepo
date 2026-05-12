@@ -7,6 +7,7 @@ import { Button } from '@/components/design-system/Button';
 import { FormHelper } from '@/components/design-system/Form';
 import { Label } from '@/components/design-system/Label';
 import { TextArea } from '@/components/design-system/TextArea';
+import Select from '@/components/design-system/Select/Select';
 
 export const CreateView = () => {
   const createTask = useCreateTask();
@@ -67,26 +68,24 @@ export const CreateView = () => {
 
           <div className={'grid grid-cols-2 gap-3'}>
             <Input
+              type={'date'}
               label={'Deadline'}
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
               placeholder={'dd-mm-yyyy'}
               errorOption={false}
             />
-            <div className={'flex flex-col gap-1'}>
-              <Label text={'Locatie'} variant={'inputLabel'} />
-              <select
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className={
-                  'w-full rounded-full outline-none ring-0 border border-gray-300/30 focus:border-gray-700/30 px-5 py-3.5 bg-gray-300/30 shadow-inner'
-                }
-              >
-                <option>Plant 1</option>
-                <option>Plant 2</option>
-                <option>Plant 3</option>
-              </select>
-            </div>
+            <Select
+              label="Locatie"
+              options={[
+                { value: 'Plant 1', label: 'Plant 1' },
+                { value: 'Plant 2', label: 'Plant 2' },
+                { value: 'Plant 3', label: 'Plant 3' },
+              ]}
+              value={location}
+              placeholder="Selecteer locatie"
+              onChange={(val) => setLocation(String(val))}
+            />
           </div>
 
           <div className={'flex flex-row items-center gap-3'}>

@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import type { Task } from '@/stores/taakStore';
 import { Label } from '@/components/design-system/Label';
 import { Container } from '@/components/design-system/Container';
+import Link from '@/components/design-system/Link/Link';
+import { IoMdCheckmark } from 'react-icons/io';
 
 interface OpenTakenProps {
   taken: Task[];
@@ -15,6 +17,14 @@ function formatDeadline(dueDate: string) {
   return d.toLocaleDateString('nl-BE', { day: 'numeric', month: 'short' });
 }
 
+function isDichtbijDeadline(dueDate: string): boolean {
+  const deadline = new Date(dueDate);
+  const vandaag = new Date();
+  deadline.setHours(0, 0, 0, 0);
+  vandaag.setHours(0, 0, 0, 0);
+  return deadline <= vandaag;
+}
+
 export function OpenTaken({ taken }: OpenTakenProps) {
   const router = useRouter();
   const openTaken = taken.filter((t) => !t.finished);
@@ -22,66 +32,64 @@ export function OpenTaken({ taken }: OpenTakenProps) {
   return (
     <Container
       onClick={() => router.push('/taken')}
-      label={'Snelle statistieken:'}
-      className="col-start-3 col-end-4 row-start-3 row-end-4"
+      label={'Open Taken'}
+      className=""
     >
       {openTaken.length > 0 && (
         <span className="text-[10px] font-bold text-zinc-400">
           {openTaken.length} open
         </span>
       )}
-      <div className="flex flex-col">
-        {/* Scrollbare lijst — overflow beheerd op dit niveau, niet op Card */}
-        <div className="max-h-[160px] overflow-y-auto scroll-hidden flex flex-col gap-1 p-2.5 rounded-t-3xl">
+      <div className="flex flex-col h-full">
+        <div className=" flex-1 h-full overflow-y-auto scroll-hidden flex flex-col gap-1">
           {openTaken.length === 0 && (
-            <div className="flex items-center justify-center py-4">
+            <div className="flex h-full items-center justify-center py-4">
               <Label text="Geen openstaande taken." variant="emptystate" />
             </div>
           )}
 
-          {openTaken.map((taak) => (
-            <NextLink
-              key={taak.id}
-              href={`/taken?taakId=${taak.id}`}
-              onClick={(e) => e.stopPropagation()}
-              className={`flex items-center gap-2 px-2.5 py-2 rounded-xl border transition-all duration-200 hover:brightness-95
-                  ${
-                    taak.important
-                      ? 'border-red-200/60 bg-red-50/60'
-                      : 'border-gray-300/40 bg-white/40'
-                  }`}
-            >
-              {/* Prioriteitsindicator */}
-              <div
-                className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${taak.important ? 'bg-red-400' : 'bg-zinc-300'}`}
-              />
-
-              <div className="flex-1 min-w-0">
-                <span
-                  className={`text-[11px] font-bold truncate block ${taak.important ? 'text-red-700' : 'text-zinc-800'}`}
-                >
-                  {taak.name}
-                </span>
-                <span className="text-[9px] text-zinc-400">
-                  {taak.location}
-                </span>
-              </div>
-
-              <span
-                className={`text-[9px] font-bold flex-shrink-0 ${taak.important ? 'text-red-400' : 'text-zinc-400'}`}
+          {openTaken.map((taak) => {
+            const deadline = isDichtbijDeadline(taak.dueDate);
+            const roodKader = taak.important || deadline;
+            return (
+              <NextLink
+                key={taak.id}
+                href={`/taken?taakId=${taak.id}`}
+                onClick={(e) => e.stopPropagation()}
+                className={`flex items-center gap-2 px-2.5 py-2 rounded-xl border transition-all duration-200 hover:brightness-95
+                    ${roodKader ? 'border-red-300/70 bg-red-50/60' : 'border-gray-300/40 bg-white/40'}`}
               >
-                {formatDeadline(taak.dueDate)}
-              </span>
-            </NextLink>
-          ))}
+                <div
+                  className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${roodKader ? 'bg-red-400' : 'bg-zinc-300'}`}
+                />
+
+                <div className="flex-1 min-w-0">
+                  <span
+                    className={`text-[11px] font-bold truncate block ${roodKader ? 'text-red-700' : 'text-zinc-800'}`}
+                  >
+                    {taak.name}
+                  </span>
+                  <span className="text-[9px] text-zinc-400">
+                    {taak.location}
+                  </span>
+                </div>
+
+                <span
+                  className={`text-[9px] font-bold flex-shrink-0 ${roodKader ? 'text-red-400' : 'text-zinc-400'}`}
+                >
+                  {formatDeadline(taak.dueDate)}
+                </span>
+              </NextLink>
+            );
+          })}
         </div>
 
-        {/* Vaste footer — rounded-b-3xl zodat de onderste hoeken van de Card vrij blijven */}
-        <div className="border-t border-gray-300/30 py-2 flex items-center justify-center pointer-events-none rounded-b-3xl">
-          <span className="text-[10px] font-bold text-zinc-400">
-            Bekijk alle taken
-          </span>
-        </div>
+        <Link
+          icon={<IoMdCheckmark />}
+          href={'/taken'}
+          label={'taken'}
+          className="text-[10px] font-bold text-zinc-400"
+        />
       </div>
     </Container>
   );

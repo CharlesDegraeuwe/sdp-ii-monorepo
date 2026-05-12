@@ -28,7 +28,9 @@ const Container = (props: ContainerProps) => {
             `}
     >
       {(label || indent) && (
-        <span className={`font-bold text-sm px-5 ${!label ? 'invisible' : ''}`}>
+        <span
+          className={`font-bold w-full text-sm px-5 ${!label ? 'invisible' : ''}`}
+        >
           {label || 'placeholder'}
         </span>
       )}

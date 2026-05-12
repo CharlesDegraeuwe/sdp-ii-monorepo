@@ -1,0 +1,106 @@
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+
+const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
+
+export interface SiteOptie {
+  id: number;
+  naam: string;
+  locatie: string;
+}
+
+export interface TeamOptie {
+  id: number;
+  naam: string;
+  siteId: number;
+  siteNaam: string;
+}
+
+export interface WerknemerOptie {
+  id: number;
+  voornaam: string;
+  naam: string;
+}
+
+export interface WerknemerMetTeam extends WerknemerOptie {
+  teamId: number;
+  teamNaam: string;
+}
+
+export function usePlanningFilters(authHeader: Record<string, string>) {
+  const [sites, setSites] = useState<SiteOptie[]>([]);
+  const [teams, setTeams] = useState<TeamOptie[]>([]);
+  const [teamWerknemers, setTeamWerknemers] = useState<WerknemerOptie[]>([]);
+  const [alleWerknemers, setAlleWerknemers] = useState<WerknemerMetTeam[]>([]);
+
+  useEffect(() => {
+    const bearer = authHeader.Authorization;
+    if (!bearer || bearer === 'Bearer undefined') return;
+    Promise.all([
+      fetch(`${BASE}/teams/sites`, { headers: authHeader }),
+      fetch(`${BASE}/teams`, { headers: authHeader }),
+    ])
+      .then(async ([sitesRes, teamsRes]) => {
+        if (sitesRes.ok) setSites(await sitesRes.json());
+        if (teamsRes.ok) setTeams(await teamsRes.json());
+      })
+      .catch(console.error);
+  }, [authHeader]);
+
+  const laadWerknemersVanTeam = useCallback(
+    async (teamId: number) => {
+      setTeamWerknemers([]);
+      const res = await fetch(`${BASE}/teams/${teamId}/werknemers`, {
+        headers: authHeader,
+      }).catch(() => null);
+      if (res?.ok) setTeamWerknemers(await res.json());
+    },
+    [authHeader],
+  );
+
+  const resetTeamWerknemers = useCallback(() => setTeamWerknemers([]), []);
+
+  const laadAlleWerknemers = useCallback(
+    async (teamsToLoad: TeamOptie[]) => {
+      if (teamsToLoad.length === 0) return;
+      setAlleWerknemers([]);
+      const results = await Promise.all(
+        teamsToLoad.map((t) =>
+          fetch(`${BASE}/teams/${t.id}/werknemers`, { headers: authHeader })
+            .then((r) =>
+              r.ok
+                ? (r.json() as Promise<WerknemerOptie[]>)
+                : Promise.resolve([]),
+            )
+            .then((ws: WerknemerOptie[]) =>
+              ws.map((w) => ({ ...w, teamId: t.id, teamNaam: t.naam })),
+            )
+            .catch(() => [] as WerknemerMetTeam[]),
+        ),
+      );
+      const seen = new Set<number>();
+      const unique: WerknemerMetTeam[] = [];
+      for (const batch of results) {
+        for (const w of batch) {
+          if (!seen.has(w.id)) {
+            seen.add(w.id);
+            unique.push(w);
+          }
+        }
+      }
+      setAlleWerknemers(unique);
+    },
+    [authHeader],
+  );
+
+  return {
+    sites,
+    teams,
+    teamWerknemers,
+    alleWerknemers,
+    laadWerknemersVanTeam,
+    laadAlleWerknemers,
+    resetTeamWerknemers,
+  };
+}

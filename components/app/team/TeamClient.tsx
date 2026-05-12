@@ -10,8 +10,8 @@ type Mode = 'check' | 'creëer';
 type Scope = 'teams' | 'users';
 
 const modes: { key: Mode; label: string }[] = [
-  { key: 'check', label: 'Check' },
-  { key: 'creëer', label: 'Creëer' },
+  { key: 'check', label: 'Zoeken' },
+  { key: 'creëer', label: 'Aanmaken' },
 ];
 
 const scopes: { key: Scope; label: string }[] = [

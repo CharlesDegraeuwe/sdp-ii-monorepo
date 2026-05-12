@@ -4,6 +4,7 @@ import NextAuth from 'next-auth';
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
+      id: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
         code: { label: 'Code', type: 'text' },
@@ -17,7 +18,48 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 email: credentials?.email,
-                token: credentials?.code, // backend verwacht "token", niet "code"
+                token: credentials?.code,
+              }),
+            },
+          );
+
+          if (!loginResponse.ok) return null;
+
+          const data = await loginResponse.json();
+
+          return {
+            id: String(data.werknemer.id),
+            email: data.werknemer.email,
+            naam: data.werknemer.naam,
+            voornaam: data.werknemer.voornaam,
+            telefoonnummer: data.werknemer.telefoonnummer,
+            geboortedatum: data.werknemer.geboortedatum,
+            rol: data.werknemer.rol,
+            status: data.werknemer.status,
+            accessToken: data.token,
+          };
+        } catch (error) {
+          console.error('Auth error:', error);
+          return null;
+        }
+      },
+    }),
+    Credentials({
+      id: 'password',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        wachtwoord: { label: 'Wachtwoord', type: 'password' },
+      },
+      authorize: async (credentials) => {
+        try {
+          const loginResponse = await fetch(
+            `${process.env.AUTH_API_URL}/werknemers/login-password`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: credentials?.email,
+                wachtwoord: credentials?.wachtwoord,
               }),
             },
           );
@@ -80,7 +122,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     jwt: async ({ token, user, account }) => {
-      if (user && account?.provider === 'credentials') {
+      if (
+        user &&
+        (account?.provider === 'credentials' ||
+          account?.provider === 'password')
+      ) {
         token.accessToken = user.accessToken;
         token.user = {
           id: user.id!,

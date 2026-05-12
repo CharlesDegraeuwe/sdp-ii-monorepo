@@ -1,6 +1,9 @@
-export interface ToastProps extends React.HTMLProps<HTMLDivElement> {
-  message?: string;
-  error?: boolean;
-  variant?: 'success' | 'error' | 'warning' | 'info' | 'ghost';
-  onDismiss?: () => void;
-}
+export type ToastVariant = 'success' | 'error' | 'warning' | 'info';
+
+export type ToastProps = {
+  message: string;
+  variant?: ToastVariant;
+  duration?: number;
+  open?: boolean;
+  onClose?: () => void;
+};

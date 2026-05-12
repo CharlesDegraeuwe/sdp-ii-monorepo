@@ -1,5 +1,11 @@
 import type { Afwezigheid, PlannerTaak, View } from './types';
 import { MAANDEN } from './constants';
+export {
+  isBelgischeFestdag,
+  isWeekend,
+  isVrij,
+  vrijReden,
+} from './belgischCalendar';
 
 export function afwezighedenOpDag(
   afwezigheden: Afwezigheid[],
