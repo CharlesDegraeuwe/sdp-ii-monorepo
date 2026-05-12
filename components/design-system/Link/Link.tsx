@@ -14,7 +14,7 @@ const Link = ({ href, icon, label, rounded }: LinkProps) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         className={`w-full flex items-center justify-between px-4 py-3 border transition-all duration-300
-          ${hovered ? 'bg-zinc-200 border-blue-900' : 'bg-zinc-200/40 border-zinc-200'}
+          ${hovered ? 'bg-zinc-200 border-zinc-900' : 'bg-zinc-200/40 border-zinc-200'}
           ${rounded ? 'rounded-' + rounded : 'rounded-2xl'}`}
       >
         <div className={'flex w-full flex-row gap-2 items-center'}>

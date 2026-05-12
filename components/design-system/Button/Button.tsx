@@ -32,6 +32,7 @@ const variantMap = {
   outline: 'border border-gray-300 text-black',
   prompt: 'border border-zinc-300 text-zinc-500',
   ghost: 'text-zinc-500 hover:bg-gray-200 transition-colors duration-200',
+  approve: 'text-white bg-emerald-500',
   submit:
     'bg-rose-500 text-white p-0 min-h-full rounded-xl max-w-fit disabled:cursor-not-allowed disabled:active:scale-100',
 } as const;

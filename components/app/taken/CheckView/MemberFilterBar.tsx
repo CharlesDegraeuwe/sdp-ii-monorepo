@@ -17,6 +17,7 @@ export const MemberFilterBar = () => {
   return (
     <div className="w-1/4">
       <Select
+        size={'sm'}
         label="Werknemer"
         options={options}
         value={selectedMemberId ?? ''}

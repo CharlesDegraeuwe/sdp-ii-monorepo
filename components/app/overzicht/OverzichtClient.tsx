@@ -22,9 +22,12 @@ export default function OverzichtClient() {
   ).length;
 
   return (
-    <div className="w-full h-full grid grid-cols-4 gap-5">
-      <SnelleActies />
-      <GeplandUren />
+    <div className="w-full h-full grid grid-cols-4 grid-rows-3 gap-5">
+      <div className="col-span-2 row-span-3 flex flex-col gap-5">
+        <SnelleActies />
+        <GeplandUren />
+      </div>
+
       <MiniKalender afwezigheden={afwezigheden} />
       <NotificatiesWidget
         notificaties={notificaties}

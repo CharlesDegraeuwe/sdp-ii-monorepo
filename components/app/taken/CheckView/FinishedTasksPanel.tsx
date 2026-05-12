@@ -36,10 +36,8 @@ export const FinishedTasksPanel = ({ targetId, scope }: Props) => {
   const visible = showAll ? finished : finished.slice(0, 6);
 
   return (
-    <div className="flex flex-col gap-3 text-sm">
-      <hr className="opacity-10" />
+    <div className="flex flex-col gap-3 text-sm h-full">
       <div className="flex flex-row items-center justify-between">
-        <span className="text-xs text-zinc-400">Afgewerkte taken</span>
         {finished.length > 6 && (
           <Button
             type="button"
@@ -53,7 +51,7 @@ export const FinishedTasksPanel = ({ targetId, scope }: Props) => {
       </div>
 
       {finished.length === 0 ? (
-        <div className="w-full py-8 flex items-center justify-center">
+        <div className="w-full h-full flex items-center justify-center">
           <Label text="Nog geen taken afgewerkt" variant="emptystate" />
         </div>
       ) : (

@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import type { Task } from '@/stores/taakStore';
 import { Label } from '@/components/design-system/Label';
 import { Container } from '@/components/design-system/Container';
+import Link from '@/components/design-system/Link/Link';
+import { IoMdCheckmark } from 'react-icons/io';
 
 interface OpenTakenProps {
   taken: Task[];
@@ -31,17 +33,17 @@ export function OpenTaken({ taken }: OpenTakenProps) {
     <Container
       onClick={() => router.push('/taken')}
       label={'Open Taken'}
-      className="col-start-3 col-end-4 row-start-3 row-end-4"
+      className=""
     >
       {openTaken.length > 0 && (
         <span className="text-[10px] font-bold text-zinc-400">
           {openTaken.length} open
         </span>
       )}
-      <div className="flex flex-col">
-        <div className="max-h-[160px] overflow-y-auto scroll-hidden flex flex-col gap-1 p-2.5 rounded-t-3xl">
+      <div className="flex flex-col h-full">
+        <div className=" flex-1 h-full overflow-y-auto scroll-hidden flex flex-col gap-1">
           {openTaken.length === 0 && (
-            <div className="flex items-center justify-center py-4">
+            <div className="flex h-full items-center justify-center py-4">
               <Label text="Geen openstaande taken." variant="emptystate" />
             </div>
           )}
@@ -82,11 +84,12 @@ export function OpenTaken({ taken }: OpenTakenProps) {
           })}
         </div>
 
-        <div className="border-t border-gray-300/30 py-2 flex items-center justify-center pointer-events-none rounded-b-3xl">
-          <span className="text-[10px] font-bold text-zinc-400">
-            Bekijk alle taken
-          </span>
-        </div>
+        <Link
+          icon={<IoMdCheckmark />}
+          href={'/taken'}
+          label={'taken'}
+          className="text-[10px] font-bold text-zinc-400"
+        />
       </div>
     </Container>
   );

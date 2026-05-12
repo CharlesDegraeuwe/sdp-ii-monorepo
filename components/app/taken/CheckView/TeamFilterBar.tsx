@@ -15,6 +15,7 @@ export const TeamFilterBar = () => {
   return (
     <div className="w-1/4">
       <Select
+        size={'sm'}
         label="Team"
         options={options}
         value={selectedTeamId ?? ''}

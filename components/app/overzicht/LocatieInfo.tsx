@@ -1,14 +1,11 @@
-import Link from 'next/link';
 import { MdOutlineLocationOn } from 'react-icons/md';
 import { Container } from '@/components/design-system/Container';
+import Link from '@/components/design-system/Link/Link';
 
 export function LocatieInfo() {
   return (
-    <Container
-      label={'Locatie Info'}
-      className="col-start-3 col-end-5 row-start-4 row-end-6"
-    >
-      <div className="flex flex-col gap-2 h-full">
+    <Container label={'Locatie Info'} className="col-span-2">
+      <div className="relative flex flex-col gap-2 h-full">
         <div className="flex items-center gap-2 px-1">
           <MdOutlineLocationOn size={16} className="text-zinc-500" />
           <span className="text-xs font-semibold text-zinc-600">
@@ -26,13 +23,13 @@ export function LocatieInfo() {
             <span className="text-xs text-zinc-600">Teamleden op locatie</span>
             <span className="text-xs font-semibold text-zinc-800">—</span>
           </div>
-          <Link
-            href="/locaties"
-            className="mt-auto flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-gray-200/40 bg-white/40 hover:bg-white/70 hover:border-gray-300/60 transition-all duration-200 text-xs font-semibold text-zinc-600"
-          >
-            <MdOutlineLocationOn size={14} />
-            Bekijk kaart
-          </Link>
+          <div className={'absolute bottom-0 w-full '}>
+            <Link
+              label={'Bekijk kaart'}
+              icon={<MdOutlineLocationOn size={14} />}
+              href="/locaties"
+            />
+          </div>
         </div>
       </div>
     </Container>

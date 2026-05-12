@@ -26,10 +26,14 @@ export const CheckView = ({ scope }: CheckViewProps) => {
           <TaskColumn targetId={targetId} scope={scope} />
         </Container>
 
-        <Container label="Details" height="full">
-          <TaskDetailPanel />
-          <FinishedTasksPanel targetId={targetId} scope={scope} />
-        </Container>
+        <div className={'flex flex-col gap-5'}>
+          <Container label="Details" height="1/2">
+            <TaskDetailPanel />
+          </Container>
+          <Container label={'Afgewerkte taken'} height="1/2">
+            <FinishedTasksPanel targetId={targetId} scope={scope} />
+          </Container>
+        </div>
       </div>
     </div>
   );
