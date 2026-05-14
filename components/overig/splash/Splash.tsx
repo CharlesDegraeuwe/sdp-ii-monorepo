@@ -10,15 +10,17 @@ const SplashOverlay = () => {
   useEffect(() => {
     const TIME: number = 1000;
     setTimeout(() => setSplashOpen(false), TIME);
-  }, [splashOpen]);
+  }, [splashOpen, setSplashOpen]);
 
   return (
     <div
       className={
-        'min-w-screen relative z-[999999] min-h-screen bg-zinc-50 flex items-center justify-center'
+        'w-full relative z-[999999] min-h-screen bg-zinc-50 flex items-center justify-center'
       }
     >
-      <div className={'w-1/4 h-50 items-center justify-center flex flex-col'}>
+      <div
+        className={'w-fit h-50 items-center justify-center flex flex-col px-8'}
+      >
         <Image
           src={'/logo.svg'}
           width={0}

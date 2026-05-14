@@ -21,7 +21,7 @@ const PasswordForm = (props: passwordProps) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { splashOpen, setSplashOpen } = useSplash();
+  const { setSplashOpen } = useSplash();
   const toast = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();

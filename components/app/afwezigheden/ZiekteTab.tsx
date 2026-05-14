@@ -30,7 +30,7 @@ const ZiekteTab = (props: ZiekteTabProps) => {
 
   return (
     <>
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-1 flex-1">
           <Label text={'Startdatum'} verplicht />
 
@@ -58,7 +58,7 @@ const ZiekteTab = (props: ZiekteTabProps) => {
           placeholder="Reden voor afwezigheid..."
         />
       </div>
-      <div className="flex flex-col gap-1 h-full flex-1">
+      <div className="flex flex-col gap-1">
         <Label text={'Ziektebriefje'} />
         <div
           onDragOver={(e) => {
@@ -73,7 +73,7 @@ const ZiekteTab = (props: ZiekteTabProps) => {
             if (f) setCertificaat(f);
           }}
           onClick={() => document.getElementById('fileInput')?.click()}
-          className={`border-2 border-dashed rounded-2xl p-8 flex flex-1 flex-col items-center min-h-full justify-center gap-2 cursor-pointer transition-all duration-300 ${isDragging ? 'border-zinc-900 bg-zinc-100' : 'border-gray-300/50 bg-gray-300/10 hover:border-gray-400/50'}`}
+          className={`border-2 border-dashed rounded-2xl p-8 flex flex-col items-center min-h-36 justify-center gap-2 cursor-pointer transition-all duration-300 ${isDragging ? 'border-zinc-900 bg-zinc-100' : 'border-gray-300/50 bg-gray-300/10 hover:border-gray-400/50'}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -84,7 +84,6 @@ export function NotificatiesWidget({
   const [acties, setActies] = useState<Record<number, Actie>>({});
 
   const ongelezen = notificaties.filter((n) => n.gelezen === 'Nee');
-  const aantalOngelezen = ongelezen.length;
 
   async function voerActieUit(n: Notificatie, type: 'goed' | 'af') {
     if (!n.referentieId) return;
@@ -113,15 +112,9 @@ export function NotificatiesWidget({
 
   return (
     <Container label={'Notificaties'} className="">
-      {aantalOngelezen > 0 && (
-        <span className="text-[10px] font-bold bg-[var(--color-delaware_red)] text-white rounded-full px-2 py-0.5 leading-none">
-          {aantalOngelezen}
-        </span>
-      )}
-
       <div className="flex flex-col min-h-full items-center justify-center">
         {/* Scrollbare lijst */}
-        <div className="flex-1 min-h-0 overflow-y-auto scroll-hiddenflex flex flex-col gap-1 p-2.5 items-center justify-center">
+        <div className="flex-1 min-h-0 overflow-y-auto scroll-hiddenflex flex flex-col gap-3 items-center justify-baseline">
           {ongelezen.length === 0 && (
             <Label
               text={'Geen ongelezen notificaties'}
@@ -139,7 +132,7 @@ export function NotificatiesWidget({
             return (
               <div
                 key={n.id}
-                className="flex items-start gap-2 px-2.5 py-2 rounded-xl border border-gray-300/50 bg-white/50 transition-all duration-300"
+                className="flex items-start gap-2 px-2.5 py-2 rounded-xl border border-gray-300/50 bg-white/30 shadow-lg transition-all duration-300"
               >
                 <div
                   className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${badge.dot}`}

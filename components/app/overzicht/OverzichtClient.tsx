@@ -22,24 +22,42 @@ export default function OverzichtClient() {
   ).length;
 
   return (
-    <div className="w-full h-full grid grid-cols-4 grid-rows-3 gap-5">
-      <div className="col-span-2 row-span-3 flex flex-col gap-5">
+    <div className="w-full flex flex-col xl:flex-row gap-5 pb-5">
+      {/* Left column: SnelleActies + GeplandUren */}
+      <div className="flex flex-col gap-5 xl:w-1/2">
         <SnelleActies />
-        <GeplandUren />
+        <div className="flex-1 min-h-80">
+          <GeplandUren />
+        </div>
       </div>
 
-      <MiniKalender afwezigheden={afwezigheden} />
-      <NotificatiesWidget
-        notificaties={notificaties}
-        onRefresh={refreshNotificaties}
-      />
-      <OpenTaken taken={taken} />
-      <AfwezighedenWidget
-        afwezigVandaag={afwezigVandaag}
-        inAfwachting={inAfwachting}
-        aantalOngelezen={aantalOngelezen}
-      />
-      <LocatieInfo />
+      {/* Right column: 2x2 widgets + LocatieInfo */}
+      <div className="flex flex-col gap-5 xl:w-1/2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="min-h-48">
+            <MiniKalender afwezigheden={afwezigheden} />
+          </div>
+          <div className="min-h-48">
+            <NotificatiesWidget
+              notificaties={notificaties}
+              onRefresh={refreshNotificaties}
+            />
+          </div>
+          <div className="min-h-48">
+            <OpenTaken taken={taken} />
+          </div>
+          <div className="min-h-48">
+            <AfwezighedenWidget
+              afwezigVandaag={afwezigVandaag}
+              inAfwachting={inAfwachting}
+              aantalOngelezen={aantalOngelezen}
+            />
+          </div>
+        </div>
+        <div className="min-h-24">
+          <LocatieInfo />
+        </div>
+      </div>
     </div>
   );
 }

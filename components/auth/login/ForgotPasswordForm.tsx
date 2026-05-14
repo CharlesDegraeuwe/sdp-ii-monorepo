@@ -6,7 +6,6 @@ import { FaArrowRight } from 'react-icons/fa';
 import FormHelper from '../../design-system/Form/FormHelper';
 import { useToast } from '@/providers/ToastProvider';
 import { useState } from 'react';
-import { useSplash } from '@/providers/SplashProvider';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
 
@@ -15,7 +14,6 @@ interface FpwProps {
 }
 const ForgotPasswordForm = (props: FpwProps) => {
   const { setForgotForm } = props;
-  const { splashOpen, setSplashOpen } = useSplash();
 
   const toast = useToast();
   const [email, setEmail] = useState('');

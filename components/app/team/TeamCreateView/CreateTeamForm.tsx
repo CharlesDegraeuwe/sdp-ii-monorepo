@@ -15,11 +15,7 @@ interface Lid {
   isSupervisor: boolean;
 }
 
-interface CreateTeamFormProps {
-  scope?: string;
-}
-
-const CreateTeamForm = ({ scope }: CreateTeamFormProps) => {
+const CreateTeamForm = () => {
   const werknemers = useTeamsStore((s) => s.werknemers);
   const sites = useTeamsStore((s) => s.sites);
   const createTeam = useCreateTeam();
@@ -96,7 +92,7 @@ const CreateTeamForm = ({ scope }: CreateTeamFormProps) => {
       <div className={'w-full flex flex-col gap-3 pt-5'}>
         <Container label={'Nieuw team'}>
           <FormHelper onSubmit={handleSubmit} noHeight>
-            <div className={'w-full grid grid-cols-2 gap-6'}>
+            <div className={'w-full grid grid-cols-1 sm:grid-cols-2 gap-6'}>
               <div className={'flex flex-col gap-4'}>
                 <Label text={'Basis informatie'} size={'sm'} weight={600} />
                 <Input
@@ -164,7 +160,7 @@ const CreateTeamForm = ({ scope }: CreateTeamFormProps) => {
 
               <div
                 className={
-                  'flex flex-col gap-3 border-l border-zinc-200/50 pl-6'
+                  'flex flex-col gap-3 sm:border-l border-zinc-200/50 sm:pl-6'
                 }
               >
                 <div className={'flex flex-row justify-between items-center'}>

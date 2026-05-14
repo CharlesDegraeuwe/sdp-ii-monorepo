@@ -87,7 +87,7 @@ export default function MeldenPage() {
     <div className={'w-full h-fit'}>
       <Container>
         <div className="flex flex-col gap-6 p-2">
-          <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row flex-wrap items-center justify-between gap-3">
             <span className="text-xl font-bold text-zinc-900">
               {tab == 'verlof' ? 'Verlof aanvragen' : 'Ziekte melden'}
             </span>

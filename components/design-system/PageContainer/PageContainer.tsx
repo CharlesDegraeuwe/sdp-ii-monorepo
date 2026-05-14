@@ -1,5 +1,4 @@
 import { PageContainerProps } from '@/components/design-system/PageContainer/PageContainer.types';
-import PageHeader from '../PageHeader/PageHeader';
 
 const PageContainer = (props: PageContainerProps) => {
   const { color, height, children, padding } = props;

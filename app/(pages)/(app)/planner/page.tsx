@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -31,7 +32,7 @@ const LEEG_FILTER: FilterState = {
   werknemerId: null,
 };
 
-export default function PlannerPage() {
+function PlannerPageInner() {
   const { data: session } = useSession();
   const token = session?.accessToken;
   const user = session?.user;
@@ -166,13 +167,24 @@ export default function PlannerPage() {
           <div className="flex flex-col lg:flex-row gap-4 w-full flex-1 min-h-0">
             <div className="flex-1 min-w-0 rounded-xl h-full min-h-64 overflow-y-auto scroll-hidden">
               {view === 'maand' && (
-                <MonthView
-                  huidigeDatum={huidigeDatum}
-                  afwezigheden={filteredAfwezigheden}
-                  taken={taken}
-                  geselecteerdeDag={geselecteerdeDag}
-                  onSelectDag={setGeselecteerdeDag}
-                />
+                <>
+                  <div className="hidden sm:block h-full">
+                    <MonthView
+                      huidigeDatum={huidigeDatum}
+                      afwezigheden={filteredAfwezigheden}
+                      taken={taken}
+                      geselecteerdeDag={geselecteerdeDag}
+                      onSelectDag={setGeselecteerdeDag}
+                    />
+                  </div>
+                  <div className="sm:hidden flex flex-col items-center justify-center gap-2 h-full min-h-48 text-zinc-400 text-sm text-center px-4">
+                    <span>Maandoverzicht is niet beschikbaar op mobiel.</span>
+                    <span className="text-xs">
+                      Schakel naar week- of dagweergave via de knoppen
+                      hierboven.
+                    </span>
+                  </div>
+                </>
               )}
               {view === 'week' && (
                 <WeekView
@@ -209,5 +221,13 @@ export default function PlannerPage() {
         </div>
       </AppContainer>
     </PageContainer>
+  );
+}
+
+export default function PlannerPage() {
+  return (
+    <Suspense>
+      <PlannerPageInner />
+    </Suspense>
   );
 }

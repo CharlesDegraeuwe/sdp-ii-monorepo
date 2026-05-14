@@ -30,7 +30,7 @@ const EmailForm = (props: emailFormProps) => {
   const [submittedEmail, setSubmittedEmail] = useState(false);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { splashOpen, setSplashOpen } = useSplash();
+  const { setSplashOpen } = useSplash();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errors, setErrors] = useState<Errors>(initialErrors);

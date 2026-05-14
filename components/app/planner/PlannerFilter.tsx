@@ -61,66 +61,69 @@ export function PlannerFilter({
   ];
 
   return (
-    <div className="flex w-full items-end gap-3">
-      <span className="flex items-center gap-1 text-[11px] font-bold text-zinc-400 pb-2 shrink-0">
+    <div className="flex flex-col sm:flex-row w-full items-start sm:items-end gap-3">
+      <span className="flex items-center gap-1 text-[11px] font-bold text-zinc-400 pb-0 sm:pb-2 shrink-0">
         <MdFilterList size={14} />
         Filter
       </span>
 
-      <div className={'w-1/8'}>
-        <Select
-          size={'sm'}
-          label="Locaties"
-          options={siteOptions}
-          value={filter.locatieId != null ? String(filter.locatieId) : ''}
-          placeholder="Alle locaties"
-          onChange={(val) => {
-            const id = val ? Number(val) : null;
-            onChange({ locatieId: id, teamId: null, werknemerId: null });
-          }}
-        />
-      </div>
-      <div className={'w-1/8'}>
-        <Select
-          size={'sm'}
-          label="Team"
-          options={teamOptions}
-          value={filter.teamId != null ? String(filter.teamId) : ''}
-          placeholder="Alle teams"
-          onChange={(val) => {
-            const id = val ? Number(val) : null;
-            onChange({ teamId: id, werknemerId: null });
-          }}
-        />
-      </div>
-      <div className={'w-1/8'}>
-        <Select
-          size={'sm'}
-          label="Werknemer"
-          options={werknemerOptions}
-          value={filter.werknemerId != null ? String(filter.werknemerId) : ''}
-          placeholder={
-            filter.teamId ? 'Alle werknemers' : 'Kies eerst een team'
-          }
-          disabled={!filter.teamId}
-          onChange={(val) => {
-            const id = val ? Number(val) : null;
-            onChange({ werknemerId: id });
-          }}
-        />
+      <div className="flex flex-col sm:flex-row gap-3 flex-1 w-full">
+        <div className={'flex-1 min-w-28'}>
+          <Select
+            size={'sm'}
+            label="Locaties"
+            options={siteOptions}
+            value={filter.locatieId != null ? String(filter.locatieId) : ''}
+            placeholder="Alle locaties"
+            onChange={(val) => {
+              const id = val ? Number(val) : null;
+              onChange({ locatieId: id, teamId: null, werknemerId: null });
+            }}
+          />
+        </div>
+        <div className={'flex-1 min-w-28'}>
+          <Select
+            size={'sm'}
+            label="Team"
+            options={teamOptions}
+            value={filter.teamId != null ? String(filter.teamId) : ''}
+            placeholder="Alle teams"
+            onChange={(val) => {
+              const id = val ? Number(val) : null;
+              onChange({ teamId: id, werknemerId: null });
+            }}
+          />
+        </div>
+        <div className={'flex-1 min-w-28'}>
+          <Select
+            size={'sm'}
+            label="Werknemer"
+            options={werknemerOptions}
+            value={filter.werknemerId != null ? String(filter.werknemerId) : ''}
+            placeholder={
+              filter.teamId ? 'Alle werknemers' : 'Kies eerst een team'
+            }
+            disabled={!filter.teamId}
+            onChange={(val) => {
+              const id = val ? Number(val) : null;
+              onChange({ werknemerId: id });
+            }}
+          />
+        </div>
       </div>
 
       {isFiltered && (
-        <Button
-          size={'sm'}
-          iconLeft={<MdClose size={11} />}
-          variant={'outline'}
-          label={'Wis filters'}
-          onClick={() =>
-            onChange({ locatieId: null, teamId: null, werknemerId: null })
-          }
-          className="flex items-center gap-1 mb-0.5 text-[11px] font-bold text-zinc-500 hover:text-zinc-800 px-2.5 py-1.5 rounded-xl border border-gray-300/60 hover:border-zinc-400 bg-white/60 transition-all duration-150"
-        />
+        <div className="shrink-0">
+          <Button
+            size={'sm'}
+            iconLeft={<MdClose size={11} />}
+            variant={'outline'}
+            label={'Wis filters'}
+            onClick={() =>
+              onChange({ locatieId: null, teamId: null, werknemerId: null })
+            }
+          />
+        </div>
       )}
     </div>
   );

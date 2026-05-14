@@ -15,7 +15,7 @@ export const MemberFilterBar = () => {
   ];
 
   return (
-    <div className="w-1/4">
+    <div className="w-full sm:w-1/4">
       <Select
         size={'sm'}
         label="Werknemer"

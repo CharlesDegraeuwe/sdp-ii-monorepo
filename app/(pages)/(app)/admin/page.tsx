@@ -167,9 +167,9 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 items-stretch min-h-[400px]">
-        <div className="lg:col-span-1 h-full flex flex-col">
-          <Container label={'Snelle Acties'} width={'full'} height={'full'}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
+          <Container label={'Snelle Acties'} width={'full'} height={'fit'}>
             <div className="flex flex-col gap-4 w-full mt-4">
               {links.map((link, index) => (
                 <div
@@ -198,74 +198,68 @@ export default function Page() {
           </Container>
         </div>
 
-        <div className="lg:col-span-2 h-full flex flex-col">
-          <Container
-            label={'Recente Activiteit'}
-            width={'full'}
-            height={'full'}
-          >
-            <div className="relative w-full h-full min-h-[300px]">
-              <div className="absolute inset-0 overflow-y-auto pr-2 pb-4 mt-2 custom-scrollbar">
-                {recenteLogs && recenteLogs.length > 0 ? (
-                  recenteLogs.map((log) => (
+        <div className="lg:col-span-2">
+          <Container label={'Recente Activiteit'} width={'full'} height={'fit'}>
+            <div className="mt-2 max-h-96 lg:max-h-[500px] overflow-y-auto pr-1 scroll-hidden">
+              {recenteLogs && recenteLogs.length > 0 ? (
+                recenteLogs.map((log) => (
+                  <div
+                    key={log.id}
+                    className="flex items-start gap-4 py-3 border-b border-gray-100 last:border-0 hover:bg-slate-50/50 transition-colors px-2 rounded-lg"
+                  >
                     <div
-                      key={log.id}
-                      className="flex items-start gap-4 py-3 border-b border-gray-100 last:border-0 hover:bg-slate-50/50 transition-colors px-2 rounded-lg"
-                    >
-                      <div
-                        className={`mt-1.5 w-2.5 h-2.5 rounded-full shrink-0 shadow-sm ${getLogColor(log.type)}`}
-                      ></div>
+                      className={`mt-1.5 w-2.5 h-2.5 rounded-full shrink-0 shadow-sm ${getLogColor(log.type)}`}
+                    ></div>
 
-                      <div className="flex flex-col w-full">
-                        <div className="flex justify-between items-start">
-                          <p className="text-sm text-gray-800 font-medium leading-tight">
-                            <span className="inline-block px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] font-bold uppercase tracking-wider mr-2 align-middle">
-                              {log.tabel}
-                            </span>
-                            <span className="align-middle">
-                              <span className="font-semibold text-slate-700">
-                                {log.werknemer?.voornaam} {log.werknemer?.naam}
-                              </span>
-                              <span className="text-slate-500">
-                                {' '}
-                                {getActionText(log.type)}{' '}
-                              </span>
-                              <span className="text-slate-800">
-                                {log.beschrijving}
-                              </span>
-                            </span>
-                          </p>
-                        </div>
-
-                        <div className="flex justify-between items-center mt-1">
-                          <span className="text-xs text-gray-400 font-medium">
-                            Actie:{' '}
-                            <span className="text-gray-500">{log.type}</span>
+                    <div className="flex flex-col w-full">
+                      <div className="flex justify-between items-start">
+                        <p className="text-sm text-gray-800 font-medium leading-tight">
+                          <span className="inline-block px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] font-bold uppercase tracking-wider mr-2 align-middle">
+                            {log.tabel}
                           </span>
-                          <span className="text-[11px] text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-full">
-                            {new Date(log.timestamp).toLocaleTimeString(
+                          <span className="align-middle">
+                            <span className="font-semibold text-slate-700">
+                              {log.werknemer?.voornaam} {log.werknemer?.naam}
+                            </span>
+                            <span className="text-slate-500">
+                              {' '}
+                              {getActionText(log.type)}{' '}
+                            </span>
+                            <span className="text-slate-800">
+                              {log.beschrijving}
+                            </span>
+                          </span>
+                        </p>
+                      </div>
+
+                      <div className="flex justify-between items-center mt-1">
+                        <span className="text-xs text-gray-400 font-medium">
+                          Actie:{' '}
+                          <span className="text-gray-500">{log.type}</span>
+                        </span>
+                        <span className="text-[11px] text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-full">
+                          {new Date(log.timestamp).toLocaleTimeString('nl-BE', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                          <span className="text-gray-400 font-normal ml-1">
+                            (
+                            {new Date(log.timestamp).toLocaleDateString(
                               'nl-BE',
-                              { hour: '2-digit', minute: '2-digit' },
+                              { day: '2-digit', month: 'short' },
                             )}
-                            <span className="text-gray-400 font-normal ml-1">
-                              (
-                              {new Date(log.timestamp).toLocaleDateString(
-                                'nl-BE',
-                                { day: '2-digit', month: 'short' },
-                              )}
-                              )
-                            </span>
+                            )
                           </span>
-                        </div>
+                        </span>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="flex flex-col justify-center items-center h-full text-gray-400 italic">
-                    Geen recente activiteit gevonden.
                   </div>
-                )}
-              </div>
+                ))
+              ) : (
+                <div className="flex flex-col justify-center items-center h-full text-gray-400 italic">
+                  Geen recente activiteit gevonden.
+                </div>
+              )}
             </div>
           </Container>
         </div>

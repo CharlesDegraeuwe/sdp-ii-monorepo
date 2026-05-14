@@ -11,7 +11,6 @@ import type {
   TeamOptie,
   WerknemerOptie,
 } from '@/hooks/usePlanningFilters';
-import { AnimateOnMount } from '@/components/design-system/AnimateOnMount';
 
 export type Tab = 'team' | 'you';
 
@@ -57,14 +56,15 @@ export function PlannerToolbar({
 }: PlannerToolbarProps) {
   return (
     <div className="flex flex-col gap-2.5 w-full">
-      <div className="flex flex-row sm:flex-row items-start sm:items-center gap-3 w-full">
-        <div className="flex flex-row w-full gap-3 items-center">
+      {/* Row 1: navigation + view switcher + today button */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full">
+        <div className="flex flex-row w-full sm:w-auto gap-3 items-center">
           <Button
             variant={'outline'}
             icon={<FaChevronLeft />}
             onClick={() => onNavigate(-1)}
           />
-          <span className="text-sm font-bold text-zinc-800 min-w-32 sm:min-w-52 text-center capitalize">
+          <span className="flex-1 sm:flex-none text-sm font-bold text-zinc-800 min-w-28 sm:min-w-52 text-center capitalize">
             {periodeLabel(view, huidigeDatum)}
           </span>
           <Button
@@ -73,16 +73,24 @@ export function PlannerToolbar({
             onClick={() => onNavigate(1)}
           />
         </div>
-        <div className="flex w-fit gap-2 sm:gap-3 items-center">
+        <div className="flex flex-row w-full sm:w-auto justify-between sm:justify-start gap-2 sm:gap-3 items-center">
           <TabSwitcher
             tabs={views}
             value={view}
             onChange={(key) => onViewChange(key as View)}
           />
-
           <Button onClick={onVandaag} variant="primary" label="Vandaag" />
+          {/* Team switcher inline on desktop, in its own row slot on mobile */}
+          <div className={'hidden sm:flex min-w-fit lg:min-w-90 justify-end'}>
+            <TabSwitcher
+              tabs={tabs}
+              value={tab}
+              onChange={(key) => onTabChange(key as Tab)}
+            />
+          </div>
         </div>
-        <div className={' min-w-fit  w-fit lg:min-w-90 flex justify-end'}>
+        {/* Team switcher visible on mobile only (below view controls) */}
+        <div className={'flex sm:hidden w-full justify-start'}>
           <TabSwitcher
             tabs={tabs}
             value={tab}

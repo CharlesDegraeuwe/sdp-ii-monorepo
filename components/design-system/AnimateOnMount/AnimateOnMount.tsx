@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimateOnMountProps } from '@/components/design-system/AnimateOnMount/AnimateOnMount.types';
 
 const AnimateOnMount = ({

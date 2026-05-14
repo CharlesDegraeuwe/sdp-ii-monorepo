@@ -9,15 +9,16 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="w-full flex-1 bg-delaware_red">
+    <main className="w-full flex-1 bg-delaware_red overflow-x-hidden">
       <div
         className={
-          'relative flex flex-row p-10 items-center justify-end w-full h-full bg-linear-180 from-delaware_red to-rose-700'
+          'relative flex flex-col sm:flex-row p-6 sm:p-10 items-center justify-center sm:justify-end w-full min-h-full h-full bg-linear-180 from-delaware_red to-rose-700'
         }
       >
+        {/* Branding – hidden on small mobile, shown on tablet+ */}
         <div
           className={
-            'absolute left-10 top-1/4 translate-y-1/2 text-[3rem] text-white font-futura font-bold flex flex-col'
+            'hidden md:flex absolute left-10 top-1/4 translate-y-1/2 text-[3rem] text-white font-futura font-bold flex-col'
           }
         >
           <AnimateOnMount delay={100}>
@@ -37,14 +38,14 @@ export default function Page() {
             </span>
           </AnimateOnMount>
         </div>
-        <div className={'absolute top-10 left-10'}>
+        <div className={'absolute top-6 left-6 sm:top-10 sm:left-10'}>
           <AnimateOnMount delay={100}>
             <Image
               src={'/logo-light.png'}
               width={300}
               height={0}
               alt={'logo'}
-              className={'h-7 w-fit'}
+              className={'h-6 sm:h-7 w-fit'}
             />
           </AnimateOnMount>
         </div>

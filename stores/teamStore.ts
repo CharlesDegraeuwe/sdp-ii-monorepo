@@ -97,6 +97,7 @@ export const useTeamsStore = create<TeamsStore>((set) => ({
   addTeam: (t) => set((s) => ({ teams: { ...s.teams, [t.id]: t } })),
   removeTeam: (id) =>
     set((s) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [id]: _, ...rest } = s.teams;
       return { teams: rest };
     }),
@@ -109,6 +110,7 @@ export const useTeamsStore = create<TeamsStore>((set) => ({
     })),
   removeWerknemer: (id) =>
     set((s) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [id]: _, ...rest } = s.werknemers;
       return { werknemers: rest };
     }),

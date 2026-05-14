@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 interface AvatarProps {
   img_url?: string;
   displayName: string;
@@ -33,7 +35,7 @@ const Avatar = ({ img_url, displayName, id, size = 36 }: AvatarProps) => {
   if (img_url) {
     return (
       <div className="flex flex-row items-center gap-2">
-        <img
+        <Image
           src={img_url}
           width={size}
           height={size}

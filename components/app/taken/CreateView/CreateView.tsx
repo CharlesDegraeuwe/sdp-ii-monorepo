@@ -5,7 +5,6 @@ import { Input } from '@/components/design-system/Input';
 import { Container } from '@/components/design-system/Container';
 import { Button } from '@/components/design-system/Button';
 import { FormHelper } from '@/components/design-system/Form';
-import { Label } from '@/components/design-system/Label';
 import { TextArea } from '@/components/design-system/TextArea';
 import Select from '@/components/design-system/Select/Select';
 
@@ -50,7 +49,7 @@ export const CreateView = () => {
 
   return (
     <div className={'flex flex-col pt-5 min-h-full w-full'}>
-      <Container width={'2/3'} height={'fit'} label={'Taak beschrijving'}>
+      <Container height={'fit'} label={'Taak beschrijving'}>
         <FormHelper onSubmit={handleSubmit} noHeight>
           <Input
             label={'Naam'}
@@ -66,7 +65,7 @@ export const CreateView = () => {
             placeholder={'Specificaties'}
           />
 
-          <div className={'grid grid-cols-2 gap-3'}>
+          <div className={'grid grid-cols-1 sm:grid-cols-2 gap-3'}>
             <Input
               type={'date'}
               label={'Deadline'}
@@ -88,17 +87,25 @@ export const CreateView = () => {
             />
           </div>
 
-          <div className={'flex flex-row items-center gap-3'}>
-            <input
-              type={'checkbox'}
-              checked={wholeDay}
-              onChange={(e) => setWholeDay(e.target.checked)}
-            />
-            <span className={'text-sm truncate min-w-fit'}>Hele dag</span>
+          <div className={'flex flex-col sm:flex-row sm:items-center gap-3'}>
+            <div className="flex items-center gap-3">
+              <input
+                type={'checkbox'}
+                checked={wholeDay}
+                onChange={(e) => setWholeDay(e.target.checked)}
+              />
+              <span className={'text-sm truncate min-w-fit'}>Hele dag</span>
+            </div>
             {!wholeDay && (
               <>
-                <span className={'text-xs text-zinc-500'}>of</span>
-                <div className={'flex-row items-center justify-end flex gap-3'}>
+                <span className={'text-xs text-zinc-500 hidden sm:inline'}>
+                  of
+                </span>
+                <div
+                  className={
+                    'flex-row items-center justify-start flex gap-3 flex-wrap'
+                  }
+                >
                   <Input
                     value={hour}
                     onChange={(e) => setHour(e.target.value)}

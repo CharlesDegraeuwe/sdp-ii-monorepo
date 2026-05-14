@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { PageContainer } from '@/components/design-system/PageContainer';
 import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
@@ -13,7 +14,9 @@ export default function TakenPage() {
     <PageContainer className="h-full">
       <BreadcrumbInit pages={['taken']} />
       <AppContainer>
-        <TaakClient />
+        <Suspense>
+          <TaakClient />
+        </Suspense>
       </AppContainer>
     </PageContainer>
   );

@@ -11,7 +11,7 @@ interface SsePayload {
 
 export function useSseNotifications() {
   const { data: session } = useSession();
-  const { showToast } = useToast();
+  const toast = useToast();
 
   useEffect(() => {
     const token = session?.accessToken;
@@ -28,9 +28,9 @@ export function useSseNotifications() {
       try {
         const data: SsePayload = JSON.parse(event.data);
         const message = data.titel ?? data.bericht ?? 'Nieuwe melding';
-        showToast(message, data.type ?? 'info');
+        toast.show(message);
       } catch {
-        showToast(event.data || 'Nieuwe melding', 'info');
+        toast.show(event.data || 'Nieuwe melding');
       }
     };
 
@@ -39,5 +39,5 @@ export function useSseNotifications() {
     };
 
     return () => es.close();
-  }, [session?.accessToken, session?.user?.id, showToast]);
+  }, [session?.accessToken, session?.user?.id, toast]);
 }

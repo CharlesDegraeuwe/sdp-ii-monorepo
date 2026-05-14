@@ -18,10 +18,10 @@ export const CheckView = ({ scope }: CheckViewProps) => {
   const targetId = scope === 'teams' ? selectedTeamId : selectedMemberId;
 
   return (
-    <div className="relative w-full h-3/4 flex flex-col gap-3 pt-5">
+    <div className="relative w-full flex flex-col gap-3 pt-5 min-h-96">
       {scope === 'teams' ? <TeamFilterBar /> : <MemberFilterBar />}
 
-      <div className="w-full grid grid-cols-2 gap-5 min-h-full">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1">
         <Container label="Taken" height="full" padding="0">
           <TaskColumn targetId={targetId} scope={scope} />
         </Container>

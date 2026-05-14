@@ -25,7 +25,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="relative flex flex-col h-screen w-screen">
+      <body className="relative flex flex-col h-screen w-screen overflow-x-hidden">
         <SessionProvider>
           <UserProvider>
             <SplashProvider>

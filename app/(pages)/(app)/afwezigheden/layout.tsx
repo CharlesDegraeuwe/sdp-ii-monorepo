@@ -24,7 +24,7 @@ export default function AfwezighedenLayout({
     <PageContainer className="h-full">
       <BreadcrumbInit pages={['afwezigheden']} />
       <AppContainer>
-        <div className="w-full max-w-4xl min-h-0 h-4/5 mx-auto flex flex-col gap-6">
+        <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
           <TabSwitcher
             tabs={tabs}
             value={tab}

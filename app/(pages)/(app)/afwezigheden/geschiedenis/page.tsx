@@ -76,8 +76,8 @@ export default function GeschiedenisPage() {
 
   return (
     <>
-      <div className="flex gap-4 min-h-full w-full">
-        <div className="w-1/3 h-full min-h-0">
+      <div className="flex flex-col sm:flex-row gap-4 min-h-full w-full">
+        <div className="w-full sm:w-1/3 min-h-48 sm:h-full sm:min-h-0">
           <Container height="full">
             <div className="flex flex-col gap-2 p-1 h-full">
               <Label text={'Teamleden'} variant={'caption'} />

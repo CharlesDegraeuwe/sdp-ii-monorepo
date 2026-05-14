@@ -12,7 +12,6 @@ import type {
 import { afwezighedenOpDag, isVrij } from './utils';
 import {
   VIS_START,
-  VIS_END,
   UUR_BREEDTE,
   NAAM_B,
   TIMELINE_W,

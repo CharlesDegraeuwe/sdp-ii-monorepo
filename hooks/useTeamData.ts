@@ -46,7 +46,7 @@ export const useTeamsData = () => {
     };
 
     void fetchData();
-  }, []);
+  }, [lastSynced, setLastSynced, setLoaded, setSites, setTeams, setWerknemers]);
 
   return { loaded };
 };

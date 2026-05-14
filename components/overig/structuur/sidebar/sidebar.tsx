@@ -16,6 +16,7 @@ import { IoCalendarOutline } from 'react-icons/io5';
 import { RiChatAiLine } from 'react-icons/ri';
 import { useSession } from 'next-auth/react';
 import { useSidebarStore } from '@/stores/sidebarStore';
+import { useUser } from '@/providers/UserProvider';
 
 const links = [
   {
@@ -68,6 +69,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const userRole = session?.user?.rol;
+  const { isAdmin } = useUser();
   const { isMobileOpen, close } = useSidebarStore();
 
   useEffect(() => {
@@ -123,17 +125,19 @@ export default function Sidebar() {
               ))}
           </div>
 
-          <div className={'w-full h-1/2 flex flex-col justify-end'}>
-            <Link
-              href="/admin"
-              className={`w-full h-1/5 flex hover:bg-zinc-200 flex-col gap-1 justify-center items-center text-sm rounded-3xl ${pathname == '/admin' ? 'bg-zinc-200' : ''}`}
-            >
-              <MdAdminPanelSettings size={20} />
-              <span className={`${collapsed ? 'hidden' : 'block'} truncate`}>
-                admin
-              </span>
-            </Link>
-          </div>
+          {isAdmin && (
+            <div className={'w-full h-1/2 flex flex-col justify-end'}>
+              <Link
+                href="/admin"
+                className={`w-full h-1/5 flex hover:bg-zinc-200 flex-col gap-1 justify-center items-center text-sm rounded-3xl ${pathname == '/admin' ? 'bg-zinc-200' : ''}`}
+              >
+                <MdAdminPanelSettings size={20} />
+                <span className={`${collapsed ? 'hidden' : 'block'} truncate`}>
+                  admin
+                </span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </>

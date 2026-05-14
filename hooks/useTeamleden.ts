@@ -19,7 +19,7 @@ export const useTeamLeden = (teamId: number | null) => {
     };
 
     void fetchLeden();
-  }, [teamId]);
+  }, [teamId, setTeamLeden, teamLeden]);
 
   return teamId ? (teamLeden[teamId] ?? []) : [];
 };

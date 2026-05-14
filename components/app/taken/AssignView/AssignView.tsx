@@ -81,7 +81,9 @@ export const AssignView = () => {
   };
 
   return (
-    <div className={'w-full grid grid-cols-2 gap-5 h-3/4 pt-5'}>
+    <div
+      className={'w-full grid grid-cols-1 sm:grid-cols-2 gap-5 min-h-96 pt-5'}
+    >
       <Container label={'Taken'}>
         {unassigned.length === 0 ? (
           <div
