@@ -4,6 +4,7 @@ import SessionProvider from '@/providers/SessionProvider';
 import { UserProvider } from '@/providers/UserProvider';
 import { ToastProvider } from '@/providers/ToastProvider';
 import { SplashProvider } from '@/providers/SplashProvider';
+import { SettingsProvider } from '@/providers/SettingsProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,13 +27,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="relative flex flex-col h-screen w-screen overflow-x-hidden">
-        <SessionProvider>
-          <UserProvider>
-            <SplashProvider>
-              <ToastProvider>{children}</ToastProvider>
-            </SplashProvider>
-          </UserProvider>
-        </SessionProvider>
+        <SettingsProvider>
+          <SessionProvider>
+            <UserProvider>
+              <SplashProvider>
+                <ToastProvider>{children}</ToastProvider>
+              </SplashProvider>
+            </UserProvider>
+          </SessionProvider>
+        </SettingsProvider>
       </body>
     </html>
   );

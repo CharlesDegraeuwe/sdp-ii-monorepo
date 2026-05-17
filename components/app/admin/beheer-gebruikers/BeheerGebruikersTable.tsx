@@ -8,6 +8,8 @@ import { WerknemerUser } from '@/types/types';
 import { Container } from '@/components/design-system/Container';
 import { useBeheerGebruikers } from '@/hooks/useBeheerGebruikers';
 import { IoTrashOutline } from 'react-icons/io5';
+import Input from '@/components/design-system/Input/Input';
+import Button from '@/components/design-system/Button/Button';
 
 const BeheerGebruikersTable = () => {
   const fetched = useBeheerGebruikers();
@@ -15,6 +17,7 @@ const BeheerGebruikersTable = () => {
   const { werknemers, setWerknemers, updateWerknemer } = useWerknemerStore();
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteError, setDeleteError] = useState('');
   const [sortConfig, setSortConfig] = useState<{
     key: keyof WerknemerUser;
     direction: 'asc' | 'desc';
@@ -51,7 +54,7 @@ const BeheerGebruikersTable = () => {
         setWerknemers(werknemers.filter((w) => String(w.id) !== String(id)));
       } else {
         const errorText = await res.text();
-        alert(`Fout bij verwijderen: ${res.status} - ${errorText}`);
+        setDeleteError(`Fout bij verwijderen: ${res.status} - ${errorText}`);
       }
     } catch (error) {
       console.error(error);
@@ -161,14 +164,14 @@ const BeheerGebruikersTable = () => {
   return (
     <Container label="Werknemers" padding="0">
       <div className="flex flex-col h-full w-full overflow-hidden">
-        <div className="pt-6 pb-4 shrink-0 z-10 flex justify-center items-center w-full">
-          <input
+        <div className="pt-6 pb-4 shrink-0 z-10 flex flex-col gap-2 items-center w-full px-4">
+          <Input
             type="text"
             placeholder="Zoek op voornaam, achternaam of email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full max-w-3xl px-0 py-2 bg-transparent border-0 border-b-2 border-gray-300/60 focus:border-slate-600 focus:ring-0 outline-none transition-all text-base text-gray-700 text-center focus:text-left placeholder-gray-400"
           />
+          {deleteError && <p className="text-red-500 text-sm">{deleteError}</p>}
         </div>
 
         <div className="overflow-x-auto overflow-y-auto flex-1 w-full scroll-hidden relative">
@@ -277,13 +280,14 @@ const BeheerGebruikersTable = () => {
                       </td>
                       <td className="px-5 py-4 text-center">
                         {session?.user?.email !== w.email && (
-                          <button
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            icon={
+                              <IoTrashOutline className="w-5 h-5 text-gray-400 hover:text-red-600" />
+                            }
                             onClick={() => handleDelete(w.id)}
-                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all"
-                            title="Verwijder gebruiker"
-                          >
-                            <IoTrashOutline className="w-5 h-5" />
-                          </button>
+                          />
                         )}
                       </td>
                     </tr>

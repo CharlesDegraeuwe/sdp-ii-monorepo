@@ -3,6 +3,35 @@ import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/providers/ToastProvider';
 
+const STORAGE_KEY = 'sdp2_settings';
+
+function playNotificationSound() {
+  try {
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 880;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  } catch {
+    // AudioContext not available
+  }
+}
+
+function isSoundEnabled(): boolean {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
+    return Boolean(s['notify-sound']);
+  } catch {
+    return false;
+  }
+}
+
 interface SsePayload {
   titel?: string;
   bericht?: string;
@@ -31,6 +60,10 @@ export function useSseNotifications() {
         toast.show(message);
       } catch {
         toast.show(event.data || 'Nieuwe melding');
+      }
+
+      if (isSoundEnabled()) {
+        playNotificationSound();
       }
     };
 

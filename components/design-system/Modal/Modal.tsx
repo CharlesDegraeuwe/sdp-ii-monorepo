@@ -1,14 +1,12 @@
 import { ModalProps } from '@/components/design-system/Modal/Modal.types';
 
-const Modal = (props: ModalProps) => {
-  const { children } = props;
+const Modal = ({ children, onClose }: ModalProps) => {
   return (
     <div
-      className={
-        'left-0 top-0 w-full z-90 flex flex-col backdrop-blur-2xl items-center justify-center h-full absolute bg-zinc-600/30'
-      }
+      className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-zinc-600/50"
+      onClick={onClose}
     >
-      {children}
+      <div onClick={(e) => e.stopPropagation()}>{children}</div>
     </div>
   );
 };

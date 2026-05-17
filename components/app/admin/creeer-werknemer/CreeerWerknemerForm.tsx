@@ -3,11 +3,15 @@
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Input from '@/components/design-system/Input/Input';
+import Button from '@/components/design-system/Button/Button';
+import { Container } from '@/components/design-system/Container';
 
 export default function CreeerWerknemerForm() {
   const { data: session } = useSession();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     voornaam: '',
     naam: '',
@@ -21,6 +25,7 @@ export default function CreeerWerknemerForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
 
     const token = (session as unknown as { accessToken?: string })?.accessToken;
 
@@ -38,105 +43,87 @@ export default function CreeerWerknemerForm() {
         router.push('/admin/beheer-gebruikers');
       } else {
         const errorText = await res.text();
-        alert(`Er is iets misgegaan: ${res.status} - ${errorText}`);
+        setError(`Er is iets misgegaan: ${res.status} - ${errorText}`);
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setError('Er is een onverwachte fout opgetreden.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-lg">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            Voornaam
-          </label>
-          <input
-            required
+    <Container label="Werknemer aanmaken" height="fit">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 max-w-lg pt-2"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Input
+            label="Voornaam"
             type="text"
             value={formData.voornaam}
             onChange={(e) =>
               setFormData({ ...formData, voornaam: e.target.value })
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             placeholder="Jan"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            Achternaam
-          </label>
-          <input
             required
+          />
+          <Input
+            label="Achternaam"
             type="text"
             value={formData.naam}
             onChange={(e) => setFormData({ ...formData, naam: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             placeholder="Peeters"
+            required
           />
         </div>
-      </div>
 
-      <div>
-        <label className="block text-xs font-semibold text-gray-600 mb-1">
-          E-mailadres
-        </label>
-        <input
-          required
+        <Input
+          label="E-mailadres"
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           placeholder="jan.peeters@bedrijf.be"
+          required
         />
-      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            Telefoonnummer
-          </label>
-          <input
-            required
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Input
+            label="Telefoonnummer"
             type="tel"
             value={formData.telefoonnummer}
             onChange={(e) =>
               setFormData({ ...formData, telefoonnummer: e.target.value })
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             placeholder="0470 12 34 56"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-gray-600 mb-1">
-            Geboortedatum
-          </label>
-          <input
             required
+          />
+          <Input
+            label="Geboortedatum"
             type="date"
             value={formData.geboortedatum}
             onChange={(e) =>
               setFormData({ ...formData, geboortedatum: e.target.value })
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-gray-700"
+            required
           />
         </div>
-      </div>
 
-      <p className="text-[10px] text-gray-400 italic">
-        Nieuwe accounts krijgen standaard het wachtwoord: Wachtwoord123
-      </p>
+        <p className="text-[10px] text-gray-400 italic px-3">
+          Nieuwe accounts krijgen standaard het wachtwoord: Wachtwoord123
+        </p>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-colors disabled:bg-blue-400"
-      >
-        {isSubmitting ? 'Bezig met aanmaken...' : 'Werknemer aanmaken'}
-      </button>
-    </form>
+        {error && <p className="text-red-500 text-sm px-3">{error}</p>}
+
+        <Button
+          label="Werknemer aanmaken"
+          variant="secondary"
+          type="submit"
+          loading={isSubmitting}
+        />
+      </form>
+    </Container>
   );
 }

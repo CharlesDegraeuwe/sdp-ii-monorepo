@@ -1,27 +1,45 @@
 import type { Task } from '@/stores/taakStore';
 
-export function mapBackendTask(dto: Record<string, unknown>): Task {
+interface BackendWerknemer {
+  id: number;
+  naam: string;
+  voornaam: string;
+  email: string;
+}
+
+interface BackendTaakDTO {
+  id: number;
+  werknemer?: BackendWerknemer;
+  titel?: string;
+  beschrijving?: string;
+  afgewerkt?: string;
+  deadline?: string;
+  teamId?: number;
+  siteId?: number;
+}
+
+export function mapBackendTask(
+  dto: BackendTaakDTO | Record<string, unknown>,
+): Task {
+  const d = dto as BackendTaakDTO;
   return {
-    id: String(dto.id),
-    name: (dto.naam as string) ?? '',
-    specifications: (dto.specificaties as string) ?? '',
-    dueDate: (dto.deadline as string) ?? '',
-    duration: (dto.duur as string) ?? undefined,
-    location: (dto.locatie as string) ?? '',
-    important: (dto.belangrijk as boolean) ?? false,
-    finished: (dto.afgewerkt as boolean) ?? false,
-    finishedAt: (dto.afgewerktOp as string) ?? undefined,
-    assigneeId: dto.werknemerId ? String(dto.werknemerId) : undefined,
+    id: String(d.id),
+    name: d.titel ?? '',
+    description: d.beschrijving ?? '',
+    specifications: d.beschrijving ?? '',
+    dueDate: d.deadline ?? '',
+    location: d.siteId != null ? String(d.siteId) : '',
+    important: false,
+    finished: d.afgewerkt === 'ja',
+    assigneeId: d.werknemer?.id != null ? String(d.werknemer.id) : undefined,
   };
 }
 
 export function mapTaskToBackend(task: Omit<Task, 'id' | 'finished'>) {
   return {
-    naam: task.name,
-    specificaties: task.specifications,
+    werknemerId: task.assigneeId ? Number(task.assigneeId) : 0,
+    titel: task.name,
+    beschrijving: task.description ?? task.specifications ?? '',
     deadline: task.dueDate,
-    locatie: task.location,
-    duur: task.duration,
-    belangrijk: task.important,
   };
 }
