@@ -1,10 +1,11 @@
 package hogent.sdp2.backend.rest.service.notificatie;
 
-import hogent.sdp2.backend.domain.Notificaty;
+import hogent.sdp2.backend.domain.Notificatie;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.rest.dto.request.NotificatieDTO;
 import hogent.sdp2.backend.rest.repository.NotificatieRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
+import hogent.sdp2.backend.rest.service.sse.SseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class NotificatieService {
 
     private final NotificatieRepository notificatieRepository;
     private final WerknemerRepository werknemerRepository;
+    private final SseService sseService;
 
     public void maakNotificatie(Integer werknemerId, String titel, String bericht) {
         maakNotificatie(werknemerId, titel, bericht, null);
@@ -26,7 +28,7 @@ public class NotificatieService {
         Werknemer werknemer = werknemerRepository.findById(werknemerId)
                 .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
 
-        Notificaty notificatie = new Notificaty();
+        Notificatie notificatie = new Notificatie();
         notificatie.setWerknemer(werknemer);
         notificatie.setTitel(titel);
         notificatie.setBericht(bericht);
@@ -35,6 +37,16 @@ public class NotificatieService {
         notificatie.setReferentieId(referentieId);
 
         notificatieRepository.save(notificatie);
+
+        sseService.pushEvent(werknemerId, "nieuwe_notificatie", new NotificatieDTO(
+                notificatie.getId(),
+                werknemerId,
+                notificatie.getTitel(),
+                notificatie.getBericht(),
+                notificatie.getGelezen(),
+                notificatie.getDatum(),
+                notificatie.getReferentieId()
+        ));
     }
 
     public List<NotificatieDTO> geefNotificatiesVanWerknemer(Integer werknemerId) {
@@ -57,7 +69,7 @@ public class NotificatieService {
     }
 
     public String markeerAlsGelezen(Integer notificatieId) {
-        Notificaty notificatie = notificatieRepository.findById(notificatieId)
+        Notificatie notificatie = notificatieRepository.findById(notificatieId)
                 .orElseThrow(() -> new RuntimeException("Notificatie niet gevonden"));
         notificatie.setGelezen("Ja");
         notificatieRepository.save(notificatie);

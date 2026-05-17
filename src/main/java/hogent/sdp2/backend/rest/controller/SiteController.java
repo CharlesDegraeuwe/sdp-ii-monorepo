@@ -3,6 +3,7 @@ package hogent.sdp2.backend.rest.controller;
 import hogent.sdp2.backend.domain.Site;
 import hogent.sdp2.backend.rest.dto.request.MachineWijzigenDTO;
 import hogent.sdp2.backend.rest.dto.request.SiteAanmakenDTO;
+import hogent.sdp2.backend.rest.dto.request.SiteStatsDTO;
 import hogent.sdp2.backend.rest.dto.request.SiteWijzigenDTO;
 import hogent.sdp2.backend.rest.service.locatie.MachineService;
 import hogent.sdp2.backend.rest.service.locatie.SiteService;
@@ -70,5 +71,16 @@ public class SiteController {
         sessieService.assertToegangTotWerknemer(werknemerId);
         List<Site> sites = siteService.haalSitesVanWerknemer(werknemerId);
         return ResponseEntity.ok(sites);
+    }
+
+    @GetMapping("/werknemer/{id}/stats")
+    public ResponseEntity<SiteStatsDTO> getSiteStats(@PathVariable("id") Integer id) {
+        try {
+            SiteStatsDTO stats = siteService.getSiteStatsVoorWerknemer(id);
+            return ResponseEntity.ok(stats);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

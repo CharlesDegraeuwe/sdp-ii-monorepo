@@ -1,11 +1,13 @@
 package hogent.sdp2.backend.rest.service.planning;
 
 import hogent.sdp2.backend.domain.Shift;
+import hogent.sdp2.backend.domain.Teamwerknemer;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.rest.dto.request.ShiftAanmakenDTO;
 import hogent.sdp2.backend.rest.dto.request.ShiftAanpassenDTO;
 import hogent.sdp2.backend.rest.dto.response.ShiftResponseDTO;
 import hogent.sdp2.backend.rest.repository.ShiftRepository;
+import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,16 @@ public class ShiftService {
 
     private final ShiftRepository shiftRepository;
     private final WerknemerRepository werknemerRepository;
+    private final TeamwerknemerRepository teamwerknemerRepository;
+
+    public List<ShiftResponseDTO> geefShiftenVanTeamOpDatum(Integer teamId, LocalDate datum) {
+        List<Teamwerknemer> teamleden = teamwerknemerRepository.findByTeamId(teamId);
+        return teamleden.stream()
+                .flatMap(tw -> shiftRepository.findByWerknemer_Id(tw.getWerknemer().getId()).stream())
+                .filter(s -> !datum.isBefore(s.getStartDatum()) && !datum.isAfter(s.getEindDatum()))
+                .map(this::mapToDTO)
+                .toList();
+    }
 
     public List<ShiftResponseDTO> geefShiftenVanWerknemerOpDatum(Integer werknemerId, LocalDate datum) {
         return shiftRepository.findByWerknemer_Id(werknemerId).stream()

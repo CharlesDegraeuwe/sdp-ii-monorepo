@@ -19,6 +19,14 @@ public class ShiftController {
 
     private final ShiftService shiftService;
 
+    @GetMapping("/team/{teamId}")
+    public List<ShiftResponseDTO> geefShiftenVanTeam(
+            @PathVariable Integer teamId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datum
+    ) {
+        return shiftService.geefShiftenVanTeamOpDatum(teamId, datum);
+    }
+
     @GetMapping("/werknemer/{werknemerId}")
     public List<ShiftResponseDTO> geefShiftenVanWerknemer(
             @PathVariable Integer werknemerId,

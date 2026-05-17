@@ -1,5 +1,6 @@
 package hogent.sdp2.backend.rest.repository;
 
+import hogent.sdp2.backend.domain.Team;
 import hogent.sdp2.backend.domain.Teamwerknemer;
 import hogent.sdp2.backend.domain.TeamwerknemerId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,7 @@ public interface TeamwerknemerRepository extends JpaRepository<Teamwerknemer, Te
 
     @Query("SELECT tw FROM Teamwerknemer tw WHERE tw.team.id = :teamId AND tw.werknemer.rol = 'Manager'")
     List<Teamwerknemer> findGoedkeurderVanTeam(@Param("teamId") Integer teamId);
+
+    List<Teamwerknemer> findByTeam(Team team);
+
 }

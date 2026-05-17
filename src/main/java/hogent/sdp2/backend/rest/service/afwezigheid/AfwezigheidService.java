@@ -9,10 +9,12 @@ import hogent.sdp2.backend.rest.repository.AfwezigheidRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
+import hogent.sdp2.backend.rest.service.sse.SseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,7 @@ public class AfwezigheidService {
     private final TeamwerknemerRepository teamwerknemerRepository;
     private final NotificatieService notificatieService;
     private final SessieService sessieService;
+    private final SseService sseService;
 
     public String meldAfwezigheid(AfwezigheidAanmakenDTO dto) {
         Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
@@ -43,7 +46,6 @@ public class AfwezigheidService {
 
         afwezigheidRepository.save(afwezigheid);
 
-        // Notificatie naar alle teamleden
         teamwerknemerRepository.findByWerknemerId(dto.werknemerId())
                 .stream()
                 .findFirst()
@@ -57,9 +59,14 @@ public class AfwezigheidService {
                                             werknemer.getVoornaam() + " " + werknemer.getNaam() +
                                                     " is ziek van " + dto.startDatum() + " tot " + dto.eindDatum() + "."
                                     );
+                                    sseService.pushEvent(teamlid.getWerknemer().getId(), "afwezigheid_gemeld",
+                                            Map.of("werknemerId", dto.werknemerId()));
                                 }
                             });
                 });
+
+        sseService.pushEvent(dto.werknemerId(), "afwezigheid_gemeld",
+                Map.of("afwezigheidId", afwezigheid.getId()));
 
         return "Afwezigheid succesvol gemeld.";
     }

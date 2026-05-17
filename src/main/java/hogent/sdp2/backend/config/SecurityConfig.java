@@ -43,7 +43,8 @@ public class SecurityConfig {
                         "/api/werknemers/activeer",
                         "/api/werknemers/wachtwoord-vergeten",
                         "/api/werknemers/wachtwoord-resetten",
-                        "/ws/**"
+                        "/ws/**",
+                        "/api/sse/subscribe/**"
                 ).permitAll()
                 .anyRequest().authenticated()
         )

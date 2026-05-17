@@ -1,5 +1,6 @@
 package hogent.sdp2.backend.rest.repository;
 
+import hogent.sdp2.backend.domain.Site;
 import hogent.sdp2.backend.domain.Siteteam;
 import hogent.sdp2.backend.domain.SiteteamId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +18,5 @@ public interface SiteteamRepository extends JpaRepository<Siteteam, SiteteamId> 
     @Query("SELECT st.site.id FROM Siteteam st WHERE st.team.id = :teamId")
     List<Integer> findSiteIdsByTeamId(@Param("teamId") Integer teamId);
 
-
+    List<Siteteam> findBySite(Site site);
 }

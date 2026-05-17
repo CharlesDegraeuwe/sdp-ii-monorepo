@@ -9,10 +9,12 @@ import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.VerlofRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
+import hogent.sdp2.backend.rest.service.sse.SseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class VerlofService {
     private final TeamwerknemerRepository teamwerknemerRepository;
     private final NotificatieService notificatieService;
     private final SessieService sessieService;
+    private final SseService sseService;
 
     public String vraagVerlofAan(VerlofAanvragenDTO dto) {
         Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
@@ -62,6 +65,9 @@ public class VerlofService {
                 verlof.getId()
         );
 
+        sseService.pushEvent(goedkeurderId, "verlof_aangevraagd",
+                Map.of("verlofId", verlof.getId(), "werknemerId", dto.werknemerId()));
+
         return "Verlofaanvraag succesvol ingediend.";
     }
 
@@ -85,6 +91,9 @@ public class VerlofService {
                 verlof.getId()
         );
 
+        sseService.pushEvent(verlof.getWerknemer().getId(), "verlof_goedgekeurd",
+                Map.of("verlofId", verlofId));
+
         return "Verlof goedgekeurd.";
     }
 
@@ -100,6 +109,9 @@ public class VerlofService {
                 "Verlof afgewezen",
                 "Jouw verlofaanvraag van " + verlof.getStartDatum() + " tot " + verlof.getEindDatum() + " is afgewezen."
         );
+
+        sseService.pushEvent(verlof.getWerknemer().getId(), "verlof_afgewezen",
+                Map.of("verlofId", verlofId));
 
         return "Verlof afgewezen.";
     }
@@ -127,9 +139,13 @@ public class VerlofService {
                                                     " heeft zijn verlof van " + verlof.getStartDatum() +
                                                     " tot " + verlof.getEindDatum() + " geannuleerd."
                                     );
+                                    sseService.pushEvent(teamlid.getWerknemer().getId(), "verlof_geannuleerd",
+                                            Map.of("verlofId", verlofId, "werknemerId", werknemer.getId()));
                                 }
                             });
                 });
+
+        sseService.pushEvent(werknemer.getId(), "verlof_geannuleerd", Map.of("verlofId", verlofId));
 
         return "Verlof geannuleerd.";
     }
