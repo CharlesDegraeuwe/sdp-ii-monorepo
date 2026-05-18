@@ -33,6 +33,7 @@ interface PlannerToolbarProps {
   sites: SiteOptie[];
   teams: TeamOptie[];
   teamWerknemers: WerknemerOptie[];
+  kanTeamZien: boolean;
   onViewChange: (v: View) => void;
   onTabChange: (t: Tab) => void;
   onNavigate: (d: 1 | -1) => void;
@@ -48,12 +49,14 @@ export function PlannerToolbar({
   sites,
   teams,
   teamWerknemers,
+  kanTeamZien,
   onViewChange,
   onTabChange,
   onNavigate,
   onVandaag,
   onFilterChange,
 }: PlannerToolbarProps) {
+  const zichtbareTabs = kanTeamZien ? tabs : tabs.filter((t) => t.key !== 'team');
   return (
     <div className="flex flex-col gap-2.5 w-full">
       {/* Row 1: navigation + view switcher + today button */}
@@ -81,22 +84,26 @@ export function PlannerToolbar({
           />
           <Button onClick={onVandaag} variant="primary" label="Vandaag" />
           {/* Team switcher inline on desktop, in its own row slot on mobile */}
-          <div className={'hidden sm:flex min-w-fit lg:min-w-90 justify-end'}>
+          {kanTeamZien && (
+            <div className={'hidden sm:flex min-w-fit lg:min-w-90 justify-end'}>
+              <TabSwitcher
+                tabs={zichtbareTabs}
+                value={tab}
+                onChange={(key) => onTabChange(key as Tab)}
+              />
+            </div>
+          )}
+        </div>
+        {/* Team switcher visible on mobile only (below view controls) */}
+        {kanTeamZien && (
+          <div className={'flex sm:hidden w-full justify-start'}>
             <TabSwitcher
-              tabs={tabs}
+              tabs={zichtbareTabs}
               value={tab}
               onChange={(key) => onTabChange(key as Tab)}
             />
           </div>
-        </div>
-        {/* Team switcher visible on mobile only (below view controls) */}
-        <div className={'flex sm:hidden w-full justify-start'}>
-          <TabSwitcher
-            tabs={tabs}
-            value={tab}
-            onChange={(key) => onTabChange(key as Tab)}
-          />
-        </div>
+        )}
       </div>
 
       {tab === 'team' && (

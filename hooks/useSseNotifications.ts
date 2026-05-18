@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/providers/ToastProvider';
 
@@ -41,6 +41,8 @@ interface SsePayload {
 export function useSseNotifications() {
   const { data: session } = useSession();
   const toast = useToast();
+  const toastRef = useRef(toast);
+  toastRef.current = toast;
 
   useEffect(() => {
     const token = session?.accessToken;
@@ -57,9 +59,13 @@ export function useSseNotifications() {
       try {
         const data: SsePayload = JSON.parse(event.data);
         const message = data.titel ?? data.bericht ?? 'Nieuwe melding';
-        toast.show(message);
+        toastRef.current.show(message);
       } catch {
-        toast.show(event.data || 'Nieuwe melding');
+        toastRef.current.show(event.data || 'Nieuwe melding');
+      }
+
+      if (isSoundEnabled()) {
+        playNotificationSound();
       }
 
       if (isSoundEnabled()) {
@@ -72,5 +78,5 @@ export function useSseNotifications() {
     };
 
     return () => es.close();
-  }, [session?.accessToken, session?.user?.id, toast]);
+  }, [session?.accessToken, session?.user?.id]); // toast niet als dep — gebruik ref om reconnects te voorkomen
 }

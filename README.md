@@ -1,7 +1,7 @@
-# pnpm + Bun + Next.js op Windows — Quickstart
+# pnpm + Bun + Next.js - Quickstart
 
 ## Installeren
-
+### Windows
 ```powershell
 # pnpm (package manager)
 iwr https://get.pnpm.io/install.ps1 -useb | iex
@@ -10,17 +10,29 @@ iwr https://get.pnpm.io/install.ps1 -useb | iex
 irm bun.sh/install.ps1 | iex
 ```
 
+### Mac
+Installeer eerst Homebrew indien nog niet aanwezig.
+
+
 ```homebrew
 # pnpm (package manager)
-iwr https://get.pnpm.io/install.ps1 -useb | iex
+brew install pnpm
 
 # bun (runtime)
-irm bun.sh/install.ps1 | iex
+curl -fsSL https://bun.sh/install | bash
 ```
+
+### Controller installatie
 
 Herstart je terminal, check met `pnpm --version` en `bun --version`.
 
 > Bij execution policy errors: `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
+
+### Dependencies installeren
+We maken gebruik van een aantal dependencies, vergeet deze ook niet te installeren.
+```
+pnpm install
+```
 
 ## Project starten
 

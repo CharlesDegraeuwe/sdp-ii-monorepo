@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
 
@@ -34,6 +34,10 @@ export function usePlanningFilters(authHeader: Record<string, string>) {
   const [teamWerknemers, setTeamWerknemers] = useState<WerknemerOptie[]>([]);
   const [alleWerknemers, setAlleWerknemers] = useState<WerknemerMetTeam[]>([]);
 
+  // Ref zodat callbacks stabiel blijven ook al verandert authHeader (token refresh)
+  const authRef = useRef(authHeader);
+  authRef.current = authHeader;
+
   useEffect(() => {
     const bearer = authHeader.Authorization;
     if (!bearer || bearer === 'Bearer undefined') return;
@@ -48,51 +52,45 @@ export function usePlanningFilters(authHeader: Record<string, string>) {
       .catch(console.error);
   }, [authHeader]);
 
-  const laadWerknemersVanTeam = useCallback(
-    async (teamId: number) => {
-      setTeamWerknemers([]);
-      const res = await fetch(`${BASE}/teams/${teamId}/werknemers`, {
-        headers: authHeader,
-      }).catch(() => null);
-      if (res?.ok) setTeamWerknemers(await res.json());
-    },
-    [authHeader],
-  );
+  const laadWerknemersVanTeam = useCallback(async (teamId: number) => {
+    setTeamWerknemers([]);
+    const res = await fetch(`${BASE}/teams/${teamId}/werknemers`, {
+      headers: authRef.current,
+    }).catch(() => null);
+    if (res?.ok) setTeamWerknemers(await res.json());
+  }, []);
 
   const resetTeamWerknemers = useCallback(() => setTeamWerknemers([]), []);
 
-  const laadAlleWerknemers = useCallback(
-    async (teamsToLoad: TeamOptie[]) => {
-      if (teamsToLoad.length === 0) return;
-      setAlleWerknemers([]);
-      const results = await Promise.all(
-        teamsToLoad.map((t) =>
-          fetch(`${BASE}/teams/${t.id}/werknemers`, { headers: authHeader })
-            .then((r) =>
-              r.ok
-                ? (r.json() as Promise<WerknemerOptie[]>)
-                : Promise.resolve([]),
-            )
-            .then((ws: WerknemerOptie[]) =>
-              ws.map((w) => ({ ...w, teamId: t.id, teamNaam: t.naam })),
-            )
-            .catch(() => [] as WerknemerMetTeam[]),
-        ),
-      );
-      const seen = new Set<number>();
-      const unique: WerknemerMetTeam[] = [];
-      for (const batch of results) {
-        for (const w of batch) {
-          if (!seen.has(w.id)) {
-            seen.add(w.id);
-            unique.push(w);
-          }
+  const laadAlleWerknemers = useCallback(async (teamsToLoad: TeamOptie[]) => {
+    if (teamsToLoad.length === 0) return;
+    setAlleWerknemers([]);
+    const results = await Promise.all(
+      teamsToLoad.map((t) =>
+        fetch(`${BASE}/teams/${t.id}/werknemers`, { headers: authRef.current })
+          .then((r) =>
+            r.ok
+              ? (r.json() as Promise<WerknemerOptie[]>)
+              : Promise.resolve([]),
+          )
+          .then((ws: WerknemerOptie[]) =>
+            ws.map((w) => ({ ...w, teamId: t.id, teamNaam: t.naam })),
+          )
+          .catch(() => [] as WerknemerMetTeam[]),
+      ),
+    );
+    const seen = new Set<number>();
+    const unique: WerknemerMetTeam[] = [];
+    for (const batch of results) {
+      for (const w of batch) {
+        if (!seen.has(w.id)) {
+          seen.add(w.id);
+          unique.push(w);
         }
       }
-      setAlleWerknemers(unique);
-    },
-    [authHeader],
-  );
+    }
+    setAlleWerknemers(unique);
+  }, []);
 
   return {
     sites,

@@ -21,6 +21,8 @@ interface WerknemerRijProps {
   isManager: boolean;
   dagIsVrij: boolean;
   huidigUurX: number | null;
+  isGeselecteerd?: boolean;
+  onSelecteer?: () => void;
   onEdit: () => void;
   onCreate: () => void;
 }
@@ -32,17 +34,25 @@ export function WerknemerRij({
   isManager,
   dagIsVrij,
   huidigUurX,
+  isGeselecteerd,
+  onSelecteer,
   onEdit,
   onCreate,
 }: WerknemerRijProps) {
   return (
     <div
-      className="flex border-b border-zinc-100 hover:bg-zinc-50/50 transition-colors"
+      className={`flex border-b border-zinc-100 transition-colors ${
+        isGeselecteerd ? 'bg-zinc-50' : 'hover:bg-zinc-50/50'
+      }`}
       style={{ height: ROW_H }}
     >
-      <div
+      <button
         style={{ width: NAAM_B, minWidth: NAAM_B }}
-        className="shrink-0 flex flex-col justify-center px-3 py-1 border-r border-zinc-100"
+        className={`shrink-0 flex flex-col justify-center px-3 py-1 border-r border-zinc-100 text-left transition-colors ${
+          onSelecteer ? 'cursor-pointer hover:bg-zinc-100/60' : ''
+        } ${isGeselecteerd ? 'bg-zinc-100/60' : ''}`}
+        onClick={onSelecteer}
+        type="button"
       >
         <span className="text-xs font-semibold text-zinc-800 truncate">
           {rij.label}
@@ -54,7 +64,10 @@ export function WerknemerRij({
             {afwezigheidLabel(afwezig[0])}
           </span>
         )}
-      </div>
+        {isGeselecteerd && (
+          <span className="text-[9px] text-zinc-400 mt-0.5">▸ taken</span>
+        )}
+      </button>
 
       <div
         className="relative"
