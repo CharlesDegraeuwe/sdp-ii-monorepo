@@ -19,7 +19,9 @@ public class SiteApiService extends ApiService {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) return Collections.emptyList();
-            LocatieDTO[] array = mapper.readValue(response.body(), LocatieDTO[].class);
+            String body = response.body();
+            if (body == null || body.isBlank()) return Collections.emptyList();
+            LocatieDTO[] array = mapper.readValue(body, LocatieDTO[].class);
             return Arrays.asList(array);
         } catch (Exception e) {
             throw new RuntimeException("Fout bij ophalen sites", e);

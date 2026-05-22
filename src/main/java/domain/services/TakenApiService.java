@@ -20,7 +20,9 @@ public class TakenApiService extends ApiService {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) return Collections.emptyList();
-            TaakDTO[] array = mapper.readValue(response.body(), TaakDTO[].class);
+            String body = response.body();
+            if (body == null || body.isBlank()) return Collections.emptyList();
+            TaakDTO[] array = mapper.readValue(body, TaakDTO[].class);
             return Arrays.asList(array);
         } catch (Exception e) {
             throw new RuntimeException("Fout bij ophalen taken", e);
@@ -32,7 +34,9 @@ public class TakenApiService extends ApiService {
             HttpRequest request = authenticatedRequest(BASE_URL + "/alle").GET().build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) return Collections.emptyList();
-            TaakDTO[] array = mapper.readValue(response.body(), TaakDTO[].class);
+            String body = response.body();
+            if (body == null || body.isBlank()) return Collections.emptyList();
+            TaakDTO[] array = mapper.readValue(body, TaakDTO[].class);
             return Arrays.asList(array);
         } catch (Exception e) {
             throw new RuntimeException("Fout bij ophalen alle taken", e);
@@ -51,20 +55,25 @@ public class TakenApiService extends ApiService {
         }
     }
 
-    public String maakTaakAan(int werknemerId, String titel, String beschrijving, LocalDate deadline, int siteId) {
+    public String maakTaakAan(String titel, String beschrijving, LocalDate deadline, int siteId) {
         try {
+            int werknemerId = domain.auth.Sessie.getInstance().getIngelogdeWerknemer().id();
             String json = mapper.writeValueAsString(new TaakAanmakenRequest(werknemerId, titel, beschrijving, deadline, siteId));
             HttpRequest request = authenticatedRequest(BASE_URL)
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.body();
+            if (response.statusCode() < 200 || response.statusCode() >= 300)
+                throw new RuntimeException("Server fout " + response.statusCode() + ": " + response.body());
+            return "Taak succesvol aangemaakt!";
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Fout bij aanmaken taak", e);
         }
     }
 
-    private record TaakAanmakenRequest(int werknemerId, String titel, String beschrijving, java.time.LocalDate deadline, int siteId) {}
+    private record TaakAanmakenRequest(int werknemerId, String titel, String beschrijving, LocalDate deadline, int siteId) {}
 
     public String wijzigTaak(int taakId, String titel, String beschrijving) {
         try {

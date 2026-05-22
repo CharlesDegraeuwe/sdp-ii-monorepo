@@ -47,13 +47,12 @@ public class SidebarController extends VBox {
             loader.load();
 
             initSchermItems();
-            System.out.println(Sessie.getInstance().userRole());
-            switch(Sessie.getInstance().userRole()) {
-
-                case "Admin" -> showAdminOnly();
-                case "Supervisor" -> showSupervisorOnly();
-                case "Werknemer" -> showEmployeeOnly();
-                case "Manager" -> showManagerOnly();
+            switch(Sessie.getInstance().userRole().toLowerCase()) {
+                case "admin"      -> showAdminOnly();
+                case "supervisor" -> showSupervisorOnly();
+                case "werknemer"  -> showEmployeeOnly();
+                case "manager"    -> showManagerOnly();
+                default           -> showEmployeeOnly();
             }
 
         } catch (IOException e) {
@@ -124,7 +123,7 @@ public class SidebarController extends VBox {
     }
 
     private void showEmployeeOnly() {
-        configureVisibility(Set.of(dashboard, planning, tasks, absense));
+        configureVisibility(Set.of(dashboard, planning, tasks, absense, teams));
         setActive(dashboard);
     }
 

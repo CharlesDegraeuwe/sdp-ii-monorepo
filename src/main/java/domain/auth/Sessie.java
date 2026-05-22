@@ -9,7 +9,7 @@ public class Sessie {
     private WerknemerDTO ingelogdeWerknemer;
     @Setter
     @Getter
-    private String sessionId; 
+    private String jwtToken;
 
     private static class SessieHolder {
         private static final Sessie INSTANCE = new Sessie();
@@ -28,22 +28,23 @@ public class Sessie {
 
     public void uitloggen() {
         this.ingelogdeWerknemer = null;
+        this.jwtToken = null;
     }
 
     public boolean isAdmin() {
-        return ingelogdeWerknemer != null && userRole().equals("Admin");
+        return ingelogdeWerknemer != null && userRole().equalsIgnoreCase("Admin");
     }
 
     public boolean isMangerOrAdmin() {
-        return userRole().equals("Manager") || userRole().equals("Admin");
+        return userRole().equalsIgnoreCase("Manager") || userRole().equalsIgnoreCase("Admin");
     }
 
     public boolean isSuperVisor() {
-        return userRole().equals("Supervisor");
+        return userRole().equalsIgnoreCase("Supervisor");
     }
 
     public boolean isWerknemer() {
-        return userRole().equals("Werknemer");
+        return userRole().equalsIgnoreCase("Werknemer");
     }
 
     public String userRole() {

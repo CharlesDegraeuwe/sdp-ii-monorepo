@@ -19,7 +19,7 @@
                 <ComboBox fx:id="Werknemer" promptText="Werknemer..." styleClass="picker"/>
             </HBox>
 
-            <GridPane hgap="16" maxHeight="Infinity" VBox.vgrow="ALWAYS">
+            <GridPane hgap="16" VBox.vgrow="ALWAYS">
                 <columnConstraints>
                     <ColumnConstraints percentWidth="50"/>
                     <ColumnConstraints percentWidth="50"/>
@@ -28,52 +28,57 @@
                     <RowConstraints vgrow="ALWAYS" minHeight="0"/>
                 </rowConstraints>
 
-                <!-- Kolom 0 -->
+                <!-- Kolom 0: open taken -->
                 <VBox spacing="12" GridPane.columnIndex="0" GridPane.vgrow="ALWAYS">
                     <HBox minHeight="30" prefHeight="30" spacing="5" alignment="CENTER_LEFT">
                         <Label fx:id="titel_taken" text="Alle taken:" styleClass="card_subtitle"/>
                         <Region HBox.hgrow="ALWAYS"/>
                     </HBox>
-                    <VBox styleClass="card" spacing="5" VBox.vgrow="ALWAYS">
-                        <TextField promptText="zoeken..." styleClass="task-input"/>
+                    <VBox styleClass="card" spacing="8" VBox.vgrow="ALWAYS">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                        <TextField promptText="zoeken..." styleClass="task-input"/>
                         <Label fx:id="geen_filter_label" text="" styleClass="task-due-text" maxWidth="Infinity" alignment="CENTER" visible="false" managed="false"/>
-                        <VBox fx:id="taken_container" styleClass="task-section" VBox.vgrow="ALWAYS">
-                            <padding><Insets top="8" bottom="12"/></padding>
-                        </VBox>
+                        <ScrollPane styleClass="assign-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                            <VBox fx:id="taken_container" styleClass="task-section" spacing="4">
+                                <padding><Insets top="4" bottom="8"/></padding>
+                            </VBox>
+                        </ScrollPane>
                     </VBox>
                 </VBox>
 
-                <!-- Kolom 1 -->
-                <VBox spacing="12" GridPane.columnIndex="1" GridPane.vgrow="ALWAYS">
-                    <Region minHeight="30" prefHeight="30"/>
-                    <VBox fx:id="detail_card" styleClass="card" spacing="12" visible="false" managed="false">
-                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                        <HBox alignment="CENTER_LEFT">
-                            <Label text="Taak details:" styleClass="section-label"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label fx:id="edit_button" text="edit" styleClass="edit-link"/>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT">
-                            <Label fx:id="detail_deadline" text="" styleClass="task-due-text"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label fx:id="detail_locatie" text="" styleClass="task-location-link"/>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT">
-                            <Label fx:id="detail_werknemer" text="" styleClass="task-due-text"/>
-                        </HBox>
-                        <TextField fx:id="detail_titel" promptText="taak naam" styleClass="task-input" editable="false"/>
-                        <TextArea fx:id="detail_beschrijving" promptText="specificaties" prefRowCount="3" styleClass="task-input-area" editable="false"/>
-                        <Button fx:id="opslaan_button" text="Opslaan" visible="false" managed="false" maxWidth="Infinity" styleClass="create-task-btn"/>
-                    </VBox>
-                    <VBox styleClass="card" spacing="4" VBox.vgrow="ALWAYS">
-                        <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-                        <Label fx:id="afgewerkte_taken_titel" styleClass="section-label"/>
-                        <VBox fx:id="finished_task_container" spacing="4" styleClass="task-section" VBox.vgrow="ALWAYS">
-                            <padding><Insets top="8"/></padding>
+                <!-- Kolom 1: details + afgewerkt -->
+                <ScrollPane styleClass="assign-scroll" fitToWidth="true" hbarPolicy="NEVER"
+                            GridPane.columnIndex="1" GridPane.vgrow="ALWAYS">
+                    <VBox spacing="12">
+                        <Region minHeight="42" prefHeight="42"/>
+                        <VBox fx:id="detail_card" styleClass="card" spacing="12" visible="false" managed="false">
+                            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Taak details:" styleClass="section-label"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="edit_button" text="edit" styleClass="edit-link"/>
+                            </HBox>
+                            <HBox alignment="CENTER_LEFT">
+                                <Label fx:id="detail_deadline" text="" styleClass="task-due-text"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="detail_locatie" text="" styleClass="task-location-link"/>
+                            </HBox>
+                            <HBox alignment="CENTER_LEFT">
+                                <Label fx:id="detail_werknemer" text="" styleClass="task-due-text"/>
+                            </HBox>
+                            <TextField fx:id="detail_titel" promptText="taak naam" styleClass="task-input" editable="false"/>
+                            <TextArea fx:id="detail_beschrijving" promptText="specificaties" prefRowCount="3" styleClass="task-input-area" editable="false"/>
+                            <Button fx:id="opslaan_button" text="Opslaan" visible="false" managed="false" maxWidth="Infinity" styleClass="create-task-btn"/>
+                        </VBox>
+                        <VBox styleClass="card" spacing="4">
+                            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+                            <Label fx:id="afgewerkte_taken_titel" styleClass="section-label"/>
+                            <VBox fx:id="finished_task_container" spacing="4" styleClass="task-section">
+                                <padding><Insets top="8"/></padding>
+                            </VBox>
                         </VBox>
                     </VBox>
-                </VBox>
+                </ScrollPane>
 
             </GridPane>
 

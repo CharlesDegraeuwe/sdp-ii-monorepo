@@ -38,12 +38,7 @@ public class TeamItemController extends HBox {
     private void init() {
         teamNaam.setText(team.naam());
 
-        this.setOnMouseClicked(e -> {
-            if(e.getTarget() != this) {
-                onSelect.select(null);
-            }
-            onSelect.select(this);
-        });
+        this.setOnMouseClicked(e -> onSelect.select(this));
 
     }
 

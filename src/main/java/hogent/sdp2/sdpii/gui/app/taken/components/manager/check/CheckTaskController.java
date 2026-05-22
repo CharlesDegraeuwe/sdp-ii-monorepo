@@ -8,6 +8,7 @@ import domain.facades.TakenFacade;
 import domain.facades.TeamFacade;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.FinishedTaakItem;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.TaakItemController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -51,7 +52,7 @@ public class CheckTaskController extends BorderPane {
     private static final TeamLidDTO ALLE_WERKNEMERS = new TeamLidDTO(-1, "Alle werknemers", "", null, null, null, false, 0, null, null, null, null, null, null);
 
     private TaakDTO geselecteerdeTaak;
-    private List<TaakDTO> alleTaken;
+    private List<TaakDTO> alleTaken = new java.util.ArrayList<>();
     private TakenFacade takenFacade;
     private final TeamFacade teamFacade = new TeamFacade();
 
@@ -162,13 +163,25 @@ public class CheckTaskController extends BorderPane {
         Werknemer.setOnAction(e -> toonTaken());
         Toegewezen.setOnAction(e -> toonTaken());
 
-        alleTaken = takenFacade.geefAlleTaken();
-        toonTaken();
+        laadTaken();
+    }
+
+    private void laadTaken() {
+        new Thread(() -> {
+            try {
+                List<TaakDTO> geladen = takenFacade.geefAlleTaken();
+                Platform.runLater(() -> {
+                    alleTaken = geladen;
+                    toonTaken();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void herlaad() {
-        alleTaken = takenFacade.geefAlleTaken();
-        toonTaken();
+        laadTaken();
     }
 
     private void toonTaken() {
@@ -180,36 +193,31 @@ public class CheckTaskController extends BorderPane {
 
         String toegewezenFilter = Toegewezen.getValue() != null && !Toegewezen.getValue().equals(ALLE_TOEGEWEZEN)
                 ? Toegewezen.getValue() : null;
-        Integer siteFilter = Locatie.getValue() != null && Locatie.getValue().id() != -1
-                ? Locatie.getValue().id() : null;
-        Integer teamFilter = Team.getValue() != null && Team.getValue().id() != -1
-                ? Team.getValue().id() : null;
+        String locatieFilter = Locatie.getValue() != null && Locatie.getValue().id() != -1
+                ? Locatie.getValue().naam() : null;
         Integer werknemerFilter = Werknemer.getValue() != null && Werknemer.getValue().werknemerId() != -1
                 ? Werknemer.getValue().werknemerId() : null;
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         int aantalTaken = 0;
 
         for (TaakDTO taak : alleTaken) {
-            // Toegewezen filter
             if (toegewezenFilter != null) {
-                if (toegewezenFilter.equals("Toegewezen") && taak.werknemer() == null) continue;
-                if (toegewezenFilter.equals("Niet toegewezen") && taak.werknemer() != null) continue;
+                if (toegewezenFilter.equals("Toegewezen") && taak.werknemerId() == null) continue;
+                if (toegewezenFilter.equals("Niet toegewezen") && taak.werknemerId() != null) continue;
             }
-            if (siteFilter != null && !siteFilter.equals(taak.siteId())) continue;
-            if (teamFilter != null && !teamFilter.equals(taak.teamId())) continue;
+            if (locatieFilter != null && !locatieFilter.equalsIgnoreCase(taak.locatie())) continue;
             if (werknemerFilter != null) {
-                if (taak.werknemer() == null || taak.werknemer().id() != werknemerFilter) continue;
+                if (taak.werknemerId() == null || !taak.werknemerId().equals(werknemerFilter)) continue;
             }
 
             aantalTaken++;
-            String deadlineTekst = "Deadline: " + taak.deadline().format(formatter);
-            if (taak.afgewerkt().equals("nee")) {
-                TaakItemController item = new TaakItemController(taak.titel(), deadlineTekst);
+            String deadlineTekst = "Deadline: " + formatDeadline(taak.deadline());
+            if (!taak.isAfgewerkt()) {
+                TaakItemController item = new TaakItemController(taak.naam(), deadlineTekst);
                 item.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> toonDetails(taak));
                 taken_container.getChildren().add(item);
             } else {
-                finished_task_container.getChildren().add(new FinishedTaakItem(taak.titel(), "Afgewerkt"));
+                finished_task_container.getChildren().add(new FinishedTaakItem(taak.naam(), "Afgewerkt"));
             }
         }
 
@@ -222,20 +230,14 @@ public class CheckTaskController extends BorderPane {
 
     private void toonDetails(TaakDTO taak) {
         geselecteerdeTaak = taak;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        detail_deadline.setText("Deadline: " + taak.deadline().format(formatter));
-        detail_werknemer.setText(taak.werknemer() != null
-                ? "Toegewezen aan: " + taak.werknemer().voornaam() + " " + taak.werknemer().naam()
+        detail_deadline.setText("Deadline: " + formatDeadline(taak.deadline()));
+        detail_werknemer.setText(taak.werknemerId() != null
+                ? "Toegewezen aan werknemer #" + taak.werknemerId()
                 : "Niet toegewezen");
-        detail_titel.setText(taak.titel());
-        detail_beschrijving.setText(taak.beschrijving() != null ? taak.beschrijving() : "");
-        LocatieDTO gevondenLocatie = taak.siteId() != null
-                ? new LocatieFacade().vindLocatie(taak.siteId())
-                : null;
-        if (gevondenLocatie != null) {
-            detail_locatie.setText(gevondenLocatie.naam());
-            final int siteId = gevondenLocatie.id();
-            detail_locatie.setOnMouseClicked(e -> Router.getInstance().navigeerNaarLocatie(siteId));
+        detail_titel.setText(taak.naam());
+        detail_beschrijving.setText(taak.specificaties() != null ? taak.specificaties() : "");
+        if (taak.locatie() != null && !taak.locatie().isBlank()) {
+            detail_locatie.setText(taak.locatie());
             detail_locatie.setVisible(true);
             detail_locatie.setManaged(true);
         } else {
@@ -245,6 +247,16 @@ public class CheckTaskController extends BorderPane {
         zetEditModusUit();
         detail_card.setVisible(true);
         detail_card.setManaged(true);
+    }
+
+    private static java.time.LocalDate parseDeadline(String deadline) {
+        if (deadline == null || deadline.length() < 10) return null;
+        try { return java.time.LocalDate.parse(deadline.substring(0, 10)); } catch (Exception e) { return null; }
+    }
+
+    private static String formatDeadline(String deadline) {
+        java.time.LocalDate d = parseDeadline(deadline);
+        return d != null ? d.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "—";
     }
 
     public void verbergDetails() {

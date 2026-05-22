@@ -12,7 +12,7 @@ public class JouwUrenItemController extends HBox {
     @FXML Label uur;
     @FXML Label datum;
 
-    public JouwUrenItemController(String datum, String uur, String locatie) {
+    public JouwUrenItemController(String datum, String uur, String locatie, boolean afwijkend) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/overzicht/components/jouw_uren/JouwUrenItem.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -21,9 +21,11 @@ public class JouwUrenItemController extends HBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //text instellen
         this.datum.setText(datum);
         this.locatie.setText(locatie);
         this.uur.setText(uur);
+        if (afwijkend) {
+            this.uur.setStyle("-fx-text-fill: #B91C1C; -fx-font-weight: bold;");
+        }
     }
 }

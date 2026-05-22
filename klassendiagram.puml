@@ -1,0 +1,528 @@
+@startuml klassendiagram_domain
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+hide empty members
+
+' ─────────────────────────────────────────────────────────────────────
+' PACKAGE: domain (root)
+' ─────────────────────────────────────────────────────────────────────
+package domain {
+
+    class Beheerder <<Singleton>> {
+        - {static} INSTANCE : Beheerder
+        + {static} getInstance() : Beheerder
+        + getAfwezigheidFacade() : AfwezigheidFacade
+        + getAuthFacade() : AuthFacade
+        + getGeschiedenisFacade() : GeschiedenisFacade
+        + getLocatieFacade() : LocatieFacade
+        + getNotificatieFacade() : NotificatieFacade
+        + getOverzichtFacade() : OverzichtsFacade
+        + getPlanningFacade() : PlanningFacade
+        + getSiteFacade() : SiteFacade
+        + getTakenFacade() : TakenFacade
+        + getTeamFacade() : TeamFacade
+        + getVerlofFacade() : VerlofFacade
+        + getWerknemersFacade() : WerknemersFacade
+    }
+
+}
+
+' ─────────────────────────────────────────────────────────────────────
+' PACKAGE: domain.auth
+' ─────────────────────────────────────────────────────────────────────
+package domain.auth {
+
+    class Sessie <<Singleton>> {
+        - ingelogdeWerknemer : WerknemerDTO
+        - sessionId : String
+        + {static} getInstance() : Sessie
+        + getIngelogdeWerknemer() : WerknemerDTO
+        + setIngelogdeWerknemer(w : WerknemerDTO) : void
+        + uitloggen() : void
+        + isAdmin() : boolean
+        + isMangerOrAdmin() : boolean
+        + isSuperVisor() : boolean
+        + isWerknemer() : boolean
+        + userRole() : String
+    }
+
+}
+
+' ─────────────────────────────────────────────────────────────────────
+' PACKAGE: domain.dto
+' ─────────────────────────────────────────────────────────────────────
+package domain.dto {
+
+    class WerknemerDTO <<record>> {
+        id : int
+        naam : String
+        voornaam : String
+        email : String
+        telefoonnummer : String
+        geboortedatum : LocalDate
+        rol : String
+        status : String
+    }
+
+    class UpdateWerknemerDTO <<record>> {
+        naam : String
+        voornaam : String
+        email : String
+        telefoonnummer : String
+        geboortedatum : LocalDate
+    }
+
+    class TaakDTO <<record>> {
+        id : int
+        werknemer : WerknemerDTO
+        titel : String
+        beschrijving : String
+        afgewerkt : String
+        deadline : LocalDate
+        siteId : Integer
+        teamId : Integer
+    }
+
+    class LocatieDTO <<record>> {
+        id : Integer
+        naam : String
+        locatie : String
+        capaciteit : Integer
+        status : String
+    }
+
+    class MachineAanmaakDTO <<record>> {
+        naam : String
+        status : String
+        siteId : Integer
+    }
+
+    class NotificatieDTO <<record>> {
+        id : int
+        werknemerId : int
+        titel : String
+        bericht : String
+        gelezen : String
+        datum : LocalDate
+        referentieId : Integer
+    }
+
+    class AfwezigheidAanmakenDTO <<record>> {
+        werknemerId : int
+        startDatum : LocalDate
+        eindDatum : LocalDate
+        reden : String
+        certificaat : byte[]
+    }
+
+    class AfwezigheidsOverzichtDTO <<record>> {
+        werknemerId : Integer
+        voornaam : String
+        naam : String
+        type : String
+        startDatum : LocalDate
+        eindDatum : LocalDate
+        status : String
+    }
+
+    class VerlofAanvragenDTO <<record>> {
+        werknemerId : int
+        startDatum : LocalDate
+        eindDatum : LocalDate
+        type : String
+    }
+
+    class LogDTO <<record>> {
+        id : Integer
+        werknemerId : Integer
+        type : String
+        tabel : String
+        timestamp : LocalDateTime
+        test : String
+    }
+
+    class TeamDTO <<record>> {
+        id : int
+        naam : String
+        beschrijving : String
+        managerId : Integer
+        managerNaam : String
+        siteId : Integer
+        siteNaam : String
+    }
+
+    class TeamLidDTO <<record>> {
+        werknemerId : int
+        naam : String
+        voornaam : String
+        rol : String
+        isSupervisor : boolean
+        teamId : int
+        teamNaam : String
+    }
+
+    class TeamInfoDTO <<record>> {
+        id : Integer
+        naam : String
+        beschrijving : String
+    }
+
+    class CreateTeamDTO <<record>> {
+        naam : String
+        beschrijving : String
+        managerId : Integer
+        siteId : Integer
+        leden : List<CreateTeamLidDTO>
+    }
+
+    class CreateTeamLidDTO <<record>> {
+        werknemerId : int
+        isSupervisor : boolean
+    }
+
+    class SiteDTO <<record>> {
+        id : int
+        naam : String
+        locatie : String
+    }
+
+    class GeschiedenisItemDTO <<record>> {
+        id : Integer
+        type : String
+        startDatum : LocalDate
+        eindDatum : LocalDate
+        status : String
+        omschrijving : String
+    }
+
+    class LocatieInfoDTO {
+        - naam : String
+        - locatie : String
+        - status : String
+        - quickStats : String
+        + getNaam() : String
+        + getLocatie() : String
+        + getStatus() : String
+        + getQuickStats() : String
+    }
+
+    CreateTeamDTO --> CreateTeamLidDTO : leden
+    TaakDTO --> WerknemerDTO : werknemer
+}
+
+' ─────────────────────────────────────────────────────────────────────
+' PACKAGE: domain.services
+' ─────────────────────────────────────────────────────────────────────
+package domain.services {
+
+    abstract class ApiService {
+        # client : HttpClient
+        # mapper : ObjectMapper
+        # authenticatedRequest(url : String) : HttpRequest.Builder
+    }
+
+    class AuthApiService {
+        - BASE_URL : String
+        + login(email : String, wachtwoord : String) : WerknemerDTO
+        + activeerAccount(werknemerId : int, code : String) : boolean
+    }
+
+    class WerknemersApiService {
+        - BASE_URL : String
+        + getAlleWerknemers() : List<WerknemerDTO>
+        + activeerWerknemer(code : String) : String
+        + zoekOpEmail(email : String) : WerknemerDTO
+        + zoekOpId(id : int) : WerknemerDTO
+        + update(dto : UpdateWerknemerDTO) : WerknemerDTO
+        + veranderStatus(id : int, actie : String) : boolean
+        + registreerWerknemer(...) : boolean
+    }
+
+    class TakenApiService {
+        - BASE_URL : String
+        + geefTakenVanWerknemer(id : int) : List<TaakDTO>
+        + geefAlleTaken() : List<TaakDTO>
+        + wijsTaakToe(taakId : int, werknemerId : int) : String
+        + maakTaakAan(...) : String
+        + wijzigTaak(id : int, titel : String, oms : String) : String
+        + verwijderTaak(id : int) : String
+        + markeerAfgewerkt(id : int) : String
+    }
+
+    class VerlofApiService {
+        - BASE_URL : String
+        + vraagVerlofAan(dto : VerlofAanvragenDTO) : String
+        + geefVerlofStatus(id : int) : String
+        + keurVerlofGoed(id : int) : String
+        + wijsVerlofAf(id : int) : String
+        + annuleerVerlof(id : int) : String
+    }
+
+    class AfwezigheidApiService {
+        - BASE_URL : String
+        + meldAfwezigheid(dto : AfwezigheidAanmakenDTO) : String
+    }
+
+    class PlanningApiService {
+        - BASE_URL : String
+        + geefAfwezighedenVanTeam(id : int, van : LocalDate, tot : LocalDate) : List<AfwezigheidsOverzichtDTO>
+        + geefAlleAfwezigheden(van : LocalDate, tot : LocalDate) : List<AfwezigheidsOverzichtDTO>
+        + geefAfwezighedenVanSpecifiekTeam(id : int, van : LocalDate, tot : LocalDate) : List<AfwezigheidsOverzichtDTO>
+    }
+
+    class LocatieApiService {
+        - BASE_URL : String
+        - MACHINES_URL : String
+        + geefAlleLocaties() : List<LocatieDTO>
+        + vindLocatie(id : Integer) : LocatieDTO
+        + verwijderLocatie(id : Integer) : boolean
+        + wijzigLocatie(id : Integer, dto : LocatieDTO) : boolean
+        + maakLocatie(dto : LocatieDTO) : boolean
+        + maakMachine(dto : MachineAanmaakDTO) : boolean
+        + haalMachinesOpVoorSite(siteId : Integer) : List<MachineAanmaakDTO>
+        + wijzigMachine(id : Integer, dto : MachineAanmaakDTO) : boolean
+        + verwijderMachine(id : Integer) : boolean
+    }
+
+    class TeamApiService {
+        - BASE_URL : String
+        + getAlleTeams() : List<TeamDTO>
+        + geefTeamsVanSite(siteId : int) : List<TeamDTO>
+        + getTeamMembers(teamId : int) : List<TeamLidDTO>
+        + geefTeamsVanManager(managerId : int) : List<TeamInfoDTO>
+        + getBeschikbareWerknemers(teamId : int) : List<WerknemerDTO>
+        + voegLidToe(teamId : int, werknemerId : int) : List<WerknemerDTO>
+        + getAlleSites() : List<SiteDTO>
+        + getAlleWerknemers() : List<WerknemerDTO>
+        + maakTeam(dto : CreateTeamDTO) : TeamDTO
+        + getTeamsVanWerknemer(werknemerId : int) : List<TeamDTO>
+        + verwijderLid(teamId : int, werknemerId : int) : void
+        + verwijderTeam(teamId : int) : void
+        + maakSupervisor(teamId : int, werknemerId : int) : void
+    }
+
+    class NotificatieApiService {
+        - BASE_URL : String
+        + geefNotificaties(werknemerId : int) : List<NotificatieDTO>
+        + geefAantalOngelezen(werknemerId : int) : long
+        + markeerAlsGelezen(id : int) : String
+        + verwijderNotificatie(id : int) : String
+    }
+
+    class LogsApiService {
+        - BASE_URL : String
+        + getAlleLogs() : List<LogDTO>
+        + voegLogToe(log : LogDTO) : String
+        + zoekOpId(id : int) : LogDTO
+    }
+
+    class GeschiedenisApiService {
+        - BASE_URL : String
+        + geefGeschiedenisVanWerknemer(id : int) : List<GeschiedenisItemDTO>
+        + geefTeamledenVanManager(managerId : int) : List<WerknemerDTO>
+    }
+
+    class SiteApiService {
+        - BASE_URL : String
+        + geefSitesVanManager(managerId : int) : List<LocatieDTO>
+    }
+
+    class LogService <<utility>> {
+        - {static} facade : LogFacade
+        + {static} log(type : String, tabel : String, details : String) : void
+    }
+
+    AuthApiService --|> ApiService
+    TakenApiService --|> ApiService
+    LocatieApiService --|> ApiService
+    SiteApiService --|> ApiService
+
+    LogService ..> Sessie : gebruikt
+}
+
+' ─────────────────────────────────────────────────────────────────────
+' PACKAGE: domain.facades
+' ─────────────────────────────────────────────────────────────────────
+package domain.facades {
+
+    class AuthFacade {
+        - api : AuthApiService
+        + login(email : String, wachtwoord : String) : WerknemerDTO
+        + activeerAccount(werknemerId : int, code : String) : boolean
+    }
+
+    class WerknemersFacade {
+        - api : WerknemersApiService
+        - {static} EMAIL_PATTERN : Pattern
+        - {static} TELEFOON_PATTERN : Pattern
+        + geefAlleWerknemers() : List<WerknemerDTO>
+        + activeerWerknemer(code : String) : void
+        + zoekOpEmail(email : String) : WerknemerDTO
+        + zoekOpId(id : int) : WerknemerDTO
+        + update(dto : UpdateWerknemerDTO) : void
+        + veranderStatus(id : int, actie : String) : boolean
+        + registreerWerknemer(...) : boolean
+    }
+
+    class TakenFacade {
+        - api : TakenApiService
+        + geefEigenTaken() : List<TaakDTO>
+        + geefAlleTaken() : List<TaakDTO>
+        + wijsTaakToe(taakId : int, werknemerId : int) : String
+        + maakTaakAan(titel : String, oms : String, deadline : LocalDate, siteId : int) : String
+        + wijzigTaak(id : int, titel : String, oms : String) : String
+        + verwijderTaak(id : int) : String
+        + markeerAfgewerkt(id : int) : String
+    }
+
+    class VerlofFacade {
+        - api : VerlofApiService
+        + vraagVerlofAan(werknemerId : int, start : LocalDate, eind : LocalDate, type : String) : String
+        + geefVerlofStatus(id : int) : String
+        + keurVerlofGoed(id : int) : String
+        + wijsVerlofAf(id : int) : String
+        + annuleerVerlof(id : int) : String
+    }
+
+    class AfwezigheidFacade {
+        - api : AfwezigheidApiService
+        + meldAfwezigheid(werknemerId : int, start : LocalDate, eind : LocalDate, reden : String, certificaat : byte[]) : String
+    }
+
+    class PlanningFacade {
+        - api : PlanningApiService
+        + geefAfwezighedenVanTeam(id : int, van : LocalDate, tot : LocalDate) : List<AfwezigheidsOverzichtDTO>
+        + geefAlleAfwezigheden(van : LocalDate, tot : LocalDate) : List<AfwezigheidsOverzichtDTO>
+        + geefAfwezighedenVanSpecifiekTeam(id : int, van : LocalDate, tot : LocalDate) : List<AfwezigheidsOverzichtDTO>
+    }
+
+    class LocatieFacade {
+        - api : LocatieApiService
+        + geefAlleLocaties() : List<LocatieDTO>
+        + vindLocatie(id : Integer) : LocatieDTO
+        + verwijderLocatie(id : Integer) : boolean
+        + wijzigLocatie(id : Integer, dto : LocatieDTO) : boolean
+        + maakLocatie(dto : LocatieDTO) : boolean
+        + maakMachine(dto : MachineAanmaakDTO) : boolean
+        + haalMachinesOpVoorSite(siteId : Integer) : List<MachineAanmaakDTO>
+        + wijzigMachine(id : Integer, dto : MachineAanmaakDTO) : boolean
+        + verwijderMachine(id : Integer) : boolean
+    }
+
+    class TeamFacade {
+        - api : TeamApiService
+        + getAlleTeams() : List<TeamDTO>
+        + getTeamLeden(teamId : int) : List<TeamLidDTO>
+        + geefTeamsVanSite(siteId : int) : List<TeamDTO>
+        + geefTeamsVanManager(managerId : int) : List<TeamInfoDTO>
+        + getBeschikbareWerknemers(teamId : int) : List<WerknemerDTO>
+        + voegLidToe(teamId : int, werknemerId : int) : List<WerknemerDTO>
+        + getAlleSites() : List<SiteDTO>
+        + maakTeam(dto : CreateTeamDTO) : TeamDTO
+        + getTeamsVanWerknemer(werknemerId : int) : List<TeamDTO>
+        + verwijderLid(teamId : int, werknemerId : int) : void
+        + verwijderTeam(teamId : int) : void
+        + maakSupervisor(teamId : int, werknemerId : int) : void
+    }
+
+    class NotificatieFacade {
+        - api : NotificatieApiService
+        + geefNotificaties(werknemerId : int) : List<NotificatieDTO>
+        + geefAantalOngelezen(werknemerId : int) : long
+        + markeerAlsGelezen(id : int) : String
+        + verwijderNotificatie(id : int) : String
+    }
+
+    class LogFacade {
+        - api : LogsApiService
+        + geefAlleLogs() : List<LogDTO>
+        + zoekOpId(id : int) : LogDTO
+        + voegLogToe(logDTO : LogDTO) : void
+    }
+
+    class GeschiedenisFacade {
+        - api : GeschiedenisApiService
+        + geefGeschiedenisVanWerknemer(id : int) : List<GeschiedenisItemDTO>
+        + geefTeamledenVanManager(managerId : int) : List<WerknemerDTO>
+    }
+
+    class SiteFacade {
+        - api : SiteApiService
+        + geefSitesVanManager() : List<LocatieDTO>
+    }
+
+    class OverzichtsFacade {
+    }
+
+    class ChathistorieFacade {
+    }
+
+    class MachineFacade {
+    }
+
+    class ShiftFacade {
+    }
+
+    class TeamKpiFacade {
+    }
+}
+
+' ─────────────────────────────────────────────────────────────────────
+' PACKAGE: domain.util
+' ─────────────────────────────────────────────────────────────────────
+package domain.util {
+    class FilteredListUtil <<utility>> {
+        + {static} filter(items : List<T>, predicate : Predicate<T>) : List<T>
+    }
+}
+
+' ─────────────────────────────────────────────────────────────────────
+' RELATIES: Facade --> ApiService (gebruik)
+' ─────────────────────────────────────────────────────────────────────
+AuthFacade --> AuthApiService
+AuthFacade ..> Sessie : gebruikt
+WerknemersFacade --> WerknemersApiService
+TakenFacade --> TakenApiService
+TakenFacade ..> Sessie : gebruikt
+TakenFacade ..> LogService : gebruikt
+VerlofFacade --> VerlofApiService
+VerlofFacade ..> LogService : gebruikt
+AfwezigheidFacade --> AfwezigheidApiService
+AfwezigheidFacade ..> LogService : gebruikt
+PlanningFacade --> PlanningApiService
+LocatieFacade --> LocatieApiService
+TeamFacade --> TeamApiService
+NotificatieFacade --> NotificatieApiService
+LogFacade --> LogsApiService
+GeschiedenisFacade --> GeschiedenisApiService
+SiteFacade --> SiteApiService
+SiteFacade ..> Sessie : gebruikt
+
+' ─────────────────────────────────────────────────────────────────────
+' RELATIES: LogService --> LogFacade
+' ─────────────────────────────────────────────────────────────────────
+LogService --> LogFacade
+
+' ─────────────────────────────────────────────────────────────────────
+' RELATIES: Sessie --> WerknemerDTO
+' ─────────────────────────────────────────────────────────────────────
+Sessie --> WerknemerDTO
+
+' ─────────────────────────────────────────────────────────────────────
+' RELATIES: Beheerder --> Facades
+' ─────────────────────────────────────────────────────────────────────
+Beheerder --> AfwezigheidFacade
+Beheerder --> AuthFacade
+Beheerder --> GeschiedenisFacade
+Beheerder --> LocatieFacade
+Beheerder --> NotificatieFacade
+Beheerder --> OverzichtsFacade
+Beheerder --> PlanningFacade
+Beheerder --> SiteFacade
+Beheerder --> TakenFacade
+Beheerder --> TeamFacade
+Beheerder --> VerlofFacade
+Beheerder --> WerknemersFacade
+
+@enduml

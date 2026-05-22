@@ -2,6 +2,7 @@ package hogent.sdp2.sdpii.gui.app.teams.teamspagina;
 
 import domain.dto.*;
 import domain.facades.TeamFacade;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -46,24 +47,32 @@ public class CreateTeamsController extends VBox {
     }
 
     private void init() {
-        List<SiteDTO> sites = facade.getAlleSites();
-        plantCombo.getItems().addAll(sites);
         plantCombo.setConverter(new StringConverter<>() {
             @Override public String toString(SiteDTO s) { return s == null ? "" : s.naam(); }
             @Override public SiteDTO fromString(String s) { return null; }
         });
-
-        alleWerknemers = facade.getAlleWerknemersVoorTeams();
-        managers = alleWerknemers.stream().filter(w -> w.rol().equals("Manager")).toList();
-        werknemers = alleWerknemers.stream().filter(w -> !w.rol().equals("Manager") && !w.rol().equals("Admin")).toList();
-        managerCombo.getItems().addAll(managers);
         managerCombo.setConverter(new StringConverter<>() {
             @Override public String toString(WerknemerDTO w) { return w == null ? "" : w.voornaam() + " " + w.naam(); }
             @Override public WerknemerDTO fromString(String s) { return null; }
         });
-
-        buildEmployeeList();
         createTeamBtn.setOnAction(e -> handleCreate());
+
+        new Thread(() -> {
+            try {
+                List<SiteDTO> sites = facade.getAlleSites();
+                List<WerknemerDTO> alleW = facade.getAlleWerknemersVoorTeams();
+                Platform.runLater(() -> {
+                    plantCombo.getItems().addAll(sites);
+                    alleWerknemers = alleW;
+                    managers = alleW.stream().filter(w -> w.rol().equals("Manager")).toList();
+                    werknemers = alleW.stream().filter(w -> !w.rol().equals("Manager") && !w.rol().equals("Admin")).toList();
+                    managerCombo.getItems().addAll(managers);
+                    buildEmployeeList();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void buildEmployeeList() {
@@ -159,22 +168,34 @@ public class CreateTeamsController extends VBox {
 
         CreateTeamDTO dto = new CreateTeamDTO(naam, beschrijving, managerId, siteId, leden);
 
-        try {
-            facade.maakTeam(dto);
-            toonFeedback("Team succesvol aangemaakt!", false);
-            nameField.clear();
-            descriptionField.clear();
-            managerCombo.setValue(null);
-            plantCombo.setValue(null);
-            buildEmployeeList();
-        } catch (IllegalArgumentException ex) {
-            toonFeedback(ex.getMessage(), true);
-            if (ex.getMessage().contains("Teamnaam")) {
-                nameField.setStyle("-fx-border-color: #E31B35; -fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: #f5f5f5; -fx-padding: 10 16;");
+        createTeamBtn.setDisable(true);
+        new Thread(() -> {
+            try {
+                facade.maakTeam(dto);
+                Platform.runLater(() -> {
+                    createTeamBtn.setDisable(false);
+                    toonFeedback("Team succesvol aangemaakt!", false);
+                    nameField.clear();
+                    descriptionField.clear();
+                    managerCombo.setValue(null);
+                    plantCombo.setValue(null);
+                    buildEmployeeList();
+                });
+            } catch (IllegalArgumentException ex) {
+                Platform.runLater(() -> {
+                    createTeamBtn.setDisable(false);
+                    toonFeedback(ex.getMessage(), true);
+                    if (ex.getMessage().contains("Teamnaam")) {
+                        nameField.setStyle("-fx-border-color: #E31B35; -fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: #f5f5f5; -fx-padding: 10 16;");
+                    }
+                });
+            } catch (Exception ex) {
+                Platform.runLater(() -> {
+                    createTeamBtn.setDisable(false);
+                    toonFeedback("Fout: " + ex.getMessage(), true);
+                });
             }
-        } catch (Exception ex) {
-            toonFeedback("Fout: " + ex.getMessage(), true);
-        }
+        }).start();
     }
 
     private void toonFeedback(String bericht, boolean isError) {

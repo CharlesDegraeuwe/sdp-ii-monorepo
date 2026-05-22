@@ -372,3 +372,112 @@
     -fx-background-radius: 999px;
     -fx-background-color: #aaaaaa;
 }
+
+/* ── Notificaties footer ── */
+.notif_footer {
+    -fx-border-color: rgba(209,213,219,0.5) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 7 12 7 12;
+    -fx-cursor: hand;
+}
+
+.notif_footer:hover {
+    -fx-background-color: rgba(0,0,0,0.04);
+}
+
+.notif_footer_label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9CA3AF;
+}
+
+/* ── Afwezigheid stats bar ── */
+.stats_bar {
+    -fx-border-color: rgba(209,213,219,0.5) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 8 0 4 0;
+}
+
+.stats_bar_middel {
+    -fx-border-color: transparent rgba(209,213,219,0.5) transparent rgba(209,213,219,0.5);
+    -fx-border-width: 0 1 0 1;
+}
+
+.stat_getal {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.stat_getal_amber {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #D97706;
+}
+
+.stat_getal_blauw {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563EB;
+}
+
+.stat_label {
+    -fx-font-size: 9px;
+    -fx-text-fill: #9CA3AF;
+}
+
+/* ── Locatie info ── */
+.locatie_header {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.locatie_icon {
+    -fx-icon-color: #6B7280;
+}
+
+.locatie_rij {
+    -fx-background-color: rgba(255,255,255,0.7);
+    -fx-border-color: rgba(209,213,219,0.6);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 7 10 7 10;
+}
+
+.locatie_sleutel {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6B7280;
+}
+
+.locatie_waarde {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1F2937;
+}
+
+.locatie_kaart_btn {
+    -fx-background-color: rgba(255,255,255,0.7);
+    -fx-border-color: rgba(209,213,219,0.6);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 7 0 7 0;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+    -fx-cursor: hand;
+}
+
+.locatie_kaart_btn:hover {
+    -fx-background-color: rgba(255,255,255,0.95);
+    -fx-border-color: rgba(156,163,175,0.8);
+}
+
+/* ── Section label ── */
+.section_label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B7280;
+}
