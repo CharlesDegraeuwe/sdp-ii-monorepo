@@ -322,6 +322,43 @@
     -fx-text-fill: #aaaaaa;
 }
 
+/* ── Team filter kaart ── */
+.planning-filter-kaart {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);
+}
+
+.planning-filter-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888888;
+}
+
+/* ── Taak badges / kaarten ── */
+.badge-taak {
+    -fx-background-color: rgba(52, 120, 246, 0.12);
+    -fx-text-fill: #1a5dc8;
+    -fx-background-radius: 6;
+    -fx-padding: 2 6 2 6;
+    -fx-font-size: 9px;
+    -fx-max-width: Infinity;
+}
+
+.week-kaart-taak {
+    -fx-background-color: rgba(52, 120, 246, 0.08);
+    -fx-background-radius: 8;
+    -fx-padding: 6 8 6 8;
+}
+
+/* ── Dag view sectietitel ── */
+.dag-sectie-titel {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #888888;
+    -fx-padding: 4 0 2 0;
+}
+
 /* ── Scroll pane ── */
 .scroll-pane {
     -fx-background-color: transparent;

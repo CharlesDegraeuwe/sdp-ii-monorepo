@@ -8,8 +8,10 @@ C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\GeschiedenisItemDTO.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\LocatieDTO.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\LocatieInfoDTO.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\LogDTO.java
+C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\LoginResponseDTO.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\MachineAanmaakDTO.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\NotificatieDTO.java
+C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\ShiftDTO.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\SiteDTO.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\TaakDTO.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\dto\TeamDTO.java
@@ -45,6 +47,7 @@ C:\Users\joeri\2026-java-g01\src\main\java\domain\services\LogsApiService.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\services\LogService.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\services\NotificatieApiService.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\services\PlanningApiService.java
+C:\Users\joeri\2026-java-g01\src\main\java\domain\services\ShiftApiService.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\services\SiteApiService.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\services\TakenApiService.java
 C:\Users\joeri\2026-java-g01\src\main\java\domain\services\TeamApiService.java

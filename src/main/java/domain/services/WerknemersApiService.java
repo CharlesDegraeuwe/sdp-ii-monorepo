@@ -1,36 +1,31 @@
 package domain.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import domain.dto.UpdateWerknemerDTO;
 import domain.dto.WerknemerDTO;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
 
-public class WerknemersApiService {
+public class WerknemersApiService extends ApiService {
     Dotenv dotenv = Dotenv.load();
     private final String BASE_URL = dotenv.get("BASE_URL") +"/werknemers";
-    private final HttpClient client = HttpClient.newHttpClient();
-    private final ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule());
 
     //calls etc
     // ====================================================================
     public List<WerknemerDTO> getAlleWerknemers() {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/users"))
+            HttpRequest request = authenticatedRequest(BASE_URL + "/users")
                     .GET()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            WerknemerDTO[] array = mapper.readValue(response.body(), WerknemerDTO[].class);
+            if (response.statusCode() != 200) return List.of();
+            String body = response.body();
+            if (body == null || body.isBlank()) return List.of();
+            WerknemerDTO[] array = mapper.readValue(body, WerknemerDTO[].class);
             return Arrays.asList(array);
         } catch (Exception e) {
             throw new RuntimeException("Fout bij ophalen werknemers", e);
@@ -42,8 +37,7 @@ public class WerknemersApiService {
     // ====================================================================
     public String activeerWerknemer(String code) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/activeer?code=" + code))
+            HttpRequest request = authenticatedRequest(BASE_URL + "/activeer?code=" + code)
                     .POST(HttpRequest.BodyPublishers.noBody())
                     .build();
 
@@ -66,13 +60,14 @@ public class WerknemersApiService {
     // ====================================================================
     public WerknemerDTO zoekOpEmail(String email) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/user?email=" + email))
+            HttpRequest request = authenticatedRequest(BASE_URL + "/user?email=" + email)
                     .GET()
                     .build();
-
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return mapper.readValue(response.body(), WerknemerDTO.class);
+            if (response.statusCode() != 200) return null;
+            String body = response.body();
+            if (body == null || body.isBlank()) return null;
+            return mapper.readValue(body, WerknemerDTO.class);
         } catch (Exception e) {
             throw new RuntimeException("Fout bij ophalen werknemer", e);
         }
@@ -85,14 +80,18 @@ public class WerknemersApiService {
         try {
             String json = mapper.writeValueAsString(dto);
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/update"))
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + dto.id())
                     .PUT(HttpRequest.BodyPublishers.ofString(json))
-                    .header("Content-Type", "application/json")
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return mapper.readValue(response.body(), WerknemerDTO.class);
+            if (response.statusCode() < 200 || response.statusCode() >= 300)
+                throw new RuntimeException("Server fout " + response.statusCode());
+            String body = response.body();
+            if (body == null || body.isBlank()) return null;
+            return mapper.readValue(body, WerknemerDTO.class);
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Fout bij updaten werknemer", e);
         }
@@ -102,13 +101,14 @@ public class WerknemersApiService {
     // ====================================================================
     public WerknemerDTO zoekOpId(int id) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/user?id=" + id))
+            HttpRequest request = authenticatedRequest(BASE_URL + "/user?id=" + id)
                     .GET()
                     .build();
-
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return mapper.readValue(response.body(), WerknemerDTO.class);
+            if (response.statusCode() != 200) return null;
+            String body = response.body();
+            if (body == null || body.isBlank()) return null;
+            return mapper.readValue(body, WerknemerDTO.class);
         } catch (Exception e) {
             throw new RuntimeException("Fout bij ophalen werknemer", e);
         }
@@ -116,8 +116,7 @@ public class WerknemersApiService {
 
     public boolean veranderStatus(int werknemerId, String actie) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/" + werknemerId + "/" + actie))
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + werknemerId + "/" + actie)
                     .PUT(HttpRequest.BodyPublishers.noBody())
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -133,9 +132,7 @@ public class WerknemersApiService {
                     "{\"naam\":\"%s\",\"voornaam\":\"%s\",\"email\":\"%s\",\"wachtwoord\":\"Wachtwoord123\",\"telefoonnummer\":\"%s\",\"geboortedatum\":\"%s\",\"rol\":\"%s\"}",
                     naam, voornaam, email, telefoon, geboortedatum, rol
             );
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL))
-                    .header("Content-Type", "application/json")
+            HttpRequest request = authenticatedRequest(BASE_URL)
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

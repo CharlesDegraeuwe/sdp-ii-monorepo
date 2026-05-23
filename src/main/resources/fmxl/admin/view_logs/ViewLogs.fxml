@@ -13,8 +13,9 @@
 
     <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false"/>
 
-    <HBox spacing="10" styleClass="toolbar">
+    <HBox spacing="10" styleClass="toolbar" alignment="CENTER_LEFT">
         <TextField fx:id="zoekField" promptText="Zoek op werknemer" prefWidth="300"/>
+        <Button text="Vernieuwen" onAction="#herlaad" styleClass="filter-knop"/>
     </HBox>
 
     <TableView fx:id="logsTable" VBox.vgrow="ALWAYS">

@@ -1,2 +1,17 @@
+hogent\sdp2\sdpii\gui\components\auth\LoginFormController$3.class
+hogent\sdp2\sdpii\gui\components\auth\LoginFormController$2.class
+hogent\sdp2\sdpii\gui\app\overzicht\components\notificaties\NotificatieController.class
+domain\services\ShiftApiService.class
+hogent\sdp2\sdpii\gui\app\overzicht\components\jouw_uren\JouwUrenController.class
+domain\dto\LoginResponseDTO.class
+hogent\sdp2\sdpii\gui\app\overzicht\components\locatie_info\LocatieInfoController.class
 hogent\sdp2\sdpii\gui\components\app\AccountFormController.class
+domain\services\ShiftApiService$1.class
+hogent\sdp2\sdpii\gui\app\overzicht\components\open_taken\OpenTakenController.class
+hogent\sdp2\sdpii\gui\app\overzicht\components\afwezigheden\AfwezighedenController.class
+domain\dto\ShiftDTO.class
+hogent\sdp2\sdpii\gui\components\auth\LoginFormController$Modus.class
 hogent\sdp2\sdpii\gui\components\auth\LoginFormController$1.class
+hogent\sdp2\sdpii\gui\app\overzicht\components\notificaties\NotificatieItemController.class
+hogent\sdp2\sdpii\gui\app\overzicht\components\jouw_uren\JouwUrenController$1.class
+hogent\sdp2\sdpii\gui\components\auth\LoginFormController$Stap.class

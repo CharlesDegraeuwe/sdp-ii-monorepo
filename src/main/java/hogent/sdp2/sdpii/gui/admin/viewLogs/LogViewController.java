@@ -60,21 +60,34 @@ public class LogViewController extends VBox {
 
         // Kolommen instellen
         id.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().id())));
-        werknemer.setCellValueFactory(data ->
-                new SimpleStringProperty(Integer.toString(data.getValue().werknemerId()))
-        );
         type.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().type()));
         tabel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().tabel()));
         timestamp.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().timestamp().toString()));
-        details.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().test()));
+        details.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().details()));
 
         laadLogs();
         zoekField.textProperty().addListener((obs, oud, nieuw) -> filterWerknemers(nieuw));
+    }
+
+    @FXML
+    private void herlaad() {
+        zoekField.clear();
+        laadLogs();
 
     }
 
     private void laadLogs() {
         try {
+            alleWerknemers = werknemersFacade.geefAlleWerknemers();
+            Map<Integer, WerknemerDTO> werknemersMap = alleWerknemers.stream()
+                    .collect(Collectors.toMap(WerknemerDTO::id, Function.identity()));
+
+            werknemer.setCellValueFactory(data -> {
+                WerknemerDTO w = werknemersMap.get(data.getValue().werknemerId());
+                String naam = w != null ? w.voornaam() + " " + w.naam() : "#" + data.getValue().werknemerId();
+                return new SimpleStringProperty(naam);
+            });
+
             alleLogs = service.geefAlleLogs();
             logsTable.setItems(FXCollections.observableArrayList(alleLogs));
         } catch (Exception e) {

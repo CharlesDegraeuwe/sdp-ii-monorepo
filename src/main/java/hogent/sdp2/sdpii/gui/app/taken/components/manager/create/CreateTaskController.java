@@ -3,6 +3,7 @@ package hogent.sdp2.sdpii.gui.app.taken.components.manager.create;
 import domain.dto.LocatieDTO;
 import domain.facades.LocatieFacade;
 import domain.facades.TakenFacade;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -58,8 +59,8 @@ public class CreateTaskController extends BorderPane {
     }
 
     private void maakTaakAan(TakenFacade takenFacade) {
-        String titel = nameField.getText().trim();
-        String beschrijving = specField.getText().trim();
+        String naam = nameField.getText().trim();
+        String specificaties = specField.getText().trim();
         String datumTekst = dueDateField.getText().trim();
         LocatieDTO geselecteerdeSite = locationPicker.getValue();
 
@@ -72,22 +73,31 @@ public class CreateTaskController extends BorderPane {
             return;
         }
 
-        try {
-            // Facade valideert: lege velden, deadline in verleden, etc.
-            String resultaat = takenFacade.maakTaakAan(
-                    titel, beschrijving, deadline,
-                    geselecteerdeSite != null ? geselecteerdeSite.id() : -1
-            );
-            toonFeedback(resultaat, false);
-            nameField.clear();
-            specField.clear();
-            dueDateField.clear();
-            if (onAangemaakt != null) onAangemaakt.run();
-        } catch (IllegalArgumentException ex) {
-            toonFeedback(ex.getMessage(), true);
-        } catch (Exception ex) {
-            toonFeedback("Fout: " + ex.getMessage(), true);
-        }
+        int siteId = geselecteerdeSite != null ? geselecteerdeSite.id() : 0;
+        createButton.setDisable(true);
+        new Thread(() -> {
+            try {
+                String resultaat = takenFacade.maakTaakAan(naam, specificaties, deadline, siteId);
+                Platform.runLater(() -> {
+                    createButton.setDisable(false);
+                    toonFeedback(resultaat, false);
+                    nameField.clear();
+                    specField.clear();
+                    dueDateField.clear();
+                    if (onAangemaakt != null) onAangemaakt.run();
+                });
+            } catch (IllegalArgumentException ex) {
+                Platform.runLater(() -> {
+                    createButton.setDisable(false);
+                    toonFeedback(ex.getMessage(), true);
+                });
+            } catch (Exception ex) {
+                Platform.runLater(() -> {
+                    createButton.setDisable(false);
+                    toonFeedback("Fout: " + ex.getMessage(), true);
+                });
+            }
+        }).start();
     }
 
     private void toonFeedback(String bericht, boolean isError) {

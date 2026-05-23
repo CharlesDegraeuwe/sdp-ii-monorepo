@@ -1,7 +1,7 @@
 package domain.services;
 
 import domain.auth.Sessie;
-import domain.dto.WerknemerDTO;
+import domain.dto.LoginResponseDTO;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.net.http.HttpRequest;
@@ -10,42 +10,81 @@ import java.net.http.HttpResponse;
 public class AuthApiService extends ApiService {
     private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/werknemers";
 
-    public WerknemerDTO login(String email, String wachtwoord) {
+    public void verzendLoginEmail(String email) {
         try {
             String json = """
-                {"email": "%s", "wachtwoord": "%s"}
-                """.formatted(email, wachtwoord);
+                {"email": "%s"}
+                """.formatted(email);
 
-            HttpRequest request = authenticatedRequest(BASE_URL + "/login")
+            HttpRequest request = authenticatedRequest(BASE_URL + "/login-mail")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            response.headers().firstValue("Set-Cookie").ifPresent(cookie -> {
-                if (cookie.contains("JSESSIONID=")) {
-                    String sessionId = cookie.split("JSESSIONID=")[1].split(";")[0];
-                    Sessie.getInstance().setSessionId(sessionId);
-                }
-            });
+            if (response.statusCode() != 204 && response.statusCode() != 200) {
+                throw new RuntimeException("Fout bij verzenden email: " + response.statusCode());
+            }
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij verzenden email", e);
+        }
+    }
 
-            return mapper.readValue(response.body(), WerknemerDTO.class);
+    public LoginResponseDTO loginMetWachtwoord(String email, String wachtwoord) {
+        try {
+            String json = """
+                {"email": "%s", "wachtwoord": "%s"}
+                """.formatted(email, wachtwoord);
+
+            HttpRequest request = authenticatedRequest(BASE_URL + "/login-password")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Ongeldig email of wachtwoord");
+            }
+
+            String body = response.body();
+            if (body == null || body.isBlank()) throw new RuntimeException("Leeg antwoord van server");
+            LoginResponseDTO result = mapper.readValue(body, LoginResponseDTO.class);
+            Sessie.getInstance().setJwtToken(result.token());
+            return result;
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Fout bij inloggen", e);
         }
     }
 
-    public boolean activeerAccount(int werknemerId, String activatieCode) {
+    public LoginResponseDTO loginMetCode(String email, String code) {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/" + werknemerId + "/activeer?code=" + activatieCode)
-                    .POST(HttpRequest.BodyPublishers.noBody())
+            String json = """
+                {"email": "%s", "token": "%s"}
+                """.formatted(email, code);
+
+            HttpRequest request = authenticatedRequest(BASE_URL + "/login-token")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return response.statusCode() == 200 && !response.body().contains("Fout");
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Ongeldige code of email");
+            }
+
+            String body = response.body();
+            if (body == null || body.isBlank()) throw new RuntimeException("Leeg antwoord van server");
+            LoginResponseDTO result = mapper.readValue(body, LoginResponseDTO.class);
+            Sessie.getInstance().setJwtToken(result.token());
+            return result;
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Fout bij activeren", e);
+            throw new RuntimeException("Fout bij inloggen", e);
         }
     }
 }

@@ -6,6 +6,7 @@ import domain.facades.TeamFacade;
 import domain.util.FilteredListUtil;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.components.TeamItemController;
 import hogent.sdp2.sdpii.gui.app.teams.teamspagina.components.TeamLedenController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -75,22 +76,13 @@ public class CheckTeamsController extends StackPane {
         rightColumn.setMaxWidth(Double.MAX_VALUE);
 
         boolean isSupervisor = Sessie.getInstance().isSuperVisor();
+        boolean isWerknemer  = Sessie.getInstance().isWerknemer();
 
-        if (isSupervisor) {
-            int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
-            teams = tm.getTeamsVanWerknemer(werknemerId);
-        } else {
-            teams = tm.getAlleTeams();
-        }
-
-        vulTeamsList(teams);
-
-        if (isSupervisor) {
+        if (isSupervisor || isWerknemer) {
             addMemberBtn.setVisible(false);
             addMemberBtn.setManaged(false);
         }
 
-        // Search filter
         searchField.textProperty().addListener((obs, oud, nieuw) -> {
             String query = nieuw.toLowerCase().trim();
             if (query.isEmpty()) {
@@ -122,6 +114,21 @@ public class CheckTeamsController extends StackPane {
             }
             clearSelection();
         });
+
+        new Thread(() -> {
+            try {
+                boolean eigenTeams = isSupervisor || isWerknemer;
+                List<TeamDTO> geladen = eigenTeams
+                        ? tm.getTeamsVanWerknemer(Sessie.getInstance().getIngelogdeWerknemer().id())
+                        : tm.getAlleTeams();
+                Platform.runLater(() -> {
+                    teams = geladen;
+                    vulTeamsList(teams);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void vulTeamsList(List<TeamDTO> teamsToShow) {
@@ -151,17 +158,22 @@ public class CheckTeamsController extends StackPane {
         addMembersContainer.setVisible(false);
         selected = null;
         currentLedenController = null;
-
-        boolean isSupervisor = Sessie.getInstance().isSuperVisor();
-        if (isSupervisor) {
-            int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
-            teams = tm.getTeamsVanWerknemer(werknemerId);
-        } else {
-            teams = tm.getAlleTeams();
-        }
-
-        vulTeamsList(teams);
         searchField.clear();
+
+        boolean eigenTeams = Sessie.getInstance().isSuperVisor() || Sessie.getInstance().isWerknemer();
+        new Thread(() -> {
+            try {
+                List<TeamDTO> geladen = eigenTeams
+                        ? tm.getTeamsVanWerknemer(Sessie.getInstance().getIngelogdeWerknemer().id())
+                        : tm.getAlleTeams();
+                Platform.runLater(() -> {
+                    teams = geladen;
+                    vulTeamsList(teams);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public Pane noItems() {

@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
 
-<fx:root type="BorderPane" styleClass="login_body" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="BorderPane" styleClass="login_body"
+         xmlns:fx="http://javafx.com/fxml"
+         stylesheets="@/css/application.css">
+
+    <left>
+        <VBox styleClass="login-left" prefWidth="520" minWidth="520" maxWidth="520">
+
+            <VBox fx:id="controlsPlaceholder"/>
+
+            <ImageView fitWidth="170" preserveRatio="true">
+                <image>
+                    <Image url="@/icons/logo.png"/>
+                </image>
+            </ImageView>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <VBox styleClass="login-brand">
+                <Label text="People"       styleClass="login-brand-text"/>
+                <Label text="Planning"     styleClass="login-brand-text"/>
+                <Label text="Presentation" styleClass="login-brand-text"/>
+                <Label text="Welkom bij Delaware Suite" styleClass="login-brand-subtitle"/>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Label text="copyright 2026 • alle rechten voorbehouden"
+                   styleClass="login-copyright" maxWidth="Infinity"/>
+
+        </VBox>
+    </left>
 
 </fx:root>
