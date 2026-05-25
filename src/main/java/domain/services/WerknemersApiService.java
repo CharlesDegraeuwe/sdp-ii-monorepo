@@ -24,8 +24,12 @@ public class WerknemersApiService {
     // ====================================================================
     public List<WerknemerDTO> getAlleWerknemers() {
         try {
+<<<<<<< Updated upstream
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/users"))
+=======
+            HttpRequest request = authenticatedRequest(BASE_URL)
+>>>>>>> Stashed changes
                     .GET()
                     .build();
 
