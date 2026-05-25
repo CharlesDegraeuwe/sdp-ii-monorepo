@@ -30,7 +30,7 @@ export default function GeschiedenisPage() {
   const rol = (sessionUser?.rol as string) ?? '';
 
   const isWerknemer = rol === 'Werknemer';
-  const isManagerOrSupervisor = ['Manager', 'Supervisor'].includes(rol);
+  const isManagerOrSupervisor = ['Manager', 'Supervisor', 'Admin'].includes(rol);
 
   const [teamleden, setTeamleden] = useState<Teamlid[]>([]);
   const [geselecteerdLid, setGeselecteerdLid] = useState<Teamlid | null>(null);
