@@ -7,6 +7,7 @@ import { Label } from '@/components/design-system/Label';
 import { useState } from 'react';
 import { useCreateEmployee } from '@/hooks/useCreateEmployee';
 import { IoClose } from 'react-icons/io5';
+import { useToast } from '@/providers/ToastProvider';
 
 interface Props {
   onClose: () => void;
@@ -14,12 +15,13 @@ interface Props {
 
 const EmployeeModal = ({ onClose }: Props) => {
   const createEmployee = useCreateEmployee();
+  const toast = useToast();
 
   const [voornaam, setVoornaam] = useState('');
   const [naam, setNaam] = useState('');
-  const [telefoon, setTelefoon] = useState('');
+  const [telefoonnummer, setTelefoonnummer] = useState('');
   const [email, setEmail] = useState('');
-  const [beschikbaarheid, setBeschikbaarheid] = useState('');
+  const [geboortedatum, setGeboortedatum] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,10 +34,13 @@ const EmployeeModal = ({ onClose }: Props) => {
         voornaam,
         naam,
         email,
-        telefoon,
-        beschikbaarheid,
+        telefoonnummer,
+        geboortedatum: geboortedatum || undefined,
       });
+      toast.success('Werknemer aangemaakt');
       onClose();
+    } catch {
+      toast.error('Kon werknemer niet aanmaken');
     } finally {
       setSubmitting(false);
     }
@@ -82,31 +87,26 @@ const EmployeeModal = ({ onClose }: Props) => {
                   errorOption={false}
                 />
                 <Input
-                  label={'Telefoon'}
+                  label={'Telefoonnummer'}
                   type={'text'}
                   placeholder={'Telefoonnummer'}
-                  value={telefoon}
-                  onChange={(e) => setTelefoon(e.target.value)}
+                  value={telefoonnummer}
+                  onChange={(e) => setTelefoonnummer(e.target.value)}
                   errorOption={false}
                 />
                 <Input
                   label={'Email'}
-                  type={'text'}
+                  type={'email'}
                   placeholder={'Email'}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   errorOption={false}
                 />
-              </div>
-
-              <div className={'flex flex-col gap-3'}>
-                <Label text={'Beschikbaarheid'} size={'sm'} weight={600} />
                 <Input
-                  label={'Beschikbaarheid'}
-                  type={'text'}
-                  placeholder={'Beschikbaarheid'}
-                  value={beschikbaarheid}
-                  onChange={(e) => setBeschikbaarheid(e.target.value)}
+                  label={'Geboortedatum'}
+                  type={'date'}
+                  value={geboortedatum}
+                  onChange={(e) => setGeboortedatum(e.target.value)}
                   errorOption={false}
                 />
               </div>

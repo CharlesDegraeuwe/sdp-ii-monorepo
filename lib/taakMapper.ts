@@ -36,10 +36,14 @@ export function mapBackendTask(
 }
 
 export function mapTaskToBackend(task: Omit<Task, 'id' | 'finished'>) {
+  const deadline = task.dueDate?.includes('T')
+    ? task.dueDate.split('T')[0]
+    : task.dueDate;
+
   return {
-    werknemerId: task.assigneeId ? Number(task.assigneeId) : 0,
+    ...(task.assigneeId ? { werknemerId: Number(task.assigneeId) } : {}),
     titel: task.name,
     beschrijving: task.description ?? task.specifications ?? '',
-    deadline: task.dueDate,
+    deadline,
   };
 }

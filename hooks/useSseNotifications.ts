@@ -67,10 +67,6 @@ export function useSseNotifications() {
       if (isSoundEnabled()) {
         playNotificationSound();
       }
-
-      if (isSoundEnabled()) {
-        playNotificationSound();
-      }
     };
 
     es.onerror = () => {

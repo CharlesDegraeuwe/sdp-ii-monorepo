@@ -3,6 +3,15 @@ import { NextResponse } from 'next/server';
 
 const API_URL = process.env.AUTH_API_URL ?? 'http://localhost:8080/api';
 
+function safeJsonResponse(text: string) {
+  if (!text) return NextResponse.json({ ok: true });
+  try {
+    return NextResponse.json(JSON.parse(text));
+  } catch {
+    return NextResponse.json({ ok: true, message: text });
+  }
+}
+
 export async function backendFetch(
   path: string,
   options?: RequestInit,
@@ -48,7 +57,7 @@ export async function proxyPOST(path: string, body: unknown) {
         { status: res.status },
       );
     const text = await res.text();
-    return NextResponse.json(text ? JSON.parse(text) : { ok: true });
+    return safeJsonResponse(text);
   } catch {
     return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
   }
@@ -66,7 +75,7 @@ export async function proxyPUT(path: string, body?: unknown) {
         { status: res.status },
       );
     const text = await res.text();
-    return NextResponse.json(text ? JSON.parse(text) : { ok: true });
+    return safeJsonResponse(text);
   } catch {
     return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
   }
@@ -81,7 +90,7 @@ export async function proxyDELETE(path: string) {
         { status: res.status },
       );
     const text = await res.text();
-    return NextResponse.json(text ? JSON.parse(text) : { ok: true });
+    return safeJsonResponse(text);
   } catch {
     return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
   }

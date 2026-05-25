@@ -87,7 +87,7 @@ describe('mapTaskToBackend', () => {
     expect(dto.beschrijving).toBe('Alleen specs');
   });
 
-  it('zet werknemerId op 0 als assigneeId ontbreekt', () => {
+  it('laat werknemerId weg als assigneeId ontbreekt', () => {
     const task = {
       name: 'Geen assignee',
       dueDate: '2025-01-01',
@@ -95,7 +95,7 @@ describe('mapTaskToBackend', () => {
       important: false,
     };
     const dto = mapTaskToBackend(task);
-    expect(dto.werknemerId).toBe(0);
+    expect(dto.werknemerId).toBeUndefined();
   });
 
   it('geeft lege beschrijving als zowel description als specifications ontbreken', () => {

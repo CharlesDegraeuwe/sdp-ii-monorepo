@@ -40,7 +40,11 @@ const TeamsClient = ({
 
   return (
     <div className={'w-full lg:w-3/4 xl:w-1/2 flex flex-col gap-3'}>
-      <div className={'w-full h-fit justify-between flex flex-row'}>
+      <div
+        className={
+          'w-full h-fit flex flex-col sm:flex-row sm:justify-between gap-2'
+        }
+      >
         <TabSwitcher
           tabs={modes}
           value={mode}

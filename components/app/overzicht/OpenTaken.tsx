@@ -40,8 +40,8 @@ export function OpenTaken({ taken }: OpenTakenProps) {
           {openTaken.length} open
         </span>
       )}
-      <div className="flex flex-col h-full">
-        <div className=" flex-1 h-full overflow-y-auto scroll-hidden flex flex-col gap-1">
+      <div className="flex flex-col h-full relative jutify-between pb-5">
+        <div className=" flex-1 overflow-y-auto scroll-hidden flex flex-col gap-1">
           {openTaken.length === 0 && (
             <div className="flex h-full items-center justify-center py-4">
               <Label text="Geen openstaande taken." variant="emptystate" />
@@ -56,21 +56,18 @@ export function OpenTaken({ taken }: OpenTakenProps) {
                 key={taak.id}
                 href={`/taken?taakId=${taak.id}`}
                 onClick={(e) => e.stopPropagation()}
-                className={`flex items-center gap-2 px-2.5 py-2 rounded-xl border transition-all duration-200 hover:brightness-95
-                    ${roodKader ? 'border-red-300/70 bg-red-50/60' : 'border-gray-300/40 bg-white/40'}`}
+                className={`flex items-center gap-2 px-2.5 py-1 rounded-xl border transition-all duration-200 hover:brightness-95
+                    ${roodKader ? 'border-red-500/70 bg-rose-300/60 text-white' : 'border-gray-300/40 bg-white/40'}`}
               >
                 <div
-                  className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${roodKader ? 'bg-red-400' : 'bg-zinc-300'}`}
+                  className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${roodKader ? 'bg-red-400 text-white' : 'bg-zinc-300'}`}
                 />
 
                 <div className="flex-1 min-w-0">
                   <span
-                    className={`text-[11px] font-bold truncate block ${roodKader ? 'text-red-700' : 'text-zinc-800'}`}
+                    className={`text-[11px] font-bold truncate block ${roodKader ? 'text-rose-700' : 'text-zinc-800'}`}
                   >
                     {taak.name}
-                  </span>
-                  <span className="text-[9px] text-zinc-400">
-                    {taak.location}
                   </span>
                 </div>
 
