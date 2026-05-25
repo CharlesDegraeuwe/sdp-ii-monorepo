@@ -2,9 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-25.0.2\" \"/c/Program Files/JetBrains/IntelliJ IDEA 2025.3.2/plugins/maven/lib/maven3/bin/mvn.cmd\" test -Dtest=\"AuthFacadeTest,TakenFacadeTest,VerlofFacadeTest,AfwezigheidFacadeTest,WerknemersFacadeTest,LocatieFacadeTest,TeamFacadeTest,LogFacadeTest,PlanningFacadeTest,NotificatieFacadeTest\")",
-<<<<<<< Updated upstream
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-25.0.2\" \"/c/Program Files/JetBrains/IntelliJ IDEA 2025.3.2/plugins/maven/lib/maven3/bin/mvn.cmd\" test -Dtest=\"AuthFacadeTest\")"
-=======
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-25.0.2\" \"/c/Program Files/JetBrains/IntelliJ IDEA 2025.3.2/plugins/maven/lib/maven3/bin/mvn.cmd\" test -Dtest=\"AuthFacadeTest\")",
       "Bash(Get-ChildItem *)",
       "PowerShell(Get-ChildItem C:\\\\Users\\\\joeri\\\\ -ErrorAction SilentlyContinue | ForEach-Object { $_.Name })",
@@ -43,7 +41,7 @@
       "Bash(xargs grep -l \"ComboBox\\\\|ChoiceBox\\\\|filter\")",
       "Bash(mvn compile *)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\joeri\\\\2026-java-g01\" -Recurse -Directory | Select-Object -First 30 | ForEach-Object { $_.FullName })"
->>>>>>> Stashed changes
+      "Bash(mvn compile *)"
     ]
   }
 }

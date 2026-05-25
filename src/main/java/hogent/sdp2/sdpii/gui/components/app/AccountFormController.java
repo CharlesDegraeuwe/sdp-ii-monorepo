@@ -75,12 +75,26 @@ public class AccountFormController extends VBox {
     private void saveUser() {
         if (huidigeWerknemer == null) return;
         UpdateWerknemerDTO update = new UpdateWerknemerDTO(
+                huidigeWerknemer.id(),
                 naamField.getText(),
                 voornaamField.getText(),
                 emailField.getText(),
                 telefoonnummerField.getText(),
-                java.time.LocalDate.parse(geboortedatumField.getText())
+                java.time.LocalDate.parse(geboortedatumField.getText()),
+                huidigeWerknemer.status()
         );
         facade.update(update);
+        WerknemerDTO bijgewerkt = new WerknemerDTO(
+                huidigeWerknemer.id(),
+                update.naam(),
+                update.voornaam(),
+                update.email(),
+                update.telefoonnummer(),
+                update.geboortedatum(),
+                huidigeWerknemer.rol(),
+                huidigeWerknemer.status()
+        );
+        Sessie.getInstance().setIngelogdeWerknemer(bijgewerkt);
+        huidigeWerknemer = bijgewerkt;
     }
 }

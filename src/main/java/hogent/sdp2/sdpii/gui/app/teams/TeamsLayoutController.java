@@ -56,9 +56,16 @@ public class TeamsLayoutController extends VBox {
         checkTeamsController = new CheckTeamsController(tm, this::navigeerNaarUser);
         outer_container.setCenter(checkTeamsController);
 
-        if(Sessie.getInstance().isSuperVisor()) {
+        boolean beperkteToegang = Sessie.getInstance().isSuperVisor() || Sessie.getInstance().isWerknemer();
+        if (beperkteToegang) {
             tab_buttons.setVisible(false);
             tab_buttons.setManaged(false);
+        }
+        if (Sessie.getInstance().isWerknemer()) {
+            usersPagina.setVisible(false);
+            usersPagina.setManaged(false);
+            page_buttons.setVisible(false);
+            page_buttons.setManaged(false);
         }
         checkKnop.setOnMouseClicked(e -> {
             if (pagina.equals("teams")) {

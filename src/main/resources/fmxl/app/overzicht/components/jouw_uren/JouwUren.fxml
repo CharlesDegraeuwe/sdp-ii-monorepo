@@ -1,33 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<fx:root type="VBox" fx:id="container" spacing="15" xmlns:fx="http://javafx.com/fxml">
-    <VBox spacing="7">
-        <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="Deze week:" minWidth="10" styleClass="section_label"/>
-            <Region HBox.hgrow="ALWAYS" fx:id="teamPickerRegion"/>
-            <ComboBox fx:id="teamPicker" value="Team A" styleClass="team_picker"/>
-        </HBox>
-        <VBox fx:id="thisweek_item_container" spacing="7" alignment="CENTER" minHeight="50"/>
-    </VBox>
-    <VBox spacing="7">
-        <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="Volgende week:" minWidth="10" styleClass="section_label"/>
-        </HBox>
-        <VBox fx:id="nextweek_item_container" spacing="7" alignment="CENTER" minHeight="50"/>
-    </VBox>
-    <VBox spacing="7">
-        <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="Later deze maand:" minWidth="10" styleClass="section_label"/>
-        </HBox>
-        <VBox fx:id="laterthismonth_item_container" spacing="7" alignment="CENTER" minHeight="50"/>
-    </VBox>
-    <HBox alignment="CENTER_RIGHT">
-        <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
-    </HBox>
+<fx:root type="VBox" spacing="5" xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="10" right="10" bottom="6" left="10"/></padding>
+    <VBox fx:id="dagContainer" spacing="5" VBox.vgrow="ALWAYS"/>
 </fx:root>

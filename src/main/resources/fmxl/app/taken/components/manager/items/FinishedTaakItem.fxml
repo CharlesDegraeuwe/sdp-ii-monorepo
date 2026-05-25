@@ -11,8 +11,7 @@
 
     <HBox styleClass="taak_container" prefHeight="36" spacing="10" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
         <FontIcon iconLiteral="ion4-ios-checkmark" iconSize="20"/>
-        <Label fx:id="title" maxWidth="130" styleClass="taak_title"/>
-        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="title" HBox.hgrow="ALWAYS" styleClass="taak_title" wrapText="true"/>
         <Label fx:id="datum" styleClass="taak_datum"/>
     </HBox>
 </fx:root>

@@ -11,8 +11,7 @@
 
     <HBox styleClass="taak_container" spacing="10" prefHeight="36" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
         <padding><Insets top="8" right="20" bottom="8" left="10"/></padding>
-        <Label fx:id="title" maxWidth="130" styleClass="taak_title"/>
-        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="title" HBox.hgrow="ALWAYS" styleClass="taak_title" wrapText="true"/>
         <Label fx:id="datum" styleClass="taak_datum"/>
     </HBox>
 

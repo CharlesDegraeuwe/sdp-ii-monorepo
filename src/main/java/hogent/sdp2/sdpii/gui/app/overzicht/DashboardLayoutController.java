@@ -86,27 +86,19 @@ public class DashboardLayoutController extends BorderPane {
 
     @FXML
     private void initialize() {
-        boolean role = Sessie.getInstance().isWerknemer();
-        if(role) {
+        locatie_info_container.setVisible(false);
+        if (Sessie.getInstance().isWerknemer()) {
             shift.setText("Bekijk shiften");
             taak.setText("Bekijk taken");
-            locatie_info_container.setVisible(false);
             uren_container.getChildren().add(new UrenController());
-        }
-        if(Sessie.getInstance().isSuperVisor()) {
+        } else {
             shift.setText("Shift Toevoegen");
             taak.setText("Taak Toekennen");
             uren_container.getChildren().add(new AfwezighedenController());
-            locatie_info_container.setVisible(false);
         }
-        else {
-            uren_container.getChildren().add(new AfwezighedenController());
-            shift.setText("Shift Toevoegen");
-            taak.setText("Taak Toekennen");
-        }
-       add_shift.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.PLANNING));
-       assign_task.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
-       report_absence.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.ZIEKTE));
-       plan_holiday.setOnMouseClicked(e-> Router.getInstance().navigeerNaar(Scherm.VERLOF));
+        add_shift.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.PLANNING));
+        assign_task.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
+        report_absence.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.ZIEKTE));
+        plan_holiday.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.VERLOF));
     }
 }
