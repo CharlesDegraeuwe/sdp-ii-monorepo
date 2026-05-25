@@ -11,9 +11,9 @@
 <fx:root type="VBox" stylesheets="@/css/manageUsers.css" styleClass="page" spacing="20" xmlns:fx="http://javafx.com/fxml">
 
 
-    <Label text="Mijn Team" styleClass="page-title"/>
+    <Label text="Beheer gebruikers" styleClass="page-title"/>
 
-    <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false"/>
+    <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false" text=""/>
 
     <HBox spacing="10" styleClass="toolbar">
         <TextField fx:id="zoekField" promptText="Zoek op naam of email..." prefWidth="300"/>

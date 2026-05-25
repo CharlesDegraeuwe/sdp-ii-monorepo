@@ -2,6 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-25.0.2\" \"/c/Program Files/JetBrains/IntelliJ IDEA 2025.3.2/plugins/maven/lib/maven3/bin/mvn.cmd\" test -Dtest=\"AuthFacadeTest,TakenFacadeTest,VerlofFacadeTest,AfwezigheidFacadeTest,WerknemersFacadeTest,LocatieFacadeTest,TeamFacadeTest,LogFacadeTest,PlanningFacadeTest,NotificatieFacadeTest\")",
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-25.0.2\" \"/c/Program Files/JetBrains/IntelliJ IDEA 2025.3.2/plugins/maven/lib/maven3/bin/mvn.cmd\" test -Dtest=\"AuthFacadeTest\")"
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-25.0.2\" \"/c/Program Files/JetBrains/IntelliJ IDEA 2025.3.2/plugins/maven/lib/maven3/bin/mvn.cmd\" test -Dtest=\"AuthFacadeTest\")",
       "Bash(Get-ChildItem *)",
       "PowerShell(Get-ChildItem C:\\\\Users\\\\joeri\\\\ -ErrorAction SilentlyContinue | ForEach-Object { $_.Name })",
@@ -38,6 +39,8 @@
       "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-25.0.2\"; Set-Location \"C:\\\\Users\\\\joeri\\\\2026-java-g01\"; & \"C:\\\\Users\\\\joeri\\\\.m2\\\\wrapper\\\\dists\\\\apache-maven-3.9.9\\\\8e74001100ff70d6af083c5511fcc5ec49282d7017cde82c3698eee8fdf86698\\\\bin\\\\mvn.cmd\" compile 2>&1 | Where-Object { $_ -match \"error|ERROR\" } | Select-Object -First 40)",
       "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-25.0.2\"; Set-Location \"C:\\\\Users\\\\joeri\\\\2026-java-g01\"; & \"C:\\\\Users\\\\joeri\\\\.m2\\\\wrapper\\\\dists\\\\apache-maven-3.9.9\\\\8e74001100ff70d6af083c5511fcc5ec49282d7017cde82c3698eee8fdf86698\\\\bin\\\\mvn.cmd\" compile 2>&1 | Where-Object { $_ -match \"error|ERROR|BUILD\" } | Select-Object -First 20)",
       "Bash(xargs grep -l \"ComboBox\\\\|ChoiceBox\\\\|filter\")",
+      "Bash(mvn compile *)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\joeri\\\\2026-java-g01\" -Recurse -Directory | Select-Object -First 30 | ForEach-Object { $_.FullName })"
       "Bash(mvn compile *)"
     ]
   }

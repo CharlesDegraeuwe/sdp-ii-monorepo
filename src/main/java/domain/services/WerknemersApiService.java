@@ -17,7 +17,8 @@ public class WerknemersApiService extends ApiService {
     // ====================================================================
     public List<WerknemerDTO> getAlleWerknemers() {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/users")
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/users"))
                     .GET()
                     .build();
 
