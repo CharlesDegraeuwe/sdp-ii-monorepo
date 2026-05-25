@@ -41,6 +41,7 @@ function PlannerPageInner() {
   const user = session?.user;
   const rol = ((session?.user as Record<string, unknown>)?.rol as string) ?? '';
   const isManager = ['Manager', 'Admin'].includes(rol);
+  const isSupervisor = rol === 'Supervisor';
   const kanTeamZien = ['Manager', 'Admin', 'Supervisor'].includes(rol);
   const kanShiftAanmaken = kanTeamZien;
   const eigenId = Number((session?.user as Record<string, unknown>)?.id ?? 0);
@@ -90,7 +91,7 @@ function PlannerPageInner() {
     laadWerknemersVanTeam,
     laadAlleWerknemers,
     resetTeamWerknemers,
-  } = usePlanningFilters(authHeader);
+  } = usePlanningFilters(authHeader, eigenId, isSupervisor);
 
   useEffect(() => {
     if (filter.teamId) {
@@ -403,6 +404,7 @@ function PlannerPageInner() {
                   isManager={isManager}
                   tab={tab}
                   eigenShiften={eigenShiften}
+                  teamTaken={teamTaken}
                   onAfgewerkt={handleTaakAfgewerkt}
                 />
               )}
@@ -447,6 +449,7 @@ function PlannerPageInner() {
           werknemers={alleWerknemers}
           teams={teams}
           isManager={isManager}
+          isSupervisor={isSupervisor}
           huidigeDatum={huidigeDatum}
           onClose={() => setShiftAanmakenOpen(false)}
           onSuccess={() => setShiftenRefresh((n) => n + 1)}

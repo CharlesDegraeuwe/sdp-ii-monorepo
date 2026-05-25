@@ -1,7 +1,7 @@
 'use client';
 
 import { badgeKleur, afwezigheidLabel } from '@/components/app/planner/utils';
-import type { Afwezigheid, Shift } from '../types';
+import type { Afwezigheid, PlannerTaak, Shift } from '../types';
 import {
   VIS_START,
   UUR_BREEDTE,
@@ -17,6 +17,7 @@ import { ShiftBlok } from './ShiftBlok';
 interface WerknemerRijProps {
   rij: Rij;
   shift?: Shift;
+  taken?: PlannerTaak[];
   afwezig: Afwezigheid[];
   isManager: boolean;
   dagIsVrij: boolean;
@@ -30,6 +31,7 @@ interface WerknemerRijProps {
 export function WerknemerRij({
   rij,
   shift,
+  taken = [],
   afwezig,
   isManager,
   dagIsVrij,
@@ -63,6 +65,24 @@ export function WerknemerRij({
           >
             {afwezigheidLabel(afwezig[0])}
           </span>
+        )}
+        {taken.length > 0 && (
+          <div className="flex flex-wrap gap-0.5 mt-0.5">
+            {taken.slice(0, 2).map((t) => (
+              <span
+                key={t.id}
+                className="text-[8px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 truncate max-w-[80px]"
+                title={t.naam}
+              >
+                {t.naam}
+              </span>
+            ))}
+            {taken.length > 2 && (
+              <span className="text-[8px] font-semibold px-1.5 py-0.5 rounded-full bg-zinc-100 text-zinc-500">
+                +{taken.length - 2}
+              </span>
+            )}
+          </div>
         )}
         {isGeselecteerd && (
           <span className="text-[9px] text-zinc-400 mt-0.5">▸ taken</span>
