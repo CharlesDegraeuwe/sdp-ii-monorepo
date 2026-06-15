@@ -4,6 +4,7 @@ import domain.dto.UpdateWerknemerDTO;
 import domain.dto.WerknemerDTO;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;

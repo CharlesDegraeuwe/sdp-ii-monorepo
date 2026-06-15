@@ -17,6 +17,8 @@ Monorepo for "Delaware Suite" -- HR/team management platform.
 - `make sync-env` -- grep AUTH_/NEXT_PUBLIC_ from root .env into web/.env.local
 - `make init-all` -- install deps for all projects
 - `make test-all` -- run Vitest (web) + JUnit 5 (api, desktop)
+- `make lint` -- check formatting (ESLint + Spotless)
+- `make lint-fix` -- auto-fix formatting
 
 ## Auth
 

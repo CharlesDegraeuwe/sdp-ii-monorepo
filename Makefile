@@ -23,12 +23,12 @@ init-web:
 	cd web/ && bun install
 
 init-desktop:
-	@echo "dependencies installeren voor desktop..."
-	cd desktop/ && mvn dependency:resolve
+	@echo "dependencies installeren en compileren voor desktop..."
+	cd desktop/ && ./mvnw compile -q
 
 init-api:
-	@echo "dependencies installeren voor api..."
-	cd api/ && mvn dependency:resolve
+	@echo "dependencies installeren en compileren voor api..."
+	cd api/ && ./mvnw compile -q
 
 init-all: init-web init-desktop init-api
 	@echo "Alle dependencies geïnstalleerd"
