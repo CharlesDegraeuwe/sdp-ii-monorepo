@@ -15,7 +15,7 @@ const UsersOverview = ({ selectedWerknemerId = null }: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="relative w-full flex flex-col gap-3 pt-5 min-h-96">
+    <div className="relative w-full h-3/4 flex flex-col gap-3 pt-5">
       {showModal && <EmployeeModal onClose={() => setShowModal(false)} />}
 
       <div className="flex flex-row justify-end">
@@ -29,7 +29,7 @@ const UsersOverview = ({ selectedWerknemerId = null }: Props) => {
         />
       </div>
 
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1">
+      <div className="w-full grid grid-cols-2 gap-5 min-h-full">
         <Container label="Werknemers" height="full" padding="0">
           <EmployeeList selectedWerknemerId={selectedWerknemerId} />
         </Container>

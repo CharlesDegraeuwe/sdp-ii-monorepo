@@ -71,7 +71,10 @@ export function MiniKalender({
   afwezigheden: Afwezigheid[];
 }) {
   return (
-    <Container label={'Kalender'} className="">
+    <Container
+      label={'Kalender'}
+      className="col-start-3 col-end-4 row-start-1 row-end-3"
+    >
       <KalenderGrid afwezigheden={afwezigheden} />
     </Container>
   );

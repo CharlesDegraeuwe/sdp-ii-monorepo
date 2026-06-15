@@ -3,33 +3,6 @@ import React from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import { SelectProps } from '@/components/design-system/Select/Select.types';
 
-const sizeMap = {
-  sm: {
-    trigger: 'px-3 py-1.5 text-sm',
-    chevron: 12,
-    item: 'p-1.5 text-xs',
-    label: 'text-xs px-2',
-  },
-  md: {
-    trigger: 'px-4 py-2 text-base',
-    chevron: 14,
-    item: 'p-2 text-sm',
-    label: 'text-xs px-2',
-  },
-  lg: {
-    trigger: 'px-5 py-3 text-base',
-    chevron: 14,
-    item: 'p-2 text-sm',
-    label: 'text-sm px-3',
-  },
-  xl: {
-    trigger: 'px-6 py-4 text-lg',
-    chevron: 16,
-    item: 'p-3 text-base',
-    label: 'text-sm px-3',
-  },
-} as const;
-
 const Select = ({
   options,
   value,
@@ -40,13 +13,11 @@ const Select = ({
   errorOption,
   id,
   disabled,
-  size = 'lg',
 }: SelectProps) => {
   const [open, setOpen] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const selected = options.find((o) => String(o.value) === String(value));
-  const s = sizeMap[size];
+  const selected = options.find((o) => o.value === value);
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -70,7 +41,7 @@ const Select = ({
     };
   }, [open]);
 
-  const handleSelect = (optionValue: string | number) => {
+  const handleSelect = (optionValue: string) => {
     onChange?.(optionValue);
     setOpen(false);
   };
@@ -78,7 +49,7 @@ const Select = ({
   return (
     <div ref={containerRef} className={'relative'}>
       {label && (
-        <label htmlFor={id} className={`text-zinc-400 ${s.label}`}>
+        <label htmlFor={id} className={'text-zinc-400 text-sm px-3'}>
           {label}
         </label>
       )}
@@ -87,13 +58,14 @@ const Select = ({
         id={id}
         disabled={disabled}
         onClick={() => !disabled && setOpen((prev) => !prev)}
-        className={`w-full rounded-full flex flex-row items-center justify-between outline-none ring-0 border border-gray-300/30 focus:border-gray-700/30 bg-gray-300/30 shadow-inner text-left disabled:opacity-50 disabled:cursor-not-allowed ${s.trigger}`}
+        className={
+          'w-full rounded-full flex flex-row items-center justify-between outline-none ring-0 border border-gray-300/30 focus:border-gray-700/30 px-5 py-3 bg-gray-300/30 shadow-inner text-left disabled:opacity-50 disabled:cursor-not-allowed'
+        }
       >
         <span className={selected ? '' : 'text-zinc-400'}>
           {selected ? selected.label : placeholder}
         </span>
         <FaChevronDown
-          size={s.chevron}
           opacity={0.5}
           className={`transition-transform duration-200 ${
             open ? 'rotate-180' : ''
@@ -117,22 +89,22 @@ const Select = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className={'w-full flex flex-col gap-1'}>
-          <span className={`w-full text-zinc-400 ${s.label}`}>
+          <span className={'w-full text-xs text-zinc-400 px-2'}>
             {label ?? 'Opties'}
           </span>
           <div
             className={'w-full h-fit flex flex-col max-h-60 overflow-y-auto'}
           >
             {options.map((option) => {
-              const isSelected = String(option.value) === String(value);
+              const isSelected = option.value === value;
               return (
                 <button
-                  key={String(option.value)}
+                  key={option.value}
                   type={'button'}
                   onClick={() => handleSelect(option.value)}
-                  className={`w-full hover:bg-zinc-400/20 rounded-lg flex flex-row items-center justify-between cursor-pointer ${
-                    s.item
-                  } ${isSelected ? 'bg-zinc-400/20' : ''}`}
+                  className={`w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer ${
+                    isSelected ? 'bg-zinc-400/20' : ''
+                  }`}
                 >
                   <span>{option.label}</span>
                   {isSelected && (

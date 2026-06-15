@@ -1,17 +1,15 @@
 'use client';
 import { useState } from 'react';
-import { useCreateTaak } from '@/hooks/useCreateTaak';
+import { useCreateTask } from '@/hooks/useCreateTask';
 import { Input } from '@/components/design-system/Input';
 import { Container } from '@/components/design-system/Container';
 import { Button } from '@/components/design-system/Button';
 import { FormHelper } from '@/components/design-system/Form';
+import { Label } from '@/components/design-system/Label';
 import { TextArea } from '@/components/design-system/TextArea';
-import Select from '@/components/design-system/Select/Select';
-import { useToast } from '@/providers/ToastProvider';
 
 export const CreateView = () => {
-  const { mutateAsync: createTaak, isPending } = useCreateTaak();
-  const toast = useToast();
+  const createTask = useCreateTask();
   const [name, setName] = useState('');
   const [specifications, setSpecifications] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -20,19 +18,21 @@ export const CreateView = () => {
   const [hour, setHour] = useState('00');
   const [minute, setMinute] = useState('00');
   const [duration, setDuration] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!name || !dueDate) return;
+    setSubmitting(true);
     try {
-      const deadline = wholeDay
-        ? dueDate
-        : `${dueDate}T${hour.padStart(2, '0')}:${minute.padStart(2, '0')}:00`;
+      const [d, m, y] = dueDate.split('-');
+      const iso = wholeDay
+        ? new Date(`${y}-${m}-${d}T00:00:00`).toISOString()
+        : new Date(`${y}-${m}-${d}T${hour}:${minute}:00`).toISOString();
 
-      await createTaak({
+      await createTask({
         name,
         specifications,
-        dueDate: deadline,
+        dueDate: iso,
         location,
         duration: wholeDay ? undefined : duration,
         important: false,
@@ -42,15 +42,14 @@ export const CreateView = () => {
       setSpecifications('');
       setDueDate('');
       setDuration('');
-      toast.success('Taak aangemaakt');
-    } catch {
-      toast.error('Kon taak niet aanmaken');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <div className={'flex flex-col pt-5 min-h-full w-full'}>
-      <Container height={'fit'} label={'Taak beschrijving'}>
+      <Container width={'2/3'} height={'fit'} label={'Taak beschrijving'}>
         <FormHelper onSubmit={handleSubmit} noHeight>
           <Input
             label={'Naam'}
@@ -66,47 +65,41 @@ export const CreateView = () => {
             placeholder={'Specificaties'}
           />
 
-          <div className={'grid grid-cols-1 sm:grid-cols-2 gap-3'}>
+          <div className={'grid grid-cols-2 gap-3'}>
             <Input
-              type={'date'}
               label={'Deadline'}
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
               placeholder={'dd-mm-yyyy'}
               errorOption={false}
             />
-            <Select
-              label="Locatie"
-              options={[
-                { value: 'Plant 1', label: 'Plant 1' },
-                { value: 'Plant 2', label: 'Plant 2' },
-                { value: 'Plant 3', label: 'Plant 3' },
-              ]}
-              value={location}
-              placeholder="Selecteer locatie"
-              onChange={(val) => setLocation(String(val))}
-            />
+            <div className={'flex flex-col gap-1'}>
+              <Label text={'Locatie'} variant={'inputLabel'} />
+              <select
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className={
+                  'w-full rounded-full outline-none ring-0 border border-gray-300/30 focus:border-gray-700/30 px-5 py-3.5 bg-gray-300/30 shadow-inner'
+                }
+              >
+                <option>Plant 1</option>
+                <option>Plant 2</option>
+                <option>Plant 3</option>
+              </select>
+            </div>
           </div>
 
-          <div className={'flex flex-col sm:flex-row sm:items-center gap-3'}>
-            <div className="flex items-center gap-3">
-              <input
-                type={'checkbox'}
-                checked={wholeDay}
-                onChange={(e) => setWholeDay(e.target.checked)}
-              />
-              <span className={'text-sm truncate min-w-fit'}>Hele dag</span>
-            </div>
+          <div className={'flex flex-row items-center gap-3'}>
+            <input
+              type={'checkbox'}
+              checked={wholeDay}
+              onChange={(e) => setWholeDay(e.target.checked)}
+            />
+            <span className={'text-sm truncate min-w-fit'}>Hele dag</span>
             {!wholeDay && (
               <>
-                <span className={'text-xs text-zinc-500 hidden sm:inline'}>
-                  of
-                </span>
-                <div
-                  className={
-                    'flex-row items-center justify-start flex gap-3 flex-wrap'
-                  }
-                >
+                <span className={'text-xs text-zinc-500'}>of</span>
+                <div className={'flex-row items-center justify-end flex gap-3'}>
                   <Input
                     value={hour}
                     onChange={(e) => setHour(e.target.value)}
@@ -131,9 +124,9 @@ export const CreateView = () => {
 
           <Button
             type="submit"
-            label={isPending ? 'Aanmaken...' : 'Taak aanmaken'}
-            loading={isPending}
-            disabled={isPending || !name || !dueDate}
+            label={submitting ? 'Aanmaken...' : 'Taak aanmaken'}
+            loading={submitting}
+            disabled={submitting}
             variant={'primary'}
           />
         </FormHelper>

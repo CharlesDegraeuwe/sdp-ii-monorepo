@@ -10,10 +10,8 @@ import {
   IoMdAddCircleOutline,
 } from 'react-icons/io';
 import { HiOutlineLogout } from 'react-icons/hi';
-import { useUser } from '@/providers/UserProvider';
 
 export default function Popup({ popupRef, isOpen }: PopupProps) {
-  const { isAdmin } = useUser();
   const onClick = () => {
     signOut({ callbackUrl: '/login' });
   };
@@ -58,43 +56,39 @@ export default function Popup({ popupRef, isOpen }: PopupProps) {
           </button>
         </div>
       </div>
-      {isAdmin && (
-        <>
-          <hr className={'rounded-full border-zinc-300'} />
-          <div className="w-full flex flex-col gap-1">
-            <span className={'w-full text-xs text-zinc-400'}>Admin</span>
-            <div className="w-full h-fit flex flex-col">
-              <Link
-                href={'/admin/werknemer-aanmaken'}
-                className={
-                  'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
-                }
-              >
-                <span>Creëer werknemer</span>
-                <IoMdAddCircleOutline />
-              </Link>
-              <Link
-                href={'/admin/manager-aanmaken'}
-                className={
-                  'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
-                }
-              >
-                <span>Creëer manager</span>
-                <IoMdAddCircle />
-              </Link>
-              <Link
-                href={'/admin/beheer-gebruikers'}
-                className={
-                  'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
-                }
-              >
-                <span>Beheer gebruikers</span>
-                <IoServerOutline />
-              </Link>
-            </div>
-          </div>
-        </>
-      )}
+      <hr className={'rounded-full border-zinc-300'} />
+      <div className="w-full flex flex-col gap-1">
+        <span className={'w-full text-xs text-zinc-400'}>Admin</span>
+        <div className="w-full h-fit flex flex-col">
+          <Link
+            href={'/admin/creeer-werknemer'}
+            className={
+              'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
+            }
+          >
+            <span>Creëer werknemer</span>
+            <IoMdAddCircleOutline />
+          </Link>
+          <Link
+            href={'/admin/creeer-manager'}
+            className={
+              'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
+            }
+          >
+            <span>Creëer manager</span>
+            <IoMdAddCircle />
+          </Link>
+          <Link
+            href={'/admin/beheer-gebruikers'}
+            className={
+              'w-full hover:bg-zinc-400/20 rounded-lg p-2 text-sm flex flex-row items-center justify-between cursor-pointer'
+            }
+          >
+            <span>Beheer gebruikers</span>
+            <IoServerOutline />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

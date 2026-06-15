@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 import { FaArrowRight } from 'react-icons/fa';
 import { AnimateOnMount } from '@/components/design-system/AnimateOnMount';
 import { useToast } from '@/providers/ToastProvider';
-import { useSplash } from '@/providers/SplashProvider';
 
 interface passwordProps {
   setTab: (email: boolean) => void;
@@ -21,7 +20,6 @@ const PasswordForm = (props: passwordProps) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { setSplashOpen } = useSplash();
   const toast = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -47,7 +45,6 @@ const PasswordForm = (props: passwordProps) => {
           router.push('/activeer');
           return;
         }
-        setSplashOpen(true);
         router.push(callbackUrl);
       }
     } catch {

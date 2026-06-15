@@ -15,7 +15,7 @@ const LoginForm = () => {
   return (
     <div
       className={
-        'relative max-w-[50rem] w-full sm:w-4/5 md:w-3/5 lg:w-1/2 gap-5 p-8 sm:p-10 lg:p-40 min-h-fit sm:h-full shadow-2xl flex-col flex items-center rounded-4xl bg-white justify-center mt-16 sm:mt-0'
+        'relative max-w-[50rem] w-1/2 gap-5 p-10 lg:p-40 h-full shadow-2xl flex-col flex items-center rounded-4xl bg-white justify-center'
       }
     >
       <div className={'w-fit h-fit absolute top-5 right-5'}>

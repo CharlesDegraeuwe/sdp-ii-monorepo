@@ -67,7 +67,7 @@ export const useTaakData = () => {
     };
 
     void fetchData();
-  }, [lastSynced, setLastSynced, setLoaded, setMembers, setTasks, setTeams]);
+  }, []);
 
   return { loaded };
 };

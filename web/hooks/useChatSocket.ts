@@ -20,7 +20,7 @@ export function useChatSocket() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [fileList, setFileList] = useState<File[]>([]);
-  const isAgentic = useState<boolean>(false);
+  const [isAgentic, setIsAgentic] = useState<boolean>(true);
   const [status, setStatus] = useState<WSStatus>(
     token ? 'connecting' : 'closed',
   );

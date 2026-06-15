@@ -14,7 +14,11 @@ export function AfwezighedenWidget({
   aantalOngelezen,
 }: AfwezighedenWidgetProps) {
   return (
-    <Container indent={true} label={'Afwezigheden'} className="">
+    <Container
+      indent={true}
+      label={'Afwezigheden'}
+      className="col-start-4 col-end-5 row-start-3 row-end-4"
+    >
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-1.5 mt-1">
           {afwezigVandaag.length === 0 ? (

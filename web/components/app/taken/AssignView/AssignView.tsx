@@ -1,14 +1,10 @@
 'use client';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
+import { FaRegTrashCan } from 'react-icons/fa6';
 import { Container } from '@/components/design-system/Container';
 import { Label } from '@/components/design-system/Label';
 import { Button } from '@/components/design-system/Button';
-import { useUser } from '@/providers/UserProvider';
-import { useToast } from '@/providers/ToastProvider';
-import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
-import { useTaken } from '@/hooks/useTaken';
-import { useTeams } from '@/hooks/useTeams';
-import { useAssignTaak } from '@/hooks/useAssignTaak';
+import { useTaakStore } from '@/stores/taakStore';
 
 const memberPalette = [
   'bg-sky-100',
@@ -27,65 +23,66 @@ const colorForId = (id: string) => {
   return memberPalette[Math.abs(hash) % memberPalette.length];
 };
 
+const formatDue = (iso: string) => {
+  const d = new Date(iso);
+  const hh = d.getHours().toString().padStart(2, '0');
+  const mm = d.getMinutes().toString().padStart(2, '0');
+  return `${hh}:${mm}`;
+};
+
 export const AssignView = () => {
-  const { data: tasks = [] } = useTaken();
-  const { data: allTeams = [] } = useTeams();
-  const { mutateAsync: assignTaak, isPending } = useAssignTaak();
-  const { user, isSupervisor } = useUser();
-  const toast = useToast();
+  const tasks = useTaakStore((s) => s.tasks);
+  const teams = useTaakStore((s) => s.teams);
+  const members = useTaakStore((s) => s.members);
+  const assignTask = useTaakStore((s) => s.assignTask);
+  const removeTask = useTaakStore((s) => s.removeTask);
 
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
-  const [supervisorTeamIds, setSupervisorTeamIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (!isSupervisor || !user?.id) return;
-    const fetchMyTeams = async () => {
-      try {
-        const res = await fetch(`/api/teams/werknemer/${user.id}`);
-        if (!res.ok) return;
-        const data = (await res.json()) as { id: number }[];
-        setSupervisorTeamIds(data.map((t) => String(t.id)));
-      } catch {
-        // ignore
-      }
-    };
-    void fetchMyTeams();
-  }, [isSupervisor, user?.id]);
-
-  const visibleTeams = useMemo(() => {
-    if (!isSupervisor) return allTeams;
-    return allTeams.filter((t) => supervisorTeamIds.includes(t.id));
-  }, [allTeams, isSupervisor, supervisorTeamIds]);
 
   const unassigned = useMemo(
-    () => tasks.filter((t) => !t.assigneeId && !t.finished),
+    () => Object.values(tasks).filter((t) => !t.assigneeId && !t.finished),
     [tasks],
   );
 
   const teamMembers = useMemo(() => {
     if (!selectedTeamId) return [];
-    return allTeams.find((t) => t.id === selectedTeamId)?.members ?? [];
-  }, [allTeams, selectedTeamId]);
+    return teams[selectedTeamId]?.members ?? [];
+  }, [teams, selectedTeamId]);
 
   const handleAssign = async () => {
     if (!selectedTaskId || !selectedMemberId) return;
+    assignTask(selectedTaskId, selectedMemberId);
+
     try {
-      await assignTaak({ taskId: selectedTaskId, memberId: selectedMemberId });
-      toast.success('Taak toegewezen');
-    } catch {
-      toast.error('Kon taak niet toewijzen');
+      await fetch(`/api/taken/${selectedTaskId}/toewijzen`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ werknemerId: Number(selectedMemberId) }),
+      });
+    } catch (e) {
+      console.error(e);
     }
+
     setSelectedTaskId(null);
     setSelectedMemberId(null);
   };
 
+  const handleDelete = async (id: string) => {
+    const backup = tasks[id];
+    removeTask(id);
+    try {
+      await fetch(`/api/taken/${id}`, { method: 'DELETE' });
+    } catch (e) {
+      if (backup) useTaakStore.getState().addTask(backup);
+      console.error(e);
+    }
+  };
+
   return (
-    <div
-      className={'w-full grid grid-cols-1 sm:grid-cols-2 gap-5 min-h-96 pt-5'}
-    >
-      <Container label={'Niet-toegewezen taken'} padding="0">
+    <div className={'w-full grid grid-cols-2 gap-5 h-3/4 pt-5'}>
+      <Container label={'Taken'}>
         {unassigned.length === 0 ? (
           <div
             className={'w-full h-full flex justify-center items-center pb-12'}
@@ -93,33 +90,35 @@ export const AssignView = () => {
             <Label text={'Geen taken beschikbaar'} variant={'emptystate'} />
           </div>
         ) : (
-          <div className="flex flex-col gap-2 max-h-150 min-h-150 relative pr-1 overflow-x-visible scroll-hidden">
-            <div className="flex flex-col gap-2 h-full pb-10 overflow-y-auto overflow-x-visible scroll-hidden">
-              {unassigned.map((t) => {
-                const active = selectedTaskId === t.id;
-                return (
-                  <div
-                    key={t.id}
+          <div className={'flex flex-col gap-2'}>
+            {unassigned.map((t) => {
+              const active = selectedTaskId === t.id;
+              return (
+                <div key={t.id} className={'flex flex-row items-center gap-2'}>
+                  <button
                     onClick={() => setSelectedTaskId(t.id)}
-                    className="p-0.5"
+                    className={`flex-1 flex flex-row justify-between items-center px-4 py-2 rounded-full text-sm transition ${
+                      active
+                        ? 'bg-white ring-2 ring-rose-500 shadow-sm'
+                        : 'bg-zinc-100 hover:bg-zinc-200'
+                    }`}
                   >
-                    <div
-                      className={`px-4 py-2 shadow-sm rounded-full text-sm flex flex-row gap-2 items-center min-h-13 cursor-pointer text-left transition ${
-                        active
-                          ? 'bg-white ring ring-zinc-50'
-                          : 'bg-zinc-100 hover:bg-zinc-200'
-                      }`}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center shrink-0">
-                        <HiOutlineClipboardDocumentList className="w-4 h-4 text-zinc-600" />
-                      </div>
-                      <span className="flex-1 truncate">{t.name}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="absolute bottom-0 w-full h-10 bg-linear-0 from-gray-200 to-transparent" />
+                    <span>{t.name}</span>
+                    <span className={'text-xs text-zinc-500'}>
+                      Deadline {formatDue(t.dueDate)}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(t.id)}
+                    className={
+                      'p-2 rounded-full text-zinc-400 hover:text-rose-500 hover:bg-rose-50 transition'
+                    }
+                  >
+                    <FaRegTrashCan className={'w-4 h-4'} />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
       </Container>
@@ -127,11 +126,11 @@ export const AssignView = () => {
       <Container label={'Toewijzing'}>
         <div className={'flex flex-col gap-5 h-full'}>
           <div className={'flex flex-col gap-2'}>
-            <Label text={'Teams'} size={'sm'} weight={600} />
+            <Label text={'Plant teams'} size={'sm'} weight={600} />
             <div
               className={'flex flex-col gap-2 max-h-40 overflow-y-auto pr-1'}
             >
-              {visibleTeams.length === 0 ? (
+              {Object.values(teams).length === 0 ? (
                 <div className={'w-full py-4 flex items-center justify-center'}>
                   <Label
                     text={'Geen teams beschikbaar'}
@@ -139,7 +138,7 @@ export const AssignView = () => {
                   />
                 </div>
               ) : (
-                visibleTeams.map((team) => {
+                Object.values(teams).map((team) => {
                   const active = selectedTeamId === team.id;
                   return (
                     <button
@@ -183,6 +182,7 @@ export const AssignView = () => {
             ) : (
               <div className={'flex flex-col gap-2 overflow-y-auto pr-1'}>
                 {teamMembers.map((m) => {
+                  const member = members[m.id] ?? m;
                   const active = selectedMemberId === m.id;
                   const bg = colorForId(m.id);
                   return (
@@ -201,7 +201,7 @@ export const AssignView = () => {
                         }`}
                       />
                       <span>
-                        {m.firstName} {m.lastName}
+                        {member.firstName} {member.lastName}
                       </span>
                     </button>
                   );
@@ -213,8 +213,8 @@ export const AssignView = () => {
           <div className={'mt-auto'}>
             <Button
               onClick={handleAssign}
-              disabled={!selectedTaskId || !selectedMemberId || isPending}
-              label={isPending ? 'Toewijzen...' : 'Taak toewijzen'}
+              disabled={!selectedTaskId || !selectedMemberId}
+              label={'Taak toewijzen'}
               variant={'primary'}
             />
           </div>

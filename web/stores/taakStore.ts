@@ -94,7 +94,6 @@ export const useTaakStore = create<TaakStore>((set) => ({
 
   removeTask: (id) =>
     set((s) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [id]: _, ...rest } = s.tasks;
       return { tasks: rest };
     }),

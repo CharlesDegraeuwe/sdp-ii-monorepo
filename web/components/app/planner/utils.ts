@@ -89,31 +89,13 @@ export function getPeriodBounds(
 
 export function takenOpDag(taken: PlannerTaak[], datum: Date): PlannerTaak[] {
   return taken.filter((t) => {
-    if (!t.deadline) return false;
-    const datumStr = t.deadline.split('T')[0];
-    const parts = datumStr.split('-');
-    if (parts.length < 3) return false;
+    const d = new Date(t.deadline);
     return (
-      parseInt(parts[2]) === datum.getDate() &&
-      parseInt(parts[1]) - 1 === datum.getMonth() &&
-      parseInt(parts[0]) === datum.getFullYear()
+      d.getDate() === datum.getDate() &&
+      d.getMonth() === datum.getMonth() &&
+      d.getFullYear() === datum.getFullYear()
     );
   });
-}
-
-export function mapTaakVanBackend(dto: Record<string, unknown>): PlannerTaak {
-  const werknemer = dto.werknemer as Record<string, unknown> | undefined;
-  return {
-    id: dto.id as number,
-    naam: (dto.titel as string) ?? '',
-    specificaties: (dto.beschrijving as string) || undefined,
-    deadline: (dto.deadline as string) ?? '',
-    duur: undefined,
-    locatie: dto.siteId != null ? String(dto.siteId) : '',
-    belangrijk: false,
-    afgewerkt: dto.afgewerkt === 'ja',
-    werknemerId: werknemer?.id != null ? (werknemer.id as number) : undefined,
-  };
 }
 
 export function taakBadgeKleur(t: PlannerTaak): string {

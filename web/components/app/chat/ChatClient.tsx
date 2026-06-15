@@ -50,7 +50,7 @@ const ChatClient = () => {
     <FormHelper onSubmit={handleSubmit}>
       <div className={'relative w-full h-full'}>
         <div
-          className={`absolute ${isAgentic ? 'opacity-100 animate-pulse' : 'opacity-0'} transition-opacity duration-250 w-full h-full rounded-3xl overflow-hidden flex items-center justify-center bg-white`}
+          className={`absolute animate-pulse ${isAgentic ? 'opacity-100' : 'opacity-0'} transition-opacity duration-250 w-full h-full rounded-3xl overflow-hidden flex items-center justify-center bg-white`}
           style={{
             boxShadow: `
             inset 200px 200px 250px -150px #60a5fa,
@@ -66,7 +66,7 @@ const ChatClient = () => {
             {!hasMessages && (
               <div
                 className={
-                  'w-full h-full flex items-center pt-20 sm:pt-32 lg:pt-50 flex-col gap-5 px-4'
+                  'min-w-full h-full flex items-center pt-50 flex-col gap-5'
                 }
               >
                 <Image
@@ -74,11 +74,11 @@ const ChatClient = () => {
                   src={'ben.svg'}
                   width={100}
                   height={100}
-                  className="h-24 sm:h-36 w-auto"
+                  className="h-36 w-auto"
                 />
                 <div
                   className={
-                    'w-full sm:w-4/5 md:w-3/5 lg:w-1/3 flex flex-col gap-2 items-center justify-center'
+                    'min-w-1/3 flex flex-col gap-2 items-center justify-center'
                   }
                 >
                   <div
@@ -104,9 +104,7 @@ const ChatClient = () => {
                       textareaRef={inputRef}
                     />
                   </div>
-                  <div
-                    className={'w-full flex flex-col sm:flex-row gap-2 mt-3'}
-                  >
+                  <div className={'w-full flex flex-row gap-3 mt-3'}>
                     {SUGGESTIONS.map((s) => (
                       <Button
                         key={s.label}
@@ -125,16 +123,16 @@ const ChatClient = () => {
             )}
 
             {hasMessages && (
-              <div className="w-full h-full flex flex-col items-center justify-between py-6 sm:py-10 px-4">
+              <div className="w-full h-full flex flex-col items-center justify-between py-10">
                 <div
                   ref={scrollRef}
-                  className="flex flex-col w-full sm:w-4/5 md:w-3/5 lg:w-2/5 flex-1 overflow-y-auto scroll-hidden pb-10"
+                  className="flex flex-col w-2/5 flex-1 overflow-y-auto scroll-hidden pb-10"
                 >
                   {messages.map((message) => (
                     <ChatMessage key={message.id} message={message} />
                   ))}
                 </div>
-                <div className="w-full sm:w-4/5 md:w-3/5 lg:w-2/5 flex flex-col gap-1">
+                <div className="min-w-2/5 flex flex-col gap-1">
                   <ChatInput
                     isReceiving={streaming}
                     autoFocus

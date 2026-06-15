@@ -39,12 +39,12 @@ const TeamsClient = ({
   }
 
   return (
-    <div className={'w-full lg:w-3/4 xl:w-1/2 flex flex-col gap-3'}>
-      <div
-        className={
-          'w-full h-fit flex flex-col sm:flex-row sm:justify-between gap-2'
-        }
-      >
+    <div
+      className={
+        'w-full md:w-3/4 lg:w-1/2 h-full flex items-center flex-col gap-3'
+      }
+    >
+      <div className={'w-full h-fit justify-between flex flex-row'}>
         <TabSwitcher
           tabs={modes}
           value={mode}
@@ -68,7 +68,7 @@ const TeamsClient = ({
       {mode === 'check' && scope === 'users' && (
         <UsersOverview selectedWerknemerId={selectedWerknemerId} />
       )}
-      {mode === 'creëer' && <CreateTeamForm />}
+      {mode === 'creëer' && <CreateTeamForm scope={scope} />}
     </div>
   );
 };

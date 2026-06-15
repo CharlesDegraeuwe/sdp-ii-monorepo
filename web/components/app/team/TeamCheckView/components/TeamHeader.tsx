@@ -7,7 +7,6 @@ import { useDeleteTeam } from '@/hooks/useDeleteTeam';
 import { useTeamsStore } from '@/stores/teamStore';
 import { Team } from '@/types/types';
 import { CopyableField } from '@/components/app/team/UserCheckView/components/CopyableField';
-import { useToast } from '@/providers/ToastProvider';
 
 type Props = {
   team: Team;
@@ -16,7 +15,6 @@ type Props = {
 
 export const TeamHeader = ({ team, ledenAantal }: Props) => {
   const deleteTeam = useDeleteTeam();
-  const toast = useToast();
   const site = useTeamsStore((s) =>
     Object.values(s.sites ?? {}).find((x) => x.id === team.siteId),
   );
@@ -43,14 +41,7 @@ export const TeamHeader = ({ team, ledenAantal }: Props) => {
         </div>
 
         <button
-          onClick={async () => {
-            try {
-              await deleteTeam(team.id);
-              toast.success('Team verwijderd');
-            } catch {
-              toast.error('Kon team niet verwijderen');
-            }
-          }}
+          onClick={() => deleteTeam(team.id)}
           className="p-2 rounded-full text-zinc-400 hover:text-rose-500 hover:bg-rose-50 transition cursor-pointer"
         >
           <FaRegTrashCan className="w-4 h-4" />

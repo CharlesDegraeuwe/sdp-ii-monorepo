@@ -1,7 +1,7 @@
 'use client';
 
 import { badgeKleur, afwezigheidLabel } from '@/components/app/planner/utils';
-import type { Afwezigheid, PlannerTaak, Shift } from '../types';
+import type { Afwezigheid, Shift } from '../types';
 import {
   VIS_START,
   UUR_BREEDTE,
@@ -17,13 +17,10 @@ import { ShiftBlok } from './ShiftBlok';
 interface WerknemerRijProps {
   rij: Rij;
   shift?: Shift;
-  taken?: PlannerTaak[];
   afwezig: Afwezigheid[];
   isManager: boolean;
   dagIsVrij: boolean;
   huidigUurX: number | null;
-  isGeselecteerd?: boolean;
-  onSelecteer?: () => void;
   onEdit: () => void;
   onCreate: () => void;
 }
@@ -31,30 +28,21 @@ interface WerknemerRijProps {
 export function WerknemerRij({
   rij,
   shift,
-  taken = [],
   afwezig,
   isManager,
   dagIsVrij,
   huidigUurX,
-  isGeselecteerd,
-  onSelecteer,
   onEdit,
   onCreate,
 }: WerknemerRijProps) {
   return (
     <div
-      className={`flex border-b border-zinc-100 transition-colors ${
-        isGeselecteerd ? 'bg-zinc-50' : 'hover:bg-zinc-50/50'
-      }`}
+      className="flex border-b border-zinc-100 hover:bg-zinc-50/50 transition-colors"
       style={{ height: ROW_H }}
     >
-      <button
+      <div
         style={{ width: NAAM_B, minWidth: NAAM_B }}
-        className={`shrink-0 flex flex-col justify-center px-3 py-1 border-r border-zinc-100 text-left transition-colors ${
-          onSelecteer ? 'cursor-pointer hover:bg-zinc-100/60' : ''
-        } ${isGeselecteerd ? 'bg-zinc-100/60' : ''}`}
-        onClick={onSelecteer}
-        type="button"
+        className="shrink-0 flex flex-col justify-center px-3 py-1 border-r border-zinc-100"
       >
         <span className="text-xs font-semibold text-zinc-800 truncate">
           {rij.label}
@@ -66,28 +54,7 @@ export function WerknemerRij({
             {afwezigheidLabel(afwezig[0])}
           </span>
         )}
-        {taken.length > 0 && (
-          <div className="flex flex-wrap gap-0.5 mt-0.5">
-            {taken.slice(0, 2).map((t) => (
-              <span
-                key={t.id}
-                className="text-[8px] font-semibold px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 truncate max-w-[80px]"
-                title={t.naam}
-              >
-                {t.naam}
-              </span>
-            ))}
-            {taken.length > 2 && (
-              <span className="text-[8px] font-semibold px-1.5 py-0.5 rounded-full bg-zinc-100 text-zinc-500">
-                +{taken.length - 2}
-              </span>
-            )}
-          </div>
-        )}
-        {isGeselecteerd && (
-          <span className="text-[9px] text-zinc-400 mt-0.5">▸ taken</span>
-        )}
-      </button>
+      </div>
 
       <div
         className="relative"

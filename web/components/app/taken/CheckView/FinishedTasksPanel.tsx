@@ -1,5 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
+import { Container } from '@/components/design-system/Container';
 import { Label } from '@/components/design-system/Label';
 import { Button } from '@/components/design-system/Button';
 import { useTaakStore } from '@/stores/taakStore';
@@ -34,41 +35,51 @@ export const FinishedTasksPanel = ({ targetId, scope }: Props) => {
   }, [tasks, teams, targetId, scope]);
 
   const visible = showAll ? finished : finished.slice(0, 6);
+  if (finished.length === 0) {
+    return (
+      <Container height={'1/2'} label={'Afgewerkte taken'}>
+        <div className={'w-full h-full flex items-center justify-center'}>
+          <Label text={'Nog geen taken afgewerkt'} variant={'emptystate'} />
+        </div>
+      </Container>
+    );
+  }
 
   return (
-    <div className="flex flex-col gap-3 text-sm h-full">
-      <div className="flex flex-row items-center justify-between">
-        {finished.length > 6 && (
+    <Container height={'1/2'} label={'Afgewerkte taken'}>
+      <div
+        className={
+          'w-full h-fit flex flex-col overflow-hidden overflow-y-scroll items-center justify-center gap-3'
+        }
+      >
+        {visible.map((t) => (
+          <div
+            key={t.id}
+            className={
+              'flex flex-row items-center gap-3 px-4 py-2 rounded-full bg-zinc-100'
+            }
+          >
+            <span className={'w-4 h-4 rounded-full bg-zinc-400'} />
+            <span className={'text-sm flex-1'}>{t.name}</span>
+            <span className={'text-xs text-zinc-500'}>
+              Afgewerkt {new Date(t.finishedAt ?? '').toLocaleDateString()}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {finished.length > 6 && (
+        <div className={'self-end'}>
           <Button
             type="button"
             label={showAll ? 'Minder tonen' : 'Meer tonen'}
-            variant="outline"
-            textSize="sm"
-            px="px-3"
+            variant={'outline'}
+            textSize={'sm'}
+            px={'px-3'}
             onClick={() => setShowAll(!showAll)}
           />
-        )}
-      </div>
-
-      {finished.length === 0 ? (
-        <div className="w-full h-full flex items-center justify-center">
-          <Label text="Nog geen taken afgewerkt" variant="emptystate" />
-        </div>
-      ) : (
-        <div className="flex flex-col gap-2 overflow-y-auto scroll-hidden pr-1">
-          {visible.map((t) => (
-            <div key={t.id} className="p-0.5">
-              <div className="flex flex-row items-center gap-3 px-4 py-2 shadow-sm rounded-full bg-zinc-100 min-h-13">
-                <span className="w-4 h-4 rounded-full bg-zinc-400 shrink-0" />
-                <span className="text-sm flex-1 truncate">{t.name}</span>
-                <span className="text-xs text-zinc-500 shrink-0">
-                  {new Date(t.finishedAt ?? '').toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-          ))}
         </div>
       )}
-    </div>
+    </Container>
   );
 };

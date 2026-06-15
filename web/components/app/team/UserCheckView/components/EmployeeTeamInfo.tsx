@@ -1,7 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { HiOutlineUserGroup } from 'react-icons/hi2';
 import { useTeamsStore, Werknemer } from '@/stores/teamStore';
-import { useMemo } from 'react';
 
 type Props = {
   employee: Werknemer;
@@ -9,17 +8,11 @@ type Props = {
 
 export const EmployeeTeamInfo = ({ employee }: Props) => {
   const router = useRouter();
-  const teams = useTeamsStore((s) => s.teams);
-  const teamLeden = useTeamsStore((s) => s.teamLeden);
-
-  const team = useMemo(() => {
-    for (const [teamId, leden] of Object.entries(teamLeden)) {
-      if (leden.some((l) => l.werknemerId === employee.id)) {
-        return teams[Number(teamId)] ?? null;
-      }
-    }
-    return null;
-  }, [teams, teamLeden, employee.id]);
+  const team = useTeamsStore((s) =>
+    employee.siteId
+      ? Object.values(s.teams).find((t) => t.siteId === employee.siteId)
+      : null,
+  );
 
   if (!team) return null;
 
@@ -35,6 +28,9 @@ export const EmployeeTeamInfo = ({ employee }: Props) => {
           <span className="text-zinc-400">— {employee.role}</span>
         )}
       </span>
+      <button className="text-xs underline text-zinc-500 hover:text-zinc-800">
+        zie planning
+      </button>
     </div>
   );
 };

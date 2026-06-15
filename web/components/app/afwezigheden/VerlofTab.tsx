@@ -25,7 +25,7 @@ const VerlofTab = (props: VerlofTabProps) => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex gap-4">
         <div className="flex flex-col gap-1 flex-1">
           <Label text={'Startdatum'} verplicht />
           <Input
@@ -47,7 +47,7 @@ const VerlofTab = (props: VerlofTabProps) => {
         <Label text={'Type Verlof'} verplicht />
         <Select
           value={verlofType}
-          onChange={(v) => setVerlofType(String(v))}
+          onChange={setVerlofType}
           placeholder="Kies een land"
           options={[
             { value: 'jaarlijks_verlof', label: 'Jaarlijks verlof' },

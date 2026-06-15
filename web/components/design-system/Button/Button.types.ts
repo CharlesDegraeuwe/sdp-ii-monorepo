@@ -1,11 +1,3 @@
-type variant =
-  | 'primary'
-  | 'secondary'
-  | 'outline'
-  | 'prompt'
-  | 'ghost'
-  | 'submit'
-  | 'approve';
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   label?: string;
@@ -13,7 +5,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   error?: string;
   loading?: boolean;
 
-  variant?: variant;
+  variant?: 'primary' | 'secondary' | 'outline' | 'prompt' | 'ghost' | 'submit';
   textColor?: 'white' | 'black';
   textSize?: 'sm' | 'md' | 'lg';
   borderColor?: 'default' | 'red';

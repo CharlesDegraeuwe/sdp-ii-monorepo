@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Questrial&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 @import 'tailwindcss';
 
-@custom-variant dark (&:is(.dark, .dark *));
-
 :root {
 }
 
@@ -37,25 +35,7 @@ input:-webkit-autofill:focus {
   --font-sfpro: 'SF Pro Display', sans-serif;
 }
 
-/* Dark mode */
-.dark body {
-  background-color: #111111;
-  color: #f0f0f0;
-}
-
-.dark input {
-  color: #f0f0f0;
-  background-color: transparent;
-}
-
-/* Compact mode */
-.compact .compact-gap {
-  gap: 0.375rem !important;
-}
-
-.compact .compact-py {
-  padding-top: 0.375rem !important;
-  padding-bottom: 0.375rem !important;
+@media (prefers-color-scheme: dark) {
 }
 
 .scroll-hidden {

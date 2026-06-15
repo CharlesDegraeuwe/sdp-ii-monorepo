@@ -100,7 +100,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: async ({ auth, request }) => {
       const { pathname } = request.nextUrl;
       const isLoggedIn = !!auth;
-      const userRole = (auth as { user?: { rol?: string } } | null)?.user?.rol;
       const authRoutes = ['/login', '/activeer'];
       const publicRoutes = ['/login', '/activeer', '/'];
 
@@ -118,25 +117,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       if (!isPublicRoute && !isLoggedIn) return false;
-
-      if (isLoggedIn) {
-        // Admin-only routes
-        if (pathname.startsWith('/admin') && userRole !== 'Admin') {
-          return Response.redirect(new URL('/overzicht', request.url));
-        }
-
-        // Routes for Admin, Manager, Supervisor (not Werknemer)
-        const elevatedRoutes = ['/locaties', '/teams'];
-        const isElevatedRoute = elevatedRoutes.some((r) =>
-          pathname.startsWith(r),
-        );
-        if (
-          isElevatedRoute &&
-          !['Admin', 'Manager', 'Supervisor'].includes(userRole ?? '')
-        ) {
-          return Response.redirect(new URL('/overzicht', request.url));
-        }
-      }
 
       return true;
     },
