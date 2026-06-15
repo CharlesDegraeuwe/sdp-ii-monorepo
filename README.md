@@ -218,3 +218,5 @@ git commit
 
 - [Architectuur](docs/architectuur.md) - Hoe de projecten samenwerken, welke packages wat doen, endpoints overzicht
 - [Development gids](docs/development.md) - Uitgebreide uitleg over dagelijks ontwikkelen, nieuwe features toevoegen, environment variabelen
+
+S.O. naar Claude en Charles ofc
