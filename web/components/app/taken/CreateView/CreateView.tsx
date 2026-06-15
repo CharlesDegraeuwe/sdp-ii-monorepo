@@ -1,17 +1,15 @@
 'use client';
 import { useState } from 'react';
-import { useCreateTaak } from '@/hooks/useCreateTaak';
+import { useCreateTask } from '@/hooks/useCreateTask';
 import { Input } from '@/components/design-system/Input';
 import { Container } from '@/components/design-system/Container';
 import { Button } from '@/components/design-system/Button';
 import { FormHelper } from '@/components/design-system/Form';
 import { TextArea } from '@/components/design-system/TextArea';
 import Select from '@/components/design-system/Select/Select';
-import { useToast } from '@/providers/ToastProvider';
 
 export const CreateView = () => {
-  const { mutateAsync: createTaak, isPending } = useCreateTaak();
-  const toast = useToast();
+  const createTask = useCreateTask();
   const [name, setName] = useState('');
   const [specifications, setSpecifications] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -20,19 +18,21 @@ export const CreateView = () => {
   const [hour, setHour] = useState('00');
   const [minute, setMinute] = useState('00');
   const [duration, setDuration] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!name || !dueDate) return;
+    setSubmitting(true);
     try {
-      const deadline = wholeDay
-        ? dueDate
-        : `${dueDate}T${hour.padStart(2, '0')}:${minute.padStart(2, '0')}:00`;
+      const [d, m, y] = dueDate.split('-');
+      const iso = wholeDay
+        ? new Date(`${y}-${m}-${d}T00:00:00`).toISOString()
+        : new Date(`${y}-${m}-${d}T${hour}:${minute}:00`).toISOString();
 
-      await createTaak({
+      await createTask({
         name,
         specifications,
-        dueDate: deadline,
+        dueDate: iso,
         location,
         duration: wholeDay ? undefined : duration,
         important: false,
@@ -42,9 +42,8 @@ export const CreateView = () => {
       setSpecifications('');
       setDueDate('');
       setDuration('');
-      toast.success('Taak aangemaakt');
-    } catch {
-      toast.error('Kon taak niet aanmaken');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -131,9 +130,9 @@ export const CreateView = () => {
 
           <Button
             type="submit"
-            label={isPending ? 'Aanmaken...' : 'Taak aanmaken'}
-            loading={isPending}
-            disabled={isPending || !name || !dueDate}
+            label={submitting ? 'Aanmaken...' : 'Taak aanmaken'}
+            loading={submitting}
+            disabled={submitting}
             variant={'primary'}
           />
         </FormHelper>

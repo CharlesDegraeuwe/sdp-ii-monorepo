@@ -122,55 +122,49 @@ export default function Page() {
       <BreadcrumbInit pages={['admin']} />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Container height="fit">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
-              <IoPeopleOutline className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-500 font-medium">
-                Totale Werknemers
-              </p>
-              <p className="text-2xl font-bold text-gray-800">
-                {totalEmployees !== null ? totalEmployees : '...'}
-              </p>
-            </div>
+        <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
+            <IoPeopleOutline className="w-6 h-6" />
           </div>
-        </Container>
+          <div>
+            <p className="text-sm text-gray-500 font-medium">
+              Totale Werknemers
+            </p>
+            <p className="text-2xl font-bold text-gray-800">
+              {totalEmployees !== null ? totalEmployees : '...'}
+            </p>
+          </div>
+        </div>
 
-        <Container height="fit">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
-              <IoBusinessOutline className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-500 font-medium">
-                Actieve Locaties
-              </p>
-              <p className="text-2xl font-bold text-gray-800">
-                {activeSitesPercentage !== null
-                  ? `${activeSitesPercentage}%`
-                  : '...'}
-              </p>
-            </div>
+        <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
+            <IoBusinessOutline className="w-6 h-6" />
           </div>
-        </Container>
+          <div>
+            <p className="text-sm text-gray-500 font-medium">
+              Actieve Locaties
+            </p>
+            <p className="text-2xl font-bold text-gray-800">
+              {activeSitesPercentage !== null
+                ? `${activeSitesPercentage}%`
+                : '...'}
+            </p>
+          </div>
+        </div>
 
-        <Container height="fit">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
-              <IoTimeOutline className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-500 font-medium">
-                Afwezige Werknemers
-              </p>
-              <p className="text-2xl font-bold text-gray-800">
-                {absentEmployees !== null ? absentEmployees : '...'}
-              </p>
-            </div>
+        <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
+            <IoTimeOutline className="w-6 h-6" />
           </div>
-        </Container>
+          <div>
+            <p className="text-sm text-gray-500 font-medium">
+              Afwezige Werknemers
+            </p>
+            <p className="text-2xl font-bold text-gray-800">
+              {absentEmployees !== null ? absentEmployees : '...'}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

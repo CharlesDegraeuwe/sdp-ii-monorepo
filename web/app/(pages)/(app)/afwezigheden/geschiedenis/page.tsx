@@ -1,7 +1,7 @@
 'use client';
 import Container from '../../../../../components/design-system/Container/Container';
 import { useSession } from 'next-auth/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Label } from '@/components/design-system/Label';
 
 interface GeschiedenisItem {
@@ -25,14 +25,8 @@ const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
 export default function GeschiedenisPage() {
   const { data: session } = useSession();
   const token = session?.accessToken;
-  const sessionUser = session?.user as Record<string, unknown> | undefined;
-  const eigenId = Number(sessionUser?.id ?? 0);
-  const rol = (sessionUser?.rol as string) ?? '';
 
-  const isWerknemer = rol === 'Werknemer';
-  const isManagerOrSupervisor = ['Manager', 'Supervisor', 'Admin'].includes(rol);
-
-  const [teamleden, setTeamleden] = useState<Teamlid[]>([]);
+  const [teamleden] = useState<Teamlid[]>([]);
   const [geselecteerdLid, setGeselecteerdLid] = useState<Teamlid | null>(null);
   const [geschiedenis, setGeschiedenis] = useState<GeschiedenisItem[]>([]);
   const [geschiedenisLaden, setGeschiedenisLaden] = useState(false);
@@ -57,96 +51,6 @@ export default function GeschiedenisPage() {
     }
   }
 
-  // Employee: auto-load own absence history on mount
-  useEffect(() => {
-    if (!token || !eigenId || !isWerknemer) return;
-    const zelf: Teamlid = {
-      id: eigenId,
-      naam: (sessionUser?.naam as string) ?? '',
-      voornaam: (sessionUser?.voornaam as string) ?? '',
-      rol,
-    };
-    setGeselecteerdLid(zelf);
-    setGeschiedenisLaden(true);
-    fetch(`${BASE}/geschiedenis/werknemer/${eigenId}`, { headers: authHeader })
-      .then((res) => res.json())
-      .then(setGeschiedenis)
-      .catch(() => setGeschiedenis([]))
-      .finally(() => setGeschiedenisLaden(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, eigenId]);
-
-  // Manager/Supervisor: fetch team members and auto-select self
-  useEffect(() => {
-    if (!token || !eigenId || !isManagerOrSupervisor) return;
-
-    async function init() {
-      try {
-        const teamsRes = await fetch(`${BASE}/teams/werknemer/${eigenId}`, {
-          headers: authHeader,
-        });
-        const teams: { id: number }[] = teamsRes.ok
-          ? await teamsRes.json()
-          : [];
-
-        const ledenArrays = await Promise.all(
-          teams.map((t) =>
-            fetch(`/api/teams/${t.id}/leden`).then((r) =>
-              r.ok ? r.json() : [],
-            ),
-          ),
-        );
-
-        const gezien = new Set<number>();
-        const alleleden: Teamlid[] = [];
-
-        for (const leden of ledenArrays) {
-          for (const lid of leden as Teamlid[]) {
-            if (!gezien.has(lid.id)) {
-              gezien.add(lid.id);
-              alleleden.push(lid);
-            }
-          }
-        }
-
-        // Ensure self appears first in the list
-        const zelfIndex = alleleden.findIndex((l) => l.id === eigenId);
-        if (zelfIndex > 0) {
-          const [zelf] = alleleden.splice(zelfIndex, 1);
-          alleleden.unshift(zelf);
-        } else if (zelfIndex === -1) {
-          alleleden.unshift({
-            id: eigenId,
-            naam: (sessionUser?.naam as string) ?? '',
-            voornaam: (sessionUser?.voornaam as string) ?? '',
-            rol,
-          });
-        }
-
-        setTeamleden(alleleden);
-
-        // Auto-select self and load own history
-        const zelf = alleleden[0];
-        if (zelf) {
-          setGeselecteerdLid(zelf);
-          setGeschiedenisLaden(true);
-          fetch(`${BASE}/geschiedenis/werknemer/${zelf.id}`, {
-            headers: authHeader,
-          })
-            .then((res) => res.json())
-            .then(setGeschiedenis)
-            .catch(() => setGeschiedenis([]))
-            .finally(() => setGeschiedenisLaden(false));
-        }
-      } catch {
-        // leave teamleden empty on error
-      }
-    }
-
-    init();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, eigenId]);
-
   function formatDatum(d: string) {
     return new Date(d).toLocaleDateString('nl-BE', {
       day: 'numeric',
@@ -170,63 +74,6 @@ export default function GeschiedenisPage() {
     }
   }
 
-  const geschiedenisItems = (
-    <>
-      {geschiedenisLaden && <p className="text-sm text-zinc-400">Laden...</p>}
-      {!geschiedenisLaden && geschiedenis.length === 0 && (
-        <p className="text-sm text-zinc-400">Geen geschiedenis gevonden.</p>
-      )}
-      {geschiedenis.map((item) => (
-        <div
-          key={item.id}
-          className={`flex items-center justify-between px-4 py-3 rounded-2xl border ${item.type === 'Ziekte' ? 'bg-red-50/50 border-red-100' : item.status === 'In afwachting' ? 'bg-amber-50/50 border-amber-100' : item.status === 'Afgewezen' || item.status === 'Geannuleerd' ? 'bg-zinc-50 border-zinc-200' : 'bg-emerald-50/50 border-emerald-100'}`}
-        >
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold text-zinc-800">
-              {formatDatum(item.startDatum)}
-              {item.startDatum !== item.eindDatum &&
-                ` – ${formatDatum(item.eindDatum)}`}
-            </span>
-            {item.omschrijving && (
-              <span className="text-xs text-zinc-500">{item.omschrijving}</span>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <span
-              className={`text-xs font-bold px-2 py-1 rounded-full ${item.type === 'Ziekte' ? 'bg-red-100 text-red-500' : 'bg-zinc-100 text-zinc-600'}`}
-            >
-              {item.type}
-            </span>
-            {item.status && (
-              <span
-                className={`text-xs font-bold px-2 py-1 rounded-full ${statusKleur(item.status)}`}
-              >
-                {item.status}
-              </span>
-            )}
-          </div>
-        </div>
-      ))}
-    </>
-  );
-
-  // Employee view: full-width history panel, no team member selector
-  if (isWerknemer) {
-    return (
-      <Container height="full">
-        <div className="flex flex-col gap-3 p-1 h-full">
-          {geselecteerdLid && (
-            <span className="text-base font-bold text-zinc-900">
-              {geselecteerdLid.voornaam} {geselecteerdLid.naam}
-            </span>
-          )}
-          {geschiedenisItems}
-        </div>
-      </Container>
-    );
-  }
-
-  // Manager / Supervisor / Admin view: two-column layout with team member selector
   return (
     <>
       <div className="flex flex-col sm:flex-row gap-4 min-h-full w-full">
@@ -272,7 +119,47 @@ export default function GeschiedenisPage() {
                   <span className="text-base font-bold text-zinc-900">
                     {geselecteerdLid.voornaam} {geselecteerdLid.naam}
                   </span>
-                  {geschiedenisItems}
+                  {geschiedenisLaden && (
+                    <p className="text-sm text-zinc-400">Laden...</p>
+                  )}
+                  {!geschiedenisLaden && geschiedenis.length === 0 && (
+                    <p className="text-sm text-zinc-400">
+                      Geen geschiedenis gevonden.
+                    </p>
+                  )}
+                  {geschiedenis.map((item) => (
+                    <div
+                      key={item.id}
+                      className={`flex items-center justify-between px-4 py-3 rounded-2xl border ${item.type === 'Ziekte' ? 'bg-red-50/50 border-red-100' : item.status === 'In afwachting' ? 'bg-amber-50/50 border-amber-100' : item.status === 'Afgewezen' || item.status === 'Geannuleerd' ? 'bg-zinc-50 border-zinc-200' : 'bg-emerald-50/50 border-emerald-100'}`}
+                    >
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-sm font-semibold text-zinc-800">
+                          {formatDatum(item.startDatum)}
+                          {item.startDatum !== item.eindDatum &&
+                            ` – ${formatDatum(item.eindDatum)}`}
+                        </span>
+                        {item.omschrijving && (
+                          <span className="text-xs text-zinc-500">
+                            {item.omschrijving}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-xs font-bold px-2 py-1 rounded-full ${item.type === 'Ziekte' ? 'bg-red-100 text-red-500' : 'bg-zinc-100 text-zinc-600'}`}
+                        >
+                          {item.type}
+                        </span>
+                        {item.status && (
+                          <span
+                            className={`text-xs font-bold px-2 py-1 rounded-full ${statusKleur(item.status)}`}
+                          >
+                            {item.status}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </>
               )}
             </div>

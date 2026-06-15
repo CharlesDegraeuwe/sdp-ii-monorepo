@@ -9,21 +9,16 @@ import { useCreateTeam } from '@/hooks/useCreateTeam';
 import { useTeamsStore } from '@/stores/teamStore';
 import { IoIosAdd } from 'react-icons/io';
 import EmployeeModal from '@/components/app/team/Modal/EmployeeModal';
-import { useToast } from '@/providers/ToastProvider';
 
 interface Lid {
   werknemerId: number;
   isSupervisor: boolean;
 }
 
-const MAX_LEDEN = 4;
-
 const CreateTeamForm = () => {
   const werknemers = useTeamsStore((s) => s.werknemers);
   const sites = useTeamsStore((s) => s.sites);
-  const teamLeden = useTeamsStore((s) => s.teamLeden);
   const createTeam = useCreateTeam();
-  const toast = useToast();
 
   const [naam, setNaam] = useState('');
   const [beschrijving, setBeschrijving] = useState('');
@@ -33,14 +28,6 @@ const CreateTeamForm = () => {
   const [leden, setLeden] = useState<Lid[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
-  const werknemersInTeam = useMemo(() => {
-    const ids = new Set<number>();
-    Object.values(teamLeden).forEach((leden) =>
-      leden.forEach((l) => ids.add(l.werknemerId)),
-    );
-    return ids;
-  }, [teamLeden]);
 
   const filtered = useMemo(() => {
     const list = Object.values(werknemers);
@@ -54,18 +41,14 @@ const CreateTeamForm = () => {
   }, [werknemers, search]);
 
   const isLid = (id: number) => leden.some((l) => l.werknemerId === id);
-  const isInAnderTeam = (id: number) => werknemersInTeam.has(id);
   const isSupervisor = (id: number) =>
     leden.find((l) => l.werknemerId === id)?.isSupervisor ?? false;
 
   const toggleLid = (id: number) => {
-    if (isInAnderTeam(id)) return;
     setLeden((prev) =>
       isLid(id)
         ? prev.filter((l) => l.werknemerId !== id)
-        : prev.length >= MAX_LEDEN
-          ? prev
-          : [...prev, { werknemerId: id, isSupervisor: false }],
+        : [...prev, { werknemerId: id, isSupervisor: false }],
     );
   };
 
@@ -95,9 +78,6 @@ const CreateTeamForm = () => {
       setManagerId('');
       setSiteId('');
       setLeden([]);
-      toast.success('Team aangemaakt');
-    } catch {
-      toast.error('Kon team niet aanmaken');
     } finally {
       setSubmitting(false);
     }
@@ -184,11 +164,7 @@ const CreateTeamForm = () => {
                 }
               >
                 <div className={'flex flex-row justify-between items-center'}>
-                  <Label
-                    text={`Leden (${leden.length}/${MAX_LEDEN})`}
-                    size={'sm'}
-                    weight={600}
-                  />
+                  <Label text={'Leden'} size={'sm'} weight={600} />
                   <button
                     type={'button'}
                     onClick={() => setShowModal(true)}
@@ -212,35 +188,22 @@ const CreateTeamForm = () => {
                 <div className={'flex flex-col gap-2 max-h-96 overflow-y-auto'}>
                   {filtered.map((w) => {
                     const checked = isLid(w.id);
-                    const inAnderTeam = isInAnderTeam(w.id);
-                    const disabled =
-                      inAnderTeam || (!checked && leden.length >= MAX_LEDEN);
                     return (
                       <div
                         key={w.id}
                         className={`flex flex-row items-center gap-2 px-3 py-2 rounded-full text-sm transition ${
-                          inAnderTeam
-                            ? 'bg-zinc-50 opacity-50'
-                            : checked
-                              ? 'bg-rose-50'
-                              : 'bg-zinc-100'
+                          checked ? 'bg-rose-50' : 'bg-zinc-100'
                         }`}
                       >
                         <input
                           type={'checkbox'}
                           checked={checked}
-                          disabled={disabled}
                           onChange={() => toggleLid(w.id)}
                         />
                         <span className={'flex-1'}>
                           {w.voornaam} {w.naam}
                         </span>
-                        {inAnderTeam && (
-                          <span className={'text-xs text-zinc-400'}>
-                            Al in team
-                          </span>
-                        )}
-                        {checked && !inAnderTeam && (
+                        {checked && (
                           <label
                             className={
                               'text-xs flex items-center gap-1 text-zinc-500'

@@ -4,8 +4,8 @@ import Link from '@/components/design-system/Link/Link';
 
 export function LocatieInfo() {
   return (
-    <Container label={'Locatie Info'} className="col-span-2 flex-1 min-h-100 ">
-      <div className="relative flex-1 flex flex-col h-full gap-2">
+    <Container label={'Locatie Info'} className="col-span-2">
+      <div className="relative flex flex-col gap-2 h-full">
         <div className="flex items-center gap-2 px-1">
           <MdOutlineLocationOn size={16} className="text-zinc-500" />
           <span className="text-xs font-semibold text-zinc-600">

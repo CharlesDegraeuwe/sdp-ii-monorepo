@@ -5,7 +5,6 @@ import { UserProvider } from '@/providers/UserProvider';
 import { ToastProvider } from '@/providers/ToastProvider';
 import { SplashProvider } from '@/providers/SplashProvider';
 import { SettingsProvider } from '@/providers/SettingsProvider';
-import { ReactQueryProvider } from '@/providers/ReactQueryProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,13 +29,11 @@ export default function RootLayout({
       <body className="relative flex flex-col h-screen w-screen overflow-x-hidden">
         <SettingsProvider>
           <SessionProvider>
-            <ReactQueryProvider>
-              <UserProvider>
-                <SplashProvider>
-                  <ToastProvider>{children}</ToastProvider>
-                </SplashProvider>
-              </UserProvider>
-            </ReactQueryProvider>
+            <UserProvider>
+              <SplashProvider>
+                <ToastProvider>{children}</ToastProvider>
+              </SplashProvider>
+            </UserProvider>
           </SessionProvider>
         </SettingsProvider>
       </body>
