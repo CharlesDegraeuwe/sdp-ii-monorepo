@@ -46,15 +46,14 @@ mvn javafx:run
 ```
 2026_java-g01/
 ├── src/main/java/gui
-│   ├── hogent.sdp2.sdpII/   #JavaFX klasses
-│   └── domain/              #domein klasses
+│   ├── App.java           # Main klasse
+│   └── util/              # Hulpklassen
 ├── src/main/resources/
 │   ├── fxml/              # Schermen
 │   ├── css/               # Stylesheets
-│   ├── icons/             # Iconen
 │   └── images/            # Afbeeldingen
 ├── pom.xml
-├── .env                   # Env variabelen (zelf aan te maken)
+├── .env                   # Env variabelen (niet in git)
 └── README.md
 ```
 

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-
-<fx:root type="VBox" spacing="5" xmlns:fx="http://javafx.com/fxml">
-    <padding><Insets top="10" right="10" bottom="6" left="10"/></padding>
-    <VBox fx:id="dagContainer" spacing="5" VBox.vgrow="ALWAYS"/>
-</fx:root>

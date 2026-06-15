@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-
-<fx:root type="HBox" styleClass="shift_tag" xmlns:fx="http://javafx.com/fxml" alignment="CENTER_LEFT">
-    <padding><Insets top="2" right="6" bottom="2" left="6"/></padding>
-    <Label fx:id="lblShift" text="08:30 - 12:30" styleClass="shift_tag_label"/>
-</fx:root>

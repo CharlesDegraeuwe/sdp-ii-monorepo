@@ -16,7 +16,7 @@ public class ManagementApplication extends javafx.application.Application {
     @Override
 
     public void start(Stage primaryStage) throws IOException {
-        Scene scene = new Scene(new MainFrameController(primaryStage), 1380, 900);
+        Scene scene = new Scene(new MainFrameController(primaryStage), 1280, 900);
         scene.getStylesheets().add("css/application.css");
 
         //primary stage initialiseren

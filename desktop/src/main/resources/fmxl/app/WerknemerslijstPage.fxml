@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+
+<fx:root type="VBox" styleClass="page" spacing="20" xmlns:fx="http://javafx.com/fxml">
+
+    <Label text="Mijn Team" styleClass="page-title"/>
+
+    <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false"/>
+
+    <HBox spacing="10" styleClass="toolbar">
+        <TextField fx:id="zoekField" promptText="Zoek op naam of email..." prefWidth="300"/>
+    </HBox>
+
+    <TableView fx:id="werknemersTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="naamCol" text="Naam" prefWidth="120"/>
+            <TableColumn fx:id="voornaamCol" text="Voornaam" prefWidth="120"/>
+            <TableColumn fx:id="emailCol" text="Email" prefWidth="200"/>
+            <TableColumn fx:id="statusCol" text="Status" prefWidth="100"/>
+            <TableColumn fx:id="telefoonCol" text="Telefoonnummer" prefWidth="140"/>
+        </columns>
+    </TableView>
+
+</fx:root>
