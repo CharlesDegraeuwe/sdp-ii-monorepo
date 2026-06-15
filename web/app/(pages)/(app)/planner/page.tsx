@@ -41,7 +41,6 @@ function PlannerPageInner() {
   const user = session?.user;
   const rol = ((session?.user as Record<string, unknown>)?.rol as string) ?? '';
   const isManager = ['Manager', 'Admin'].includes(rol);
-  const isSupervisor = rol === 'Supervisor';
   const kanTeamZien = ['Manager', 'Admin', 'Supervisor'].includes(rol);
   const kanShiftAanmaken = kanTeamZien;
   const eigenId = Number((session?.user as Record<string, unknown>)?.id ?? 0);
@@ -91,7 +90,7 @@ function PlannerPageInner() {
     laadWerknemersVanTeam,
     laadAlleWerknemers,
     resetTeamWerknemers,
-  } = usePlanningFilters(authHeader, eigenId, isSupervisor);
+  } = usePlanningFilters(authHeader);
 
   useEffect(() => {
     if (filter.teamId) {
@@ -107,13 +106,6 @@ function PlannerPageInner() {
     }
   }, [tab, teams, laadAlleWerknemers]);
 
-  // Auto-selecteer eerste team bij switchen naar teamtab
-  useEffect(() => {
-    if (tab === 'team' && teams.length > 0 && filter.teamId === null) {
-      handleFilterChange({ teamId: teams[0].id });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, teams]);
 
   function handleFilterChange(update: Partial<FilterState>) {
     setFilter((prev) => ({ ...prev, ...update }));
@@ -128,7 +120,7 @@ function PlannerPageInner() {
       const ids = new Set(teamWerknemers.map((w) => w.id));
       return afwezigheden.filter((a) => ids.has(a.werknemerId));
     }
-    return afwezigheden;
+    return [];
   }, [afwezigheden, tab, filter.werknemerId, filter.teamId, teamWerknemers]);
 
   // Fetch afwezigheid voor de huidige periode
@@ -141,10 +133,8 @@ function PlannerPageInner() {
       .then((res) => res.json())
       .then(setAfwezigheden)
       .catch(console.error);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, authHeader, huidigeDatum, view]);
 
-  // Fetch eigen shiften via bereik endpoint
   useEffect(() => {
     if (!user?.id) return;
     let van: string;
@@ -404,7 +394,6 @@ function PlannerPageInner() {
                   isManager={isManager}
                   tab={tab}
                   eigenShiften={eigenShiften}
-                  teamTaken={teamTaken}
                   onAfgewerkt={handleTaakAfgewerkt}
                 />
               )}
@@ -449,7 +438,6 @@ function PlannerPageInner() {
           werknemers={alleWerknemers}
           teams={teams}
           isManager={isManager}
-          isSupervisor={isSupervisor}
           huidigeDatum={huidigeDatum}
           onClose={() => setShiftAanmakenOpen(false)}
           onSuccess={() => setShiftenRefresh((n) => n + 1)}

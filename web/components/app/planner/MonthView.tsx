@@ -151,8 +151,6 @@ export default function MonthView({
                         const blokken = shiftBlokken(wShift);
                         const isActief = geselecteerdeTeamWerknemer === w.id;
 
-                        if (!wAfwezig && !wShift) return null;
-
                         return (
                           <button
                             key={w.id}
@@ -203,7 +201,7 @@ export default function MonthView({
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full truncate w-full text-center ${badgeKleur(dagAfwezigheid[0])}`}>
                               {afwezigheidLabel(dagAfwezigheid[0])}
                             </span>
-                          ) : shift ? (
+                          ) : (
                             <>
                               <button
                                 onClick={(e) => { e.stopPropagation(); onNavigeerNaarDag(datum); }}
@@ -218,7 +216,7 @@ export default function MonthView({
                                 {blokken.pm}
                               </button>
                             </>
-                          ) : null}
+                          )}
                         </div>
                       );
                     })()

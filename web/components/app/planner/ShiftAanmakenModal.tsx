@@ -22,7 +22,6 @@ interface Props {
   werknemers: WerknemerMetTeam[];
   teams: TeamOptie[];
   isManager: boolean;
-  isSupervisor: boolean;
   huidigeDatum: Date;
   onClose: () => void;
   onSuccess: (werknemerId: number) => void;
@@ -35,7 +34,6 @@ export function ShiftAanmakenModal({
   werknemers,
   teams,
   isManager,
-  isSupervisor,
   huidigeDatum,
   onClose,
   onSuccess,
@@ -98,17 +96,11 @@ export function ShiftAanmakenModal({
     setError(null);
 
     try {
-      const teamId =
-        wieKeuze === 'eigen'
-          ? (werknemers.find((w) => w.id === eigenId)?.teamId ?? null)
-          : (geselecteerdeWerknemer?.teamId ?? geselecteerdeTeamId ?? null);
-
       const res = await fetch('/api/shifts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           werknemerId,
-          teamId,
           startDatum,
           eindDatum,
           startTijd: toBackendTime(startTijd),
@@ -210,7 +202,7 @@ export function ShiftAanmakenModal({
                 }}
               />
             )}
-            {wieKeuze === 'teamlid' && (!isManager || geselecteerdeTeamId !== null) && !isSupervisor && (
+            {wieKeuze === 'teamlid' && (!isManager || geselecteerdeTeamId !== null) && (
               <Select
                 label="Teamlid"
                 placeholder="Selecteer een teamlid"
@@ -219,18 +211,6 @@ export function ShiftAanmakenModal({
                   label: isManager
                     ? `${w.voornaam} ${w.naam}`
                     : `${w.voornaam} ${w.naam} — ${w.teamNaam}`,
-                }))}
-                value={geselecteerdeWerknemerId !== null ? String(geselecteerdeWerknemerId) : undefined}
-                onChange={(v) => setGeselecteerdeWerknemerId(Number(v))}
-              />
-            )}
-            {wieKeuze === 'teamlid' && isSupervisor && (
-              <Select
-                label="Teamlid"
-                placeholder="Selecteer een teamlid"
-                options={werknemers.map((w) => ({
-                  value: String(w.id),
-                  label: `${w.voornaam} ${w.naam} — ${w.teamNaam}`,
                 }))}
                 value={geselecteerdeWerknemerId !== null ? String(geselecteerdeWerknemerId) : undefined}
                 onChange={(v) => setGeselecteerdeWerknemerId(Number(v))}

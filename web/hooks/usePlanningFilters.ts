@@ -28,42 +28,18 @@ export interface WerknemerMetTeam extends WerknemerOptie {
   teamNaam: string;
 }
 
-export function usePlanningFilters(
-  authHeader: Record<string, string>,
-  eigenId?: number,
-  isSupervisor?: boolean,
-) {
+export function usePlanningFilters(authHeader: Record<string, string>) {
   const [sites, setSites] = useState<SiteOptie[]>([]);
   const [teams, setTeams] = useState<TeamOptie[]>([]);
   const [teamWerknemers, setTeamWerknemers] = useState<WerknemerOptie[]>([]);
   const [alleWerknemers, setAlleWerknemers] = useState<WerknemerMetTeam[]>([]);
 
-  // Ref zodat callbacks stabiel blijven ook al verandert authHeader (token refresh)
   const authRef = useRef(authHeader);
   authRef.current = authHeader;
 
   useEffect(() => {
     const bearer = authHeader.Authorization;
     if (!bearer || bearer === 'Bearer undefined') return;
-
-    if (isSupervisor && eigenId) {
-      fetch(`${BASE}/teams/werknemer/${eigenId}`, { headers: authHeader })
-        .then((r) => (r.ok ? (r.json() as Promise<TeamOptie[]>) : Promise.resolve([])))
-        .then((supervisorTeams) => {
-          setTeams(supervisorTeams);
-          const uniekeSites = Array.from(
-            new Map(
-              supervisorTeams
-                .filter((t) => t.siteId)
-                .map((t) => [t.siteId, { id: t.siteId, naam: t.siteNaam, locatie: '' }]),
-            ).values(),
-          );
-          setSites(uniekeSites);
-        })
-        .catch(console.error);
-      return;
-    }
-
     Promise.all([
       fetch(`${BASE}/teams/sites`, { headers: authHeader }),
       fetch(`${BASE}/teams`, { headers: authHeader }),
@@ -73,7 +49,7 @@ export function usePlanningFilters(
         if (teamsRes.ok) setTeams(await teamsRes.json());
       })
       .catch(console.error);
-  }, [authHeader, eigenId, isSupervisor]);
+  }, [authHeader]);
 
   const laadWerknemersVanTeam = useCallback(async (teamId: number) => {
     setTeamWerknemers([]);

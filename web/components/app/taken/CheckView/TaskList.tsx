@@ -3,11 +3,15 @@ import { useState, useMemo } from 'react';
 import { Input } from '@/components/design-system/Input';
 import { Label } from '@/components/design-system/Label';
 import { TaskListItem } from './TaskListItem';
+import { useTaakStore } from '@/stores/taakStore';
 import { useTaken } from '@/hooks/useTaken';
 
 export const TaskList = () => {
   const [search, setSearch] = useState('');
   const { data: tasks = [] } = useTaken();
+  const selectedTaskId = useTaakStore((s) => s.selectedTaskId);
+  const selectTask = useTaakStore((s) => s.selectTask);
+
   const filtered = useMemo(() => {
     let all = tasks.filter((t) => !t.finished);
     if (search) {
@@ -40,6 +44,8 @@ export const TaskList = () => {
               <TaskListItem
                 key={t.id}
                 task={t}
+                active={selectedTaskId === t.id}
+                onClick={() => selectTask(t.id)}
               />
             ))
           )}
