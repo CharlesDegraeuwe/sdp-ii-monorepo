@@ -1,181 +1,220 @@
 # Delaware Suite Monorepo
 
-HR- en teammanagement platform. Drie projecten in een monorepo.
+HR- en teammanagement platform. Deze monorepo bevat drie projecten:
 
-Zie ook: [Architectuur](docs/architectuur.md) | [Development gids](docs/development.md)
+- **web/** - De website (Next.js)
+- **api/** - De backend server (Spring Boot)
+- **desktop/** - De desktop applicatie (JavaFX)
 
-## Projecten
+---
 
-| Project | Stack | Poort |
-|---------|-------|-------|
-| `web/` | Next.js 16, React 19, Bun, Tailwind 4 | 3000 |
-| `api/` | Spring Boot 4, Java 21, MySQL | 8080 |
-| `desktop/` | JavaFX 21 | - |
+## Wat heb je nodig?
 
-## Vereisten
+Installeer deze tools **voordat** je begint:
 
-| Tool | Versie | Installatie |
-|------|--------|-------------|
-| Java (JDK) | 21 | [Adoptium](https://adoptium.net/) |
-| Bun | latest | [bun.sh](https://bun.sh/) |
-| Maven | 3.9+ | Niet nodig als je `./mvnw` gebruikt (zit in repo) |
-| Make | - | Mac: standaard aanwezig. Windows: gebruik **Git Bash** of **WSL** |
+1. **Java 21 (JDK)** - Download van [Adoptium](https://adoptium.net/). Kies "Temurin 21 (LTS)".
+2. **Bun** - Ga naar [bun.sh](https://bun.sh/) en volg de installatie-instructies.
+3. **Git** - Heb je waarschijnlijk al. Zo niet: [git-scm.com](https://git-scm.com/).
 
-> **Windows-gebruikers**: open alle terminal-commando's in **Git Bash** of **WSL**. PowerShell en CMD worden niet ondersteund.
+Maven hoef je **niet** apart te installeren. Die zit al in de repo (`./mvnw`).
 
-## Aan de slag
+> **Windows**: Gebruik **Git Bash** of **WSL** voor alle commando's hieronder. PowerShell en CMD werken niet.
 
-### 1. Repository clonen
+---
+
+## Stap 1: Repository clonen
+
+Open een terminal en voer uit:
 
 ```bash
 git clone https://github.com/CharlesDegraeuwe/sdp-ii-monorepo.git
 cd sdp-ii-monorepo
 ```
 
-### 2. Setup (eenmalig)
+---
+
+## Stap 2: Setup draaien
+
+Dit commando doet alles voor je: environment klaarzetten, git hooks activeren, en alle dependencies installeren.
 
 ```bash
 make setup
 ```
 
-Dit doet drie dingen:
-- Kopieert `.env.example` naar `.env` (als die nog niet bestaat)
-- Synchroniseert environment variabelen naar `web/.env.local`
-- Installeert dependencies voor alle projecten
+Dit kan even duren (vooral de eerste keer). Wacht tot je "Setup compleet" ziet.
 
-### 3. Environment invullen
+---
 
-Open `.env` in de root en vul de waardes in:
+## Stap 3: Environment invullen
 
-```env
-# Web
-AUTH_SECRET=<willekeurige string, minstens 32 tekens>
-NEXT_PUBLIC_GOOGLE_API_KEY=<Google Maps API key>
+Na de setup bestaat er een `.env` bestand in de root van het project. Open dit bestand in je editor en vul de ontbrekende waardes in.
 
-# API
-DB_PASSWORD=<database wachtwoord>
-JWT_SECRET=<willekeurige string, minstens 32 tekens>
-GEMINI_API_KEY=<Gemini API key>
-RESEND_API_KEY=<Resend API key>
-```
+Dit zijn de variabelen die je moet invullen:
 
-De overige waardes (URLs, DB_URL, DB_USERNAME) staan al goed voor development.
+| Variabele | Waar te vinden | Voorbeeld |
+|-----------|----------------|-----------|
+| `DB_PASSWORD` | Vraag aan teamlead | `SDP_Ding_123` |
+| `JWT_SECRET` | Verzin zelf, minstens 32 tekens | `mijn-super-geheime-sleutel-hier` |
+| `AUTH_SECRET` | Verzin zelf, minstens 32 tekens | `nog-een-geheime-sleutel-hier` |
+| `GEMINI_API_KEY` | Vraag aan teamlead | `AIzaSy...` |
+| `RESEND_API_KEY` | Vraag aan teamlead | `re_Dff...` |
+| `NEXT_PUBLIC_GOOGLE_API_KEY` | Vraag aan teamlead | `AIzaSy...` |
 
-### 4. Opstarten
+De rest van de waardes (URLs, database URL, username) staan al goed. Daar hoef je niks aan te veranderen.
 
-Alles tegelijk:
+---
+
+## Stap 4: Alles opstarten
+
+Start alle drie de projecten tegelijk:
 
 ```bash
 make start-all
 ```
 
-Of apart in verschillende terminals:
+Je ziet logs van alle services met een prefix zodat je weet wat wat is:
+- `[api]` - Backend server
+- `[web]` - Website
+- `[desktop]` - Desktop applicatie
+
+Wil je ze **apart** opstarten (handiger voor debuggen)? Open drie terminals:
 
 ```bash
-# Terminal 1
+# Terminal 1 - Backend
 make start-api
 
-# Terminal 2
+# Terminal 2 - Website
 make start-web
 
-# Terminal 3
+# Terminal 3 - Desktop
 make start-desktop
 ```
 
-### 5. Openen
+---
 
-- Web: http://localhost:3000
-- API: http://localhost:8080/api
+## Stap 5: Openen en testen
 
-## Commando's
+Als alles draait:
 
-### Opstarten
+- **Website**: open [http://localhost:3000](http://localhost:3000) in je browser
+- **API**: draait op [http://localhost:8080/api](http://localhost:8080/api)
+- **Desktop**: opent automatisch als venster
+
+---
+
+## Werken met de code
+
+### Voor je commit
+
+Er draait automatisch een check bij elke `git commit`. Die controleert:
+- Of je code goed geformateerd is
+- Of de tests nog slagen
+
+Als de commit faalt door formatting:
+
+```bash
+make lint-fix
+git add .
+git commit
+```
+
+### Testen draaien
+
+```bash
+make test-all
+```
+
+Of per project: `make test-web`, `make test-api`, `make test-desktop`.
+
+### Formatting checken of fixen
+
+```bash
+make lint          # alleen checken
+make lint-fix      # automatisch fixen
+```
+
+---
+
+## Alle commando's op een rij
 
 | Commando | Wat doet het |
 |----------|-------------|
-| `make start-all` | Start api, web en desktop tegelijk |
-| `make start-api` | Start Spring Boot API |
-| `make start-web` | Start Next.js dev server |
-| `make start-desktop` | Start JavaFX desktop app |
+| `make setup` | Volledige eerste setup (eenmalig) |
+| `make start-all` | Start alles tegelijk |
+| `make start-api` | Start alleen de backend |
+| `make start-web` | Start alleen de website |
+| `make start-desktop` | Start alleen de desktop app |
+| `make test-all` | Draai alle tests |
+| `make lint` | Check code formatting |
+| `make lint-fix` | Fix code formatting automatisch |
+| `make sync-env` | Sync environment variabelen naar web |
+| `make init-all` | Herinstalleer alle dependencies |
 
-### Testen
+---
 
-| Commando | Wat doet het |
-|----------|-------------|
-| `make test-all` | Alle tests (Vitest + JUnit) |
-| `make test-web` | Web tests (Vitest) |
-| `make test-api` | API tests (JUnit) |
-| `make test-desktop` | Desktop tests (JUnit) |
+## IntelliJ IDEA
 
-### Code kwaliteit
+Na het openen van het project in IntelliJ staan er drie run configuraties klaar:
 
-| Commando | Wat doet het |
-|----------|-------------|
-| `make lint` | Check formatting en linting (alle projecten) |
-| `make lint-fix` | Fix formatting automatisch (alle projecten) |
+- **API (Spring Boot)** - Start de backend
+- **Desktop (JavaFX)** - Start de desktop app
+- **Web (Next.js)** - Start de website
 
-### Setup
+Je vindt ze in de dropdown naast de groene play-knop. Geen handmatige configuratie nodig.
 
-| Commando | Wat doet het |
-|----------|-------------|
-| `make setup` | Volledige eerste setup |
-| `make sync-env` | Sync `.env` naar `web/.env.local` |
-| `make init-all` | Dependencies installeren |
+---
 
-## Hoe werkt de environment?
+## Veelvoorkomende problemen
 
-Er is 1 `.env` bestand in de root. Dat is de enige plek waar je variabelen invult.
+### "make: command not found" (Windows)
 
-- **Web**: `make sync-env` kopieert de relevante variabelen (`AUTH_*`, `NEXT_PUBLIC_*`) naar `web/.env.local`. Dit gebeurt automatisch bij `make start-web` en `make start-all`.
-- **API**: Spring Boot leest de variabelen via `${VAR:fallback}` syntax in `application.yml`. De Makefile laadt `.env` als shell variabelen bij het opstarten.
+Je gebruikt waarschijnlijk PowerShell of CMD. Open **Git Bash** of **WSL** in plaats daarvan.
 
-## Lokale database (optioneel)
+### "./mvnw: Permission denied"
 
-Standaard verbindt de API met de remote database op `vichogent.be`. Wil je lokaal draaien:
+```bash
+chmod +x api/mvnw desktop/mvnw
+```
+
+### "bun: command not found"
+
+Bun is niet geinstalleerd. Ga naar [bun.sh](https://bun.sh/) en volg de installatie.
+
+### API start niet op (database fout)
+
+De database draait op de HOGENT server. Check of je verbinding hebt met het schoolnetwerk (VPN).
+
+Als alternatief kan je een lokale database draaien met Docker:
 
 ```bash
 docker compose up -d
 ```
 
-Pas daarna `DB_URL` aan in `.env`:
+Pas dan `DB_URL` aan in je `.env`:
 
-```env
+```
 DB_URL=jdbc:mysql://localhost:3306/SDP2_2526_DB_G01?serverTimezone=UTC
 ```
 
-## Pre-commit hooks
-
-Bij elke `git commit` draait automatisch:
-
-- **Web**: Prettier + ESLint op gewijzigde bestanden
-- **API/Desktop**: Spotless formatting check + Maven tests (alleen als bestanden in die map gewijzigd zijn)
-
-Als de check faalt:
+### Pre-commit hook doet niks
 
 ```bash
-make lint-fix    # fix formatting
-git add .        # opnieuw stagen
-git commit       # opnieuw proberen
+make setup
 ```
 
-## CI/CD
+Dit activeert de git hooks opnieuw.
 
-Bij elke push naar `main` en bij pull requests draait GitHub Actions:
+### Commit faalt op formatting
 
-- **Web**: lint, build, test
-- **API**: formatting check, compile, test
-- **Desktop**: formatting check, compile, test
-
-## Projectstructuur
-
+```bash
+make lint-fix
+git add .
+git commit
 ```
-sdp-ii-monorepo/
-  api/                Spring Boot REST API
-  desktop/            JavaFX desktop client
-  web/                Next.js frontend
-  .env.example        Template voor environment variabelen
-  .env                Lokale env (niet in git)
-  .husky/             Pre-commit hooks
-  docker-compose.yml  Lokale MySQL database
-  Makefile            Alle commando's
-```
+
+---
+
+## Meer informatie
+
+- [Architectuur](docs/architectuur.md) - Hoe de projecten samenwerken, welke packages wat doen, endpoints overzicht
+- [Development gids](docs/development.md) - Uitgebreide uitleg over dagelijks ontwikkelen, nieuwe features toevoegen, environment variabelen

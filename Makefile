@@ -1,8 +1,12 @@
 .PHONY: init-web init-desktop init-api init-all start-web start-desktop start-api start-all sync-env setup test-web test-api test-desktop test-all lint lint-fix
 
 # ── Setup ──────────────────────────────────────────────
-setup: env sync-env init-all
+setup: env hooks sync-env init-all
 	@echo "Setup compleet. Run: make start-all"
+
+hooks:
+	@git config core.hooksPath .husky
+	@echo "Git hooks geactiveerd (.husky/)"
 
 env:
 	@if [ ! -f .env ]; then \
@@ -47,9 +51,9 @@ start-web: sync-env
 
 start-all: sync-env
 	@echo "Alle services starten..."
-	@set -a && . ./.env && set +a && cd api && ./mvnw spring-boot:run &
-	@cd desktop && ./mvnw javafx:run &
-	@cd web && bun run dev &
+	@set -a && . ./.env && set +a && cd api && ./mvnw spring-boot:run 2>&1 | sed 's/^/[api] /' &
+	@cd desktop && ./mvnw javafx:run 2>&1 | sed 's/^/[desktop] /' &
+	@cd web && bun run dev 2>&1 | sed 's/^/[web] /' &
 	@wait
 
 # ── Tests ──────────────────────────────────────────────
