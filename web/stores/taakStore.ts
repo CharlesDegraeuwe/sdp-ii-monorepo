@@ -56,6 +56,7 @@ interface TaakStore {
 
   setLoaded: (loaded: boolean) => void;
   setLastSynced: (ts: number) => void;
+  invalidate: () => void;
 }
 
 export const useTaakStore = create<TaakStore>((set) => ({
@@ -113,4 +114,5 @@ export const useTaakStore = create<TaakStore>((set) => ({
 
   setLoaded: (loaded) => set({ loaded }),
   setLastSynced: (ts) => set({ lastSynced: ts }),
+  invalidate: () => set({ lastSynced: null }),
 }));

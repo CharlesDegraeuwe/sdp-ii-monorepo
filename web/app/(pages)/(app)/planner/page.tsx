@@ -17,7 +17,6 @@ import type {
 } from '../../../../components/app/planner/types';
 import { getPeriodBounds, getMaandag, mapTaakVanBackend } from '../../../../components/app/planner/utils';
 import { PlannerAanvraagModal } from '../../../../components/app/planner/PlannerAanvraagModal';
-import { ShiftAanmakenModal } from '../../../../components/app/planner/ShiftAanmakenModal';
 import { PageContainer } from '@/components/design-system/PageContainer';
 import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
 import {
@@ -41,12 +40,8 @@ function PlannerPageInner() {
   const user = session?.user;
   const rol = ((session?.user as Record<string, unknown>)?.rol as string) ?? '';
   const isManager = ['Manager', 'Admin'].includes(rol);
-  const isSupervisor = rol === 'Supervisor';
   const kanTeamZien = ['Manager', 'Admin', 'Supervisor'].includes(rol);
-  const kanShiftAanmaken = kanTeamZien;
   const eigenId = Number((session?.user as Record<string, unknown>)?.id ?? 0);
-  const eigenVoornaam = ((session?.user as Record<string, unknown>)?.voornaam as string) ?? '';
-  const eigenNaamStr = ((session?.user as Record<string, unknown>)?.naam as string) ?? '';
 
   const searchParams = useSearchParams();
   const [view, setView] = useState<View>(() => {
@@ -74,8 +69,6 @@ function PlannerPageInner() {
 
   const [teamShiften, setTeamShiften] = useState<Shift[]>([]);
   const [teamTaken, setTeamTaken] = useState<Record<number, PlannerTaak[]>>({});
-  const [shiftAanmakenOpen, setShiftAanmakenOpen] = useState(false);
-  const [shiftenRefresh, setShiftenRefresh] = useState(0);
   const [geselecteerdeTeamWerknemer, setGeselecteerdeTeamWerknemer] = useState<number | null>(null);
 
   const authHeader = useMemo(
@@ -91,7 +84,7 @@ function PlannerPageInner() {
     laadWerknemersVanTeam,
     laadAlleWerknemers,
     resetTeamWerknemers,
-  } = usePlanningFilters(authHeader, eigenId, isSupervisor);
+  } = usePlanningFilters(authHeader);
 
   useEffect(() => {
     if (filter.teamId) {
@@ -172,8 +165,10 @@ function PlannerPageInner() {
       .then((r) => (r.ok ? (r.json() as Promise<Shift[]>) : []))
       .then(setEigenShiften)
       .catch(() => setEigenShiften([]));
-  }, [user?.id, view, huidigeDatum, shiftenRefresh]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, view, huidigeDatum]);
 
+  // Fetch taken van de ingelogde gebruiker
   useEffect(() => {
     if (!user?.id) return;
     fetch(`/api/taken/werknemer/${user.id}`)
@@ -185,8 +180,10 @@ function PlannerPageInner() {
         setTaken(data.map(mapTaakVanBackend)),
       )
       .catch(console.error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
+  // Fetch shiften voor alle teamleden (maand/week teamview)
   useEffect(() => {
     if (tab !== 'team' || view === 'dag' || teamWerknemers.length === 0) {
       setTeamShiften([]);
@@ -319,7 +316,6 @@ function PlannerPageInner() {
             teams={teams}
             teamWerknemers={teamWerknemers}
             kanTeamZien={kanTeamZien}
-            kanShiftAanmaken={kanShiftAanmaken}
             onViewChange={setView}
             onTabChange={(t) => {
               setTab(t);
@@ -328,7 +324,6 @@ function PlannerPageInner() {
             onNavigate={navigeer}
             onVandaag={handleVandaag}
             onFilterChange={handleFilterChange}
-            onShiftAanmaken={() => setShiftAanmakenOpen(true)}
           />
 
           <div className="flex flex-col lg:flex-row gap-4 w-full flex-1 min-h-0">
@@ -404,7 +399,6 @@ function PlannerPageInner() {
                   isManager={isManager}
                   tab={tab}
                   eigenShiften={eigenShiften}
-                  teamTaken={teamTaken}
                   onAfgewerkt={handleTaakAfgewerkt}
                 />
               )}
@@ -438,21 +432,6 @@ function PlannerPageInner() {
           datum={plannerModal.datum}
           werknemerId={Number(user.id)}
           onClose={() => setPlannerModal(null)}
-        />
-      )}
-
-      {shiftAanmakenOpen && (
-        <ShiftAanmakenModal
-          eigenId={eigenId}
-          eigenVoornaam={eigenVoornaam}
-          eigenNaam={eigenNaamStr}
-          werknemers={alleWerknemers}
-          teams={teams}
-          isManager={isManager}
-          isSupervisor={isSupervisor}
-          huidigeDatum={huidigeDatum}
-          onClose={() => setShiftAanmakenOpen(false)}
-          onSuccess={() => setShiftenRefresh((n) => n + 1)}
         />
       )}
     </PageContainer>

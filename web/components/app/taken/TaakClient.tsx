@@ -6,9 +6,9 @@ import { TakenOverview } from '@/components/app/taken/CheckView/TakenOverview';
 import { FinishedOverview } from '@/components/app/taken/CheckView/FinishedOverview';
 import { AssignView } from '@/components/app/taken/AssignView/AssignView';
 import { CreateView } from '@/components/app/taken/CreateView/CreateView';
+import { useTaakData } from '@/hooks/useTaakData';
 import { useTaakStore } from '@/stores/taakStore';
 import { useUser } from '@/providers/UserProvider';
-import { useTaken } from '@/hooks/useTaken';
 
 type Mode = 'check' | 'creëer' | 'assign';
 type Scope = 'taken' | 'afgewerkt';
@@ -21,7 +21,7 @@ const scopes: { key: Scope; label: string }[] = [
 const TaakClient = () => {
   const [mode, setMode] = useState<Mode>('check');
   const [scope, setScope] = useState<Scope>('taken');
-  const { isLoading } = useTaken();
+  const { loaded } = useTaakData();
   const searchParams = useSearchParams();
   const selectTask = useTaakStore((s) => s.selectTask);
   const { isModerator, isSupervisor } = useUser();
@@ -40,12 +40,12 @@ const TaakClient = () => {
   }, [canManage]);
 
   useEffect(() => {
-    if (isLoading) return;
+    if (!loaded) return;
     const taakId = searchParams.get('taakId');
     if (taakId) selectTask(taakId);
-  }, [isLoading, searchParams, selectTask]);
+  }, [loaded, searchParams, selectTask]);
 
-  if (isLoading) {
+  if (!loaded) {
     return <div className={'p-6 text-zinc-500'}>Laden...</div>;
   }
 

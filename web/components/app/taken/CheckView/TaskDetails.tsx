@@ -4,16 +4,14 @@ import { Button } from '@/components/design-system/Button';
 import { useTaakStore } from '@/stores/taakStore';
 import { TaskHeader } from './TaskHeader';
 import { useToast } from '@/providers/ToastProvider';
-import { useTaken } from '@/hooks/useTaken';
-import { useMarkeerAfgewerkt } from '@/hooks/useMarkeerAfgewerkt';
 
 export const TaskDetails = () => {
   const selectedTaskId = useTaakStore((s) => s.selectedTaskId);
-  const { data: tasks = [] } = useTaken();
-  const { mutateAsync: markeerAfgewerkt, isPending } = useMarkeerAfgewerkt();
+  const task = useTaakStore((s) =>
+    selectedTaskId ? s.tasks[selectedTaskId] : null,
+  );
+  const updateTask = useTaakStore((s) => s.updateTask);
   const toast = useToast();
-
-  const task = selectedTaskId ? tasks.find((t) => t.id === selectedTaskId) ?? null : null;
 
   if (!task) {
     return (
@@ -24,10 +22,15 @@ export const TaskDetails = () => {
   }
 
   const handleFinish = async () => {
+    updateTask(task.id, {
+      finished: true,
+      finishedAt: new Date().toISOString(),
+    });
     try {
-      await markeerAfgewerkt(task.id);
+      await fetch(`/api/taken/${task.id}/afgewerkt`, { method: 'PUT' });
       toast.success('Taak afgewerkt');
     } catch {
+      updateTask(task.id, { finished: false, finishedAt: undefined });
       toast.error('Kon taak niet als afgewerkt markeren');
     }
   };
@@ -48,10 +51,9 @@ export const TaskDetails = () => {
       <div className="mt-auto">
         <Button
           type="button"
-          label={isPending ? 'Bezig...' : 'Markeer als afgewerkt'}
+          label="Markeer als afgewerkt"
           variant="primary"
           onClick={handleFinish}
-          disabled={isPending}
         />
       </div>
     </div>

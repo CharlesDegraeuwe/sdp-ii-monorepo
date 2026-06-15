@@ -4,19 +4,16 @@ import { LiaHashtagSolid } from 'react-icons/lia';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import { IoCalendarOutline } from 'react-icons/io5';
-import { Task } from '@/stores/taakStore';
+import { Task, useTaakStore } from '@/stores/taakStore';
 import { CopyableField } from '@/components/app/team/UserCheckView/components/CopyableField';
 import { useToast } from '@/providers/ToastProvider';
-import { useDeleteTaak } from '@/hooks/useDeleteTaak';
-import { useTaakStore } from '@/stores/taakStore';
 
 type Props = {
   task: Task;
 };
 
 export const TaskHeader = ({ task }: Props) => {
-  const { mutateAsync: deleteTaak } = useDeleteTaak();
-  const selectTask = useTaakStore((s) => s.selectTask);
+  const removeTask = useTaakStore((s) => s.removeTask);
   const toast = useToast();
 
   const due = new Date(task.dueDate);
@@ -26,10 +23,12 @@ export const TaskHeader = ({ task }: Props) => {
     .padStart(2, '0')}`;
 
   const handleDelete = async () => {
+    const backup = { ...task };
+    removeTask(task.id);
     try {
-      await deleteTaak(task.id);
-      selectTask(null);
+      await fetch(`/api/taken/${task.id}`, { method: 'DELETE' });
     } catch {
+      useTaakStore.getState().addTask(backup);
       toast.error('Kon taak niet verwijderen');
     }
   };

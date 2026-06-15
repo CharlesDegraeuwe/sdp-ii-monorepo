@@ -2,13 +2,12 @@
 import { Label } from '@/components/design-system/Label';
 import { useTaakStore } from '@/stores/taakStore';
 import { TaskHeader } from './TaskHeader';
-import { useTaken } from '@/hooks/useTaken';
 
 export const FinishedTaskDetails = () => {
   const selectedTaskId = useTaakStore((s) => s.selectedTaskId);
-  const { data: tasks = [] } = useTaken();
-
-  const task = selectedTaskId ? tasks.find((t) => t.id === selectedTaskId) ?? null : null;
+  const task = useTaakStore((s) =>
+    selectedTaskId ? s.tasks[selectedTaskId] : null,
+  );
 
   if (!task || !task.finished) {
     return (

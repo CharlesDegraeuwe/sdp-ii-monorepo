@@ -3,12 +3,10 @@ import { useState, useMemo, useEffect } from 'react';
 import { Container } from '@/components/design-system/Container';
 import { Label } from '@/components/design-system/Label';
 import { Button } from '@/components/design-system/Button';
+import { useTaakStore } from '@/stores/taakStore';
 import { useUser } from '@/providers/UserProvider';
 import { useToast } from '@/providers/ToastProvider';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
-import { useTaken } from '@/hooks/useTaken';
-import { useTeams } from '@/hooks/useTeams';
-import { useAssignTaak } from '@/hooks/useAssignTaak';
 
 const memberPalette = [
   'bg-sky-100',
@@ -28,9 +26,11 @@ const colorForId = (id: string) => {
 };
 
 export const AssignView = () => {
-  const { data: tasks = [] } = useTaken();
-  const { data: allTeams = [] } = useTeams();
-  const { mutateAsync: assignTaak, isPending } = useAssignTaak();
+  const tasks = useTaakStore((s) => s.tasks);
+  const allTeams = useTaakStore((s) => s.teams);
+  const members = useTaakStore((s) => s.members);
+  const assignTask = useTaakStore((s) => s.assignTask);
+  const setLastSynced = useTaakStore((s) => s.setLastSynced);
   const { user, isSupervisor } = useUser();
   const toast = useToast();
 
@@ -39,6 +39,7 @@ export const AssignView = () => {
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [supervisorTeamIds, setSupervisorTeamIds] = useState<string[]>([]);
 
+  // Supervisor: fetch only their own teams
   useEffect(() => {
     if (!isSupervisor || !user?.id) return;
     const fetchMyTeams = async () => {
@@ -55,28 +56,37 @@ export const AssignView = () => {
   }, [isSupervisor, user?.id]);
 
   const visibleTeams = useMemo(() => {
-    if (!isSupervisor) return allTeams;
-    return allTeams.filter((t) => supervisorTeamIds.includes(t.id));
+    const all = Object.values(allTeams);
+    if (!isSupervisor) return all;
+    return all.filter((t) => supervisorTeamIds.includes(t.id));
   }, [allTeams, isSupervisor, supervisorTeamIds]);
 
   const unassigned = useMemo(
-    () => tasks.filter((t) => !t.assigneeId && !t.finished),
+    () => Object.values(tasks).filter((t) => !t.assigneeId && !t.finished),
     [tasks],
   );
 
   const teamMembers = useMemo(() => {
     if (!selectedTeamId) return [];
-    return allTeams.find((t) => t.id === selectedTeamId)?.members ?? [];
+    return allTeams[selectedTeamId]?.members ?? [];
   }, [allTeams, selectedTeamId]);
 
   const handleAssign = async () => {
     if (!selectedTaskId || !selectedMemberId) return;
+    assignTask(selectedTaskId, selectedMemberId);
+
     try {
-      await assignTaak({ taskId: selectedTaskId, memberId: selectedMemberId });
+      await fetch(`/api/taken/${selectedTaskId}/toewijzen`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ werknemerId: Number(selectedMemberId) }),
+      });
+      setLastSynced(0);
       toast.success('Taak toegewezen');
     } catch {
       toast.error('Kon taak niet toewijzen');
     }
+
     setSelectedTaskId(null);
     setSelectedMemberId(null);
   };
@@ -183,6 +193,7 @@ export const AssignView = () => {
             ) : (
               <div className={'flex flex-col gap-2 overflow-y-auto pr-1'}>
                 {teamMembers.map((m) => {
+                  const member = members[m.id] ?? m;
                   const active = selectedMemberId === m.id;
                   const bg = colorForId(m.id);
                   return (
@@ -201,7 +212,7 @@ export const AssignView = () => {
                         }`}
                       />
                       <span>
-                        {m.firstName} {m.lastName}
+                        {member.firstName} {member.lastName}
                       </span>
                     </button>
                   );
@@ -213,8 +224,8 @@ export const AssignView = () => {
           <div className={'mt-auto'}>
             <Button
               onClick={handleAssign}
-              disabled={!selectedTaskId || !selectedMemberId || isPending}
-              label={isPending ? 'Toewijzen...' : 'Taak toewijzen'}
+              disabled={!selectedTaskId || !selectedMemberId}
+              label={'Taak toewijzen'}
               variant={'primary'}
             />
           </div>

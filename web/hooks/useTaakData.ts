@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useTaakStore } from '@/stores/taakStore';
+import { useTaakStore, Team, TeamMember } from '@/stores/taakStore';
 import { mapBackendTask } from '@/lib/taakMapper';
 
 const STALE_MS = 5 * 60 * 1000;
@@ -35,11 +35,11 @@ export const useTaakData = () => {
           takenRes.json(),
         ]);
 
-        const teams = (teamsData as Record<string, unknown>[]).map((t) => ({
+        const baseTeams = (teamsData as Record<string, unknown>[]).map((t) => ({
           id: String(t.id),
           name: (t.naam as string) ?? '',
           plant: (t.siteNaam as string) ?? '',
-          members: [],
+          members: [] as TeamMember[],
         }));
 
         const members = (werknemersData as Record<string, unknown>[]).map(
@@ -55,7 +55,29 @@ export const useTaakData = () => {
           mapBackendTask,
         );
 
-        setTeams(teams);
+        // Fetch members per team
+        const ledenResults = await Promise.all(
+          baseTeams.map(async (team): Promise<Team> => {
+            try {
+              const res = await fetch(`/api/teams/${team.id}/leden`);
+              if (!res.ok) return team;
+              const leden = (await res.json()) as Record<string, unknown>[];
+              return {
+                ...team,
+                members: leden.map((l) => ({
+                  id: String(l.werknemerId),
+                  firstName: (l.voornaam as string) ?? '',
+                  lastName: (l.naam as string) ?? '',
+                  email: (l.email as string) ?? '',
+                })),
+              };
+            } catch {
+              return team;
+            }
+          }),
+        );
+
+        setTeams(ledenResults);
         setMembers(members);
         setTasks(tasks);
         setLastSynced(Date.now());

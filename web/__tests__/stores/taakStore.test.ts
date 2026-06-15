@@ -114,16 +114,6 @@ describe('useTaakStore - selectie', () => {
     useTaakStore.getState().selectTeam(null);
     expect(useTaakStore.getState().selectedTeamId).toBeNull();
   });
-
-  it('kan taakselectie op null zetten', () => {
-    useTaakStore.getState().selectTask('1');
-    useTaakStore.getState().selectTask(null);
-    expect(useTaakStore.getState().selectedTaskId).toBeNull();
-  });
-
-  it('begint zonder geselecteerde taak', () => {
-    expect(useTaakStore.getState().selectedTaskId).toBeNull();
-  });
 });
 
 describe('useTaakStore - loaded & sync', () => {

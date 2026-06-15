@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useCreateTaak } from '@/hooks/useCreateTaak';
+import { useCreateTask } from '@/hooks/useCreateTask';
 import { Input } from '@/components/design-system/Input';
 import { Container } from '@/components/design-system/Container';
 import { Button } from '@/components/design-system/Button';
@@ -10,7 +10,7 @@ import Select from '@/components/design-system/Select/Select';
 import { useToast } from '@/providers/ToastProvider';
 
 export const CreateView = () => {
-  const { mutateAsync: createTaak, isPending } = useCreateTaak();
+  const createTask = useCreateTask();
   const toast = useToast();
   const [name, setName] = useState('');
   const [specifications, setSpecifications] = useState('');
@@ -20,16 +20,17 @@ export const CreateView = () => {
   const [hour, setHour] = useState('00');
   const [minute, setMinute] = useState('00');
   const [duration, setDuration] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!name || !dueDate) return;
+    setSubmitting(true);
     try {
       const deadline = wholeDay
         ? dueDate
         : `${dueDate}T${hour.padStart(2, '0')}:${minute.padStart(2, '0')}:00`;
 
-      await createTaak({
+      await createTask({
         name,
         specifications,
         dueDate: deadline,
@@ -45,6 +46,8 @@ export const CreateView = () => {
       toast.success('Taak aangemaakt');
     } catch {
       toast.error('Kon taak niet aanmaken');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -131,9 +134,9 @@ export const CreateView = () => {
 
           <Button
             type="submit"
-            label={isPending ? 'Aanmaken...' : 'Taak aanmaken'}
-            loading={isPending}
-            disabled={isPending || !name || !dueDate}
+            label={submitting ? 'Aanmaken...' : 'Taak aanmaken'}
+            loading={submitting}
+            disabled={submitting || !name || !dueDate}
             variant={'primary'}
           />
         </FormHelper>

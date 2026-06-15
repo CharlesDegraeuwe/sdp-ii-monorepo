@@ -34,13 +34,11 @@ interface PlannerToolbarProps {
   teams: TeamOptie[];
   teamWerknemers: WerknemerOptie[];
   kanTeamZien: boolean;
-  kanShiftAanmaken: boolean;
   onViewChange: (v: View) => void;
   onTabChange: (t: Tab) => void;
   onNavigate: (d: 1 | -1) => void;
   onVandaag: () => void;
   onFilterChange: (update: Partial<FilterState>) => void;
-  onShiftAanmaken: () => void;
 }
 
 export function PlannerToolbar({
@@ -52,13 +50,11 @@ export function PlannerToolbar({
   teams,
   teamWerknemers,
   kanTeamZien,
-  kanShiftAanmaken,
   onViewChange,
   onTabChange,
   onNavigate,
   onVandaag,
   onFilterChange,
-  onShiftAanmaken,
 }: PlannerToolbarProps) {
   const zichtbareTabs = kanTeamZien ? tabs : tabs.filter((t) => t.key !== 'team');
   return (
@@ -87,9 +83,6 @@ export function PlannerToolbar({
             onChange={(key) => onViewChange(key as View)}
           />
           <Button onClick={onVandaag} variant="primary" label="Vandaag" />
-          {kanShiftAanmaken && (
-            <Button onClick={onShiftAanmaken} variant="secondary" label="+ Shift" />
-          )}
           {/* Team switcher inline on desktop, in its own row slot on mobile */}
           {kanTeamZien && (
             <div className={'hidden sm:flex min-w-fit lg:min-w-90 justify-end'}>

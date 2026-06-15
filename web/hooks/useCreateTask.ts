@@ -4,6 +4,8 @@ import { mapTaskToBackend, mapBackendTask } from '@/lib/taakMapper';
 export const useCreateTask = () => {
   const addTask = useTaakStore((s) => s.addTask);
   const removeTask = useTaakStore((s) => s.removeTask);
+  const setTasks = useTaakStore((s) => s.setTasks);
+  const setLastSynced = useTaakStore((s) => s.setLastSynced);
 
   return async (input: Omit<Task, 'id' | 'finished'>) => {
     const tempId = `temp-${Date.now()}`;
@@ -17,12 +19,18 @@ export const useCreateTask = () => {
         body: JSON.stringify(mapTaskToBackend(input)),
       });
       if (!res.ok) throw new Error('Create failed');
-      const data = await res.json();
       removeTask(tempId);
-      if (typeof data === 'object' && data.id) {
-        addTask(mapBackendTask(data));
+
+      // Refetch taken direct zodat de data meteen klaarstaat
+      const takenRes = await fetch('/api/taken/alle');
+      if (takenRes.ok) {
+        const takenData = await takenRes.json();
+        if (Array.isArray(takenData)) {
+          const tasks = takenData.map(mapBackendTask);
+          setTasks(tasks);
+          setLastSynced(Date.now());
+        }
       }
-      return data;
     } catch (e) {
       removeTask(tempId);
       throw e;

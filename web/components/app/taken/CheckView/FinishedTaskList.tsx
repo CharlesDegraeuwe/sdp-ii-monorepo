@@ -4,16 +4,15 @@ import { Input } from '@/components/design-system/Input';
 import { Label } from '@/components/design-system/Label';
 import { useTaakStore } from '@/stores/taakStore';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
-import { useTaken } from '@/hooks/useTaken';
 
 export const FinishedTaskList = () => {
   const [search, setSearch] = useState('');
-  const { data: tasks = [] } = useTaken();
+  const tasks = useTaakStore((s) => s.tasks);
   const selectedTaskId = useTaakStore((s) => s.selectedTaskId);
   const selectTask = useTaakStore((s) => s.selectTask);
 
   const finished = useMemo(() => {
-    let all = tasks.filter((t) => t.finished);
+    let all = Object.values(tasks).filter((t) => t.finished);
     if (search) {
       const q = search.toLowerCase();
       all = all.filter((t) => t.name.toLowerCase().includes(q));

@@ -37,7 +37,6 @@ interface DayViewProps {
   isManager: boolean;
   tab: 'team' | 'you';
   eigenShiften?: Shift[];
-  teamTaken?: Record<number, PlannerTaak[]>;
   onAfgewerkt?: (id: number) => void;
 }
 
@@ -52,7 +51,6 @@ export default function DayView({
   isManager,
   tab,
   eigenShiften = [],
-  teamTaken = {},
   onAfgewerkt,
 }: DayViewProps) {
   const { data: session } = useSession();
@@ -278,34 +276,30 @@ export default function DayView({
             </div>
           </div>
 
-          {rijen.map((rij) => {
-            const rijShift = shifts.find((s) => s.werknemerId === rij.werknemerId);
-            const rijTaken = (teamTaken[rij.werknemerId] ?? []).filter((t) => !t.afgewerkt);
-            return (
-              <WerknemerRij
-                key={`w${rij.werknemerId}`}
-                rij={rij}
-                shift={rijShift}
-                taken={rijShift ? rijTaken : []}
-                afwezig={dagAfwezigheden.filter(
-                  (a) => a.werknemerId === rij.werknemerId,
-                )}
-                isManager={isManager}
-                dagIsVrij={dagIsVrij}
-                huidigUurX={huidigUurX}
-                isGeselecteerd={geselecteerdeRij?.werknemerId === rij.werknemerId}
-                onSelecteer={() =>
-                  setGeselecteerdeRij((prev) =>
-                    prev?.werknemerId === rij.werknemerId ? null : rij,
-                  )
-                }
-                onEdit={() => {
-                  if (rijShift) openEdit(rijShift, rij);
-                }}
-                onCreate={() => openCreate(rij)}
-              />
-            );
-          })}
+          {rijen.map((rij) => (
+            <WerknemerRij
+              key={`w${rij.werknemerId}`}
+              rij={rij}
+              shift={shifts.find((s) => s.werknemerId === rij.werknemerId)}
+              afwezig={dagAfwezigheden.filter(
+                (a) => a.werknemerId === rij.werknemerId,
+              )}
+              isManager={isManager}
+              dagIsVrij={dagIsVrij}
+              huidigUurX={huidigUurX}
+              isGeselecteerd={geselecteerdeRij?.werknemerId === rij.werknemerId}
+              onSelecteer={() =>
+                setGeselecteerdeRij((prev) =>
+                  prev?.werknemerId === rij.werknemerId ? null : rij,
+                )
+              }
+              onEdit={() => {
+                const s = shifts.find((s) => s.werknemerId === rij.werknemerId);
+                if (s) openEdit(s, rij);
+              }}
+              onCreate={() => openCreate(rij)}
+            />
+          ))}
 
           {rijen.length === 0 && (
             <div className="flex items-center justify-center py-12 text-xs text-zinc-400">

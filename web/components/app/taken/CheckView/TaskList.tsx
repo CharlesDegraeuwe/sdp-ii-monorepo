@@ -3,13 +3,16 @@ import { useState, useMemo } from 'react';
 import { Input } from '@/components/design-system/Input';
 import { Label } from '@/components/design-system/Label';
 import { TaskListItem } from './TaskListItem';
-import { useTaken } from '@/hooks/useTaken';
+import { useTaakStore } from '@/stores/taakStore';
 
 export const TaskList = () => {
   const [search, setSearch] = useState('');
-  const { data: tasks = [] } = useTaken();
+  const tasks = useTaakStore((s) => s.tasks);
+  const selectedTaskId = useTaakStore((s) => s.selectedTaskId);
+  const selectTask = useTaakStore((s) => s.selectTask);
+
   const filtered = useMemo(() => {
-    let all = tasks.filter((t) => !t.finished);
+    let all = Object.values(tasks).filter((t) => !t.finished);
     if (search) {
       const q = search.toLowerCase();
       all = all.filter((t) => t.name.toLowerCase().includes(q));
@@ -40,6 +43,8 @@ export const TaskList = () => {
               <TaskListItem
                 key={t.id}
                 task={t}
+                active={selectedTaskId === t.id}
+                onClick={() => selectTask(t.id)}
               />
             ))
           )}
