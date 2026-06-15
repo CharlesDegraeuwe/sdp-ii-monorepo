@@ -8,7 +8,9 @@ export const FinishedTaskDetails = () => {
   const selectedTaskId = useTaakStore((s) => s.selectedTaskId);
   const { data: tasks = [] } = useTaken();
 
-  const task = selectedTaskId ? tasks.find((t) => t.id === selectedTaskId) ?? null : null;
+  const task = selectedTaskId
+    ? (tasks.find((t) => t.id === selectedTaskId) ?? null)
+    : null;
 
   if (!task || !task.finished) {
     return (

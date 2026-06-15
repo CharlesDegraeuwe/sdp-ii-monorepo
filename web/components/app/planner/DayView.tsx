@@ -1,8 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { MdCheckCircle, MdDelete, MdClose, MdRadioButtonUnchecked } from 'react-icons/md';
+import {
+  MdCheckCircle,
+  MdDelete,
+  MdClose,
+  MdRadioButtonUnchecked,
+} from 'react-icons/md';
 import type { Afwezigheid, PlannerTaak, Shift } from './types';
 import type { FilterState } from './PlannerFilter';
 import type {
@@ -10,7 +15,13 @@ import type {
   WerknemerOptie,
   WerknemerMetTeam,
 } from '@/hooks/usePlanningFilters';
-import { afwezighedenOpDag, isVrij, mapTaakVanBackend, takenOpDag, taakBadgeKleur } from './utils';
+import {
+  afwezighedenOpDag,
+  isVrij,
+  mapTaakVanBackend,
+  takenOpDag,
+  taakBadgeKleur,
+} from './utils';
 import {
   VIS_START,
   UUR_BREEDTE,
@@ -63,6 +74,15 @@ export default function DayView({
   const [werknemerTaken, setWerknemerTaken] = useState<PlannerTaak[]>([]);
   const [laadtTaken, setLaadtTaken] = useState(false);
 
+  // Reset geselecteerde rij wanneer datum/filter/tab wijzigt
+  const resetKey = `${huidigeDatum.toISOString()}-${JSON.stringify(filter)}-${tab}`;
+  const prevResetKey = useRef(resetKey);
+  if (prevResetKey.current !== resetKey) {
+    prevResetKey.current = resetKey;
+    setGeselecteerdeRij(null);
+    setWerknemerTaken([]);
+  }
+
   const werknemersToLoad = useMemo(() => {
     if (tab === 'you') return eigenId ? [eigenId] : [];
     if (filter.werknemerId) return [filter.werknemerId];
@@ -95,27 +115,24 @@ export default function DayView({
     fetches.then(setShifts).catch(() => setShifts([]));
   }, [werknemersToLoad, huidigeDatum]);
 
-  // Reset geselecteerde rij wanneer datum/filter/tab wijzigt
-  useEffect(() => {
-    setGeselecteerdeRij(null);
-    setWerknemerTaken([]);
-  }, [huidigeDatum, filter, tab]);
-
   // Laad taken voor geselecteerde werknemer (team view)
-  useEffect(() => {
-    if (!geselecteerdeRij) return;
+  const laadTakenVoorWerknemer = useCallback(async (rij: Rij) => {
     setLaadtTaken(true);
-    fetch(`/api/taken/werknemer/${geselecteerdeRij.werknemerId}`)
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: Record<string, unknown>[]) =>
-        setWerknemerTaken(data.map(mapTaakVanBackend)),
-      )
-      .catch(() => setWerknemerTaken([]))
-      .finally(() => setLaadtTaken(false));
-  }, [geselecteerdeRij]);
+    try {
+      const r = await fetch(`/api/taken/werknemer/${rij.werknemerId}`);
+      const data: Record<string, unknown>[] = r.ok ? await r.json() : [];
+      setWerknemerTaken(data.map(mapTaakVanBackend));
+    } catch {
+      setWerknemerTaken([]);
+    } finally {
+      setLaadtTaken(false);
+    }
+  }, []);
 
   async function handleWerknemerTaakAfgewerkt(taakId: number) {
-    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, { method: 'PUT' });
+    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, {
+      method: 'PUT',
+    });
     if (res.ok) {
       setWerknemerTaken((prev) =>
         prev.map((t) => (t.id === taakId ? { ...t, afgewerkt: true } : t)),
@@ -279,8 +296,12 @@ export default function DayView({
           </div>
 
           {rijen.map((rij) => {
-            const rijShift = shifts.find((s) => s.werknemerId === rij.werknemerId);
-            const rijTaken = (teamTaken[rij.werknemerId] ?? []).filter((t) => !t.afgewerkt);
+            const rijShift = shifts.find(
+              (s) => s.werknemerId === rij.werknemerId,
+            );
+            const rijTaken = (teamTaken[rij.werknemerId] ?? []).filter(
+              (t) => !t.afgewerkt,
+            );
             return (
               <WerknemerRij
                 key={`w${rij.werknemerId}`}
@@ -293,12 +314,18 @@ export default function DayView({
                 isManager={isManager}
                 dagIsVrij={dagIsVrij}
                 huidigUurX={huidigUurX}
-                isGeselecteerd={geselecteerdeRij?.werknemerId === rij.werknemerId}
-                onSelecteer={() =>
-                  setGeselecteerdeRij((prev) =>
-                    prev?.werknemerId === rij.werknemerId ? null : rij,
-                  )
+                isGeselecteerd={
+                  geselecteerdeRij?.werknemerId === rij.werknemerId
                 }
+                onSelecteer={() => {
+                  const next =
+                    geselecteerdeRij?.werknemerId === rij.werknemerId
+                      ? null
+                      : rij;
+                  setGeselecteerdeRij(next);
+                  if (next) laadTakenVoorWerknemer(next);
+                  else setWerknemerTaken([]);
+                }}
                 onEdit={() => {
                   if (rijShift) openEdit(rijShift, rij);
                 }}
@@ -332,7 +359,8 @@ export default function DayView({
 
           {laadtTaken ? (
             <p className="text-xs text-zinc-400 italic">Laden...</p>
-          ) : dagTakenVoorGeselecteerde.length === 0 && werknemerTaken.length === 0 ? (
+          ) : dagTakenVoorGeselecteerde.length === 0 &&
+            werknemerTaken.length === 0 ? (
             <p className="text-xs text-zinc-400 italic">Geen taken gevonden.</p>
           ) : werknemerTaken.length === 0 ? (
             <p className="text-xs text-zinc-400 italic">
@@ -362,7 +390,9 @@ export default function DayView({
                           ? 'text-emerald-500 cursor-default'
                           : 'text-zinc-300 hover:text-emerald-500 cursor-pointer'
                       }`}
-                      title={t.afgewerkt ? 'Afgewerkt' : 'Markeer als afgewerkt'}
+                      title={
+                        t.afgewerkt ? 'Afgewerkt' : 'Markeer als afgewerkt'
+                      }
                     >
                       {t.afgewerkt ? (
                         <MdCheckCircle size={16} />
@@ -372,12 +402,19 @@ export default function DayView({
                     </button>
                   )}
                   {!isManager && t.afgewerkt && (
-                    <MdCheckCircle size={16} className="text-emerald-500 shrink-0" />
+                    <MdCheckCircle
+                      size={16}
+                      className="text-emerald-500 shrink-0"
+                    />
                   )}
                   <span
                     className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${taakBadgeKleur(t)}`}
                   >
-                    {t.afgewerkt ? 'Afgewerkt' : t.belangrijk ? 'Belangrijk' : 'Taak'}
+                    {t.afgewerkt
+                      ? 'Afgewerkt'
+                      : t.belangrijk
+                        ? 'Belangrijk'
+                        : 'Taak'}
                   </span>
                   <span
                     className={`text-xs font-semibold flex-1 truncate ${t.afgewerkt ? 'line-through text-zinc-400' : 'text-zinc-800'}`}

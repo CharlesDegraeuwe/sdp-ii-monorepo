@@ -15,7 +15,11 @@ import type {
   Shift,
   View,
 } from '../../../../components/app/planner/types';
-import { getPeriodBounds, getMaandag, mapTaakVanBackend } from '../../../../components/app/planner/utils';
+import {
+  getPeriodBounds,
+  getMaandag,
+  mapTaakVanBackend,
+} from '../../../../components/app/planner/utils';
 import { PlannerAanvraagModal } from '../../../../components/app/planner/PlannerAanvraagModal';
 import { ShiftAanmakenModal } from '../../../../components/app/planner/ShiftAanmakenModal';
 import { PageContainer } from '@/components/design-system/PageContainer';
@@ -45,8 +49,10 @@ function PlannerPageInner() {
   const kanTeamZien = ['Manager', 'Admin', 'Supervisor'].includes(rol);
   const kanShiftAanmaken = kanTeamZien;
   const eigenId = Number((session?.user as Record<string, unknown>)?.id ?? 0);
-  const eigenVoornaam = ((session?.user as Record<string, unknown>)?.voornaam as string) ?? '';
-  const eigenNaamStr = ((session?.user as Record<string, unknown>)?.naam as string) ?? '';
+  const eigenVoornaam =
+    ((session?.user as Record<string, unknown>)?.voornaam as string) ?? '';
+  const eigenNaamStr =
+    ((session?.user as Record<string, unknown>)?.naam as string) ?? '';
 
   const searchParams = useSearchParams();
   const [view, setView] = useState<View>(() => {
@@ -64,7 +70,9 @@ function PlannerPageInner() {
   const [afwezigheden, setAfwezigheden] = useState<Afwezigheid[]>([]);
   const [taken, setTaken] = useState<PlannerTaak[]>([]);
   const [tab, setTab] = useState<Tab>('you');
-  const [geselecteerdeDag, setGeselecteerdeDag] = useState<Date | null>(new Date());
+  const [geselecteerdeDag, setGeselecteerdeDag] = useState<Date | null>(
+    new Date(),
+  );
   const [filter, setFilter] = useState<FilterState>(LEEG_FILTER);
   const [eigenShiften, setEigenShiften] = useState<Shift[]>([]);
   const [plannerModal, setPlannerModal] = useState<{
@@ -76,7 +84,9 @@ function PlannerPageInner() {
   const [teamTaken, setTeamTaken] = useState<Record<number, PlannerTaak[]>>({});
   const [shiftAanmakenOpen, setShiftAanmakenOpen] = useState(false);
   const [shiftenRefresh, setShiftenRefresh] = useState(0);
-  const [geselecteerdeTeamWerknemer, setGeselecteerdeTeamWerknemer] = useState<number | null>(null);
+  const [geselecteerdeTeamWerknemer, setGeselecteerdeTeamWerknemer] = useState<
+    number | null
+  >(null);
 
   const authHeader = useMemo(
     () => ({ Authorization: `Bearer ${token}` }),
@@ -141,7 +151,6 @@ function PlannerPageInner() {
       .then((res) => res.json())
       .then(setAfwezigheden)
       .catch(console.error);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, authHeader, huidigeDatum, view]);
 
   // Fetch eigen shiften via bereik endpoint
@@ -196,9 +205,11 @@ function PlannerPageInner() {
     let tot: string;
     if (view === 'maand') {
       van = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), 1)
-        .toISOString().split('T')[0];
+        .toISOString()
+        .split('T')[0];
       tot = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth() + 1, 0)
-        .toISOString().split('T')[0];
+        .toISOString()
+        .split('T')[0];
     } else {
       const ma = getMaandag(huidigeDatum);
       van = ma.toISOString().split('T')[0];
@@ -215,7 +226,6 @@ function PlannerPageInner() {
     )
       .then((results) => setTeamShiften(results.flat()))
       .catch(() => setTeamShiften([]));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, view, huidigeDatum, teamWerknemers]);
 
   // Fetch taken voor alle teamleden
@@ -228,13 +238,15 @@ function PlannerPageInner() {
       teamWerknemers.map((w) =>
         fetch(`/api/taken/werknemer/${w.id}`)
           .then((r) => (r.ok ? r.json() : []))
-          .then((data: Record<string, unknown>[]) => [w.id, data.map(mapTaakVanBackend)] as [number, PlannerTaak[]])
+          .then(
+            (data: Record<string, unknown>[]) =>
+              [w.id, data.map(mapTaakVanBackend)] as [number, PlannerTaak[]],
+          )
           .catch(() => [w.id, []] as [number, PlannerTaak[]]),
       ),
     )
       .then((results) => setTeamTaken(Object.fromEntries(results)))
       .catch(() => setTeamTaken({}));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, teamWerknemers]);
 
   // Reset team member selection on tab/datum/filter changes
@@ -243,7 +255,9 @@ function PlannerPageInner() {
   }, [tab, huidigeDatum, filter]);
 
   async function handleTaakAfgewerkt(taakId: number) {
-    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, { method: 'PUT' });
+    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, {
+      method: 'PUT',
+    });
     if (res.ok) {
       setTaken((prev) =>
         prev.map((t) => (t.id === taakId ? { ...t, afgewerkt: true } : t)),
@@ -259,7 +273,9 @@ function PlannerPageInner() {
   }
 
   async function handleTeamTaakAfgewerkt(taakId: number, werknemerId: number) {
-    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, { method: 'PUT' });
+    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, {
+      method: 'PUT',
+    });
     if (res.ok) {
       setTeamTaken((prev) => ({
         ...prev,
@@ -338,7 +354,9 @@ function PlannerPageInner() {
                   <div className="hidden sm:block h-full">
                     <MonthView
                       huidigeDatum={huidigeDatum}
-                      afwezigheden={tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid}
+                      afwezigheden={
+                        tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid
+                      }
                       eigenShiften={eigenShiften}
                       geselecteerdeDag={geselecteerdeDag}
                       onSelectDag={(datum) => {
@@ -365,7 +383,8 @@ function PlannerPageInner() {
                   <div className="sm:hidden flex flex-col items-center justify-center gap-2 h-full min-h-48 text-zinc-400 text-sm text-center px-4">
                     <span>Maandoverzicht is niet beschikbaar op mobiel.</span>
                     <span className="text-xs">
-                      Schakel naar week- of dagweergave via de knoppen hierboven.
+                      Schakel naar week- of dagweergave via de knoppen
+                      hierboven.
                     </span>
                   </div>
                 </>
@@ -373,7 +392,9 @@ function PlannerPageInner() {
               {view === 'week' && (
                 <WeekView
                   huidigeDatum={huidigeDatum}
-                  afwezigheden={tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid}
+                  afwezigheden={
+                    tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid
+                  }
                   taken={taken}
                   eigenShiften={eigenShiften}
                   geselecteerdeDag={geselecteerdeDag}
@@ -413,7 +434,9 @@ function PlannerPageInner() {
             {view !== 'dag' && geselecteerdeDag && (
               <DetailPanel
                 geselecteerdeDag={geselecteerdeDag}
-                afwezigheden={tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid}
+                afwezigheden={
+                  tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid
+                }
                 eigenShiften={eigenShiften}
                 taken={taken}
                 isManager={isManager}
@@ -424,8 +447,15 @@ function PlannerPageInner() {
                 teamShiften={teamShiften}
                 teamTaken={teamTaken}
                 geselecteerdeTeamWerknemer={geselecteerdeTeamWerknemer}
-                onTeamTaakAfgewerkt={(taakId, werknemerId) => handleTeamTaakAfgewerkt(taakId, werknemerId)}
-                onTeamTaakVerwijder={isManager ? (taakId, werknemerId) => handleTeamTaakVerwijder(taakId, werknemerId) : undefined}
+                onTeamTaakAfgewerkt={(taakId, werknemerId) =>
+                  handleTeamTaakAfgewerkt(taakId, werknemerId)
+                }
+                onTeamTaakVerwijder={
+                  isManager
+                    ? (taakId, werknemerId) =>
+                        handleTeamTaakVerwijder(taakId, werknemerId)
+                    : undefined
+                }
               />
             )}
           </div>
