@@ -13,11 +13,16 @@
         <HBox styleClass="left_header" alignment="CENTER">
             <children>
 
-                <Button styleClass="header_button" fx:id="notifications">
-                    <graphic>
-                        <FontIcon iconLiteral="mdmz-notifications_none" iconSize="20" />
-                    </graphic>
-                </Button>
+                <StackPane>
+                    <Button styleClass="header_button" fx:id="notifications">
+                        <graphic>
+                            <FontIcon iconLiteral="mdmz-notifications_none" iconSize="20" />
+                        </graphic>
+                    </Button>
+                    <Label fx:id="notificatieBadge" styleClass="notificatie-badge"
+                           StackPane.alignment="TOP_RIGHT" mouseTransparent="true"
+                           visible="false" managed="false"/>
+                </StackPane>
             </children>
         </HBox>
 

@@ -57,7 +57,6 @@ public class AfwezigheidsController extends BorderPane {
     @FXML private TextArea ziekteExtraArea;
 
     // Geschiedenis
-    @FXML private VBox teamledenPanel;
     @FXML private VBox teamledenLijst;
     @FXML private VBox geschiedenisLijst;
     @FXML private Label geschiedenisTitel;
@@ -110,9 +109,11 @@ public class AfwezigheidsController extends BorderPane {
         succesLabel.setVisible(false);
         succesLabel.setManaged(false);
 
-        // Iedereen kan eigen geschiedenis zien
-        geschiedenisKnop.setVisible(true);
-        geschiedenisKnop.setManaged(true);
+        // Geschiedenis tabje enkel voor manager/supervisor
+        String rol = Sessie.getInstance().getIngelogdeWerknemer().rol();
+        boolean heeftToegang = rol.equals("Manager") || rol.equals("Supervisor");
+        geschiedenisKnop.setVisible(heeftToegang);
+        geschiedenisKnop.setManaged(heeftToegang);
     }
 
     // ─── TABS ────────────────────────────────────────────────────────────────────
@@ -147,21 +148,7 @@ public class AfwezigheidsController extends BorderPane {
         geschiedenisKnop.getStyleClass().setAll("filter-knop-actief");
         verlofKnop.getStyleClass().setAll("filter-knop");
         ziekteKnop.getStyleClass().setAll("filter-knop");
-
-        WerknemerDTO ingelogde = Sessie.getInstance().getIngelogdeWerknemer();
-        boolean heeftTeamToegang = Sessie.getInstance().isMangerOrAdmin() || Sessie.getInstance().isSuperVisor();
-
-        // Teamledenlijst links alleen zichtbaar voor manager/supervisor
-        teamledenPanel.setVisible(heeftTeamToegang);
-        teamledenPanel.setManaged(heeftTeamToegang);
-
-        // Eigen geschiedenis altijd meteen laden
-        geschiedenisTitel.setText("Mijn afwezigheidsgeschiedenis");
-        laadGeschiedenisVanWerknemer(ingelogde);
-
-        if (heeftTeamToegang) {
-            laadTeamleden();
-        }
+        laadTeamleden();
     }
 
     // ─── GESCHIEDENIS ─────────────────────────────────────────────────────────────
@@ -179,16 +166,6 @@ public class AfwezigheidsController extends BorderPane {
                         .geefTeamledenVanManager(ingelogde.id());
 
                 Platform.runLater(() -> {
-                    // "Mijn geschiedenis" bovenaan
-                    Button eigenKnop = new Button("Mijn geschiedenis");
-                    eigenKnop.setMaxWidth(Double.MAX_VALUE);
-                    eigenKnop.getStyleClass().addAll("teamlid-knop", "teamlid-knop-eigen");
-                    eigenKnop.setOnAction(e -> {
-                        geschiedenisTitel.setText("Mijn afwezigheidsgeschiedenis");
-                        laadGeschiedenisVanWerknemer(ingelogde);
-                    });
-                    teamledenLijst.getChildren().add(eigenKnop);
-
                     if (teamleden.isEmpty()) {
                         Label leeg = new Label("Geen teamleden gevonden.");
                         leeg.setStyle("-fx-text-fill: #aaaaaa; -fx-font-size: 12px;");

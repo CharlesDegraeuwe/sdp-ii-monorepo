@@ -7,53 +7,28 @@
          styleClass="page"
          stylesheets="@/css/dashboard.css, @/css/planning.css">
     <center>
-        <VBox spacing="10">
-
-            <!-- Bovenste balk: weergave-toggle links, planning-type toggle rechts -->
+        <VBox spacing="10" >
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <HBox styleClass="filter-container" spacing="0">
                     <Button fx:id="maandKnop" text="Maand" onAction="#toonMaand" styleClass="filter-knop-actief"/>
-                    <Button fx:id="weekKnop"  text="Week"  onAction="#toonWeek"  styleClass="filter-knop"/>
-                    <Button fx:id="dagKnop"   text="Dag"   onAction="#toonDag"   styleClass="filter-knop"/>
-                </HBox>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <!-- Alleen zichtbaar voor manager/admin -->
-                <HBox fx:id="planningToggleBar" spacing="0" styleClass="filter-container"
-                      visible="false" managed="false">
-                    <Button fx:id="eigenPlanningKnop" text="Eigen planning"
-                            onAction="#toonEigenPlanning" styleClass="filter-knop-actief"/>
-                    <Button fx:id="teamPlanningKnop"  text="Teamplanning"
-                            onAction="#schakelTeamPlanning" styleClass="filter-knop"/>
+                    <Button fx:id="weekKnop" text="Week" onAction="#toonWeek" styleClass="filter-knop"/>
+                    <Button fx:id="dagKnop" text="Dag" onAction="#toonDag" styleClass="filter-knop"/>
                 </HBox>
             </HBox>
-
-            <!-- Filterkaart (alleen zichtbaar in teammodus) -->
-            <HBox fx:id="teamFilterBar" spacing="16" alignment="CENTER_LEFT"
-                  styleClass="planning-filter-kaart" visible="false" managed="false">
-                <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
-                <Label text="Locatie"    styleClass="planning-filter-label"/>
-                <ComboBox fx:id="locatieDropdown"   promptText="Kies locatie"   prefWidth="160"/>
-                <Label text="Team"       styleClass="planning-filter-label"/>
-                <ComboBox fx:id="teamDropdown"      promptText="Kies team"      prefWidth="160" disable="true"/>
-                <Label text="Werknemer"  styleClass="planning-filter-label"/>
-                <ComboBox fx:id="werknemerDropdown" promptText="Kies werknemer" prefWidth="180" disable="true"/>
-            </HBox>
-
-            <!-- Navigatiebalk -->
             <HBox spacing="16">
-                <HBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS">
-                    <Button fx:id="vorigeKnop"  text="‹" onAction="#vorigePeriode" styleClass="nav-knop"/>
-                    <Label  fx:id="periodeLabel" text="..." styleClass="periode-label"/>
-                    <Button fx:id="volgendeKnop" text="›" onAction="#volgendePeriode" styleClass="nav-knop"/>
+                <HBox spacing="10" alignment="CENTER">
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button fx:id="vorigeKnop" text="‹" onAction="#vorigePeriode" styleClass="nav-knop"/>
+                        <Label fx:id="periodeLabel" text="..." styleClass="periode-label"/>
+                        <Button fx:id="volgendeKnop" text="›" onAction="#volgendePeriode" styleClass="nav-knop"/>
+                    </HBox>
+
                     <Region HBox.hgrow="ALWAYS"/>
+
                     <Button text="Vandaag" onAction="#naarVandaag" styleClass="vandaag-knop"/>
                 </HBox>
                 <VBox prefWidth="300" minWidth="280" maxWidth="320"/>
             </HBox>
-
-            <!-- Kalender + detail sidebar -->
             <HBox spacing="16">
                 <VBox spacing="16" HBox.hgrow="ALWAYS" alignment="CENTER">
                     <VBox fx:id="kalenderContainer" spacing="5"/>
@@ -67,19 +42,19 @@
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <VBox fx:id="detailLijst" spacing="8"/>
                     </VBox>
-                    <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="" styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <Label fx:id="shiftTitel" text="Today's shifts" styleClass="card_title"/>
                         <VBox fx:id="shiftOverview" spacing="8"/>
                     </VBox>
-                    <VBox styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="" styleClass="card" spacing="10" VBox.vgrow="ALWAYS">
                         <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
                         <Label fx:id="ShiftDetailTitle" text="Shift details" styleClass="card_title"/>
                         <VBox fx:id="shiftdetails" spacing="8"/>
                     </VBox>
                 </VBox>
-            </HBox>
 
+            </HBox>
         </VBox>
     </center>
 </fx:root>

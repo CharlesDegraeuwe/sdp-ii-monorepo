@@ -1,9 +1,8 @@
-package hogent.sdp2.sdpii.gui.admin.beheerGebruikers;
 
+package hogent.sdp2.sdpii.gui.admin.beheerGebruikers;
 import domain.auth.Sessie;
 import domain.dto.WerknemerDTO;
 import domain.facades.WerknemersFacade;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,7 +11,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+        import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.List;
@@ -118,75 +117,47 @@ public class BeheerGebruikersController extends VBox {
 
     private void pasStatusAan(String actie) {
         WerknemerDTO geselecteerdeWerknemer = gebruikersTable.getSelectionModel().getSelectedItem();
-        if (geselecteerdeWerknemer == null) return;
 
-        foutLabel.setVisible(false);
-        foutLabel.setManaged(false);
-        btnActiveer.setDisable(true);
-        btnDeactiveer.setDisable(true);
-        btnBlokkeer.setDisable(true);
+        if (geselecteerdeWerknemer != null) {
+            foutLabel.setVisible(false);
+            boolean succes = service.veranderStatus(geselecteerdeWerknemer.id(), actie);
 
-        new Thread(() -> {
-            try {
-                boolean succes = service.veranderStatus(geselecteerdeWerknemer.id(), actie);
-                Platform.runLater(() -> {
-                    if (succes) {
-                        laadWerknemers();
-                    } else {
-                        foutLabel.setText("Er ging iets mis bij het communiceren met de server.");
-                        foutLabel.setVisible(true);
-                        foutLabel.setManaged(true);
-                    }
-                });
-            } catch (Exception e) {
-                Platform.runLater(() -> {
-                    foutLabel.setText("Fout: " + e.getMessage());
-                    foutLabel.setVisible(true);
-                    foutLabel.setManaged(true);
-                });
+            if (succes) {
+                laadWerknemers();
+            } else {
+                foutLabel.setText("Er ging iets mis bij het communiceren met de server.");
+                foutLabel.setVisible(true);
             }
-        }).start();
+        }
     }
 
     private void laadWerknemers() {
-        gebruikersTable.setPlaceholder(new Label("Laden..."));
-        new Thread(() -> {
-            try {
-                List<WerknemerDTO> geladen = service.geefAlleWerknemers();
-                Platform.runLater(() -> {
-                    alleWerknemers = geladen;
-                    ObservableList<WerknemerDTO> masterData = FXCollections.observableArrayList(alleWerknemers);
+        alleWerknemers = service.geefAlleWerknemers();
+        ObservableList<WerknemerDTO> masterData = FXCollections.observableArrayList(alleWerknemers);
 
-                    FilteredList<WerknemerDTO> filteredData = new FilteredList<>(masterData, p -> true);
-                    Runnable updateFilter = () -> {
-                        String zoekTekst = zoekField.getText() == null ? "" : zoekField.getText().toLowerCase();
-                        String gekozenStatus = statusFilterBox.getValue() == null ? "Alle" : statusFilterBox.getValue();
-                        filteredData.setPredicate(werknemer -> {
-                            boolean statusMatch = "Alle".equals(gekozenStatus) || gekozenStatus.equalsIgnoreCase(werknemer.status());
-                            boolean tekstMatch = zoekTekst.isBlank() ||
-                                    (werknemer.voornaam() != null && werknemer.voornaam().toLowerCase().contains(zoekTekst)) ||
-                                    (werknemer.naam() != null && werknemer.naam().toLowerCase().contains(zoekTekst)) ||
-                                    (werknemer.email() != null && werknemer.email().toLowerCase().contains(zoekTekst));
-                            return statusMatch && tekstMatch;
-                        });
-                    };
-                    zoekField.textProperty().addListener((obs, oud, nieuw) -> updateFilter.run());
-                    statusFilterBox.valueProperty().addListener((obs, oud, nieuw) -> updateFilter.run());
-                    updateFilter.run();
+        FilteredList<WerknemerDTO> filteredData = new FilteredList<>(masterData, p -> true);
+        Runnable updateFilter = () -> {
+            String zoekTekst = zoekField.getText() == null ? "" : zoekField.getText().toLowerCase();
+            String gekozenStatus = statusFilterBox.getValue() == null ? "Alle" : statusFilterBox.getValue();
 
-                    SortedList<WerknemerDTO> sortedData = new SortedList<>(filteredData);
-                    sortedData.comparatorProperty().bind(gebruikersTable.comparatorProperty());
-                    gebruikersTable.setItems(sortedData);
-                    gebruikersTable.setPlaceholder(new Label("Geen gebruikers gevonden."));
-                });
-            } catch (Exception e) {
-                Platform.runLater(() -> {
-                    foutLabel.setText("Fout bij laden van gebruikers: " + e.getMessage());
-                    foutLabel.setVisible(true);
-                    foutLabel.setManaged(true);
-                    gebruikersTable.setPlaceholder(new Label("Fout bij laden."));
-                });
-            }
-        }).start();
+            filteredData.setPredicate(werknemer -> {
+                boolean statusMatch = "Alle".equals(gekozenStatus) || gekozenStatus.equalsIgnoreCase(werknemer.status());
+
+                boolean tekstMatch = zoekTekst.isBlank() ||
+                        (werknemer.voornaam() != null && werknemer.voornaam().toLowerCase().contains(zoekTekst)) ||
+                        (werknemer.naam() != null && werknemer.naam().toLowerCase().contains(zoekTekst)) ||
+                        (werknemer.email() != null && werknemer.email().toLowerCase().contains(zoekTekst));
+
+                return statusMatch && tekstMatch;
+            });
+        };
+        zoekField.textProperty().addListener((observable, oldValue, newValue) -> updateFilter.run());
+        statusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> updateFilter.run());
+        updateFilter.run();
+
+        SortedList<WerknemerDTO> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(gebruikersTable.comparatorProperty());
+
+        gebruikersTable.setItems(sortedData);
     }
 }

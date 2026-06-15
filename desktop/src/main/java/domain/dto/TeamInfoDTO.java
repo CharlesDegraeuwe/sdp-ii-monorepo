@@ -1,8 +1,5 @@
-package domain.dto;
+package domain.dto; // Jouw package
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public record TeamInfoDTO(
         Integer id,
         String naam,

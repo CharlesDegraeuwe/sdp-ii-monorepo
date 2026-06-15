@@ -1,11 +1,14 @@
 package hogent.sdp2.sdpii.gui.components.app.header;
 import domain.auth.Sessie;
 import domain.dto.WerknemerDTO;
+import domain.facades.NotificatieFacade;
+import domain.services.SseListenerService;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.notificaties.NotificatiesController;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -25,8 +28,10 @@ public class HeaderController extends HBox {
     @FXML private FontIcon button_icon;
     @FXML private HBox trigger_button;
     @FXML private Label lblUsername;
+    @FXML private Label notificatieBadge;
     private ProfilePopupController pfc;
     private Popup popup;
+    private final Runnable badgeListener = this::verversNotificatieBadge;
 
 
     public HeaderController() {
@@ -52,7 +57,27 @@ public class HeaderController extends HBox {
         } else {
             lblUsername.setText("Gast");
         }
+
+        SseListenerService.getInstance().voegListenerToe(badgeListener);
+        verversNotificatieBadge();
+
         Router();
+    }
+
+    private void verversNotificatieBadge() {
+        new Thread(() -> {
+            try {
+                int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
+                long ongelezen = new NotificatieFacade().geefAantalOngelezen(werknemerId);
+                Platform.runLater(() -> {
+                    notificatieBadge.setText(ongelezen > 9 ? "9+" : String.valueOf(ongelezen));
+                    notificatieBadge.setVisible(ongelezen > 0);
+                    notificatieBadge.setManaged(ongelezen > 0);
+                });
+            } catch (Exception e) {
+                System.err.println("[Header] Fout bij ophalen ongelezen: " + e.getMessage());
+            }
+        }).start();
     }
 
     private void togglePopup(HBox trigger) {

@@ -4,14 +4,25 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<fx:root type="VBox" spacing="0" xmlns:fx="http://javafx.com/fxml">
-    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                VBox.vgrow="ALWAYS" styleClass="scroll-pane">
-        <VBox fx:id="item_container" spacing="5">
-            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+<fx:root type="VBox" fx:id="notificatieGrid" spacing="10" stylesheets="@/css/dashboard.css" alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+    <HBox spacing="6" alignment="CENTER">
+        <Button text="All" fx:id="tabAll" styleClass="tab_active"/>
+        <Button text="Tasks" fx:id="tabTaken" styleClass="tab"/>
+        <Button text="Absence" fx:id="tabAbsence" styleClass="tab"/>
+    </HBox>
+    <ScrollPane fitToWidth="true"
+                prefWidth="Infinity"
+                hbarPolicy="NEVER"
+                maxHeight="150"
+                vbarPolicy="AS_NEEDED">
+        <VBox fx:id="item_container" styleClass="item_container" minHeight="150" maxHeight="150" VBox.vgrow="ALWAYS" spacing="7">
+
         </VBox>
     </ScrollPane>
-    <HBox fx:id="footer" alignment="CENTER" styleClass="notif_footer">
-        <Label fx:id="footerLabel" text="Bekijk alle notificaties" styleClass="notif_footer_label"/>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
     </HBox>
+    <VBox fx:id="notificatiesList" spacing="8"/>
 </fx:root>

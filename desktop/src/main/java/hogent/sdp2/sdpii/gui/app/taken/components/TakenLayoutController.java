@@ -49,13 +49,12 @@ public class TakenLayoutController extends VBox {
     }
 
     public void init(TakenFacade takenFacade) {
-        boolean isWerknemer = Sessie.getInstance().isWerknemer();
-        boolean isMgrOrAdmin = Sessie.getInstance().isMangerOrAdmin();
+        boolean role = Sessie.getInstance().isWerknemer();
 
         ownTaskController = new OwnTaskController(takenFacade);
         outer_container.setCenter(ownTaskController);
 
-        if (!isWerknemer) {
+        if (!role) {
             teamTaskController = new TeamTaskController();
             checkTaskController = new CheckTaskController(takenFacade);
             BorderPane inner_container = teamTaskController.getPage_container();
@@ -92,8 +91,6 @@ public class TakenLayoutController extends VBox {
                     createTaskController = new CreateTaskController(takenFacade);
                     createTaskController.setOnAangemaakt(() -> {
                         checkTaskController.herlaad();
-                        ownTaskController.herlaad();
-                        if (assignTaskController != null) assignTaskController.herlaad();
                         inner_container.setCenter(checkTaskController);
                         tab = "check";
                         updateTabs();
@@ -113,10 +110,6 @@ public class TakenLayoutController extends VBox {
                 tab = "toewijzen";
                 updateTabs();
             });
-            if (!isMgrOrAdmin) {
-                creeerKnop.setVisible(false);
-                creeerKnop.setManaged(false);
-            }
         } else {
             controls.setVisible(false);
         }

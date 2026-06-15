@@ -4,27 +4,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<fx:root type="VBox" fx:id="container" spacing="8" xmlns:fx="http://javafx.com/fxml">
-    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-
-    <VBox fx:id="itemContainer" spacing="5" VBox.vgrow="ALWAYS"/>
-
-    <!-- Stats bar -->
-    <HBox spacing="0" styleClass="stats_bar">
-        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Label fx:id="statAfwezig" text="—" styleClass="stat_getal"/>
-            <Label text="Afwezig" styleClass="stat_label"/>
-        </VBox>
-        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stats_bar_middel">
-            <Label fx:id="statAfwachting" text="—" styleClass="stat_getal_amber"/>
-            <Label text="In afwachting" styleClass="stat_label"/>
-        </VBox>
-        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-            <Label fx:id="statOngelezen" text="—" styleClass="stat_getal_blauw"/>
-            <Label text="Ongelezen" styleClass="stat_label"/>
-        </VBox>
+<fx:root type="VBox" fx:id="container" spacing="10" xmlns:fx="http://javafx.com/fxml">
+    <HBox alignment="CENTER_LEFT" spacing="8">
+        <Label text="Afwezige teamleden:" styleClass="section_label"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="teamPicker" value="Team A" styleClass="team_picker"/>
+        <Button fx:id="filterBtn" text="Filter" styleClass="tab_active"/>
     </HBox>
-
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" maxHeight="200" VBox.vgrow="ALWAYS">
+        <VBox fx:id="itemContainer" spacing="7"/>
+    </ScrollPane>
     <HBox alignment="CENTER_RIGHT">
         <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
     </HBox>

@@ -273,13 +273,3 @@
 .teamlid-knop:hover {
     -fx-background-color: #eeeeee;
 }
-
-.teamlid-knop-eigen {
-    -fx-background-color: rgba(227, 27, 53, 0.06);
-    -fx-text-fill: #E31B35;
-    -fx-font-weight: bold;
-}
-
-.teamlid-knop-eigen:hover {
-    -fx-background-color: rgba(227, 27, 53, 0.12);
-}

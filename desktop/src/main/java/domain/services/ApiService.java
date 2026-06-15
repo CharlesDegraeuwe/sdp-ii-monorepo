@@ -19,9 +19,9 @@ public abstract class ApiService {
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json");
 
-        String jwtToken = Sessie.getInstance().getJwtToken();
-        if (jwtToken != null) {
-            builder.header("Authorization", "Bearer " + jwtToken);
+        String sessionId = Sessie.getInstance().getSessionId();
+        if (sessionId != null) {
+            builder.header("Cookie", "JSESSIONID=" + sessionId);
         }
 
         return builder;

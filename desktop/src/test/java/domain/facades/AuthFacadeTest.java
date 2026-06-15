@@ -1,7 +1,6 @@
 package domain.facades;
 
 import domain.auth.Sessie;
-import domain.dto.LoginResponseDTO;
 import domain.dto.WerknemerDTO;
 import domain.services.AuthApiService;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,64 +25,75 @@ class AuthFacadeTest {
     private AuthFacade facade;
 
     private WerknemerDTO werknemer;
-    private LoginResponseDTO loginResponse;
 
     @BeforeEach
     void setUp() {
         werknemer = new WerknemerDTO(1, "Jansen", "Jan", "jan@test.be", "0470123456",
-                LocalDate.of(1990, 1, 1), "Werknemer", "Actief");
-        loginResponse = new LoginResponseDTO("jwt-token-123", werknemer);
+                LocalDate.of(1990, 1, 1), "Werknemer", "actief");
     }
 
     @Test
-    void verzendLoginEmail_metGeldigEmail_roeptApiAan() {
-        doNothing().when(api).verzendLoginEmail("jan@test.be");
+    void login_metGeldigeGegevens_retourneertWerknemer() {
+        when(api.login("jan@test.be", "wachtwoord123")).thenReturn(werknemer);
 
-        facade.verzendLoginEmail("jan@test.be");
-
-        verify(api).verzendLoginEmail("jan@test.be");
-    }
-
-    @Test
-    void verzendLoginEmail_metLegeEmail_gooit_IllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> facade.verzendLoginEmail(""));
-        verifyNoInteractions(api);
-    }
-
-    @Test
-    void verzendLoginEmail_metNullEmail_gooit_IllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> facade.verzendLoginEmail(null));
-        verifyNoInteractions(api);
-    }
-
-    @Test
-    void loginMetCode_metGeldigeCode_retourneertWerknemer() {
-        when(api.loginMetCode("jan@test.be", "123456")).thenReturn(loginResponse);
-
-        WerknemerDTO result = facade.loginMetCode("jan@test.be", "123456");
+        WerknemerDTO result = facade.login("jan@test.be", "wachtwoord123");
 
         assertEquals(werknemer, result);
-        verify(api).loginMetCode("jan@test.be", "123456");
+        verify(api).login("jan@test.be", "wachtwoord123");
     }
 
     @Test
-    void loginMetCode_slaatWerknemerOpInSessie() {
-        when(api.loginMetCode("jan@test.be", "123456")).thenReturn(loginResponse);
+    void login_slaatWerknemerOpInSessie() {
+        when(api.login("jan@test.be", "wachtwoord123")).thenReturn(werknemer);
 
-        facade.loginMetCode("jan@test.be", "123456");
+        facade.login("jan@test.be", "wachtwoord123");
 
         assertEquals(werknemer, Sessie.getInstance().getIngelogdeWerknemer());
     }
 
     @Test
-    void loginMetCode_metLegeCode_gooit_IllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> facade.loginMetCode("jan@test.be", ""));
+    void login_metLegeEmail_gooit_IllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> facade.login("", "wachtwoord123"));
         verifyNoInteractions(api);
     }
 
     @Test
-    void loginMetCode_metNullCode_gooit_IllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> facade.loginMetCode("jan@test.be", null));
+    void login_metNullEmail_gooit_IllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> facade.login(null, "wachtwoord123"));
+        verifyNoInteractions(api);
+    }
+
+    @Test
+    void login_metLeegWachtwoord_gooit_IllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> facade.login("jan@test.be", ""));
+        verifyNoInteractions(api);
+    }
+
+    @Test
+    void login_metNullWachtwoord_gooit_IllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> facade.login("jan@test.be", null));
+        verifyNoInteractions(api);
+    }
+
+    @Test
+    void activeerAccount_metGeldigeCode_retourneertTrue() {
+        when(api.activeerAccount(1, "ABC123")).thenReturn(true);
+
+        boolean result = facade.activeerAccount(1, "ABC123");
+
+        assertTrue(result);
+        verify(api).activeerAccount(1, "ABC123");
+    }
+
+    @Test
+    void activeerAccount_metLegeCode_gooit_IllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> facade.activeerAccount(1, ""));
+        verifyNoInteractions(api);
+    }
+
+    @Test
+    void activeerAccount_metNullCode_gooit_IllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> facade.activeerAccount(1, null));
         verifyNoInteractions(api);
     }
 }

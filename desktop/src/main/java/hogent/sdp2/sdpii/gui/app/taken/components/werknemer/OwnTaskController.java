@@ -1,8 +1,11 @@
 package hogent.sdp2.sdpii.gui.app.taken.components.werknemer;
 
 import domain.auth.Sessie;
+import domain.dto.LocatieDTO;
 import domain.dto.TaakDTO;
+import domain.facades.LocatieFacade;
 import domain.facades.TakenFacade;
+import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.FinishedTaakItem;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.TaakItemController;
 import javafx.fxml.FXML;
@@ -51,11 +54,17 @@ public class OwnTaskController extends BorderPane {
 
     private void toonDetails(TaakDTO taak) {
         geselecteerdeTaak = taak;
-        detail_deadline.setText("Deadline: " + formatDeadline(taak.deadline()));
-        detail_titel.setText(taak.naam());
-        detail_beschrijving.setText(taak.specificaties() != null ? taak.specificaties() : "");
-        if (taak.locatie() != null && !taak.locatie().isBlank()) {
-            detail_locatie.setText(taak.locatie());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        detail_deadline.setText("Deadline: " + taak.deadline().format(formatter));
+        detail_titel.setText(taak.titel());
+        detail_beschrijving.setText(taak.beschrijving() != null ? taak.beschrijving() : "");
+        LocatieDTO gevondenLocatie = taak.siteId() != null
+                ? new LocatieFacade().vindLocatie(taak.siteId())
+                : null;
+        if (gevondenLocatie != null) {
+            detail_locatie.setText(gevondenLocatie.naam());
+            final int siteId = gevondenLocatie.id();
+            detail_locatie.setOnMouseClicked(e -> Router.getInstance().navigeerNaarLocatie(siteId));
             detail_locatie.setVisible(true);
             detail_locatie.setManaged(true);
         } else {
@@ -111,63 +120,36 @@ public class OwnTaskController extends BorderPane {
             zetEditModusUit();
         });
 
-        herlaad();
-    }
-
-    public void herlaad() {
-        new Thread(() -> {
-            List<TaakDTO> taken = takenFacade.geefEigenTaken();
-            javafx.application.Platform.runLater(() -> vulIn(taken));
-        }).start();
-    }
-
-    private void vulIn(List<TaakDTO> taken) {
-        belangrijk_container.getChildren().clear();
-        vandaag_container.getChildren().clear();
-        morgen_container.getChildren().clear();
-        finished_task_container.getChildren().clear();
-        verbergDetails();
-
+        List<TaakDTO> taken = takenFacade.geefEigenTaken();
         LocalDate vandaag = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (TaakDTO taak : taken) {
-            LocalDate deadline = parseDeadline(taak.deadline());
-            String deadlineTekst = "Deadline: " + (deadline != null
-                    ? deadline.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "—");
-            if (!taak.isAfgewerkt()) {
-                TaakItemController item = new TaakItemController(taak.naam(), deadlineTekst);
+            String deadlineTekst = "Deadline: " + taak.deadline().format(formatter);
+            if (taak.afgewerkt().equals("nee")) {
+                TaakItemController item = new TaakItemController(taak.titel(), deadlineTekst);
                 item.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> toonDetails(taak));
                 item.setOnVerwijder(() -> {
                     takenFacade.verwijderTaak(taak.id());
                     VBox parent = (VBox) item.getParent();
-                    if (parent != null) parent.getChildren().remove(item);
+                    parent.getChildren().remove(item);
                 });
                 item.setOnAfgewerkt(() -> {
                     takenFacade.markeerAfgewerkt(taak.id());
                     VBox parent = (VBox) item.getParent();
-                    if (parent != null) parent.getChildren().remove(item);
-                    finished_task_container.getChildren().add(new FinishedTaakItem(taak.naam(), "Afgewerkt op " + deadlineTekst));
+                    parent.getChildren().remove(item);
+                    finished_task_container.getChildren().add(new FinishedTaakItem(taak.titel(), "Afgewerkt op " + deadlineTekst));
                 });
-                if (deadline == null || deadline.isBefore(vandaag)) {
+                if (taak.deadline().isBefore(vandaag)) {
                     belangrijk_container.getChildren().add(item);
-                } else if (deadline.isEqual(vandaag)) {
+                } else if (taak.deadline().isEqual(vandaag)) {
                     vandaag_container.getChildren().add(item);
                 } else {
                     morgen_container.getChildren().add(item);
                 }
             } else {
-                finished_task_container.getChildren().add(new FinishedTaakItem(taak.naam(), "Afgewerkt op " + deadlineTekst));
+                finished_task_container.getChildren().add(new FinishedTaakItem(taak.titel(), "Afgewerkt op " + deadlineTekst));
             }
         }
-    }
-
-    private static LocalDate parseDeadline(String deadline) {
-        if (deadline == null || deadline.length() < 10) return null;
-        try { return LocalDate.parse(deadline.substring(0, 10)); } catch (Exception e) { return null; }
-    }
-
-    private static String formatDeadline(String deadline) {
-        LocalDate d = parseDeadline(deadline);
-        return d != null ? d.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "—";
     }
 }

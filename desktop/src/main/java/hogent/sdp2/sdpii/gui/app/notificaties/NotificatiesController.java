@@ -5,6 +5,7 @@ import domain.auth.Sessie;
 import domain.dto.NotificatieDTO;
 import domain.dto.WerknemerDTO;
 import domain.facades.NotificatieFacade;
+import domain.services.SseListenerService;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -33,6 +34,7 @@ public class NotificatiesController extends BorderPane {
     private List<NotificatieDTO> alleNotificaties;
     private String actieveFilter = "Alles";
     private NotificatieFacade nf;
+    private final Runnable sseListener = this::laadNotificaties;
 
     public NotificatiesController(NotificatieFacade nf) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/notificaties/NotificationsPage.fxml"));
@@ -45,6 +47,13 @@ public class NotificatiesController extends BorderPane {
         }
         this.nf = nf;
         setTop(new PageTitleController("Notificaties"));
+
+        SseListenerService.getInstance().voegListenerToe(sseListener);
+        sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene == null) {
+                SseListenerService.getInstance().verwijderListener(sseListener);
+            }
+        });
     }
 
     @FXML

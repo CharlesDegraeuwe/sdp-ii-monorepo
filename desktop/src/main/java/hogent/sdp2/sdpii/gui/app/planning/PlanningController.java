@@ -2,18 +2,17 @@ package hogent.sdp2.sdpii.gui.app.planning;
 
 import domain.Beheerder;
 import domain.auth.Sessie;
-import domain.dto.*;
-import domain.facades.*;
+import domain.dto.AfwezigheidsOverzichtDTO;
+import domain.dto.WerknemerDTO;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.time.*;
@@ -24,7 +23,6 @@ import java.util.Locale;
 
 public class PlanningController extends BorderPane {
     public static LocalDate startDatumVanuitDashboard = null;
-
     @FXML private Button maandKnop;
     @FXML private Button weekKnop;
     @FXML private Button dagKnop;
@@ -35,23 +33,12 @@ public class PlanningController extends BorderPane {
     @FXML private VBox detailPanel;
     @FXML private Label detailTitel;
     @FXML private VBox detailLijst;
-    @FXML private HBox planningToggleBar;
-    @FXML private Button eigenPlanningKnop;
-    @FXML private Button teamPlanningKnop;
-    @FXML private HBox teamFilterBar;
-    @FXML private ComboBox<LocatieDTO> locatieDropdown;
-    @FXML private ComboBox<TeamDTO> teamDropdown;
-    @FXML private ComboBox<TeamLidDTO> werknemerDropdown;
-
     private VBox geselecteerdeCel;
 
     private enum View { MAAND, WEEK, DAG }
     private View huidigeView = View.MAAND;
     private LocalDate huidigeDatum = LocalDate.now();
     private List<AfwezigheidsOverzichtDTO> afwezigheden = List.of();
-    private List<TaakDTO> taken = List.of();
-    private List<ShiftDTO> shiften = List.of();
-    private int geselecteerdeWerknemerId;
 
     private static final DateTimeFormatter MAAND_FORMAT = DateTimeFormatter.ofPattern("MMMM yyyy", new Locale("nl", "BE"));
     private static final DateTimeFormatter DAG_FORMAT = DateTimeFormatter.ofPattern("d MMMM yyyy", new Locale("nl", "BE"));
@@ -73,123 +60,33 @@ public class PlanningController extends BorderPane {
         if (startDatumVanuitDashboard != null) {
             huidigeDatum = startDatumVanuitDashboard;
             huidigeView = View.MAAND;
+
             Platform.runLater(() -> setToggle(maandKnop));
+
             startDatumVanuitDashboard = null;
         } else {
             huidigeDatum = LocalDate.now();
         }
 
-        geselecteerdeWerknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
-
-        if (Sessie.getInstance().isMangerOrAdmin()) {
-            planningToggleBar.setVisible(true);
-            planningToggleBar.setManaged(true);
-            configureerDropdowns();
-            laadLocaties();
-        }
-
         toonDagDetail(huidigeDatum);
-        laadData(geselecteerdeWerknemerId);
+        laadAfwezigheden();
     }
 
-    private void configureerDropdowns() {
-        locatieDropdown.setConverter(new StringConverter<>() {
-            public String toString(LocatieDTO l) { return l == null ? "" : l.naam(); }
-            public LocatieDTO fromString(String s) { return null; }
-        });
-        teamDropdown.setConverter(new StringConverter<>() {
-            public String toString(TeamDTO t) { return t == null ? "" : t.naam(); }
-            public TeamDTO fromString(String s) { return null; }
-        });
-        werknemerDropdown.setConverter(new StringConverter<>() {
-            public String toString(TeamLidDTO w) { return w == null ? "" : w.voornaam() + " " + w.naam(); }
-            public TeamLidDTO fromString(String s) { return null; }
-        });
+    private void laadAfwezigheden() {
+        WerknemerDTO werknemer = Sessie.getInstance().getIngelogdeWerknemer();
+        if (werknemer == null) return;
 
-        locatieDropdown.valueProperty().addListener((obs, oud, nieuw) -> {
-            if (nieuw == null) return;
-            teamDropdown.setDisable(false);
-            teamDropdown.getItems().clear();
-            werknemerDropdown.getItems().clear();
-            werknemerDropdown.setDisable(true);
-            new Thread(() -> {
-                List<TeamDTO> teams = new TeamFacade().geefTeamsVanSite(nieuw.id());
-                Platform.runLater(() -> teamDropdown.setItems(FXCollections.observableArrayList(teams)));
-            }).start();
-        });
-
-        teamDropdown.valueProperty().addListener((obs, oud, nieuw) -> {
-            if (nieuw == null) return;
-            werknemerDropdown.setDisable(false);
-            werknemerDropdown.getItems().clear();
-            new Thread(() -> {
-                List<TeamLidDTO> leden = new TeamFacade().geefWerknemersVanTeam(nieuw.id());
-                Platform.runLater(() -> werknemerDropdown.setItems(FXCollections.observableArrayList(leden)));
-            }).start();
-        });
-
-        werknemerDropdown.valueProperty().addListener((obs, oud, nieuw) -> {
-            if (nieuw == null) return;
-            geselecteerdeWerknemerId = nieuw.werknemerId();
-            laadData(geselecteerdeWerknemerId);
-        });
-    }
-
-    private void laadLocaties() {
-        new Thread(() -> {
-            List<LocatieDTO> locaties = new LocatieFacade().geefAlleLocaties();
-            Platform.runLater(() -> locatieDropdown.setItems(FXCollections.observableArrayList(locaties)));
-        }).start();
-    }
-
-    @FXML
-    private void toonEigenPlanning() {
-        setTogglePlanning(eigenPlanningKnop);
-        teamFilterBar.setVisible(false);
-        teamFilterBar.setManaged(false);
-        locatieDropdown.setValue(null);
-        teamDropdown.getItems().clear();
-        teamDropdown.setDisable(true);
-        werknemerDropdown.getItems().clear();
-        werknemerDropdown.setDisable(true);
-        geselecteerdeWerknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
-        laadData(geselecteerdeWerknemerId);
-    }
-
-    @FXML
-    private void schakelTeamPlanning() {
-        setTogglePlanning(teamPlanningKnop);
-        teamFilterBar.setVisible(true);
-        teamFilterBar.setManaged(true);
-    }
-
-    private void setTogglePlanning(Button actief) {
-        for (Button b : List.of(eigenPlanningKnop, teamPlanningKnop)) {
-            b.getStyleClass().removeAll("filter-knop", "filter-knop-actief");
-            b.getStyleClass().add(b == actief ? "filter-knop-actief" : "filter-knop");
-        }
-    }
-
-    private void laadData(int werknemerId) {
         LocalDate van = LocalDate.now().minusMonths(3);
         LocalDate tot = LocalDate.now().plusMonths(9);
 
         new Thread(() -> {
             try {
-                List<AfwezigheidsOverzichtDTO> afwData = Beheerder.getInstance()
+                List<AfwezigheidsOverzichtDTO> data = Beheerder.getInstance()
                         .getPlanningFacade()
-                        .geefAfwezighedenVanTeam(werknemerId, van, tot);
-                List<TaakDTO> taakData = Beheerder.getInstance()
-                        .getTakenFacade()
-                        .geefTakenVanWerknemer(werknemerId);
-                List<ShiftDTO> shiftData = Beheerder.getInstance()
-                        .getShiftFacade()
-                        .geefShiftenVanWerknemerBereik(werknemerId, van, tot);
+                        .geefAfwezighedenVanTeam(werknemer.id(), van, tot);
 
                 Platform.runLater(() -> {
-                    this.afwezigheden = afwData;
-                    this.taken = taakData;
-                    this.shiften = shiftData;
+                    this.afwezigheden = data;
                     teken();
                     toonDagDetail(huidigeDatum);
                 });
@@ -281,16 +178,9 @@ public class PlanningController extends BorderPane {
         dagNummer.getStyleClass().add("dag-nummer");
         cel.getChildren().add(dagNummer);
 
-        for (AfwezigheidsOverzichtDTO a : afwezighedenOpDag(datum)) {
+        List<AfwezigheidsOverzichtDTO> opDag = afwezighedenOpDag(datum);
+        for (AfwezigheidsOverzichtDTO a : opDag) {
             cel.getChildren().add(maakBadge(a));
-        }
-
-        for (TaakDTO taak : takenOpDag(datum)) {
-            Label badge = new Label(taak.naam());
-            badge.getStyleClass().add("badge-taak");
-            badge.setMaxWidth(Double.MAX_VALUE);
-            badge.setWrapText(false);
-            cel.getChildren().add(badge);
         }
 
         cel.setOnMouseClicked(e -> {
@@ -336,19 +226,14 @@ public class PlanningController extends BorderPane {
         header.getStyleClass().add(datum.equals(LocalDate.now()) ? "week-dag-header-vandaag" : "week-dag-header");
         kolom.getChildren().add(header);
 
-        List<AfwezigheidsOverzichtDTO> afwOpDag = afwezighedenOpDag(datum);
-        List<TaakDTO> takenOpDag = takenOpDag(datum);
-
-        if (afwOpDag.isEmpty() && takenOpDag.isEmpty()) {
+        List<AfwezigheidsOverzichtDTO> opDag = afwezighedenOpDag(datum);
+        if (opDag.isEmpty()) {
             Label leeg = new Label("–");
             leeg.getStyleClass().add("week-leeg");
             kolom.getChildren().add(leeg);
         } else {
-            for (AfwezigheidsOverzichtDTO a : afwOpDag) {
+            for (AfwezigheidsOverzichtDTO a : opDag) {
                 kolom.getChildren().add(maakWeekKaart(a));
-            }
-            for (TaakDTO taak : takenOpDag) {
-                kolom.getChildren().add(maakWeekTaakKaart(taak));
             }
         }
 
@@ -374,18 +259,6 @@ public class PlanningController extends BorderPane {
         return kaart;
     }
 
-    private VBox maakWeekTaakKaart(TaakDTO taak) {
-        VBox kaart = new VBox(2);
-        kaart.getStyleClass().add("week-kaart-taak");
-        kaart.setPadding(new Insets(6, 8, 6, 8));
-        Label naam = new Label(taak.naam());
-        naam.getStyleClass().add("week-kaart-naam");
-        Label type = new Label("Taak");
-        type.getStyleClass().add("week-kaart-type");
-        kaart.getChildren().addAll(naam, type);
-        return kaart;
-    }
-
     // ─── DAG VIEW ────────────────────────────────────────────────────────────────
 
     private void tekenDag() {
@@ -393,59 +266,23 @@ public class PlanningController extends BorderPane {
 
         periodeLabel.setText(huidigeDatum.format(DAG_FORMAT));
 
+        List<AfwezigheidsOverzichtDTO> opDag = afwezighedenOpDag(huidigeDatum);
+
         VBox dagView = new VBox(10);
         dagView.setPadding(new Insets(10));
         dagView.getStyleClass().add("dag-view");
 
-        List<ShiftDTO> shiftenOpDag = shiftenOpDag(huidigeDatum);
-        if (!shiftenOpDag.isEmpty()) {
-            Label titel = new Label("Shift");
-            titel.getStyleClass().add("dag-sectie-titel");
-            dagView.getChildren().add(titel);
-            for (ShiftDTO shift : shiftenOpDag) {
-                dagView.getChildren().add(maakShiftKaart(shift));
-            }
-        }
-
-        List<AfwezigheidsOverzichtDTO> opDag = afwezighedenOpDag(huidigeDatum);
-        if (!opDag.isEmpty()) {
-            Label titel = new Label("Afwezigheden");
-            titel.getStyleClass().add("dag-sectie-titel");
-            dagView.getChildren().add(titel);
+        if (opDag.isEmpty()) {
+            Label leeg = new Label("Geen afwezigheden op deze dag.");
+            leeg.getStyleClass().add("leeg-label");
+            dagView.getChildren().add(leeg);
+        } else {
             for (AfwezigheidsOverzichtDTO a : opDag) {
                 dagView.getChildren().add(maakDetailRij(a));
             }
         }
 
-        if (shiftenOpDag.isEmpty() && opDag.isEmpty()) {
-            Label leeg = new Label("Geen planning op deze dag.");
-            leeg.getStyleClass().add("leeg-label");
-            dagView.getChildren().add(leeg);
-        }
-
         kalenderContainer.getChildren().add(dagView);
-    }
-
-    private HBox maakShiftKaart(ShiftDTO shift) {
-        HBox kaart = new HBox(12);
-        kaart.getStyleClass().add("shift-item");
-        kaart.setAlignment(Pos.CENTER_LEFT);
-
-        VBox info = new VBox(2);
-        HBox.setHgrow(info, Priority.ALWAYS);
-
-        Label tijd = new Label(shift.startTijd() + " – " + shift.eindTijd());
-        tijd.getStyleClass().add("shift-tijd");
-        info.getChildren().add(tijd);
-
-        if (shift.pauzeStart() != null && shift.pauzeEind() != null) {
-            Label pauze = new Label("Pauze: " + shift.pauzeStart() + " – " + shift.pauzeEind());
-            pauze.getStyleClass().add("shift-locatie");
-            info.getChildren().add(pauze);
-        }
-
-        kaart.getChildren().add(info);
-        return kaart;
     }
 
     // ─── DAG DETAIL ──────────────────────────────────────────────────────────────
@@ -506,27 +343,6 @@ public class PlanningController extends BorderPane {
     private List<AfwezigheidsOverzichtDTO> afwezighedenOpDag(LocalDate datum) {
         return afwezigheden.stream()
                 .filter(a -> !datum.isBefore(a.startDatum()) && !datum.isAfter(a.eindDatum()))
-                .toList();
-    }
-
-    private List<TaakDTO> takenOpDag(LocalDate datum) {
-        return taken.stream()
-                .filter(t -> {
-                    if (t.deadline() == null || t.deadline().isBlank()) return false;
-                    try {
-                        LocalDate dl = LocalDate.parse(t.deadline().substring(0, 10));
-                        return dl.equals(datum);
-                    } catch (Exception e) {
-                        return false;
-                    }
-                })
-                .toList();
-    }
-
-    private List<ShiftDTO> shiftenOpDag(LocalDate datum) {
-        return shiften.stream()
-                .filter(s -> s.startDatum() != null && s.eindDatum() != null
-                        && !datum.isBefore(s.startDatum()) && !datum.isAfter(s.eindDatum()))
                 .toList();
     }
 

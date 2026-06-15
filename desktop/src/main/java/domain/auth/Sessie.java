@@ -1,12 +1,16 @@
 package domain.auth;
 
 import domain.dto.WerknemerDTO;
+import domain.services.SseListenerService;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Sessie {
 
     private WerknemerDTO ingelogdeWerknemer;
+    @Setter
+    @Getter
+    private String sessionId;
     @Setter
     @Getter
     private String jwtToken;
@@ -27,24 +31,26 @@ public class Sessie {
     }
 
     public void uitloggen() {
+        SseListenerService.getInstance().stop();
         this.ingelogdeWerknemer = null;
         this.jwtToken = null;
+        this.sessionId = null;
     }
 
     public boolean isAdmin() {
-        return ingelogdeWerknemer != null && userRole().equalsIgnoreCase("Admin");
+        return ingelogdeWerknemer != null && userRole().equals("Admin");
     }
 
     public boolean isMangerOrAdmin() {
-        return userRole().equalsIgnoreCase("Manager") || userRole().equalsIgnoreCase("Admin");
+        return userRole().equals("Manager") || userRole().equals("Admin");
     }
 
     public boolean isSuperVisor() {
-        return userRole().equalsIgnoreCase("Supervisor");
+        return userRole().equals("Supervisor");
     }
 
     public boolean isWerknemer() {
-        return userRole().equalsIgnoreCase("Werknemer");
+        return userRole().equals("Werknemer");
     }
 
     public String userRole() {

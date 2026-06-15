@@ -10,9 +10,10 @@
     <padding><Insets top="4" right="4" bottom="4" left="4"/></padding>
 
     <HBox styleClass="taak_container" spacing="10" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-        <padding><Insets top="8" right="12" bottom="8" left="10"/></padding>
+        <padding><Insets top="8" right="20" bottom="8" left="10"/></padding>
         <CheckBox fx:id="taak_checkbox" styleClass="taak_checkbox"/>
-        <Label fx:id="title" HBox.hgrow="ALWAYS" styleClass="taak_title" wrapText="true"/>
+        <Label fx:id="title" maxWidth="130" styleClass="taak_title"/>
+        <Region HBox.hgrow="ALWAYS"/>
         <Label fx:id="datum" styleClass="taak_datum"/>
     </HBox>
 

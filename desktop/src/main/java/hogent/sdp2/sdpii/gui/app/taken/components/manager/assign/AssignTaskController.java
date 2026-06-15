@@ -7,7 +7,6 @@ import domain.facades.TakenFacade;
 import domain.facades.TeamFacade;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.AssignMemberItemController;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.AssignTaakItemController;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -33,8 +32,7 @@ public class AssignTaskController extends BorderPane {
 
     private TaakDTO geselecteerdeTaak;
     private TeamLidDTO geselecteerdeLid;
-    private List<TaakDTO> alleTaken = new java.util.ArrayList<>();
-    private TakenFacade takenFacade;
+    private List<TaakDTO> alleTaken;
 
     private final TeamFacade teamFacade = new TeamFacade();
 
@@ -53,7 +51,6 @@ public class AssignTaskController extends BorderPane {
     }
 
     public void Init(TakenFacade takenFacade) {
-        this.takenFacade = takenFacade;
         boolean isSupervisor = Sessie.getInstance().isSuperVisor();
         if (isSupervisor) {
             Locatie.setVisible(false); Locatie.setManaged(false);
@@ -61,8 +58,10 @@ public class AssignTaskController extends BorderPane {
             teamListContainer.setVisible(false); teamListContainer.setManaged(false);
         }
 
+        alleTaken = takenFacade.geefAlleTaken();
+        vulTaakList();
+
         toonToegewezenCheckbox.setOnAction(e -> vulTaakList());
-        laadTaken();
 
         setConverter(Locatie, l -> l.naam());
         setConverter(Team, t -> t.naam());
@@ -112,60 +111,33 @@ public class AssignTaskController extends BorderPane {
                 assignButton.setText("Selecteer eerst een taak en medewerker");
                 return;
             }
-            assignButton.setDisable(true);
-            int taakId = geselecteerdeTaak.id();
-            int werknemerId = geselecteerdeLid.werknemerId();
-            new Thread(() -> {
-                try {
-                    String resultaat = takenFacade.wijsTaakToe(taakId, werknemerId);
-                    Platform.runLater(() -> {
-                        assignButton.setDisable(false);
-                        assignButton.setText(resultaat);
-                        geselecteerdeTaak = null;
-                        geselecteerdeLid = null;
-                        taskListContainer.getChildren().forEach(n -> n.setStyle(""));
-                        memberListContainer.getChildren().forEach(n -> n.setStyle(""));
-                        laadTaken();
-                    });
-                } catch (Exception ex) {
-                    Platform.runLater(() -> {
-                        assignButton.setDisable(false);
-                        assignButton.setText("Fout: " + ex.getMessage());
-                    });
-                }
-            }).start();
-        });
-    }
-
-    public void herlaad() {
-        laadTaken();
-    }
-
-    private void laadTaken() {
-        new Thread(() -> {
             try {
-                List<TaakDTO> geladen = takenFacade.geefAlleTaken();
-                Platform.runLater(() -> {
-                    alleTaken = geladen;
-                    vulTaakList();
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
+                String resultaat = takenFacade.wijsTaakToe(geselecteerdeTaak.id(), geselecteerdeLid.werknemerId());
+                assignButton.setText(resultaat);
+                geselecteerdeTaak = null;
+                geselecteerdeLid = null;
+                taskListContainer.getChildren().forEach(n -> n.setStyle(""));
+                memberListContainer.getChildren().forEach(n -> n.setStyle(""));
+                alleTaken = takenFacade.geefAlleTaken();
+                vulTaakList();
+            } catch (Exception ex) {
+                assignButton.setText("Fout: " + ex.getMessage());
             }
-        }).start();
+        });
     }
 
     private void vulTaakList() {
         taskListContainer.getChildren().clear();
         geselecteerdeTaak = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         boolean toonAlles = toonToegewezenCheckbox.isSelected();
 
         for (TaakDTO taak : alleTaken) {
-            if (taak.isAfgewerkt()) continue;
-            if (!toonAlles && taak.werknemerId() != null) continue;
+            if (taak.afgewerkt().equals("ja")) continue;
+            if (!toonAlles && taak.werknemer() != null) continue;
 
-            String deadlineTekst = "Deadline: " + formatDeadline(taak.deadline());
-            AssignTaakItemController item = new AssignTaakItemController(taak.naam(), deadlineTekst);
+            String deadlineTekst = "Deadline: " + taak.deadline().format(formatter);
+            AssignTaakItemController item = new AssignTaakItemController(taak.titel(), deadlineTekst);
             item.setOnMouseClicked(e -> {
                 taskListContainer.getChildren().forEach(n -> n.setStyle(""));
                 item.setStyle(SELECTED_STYLE);
@@ -173,16 +145,6 @@ public class AssignTaskController extends BorderPane {
             });
             taskListContainer.getChildren().add(item);
         }
-    }
-
-    private static java.time.LocalDate parseDeadline(String deadline) {
-        if (deadline == null || deadline.length() < 10) return null;
-        try { return java.time.LocalDate.parse(deadline.substring(0, 10)); } catch (Exception e) { return null; }
-    }
-
-    private static String formatDeadline(String deadline) {
-        java.time.LocalDate d = parseDeadline(deadline);
-        return d != null ? d.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "—";
     }
 
     private void vulMemberList(List<TeamLidDTO> werknemers) {

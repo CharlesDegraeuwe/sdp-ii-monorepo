@@ -3,28 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<fx:root type="VBox" spacing="8" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="VBox" fx:id="container" spacing="10" xmlns:fx="http://javafx.com/fxml">
     <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
-
-    <HBox spacing="6" alignment="CENTER_LEFT">
-        <FontIcon iconLiteral="mdal-location_on" iconSize="15" styleClass="locatie_icon"/>
-        <Label text="Delaware Consulting" styleClass="locatie_header"/>
+    <TableView fx:id="locatieTable" styleClass="locatie_table" fixedCellSize="40">
+        <columns>
+            <TableColumn fx:id="colNaam" text="naam:" prefWidth="120"/>
+            <TableColumn fx:id="colLocatie" text="locatie:" prefWidth="150"/>
+            <TableColumn fx:id="colStatus" text="status:" prefWidth="100"/>
+            <TableColumn fx:id="colStats" text="snelle stats:" prefWidth="160"/>
+        </columns>
+    </TableView>
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="meer" fx:id="see_more" styleClass="see_more_button"/>
     </HBox>
-
-    <VBox spacing="6" VBox.vgrow="ALWAYS">
-        <HBox styleClass="locatie_rij" spacing="8" alignment="CENTER_LEFT">
-            <Label text="Hoofdkantoor" styleClass="locatie_sleutel"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Gent, België" styleClass="locatie_waarde"/>
-        </HBox>
-        <HBox styleClass="locatie_rij" spacing="8" alignment="CENTER_LEFT">
-            <Label text="Teamleden op locatie" styleClass="locatie_sleutel"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label text="—" styleClass="locatie_waarde"/>
-        </HBox>
-    </VBox>
-
-    <Button fx:id="btnKaart" text="Bekijk kaart" maxWidth="Infinity" styleClass="locatie_kaart_btn"/>
 </fx:root>

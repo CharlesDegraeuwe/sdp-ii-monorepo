@@ -1,7 +1,6 @@
 package domain.facades;
 
 import domain.dto.*;
-import domain.services.LogService;
 import domain.services.TeamApiService;
 
 import java.util.List;
@@ -39,9 +38,7 @@ public class TeamFacade {
     }
 
     public List<WerknemerDTO> voegLidToe(int teamId, int werknemerId) {
-        List<WerknemerDTO> result = api.voegLidToe(teamId, werknemerId);
-        LogService.log("UPDATE", "teams", "Lid toegevoegd – teamId: " + teamId + ", werknemerId: " + werknemerId);
-        return result;
+        return api.voegLidToe(teamId, werknemerId);
     }
 
     public List<SiteDTO> getAlleSites() {
@@ -70,9 +67,7 @@ public class TeamFacade {
         if (aantalSupervisors > 1) {
             throw new IllegalArgumentException("Een team mag maximaal één supervisor hebben.");
         }
-        TeamDTO team = api.maakTeam(dto);
-        LogService.log("CREATE", "teams", "Team aangemaakt – naam: " + dto.naam());
-        return team;
+        return api.maakTeam(dto);
     }
 
     public List<TeamDTO> getTeamsVanWerknemer(int werknemerId) {
@@ -81,16 +76,13 @@ public class TeamFacade {
 
     public void verwijderLid(int teamId, int werknemerId) {
         api.verwijderLid(teamId, werknemerId);
-        LogService.log("DELETE", "teams", "Lid verwijderd – teamId: " + teamId + ", werknemerId: " + werknemerId);
     }
 
     public void verwijderTeam(int teamId) {
         api.verwijderTeam(teamId);
-        LogService.log("DELETE", "teams", "Team verwijderd – teamId: " + teamId);
     }
 
     public void maakSupervisor(int teamId, int werknemerId) {
         api.maakSupervisor(teamId, werknemerId);
-        LogService.log("UPDATE", "teams", "Supervisor aangesteld – teamId: " + teamId + ", werknemerId: " + werknemerId);
     }
 }

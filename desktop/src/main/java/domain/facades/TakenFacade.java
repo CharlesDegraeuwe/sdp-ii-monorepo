@@ -16,10 +16,6 @@ public class TakenFacade {
         return api.geefTakenVanWerknemer(werknemerId);
     }
 
-    public List<TaakDTO> geefTakenVanWerknemer(int werknemerId) {
-        return api.geefTakenVanWerknemer(werknemerId);
-    }
-
     public List<TaakDTO> geefAlleTaken() {
         return api.geefAlleTaken();
     }
@@ -30,11 +26,11 @@ public class TakenFacade {
         return result;
     }
 
-    public String maakTaakAan(String naam, String specificaties, LocalDate deadline, int siteId) {
-        if (naam == null || naam.isBlank())
-            throw new IllegalArgumentException("Naam is verplicht.");
-        if (specificaties == null || specificaties.isBlank())
-            throw new IllegalArgumentException("Specificaties zijn verplicht.");
+    public String maakTaakAan(String titel, String beschrijving, LocalDate deadline, int siteId) {
+        if (titel == null || titel.isBlank())
+            throw new IllegalArgumentException("Titel is verplicht.");
+        if (beschrijving == null || beschrijving.isBlank())
+            throw new IllegalArgumentException("Beschrijving is verplicht.");
         if (deadline == null)
             throw new IllegalArgumentException("Deadline is verplicht.");
         if (deadline.isBefore(LocalDate.now()))
@@ -42,8 +38,9 @@ public class TakenFacade {
         if (siteId <= 0)
             throw new IllegalArgumentException("Selecteer een geldige locatie.");
 
-        String result = api.maakTaakAan(naam, specificaties, deadline, siteId);
-        LogService.log("CREATE", "taken", "Taak aangemaakt – naam: " + naam + ", deadline: " + deadline);
+        int werknemerId = Sessie.getInstance().getIngelogdeWerknemer().id();
+        String result = api.maakTaakAan(werknemerId, titel, beschrijving, deadline, siteId);
+        LogService.log("CREATE", "taken", "Taak aangemaakt – titel: " + titel + ", deadline: " + deadline);
         return result;
     }
 

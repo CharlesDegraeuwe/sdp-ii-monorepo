@@ -2,7 +2,6 @@ package domain.facades;
 
 import domain.dto.UpdateWerknemerDTO;
 import domain.dto.WerknemerDTO;
-import domain.services.LogService;
 import domain.services.WerknemersApiService;
 
 import java.time.LocalDate;
@@ -42,13 +41,10 @@ public class WerknemersFacade {
 
     public void update(UpdateWerknemerDTO werknemer) {
         api.update(werknemer);
-        LogService.log("UPDATE", "werknemers", "Werknemer gewijzigd – id: " + werknemer.id() + ", email: " + werknemer.email());
     }
 
     public boolean veranderStatus(int werknemerId, String actie) {
-        boolean result = api.veranderStatus(werknemerId, actie);
-        if (result) LogService.log("UPDATE", "werknemers", "Status gewijzigd – werknemerId: " + werknemerId + ", actie: " + actie);
-        return result;
+        return api.veranderStatus(werknemerId, actie);
     }
 
     /**
@@ -99,8 +95,6 @@ public class WerknemersFacade {
         if (rol == null || rol.isBlank())
             throw new IllegalArgumentException("Selecteer een rol.");
 
-        boolean result = api.registreerWerknemer(naam, voornaam, email, telefoon, geboortedatum, rol);
-        if (result) LogService.log("CREATE", "werknemers", "Werknemer geregistreerd – email: " + email + ", rol: " + rol);
-        return result;
+        return api.registreerWerknemer(naam, voornaam, email, telefoon, geboortedatum, rol);
     }
 }

@@ -444,9 +444,3 @@
     -fx-font-size: 10px;
     -fx-text-fill: #858585;
 }
-
-.taak_title {
-    -fx-font-size: 12px;
-    -fx-text-fill: #2c3e50;
-    -fx-font-weight: bold;
-}
