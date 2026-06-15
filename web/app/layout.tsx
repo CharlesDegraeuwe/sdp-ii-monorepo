@@ -2,10 +2,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import SessionProvider from '@/providers/SessionProvider';
 import { UserProvider } from '@/providers/UserProvider';
-import { ToastProvider } from '@/providers/ToastProvider';
-import { SplashProvider } from '@/providers/SplashProvider';
-import { SettingsProvider } from '@/providers/SettingsProvider';
-import { ReactQueryProvider } from '@/providers/ReactQueryProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,18 +23,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="relative flex flex-col h-screen w-screen overflow-x-hidden">
-        <SettingsProvider>
-          <SessionProvider>
-            <ReactQueryProvider>
-              <UserProvider>
-                <SplashProvider>
-                  <ToastProvider>{children}</ToastProvider>
-                </SplashProvider>
-              </UserProvider>
-            </ReactQueryProvider>
-          </SessionProvider>
-        </SettingsProvider>
+      <body className="flex flex-col h-screen w-screen">
+        <SessionProvider>
+          <UserProvider>{children}</UserProvider>
+        </SessionProvider>
       </body>
     </html>
   );

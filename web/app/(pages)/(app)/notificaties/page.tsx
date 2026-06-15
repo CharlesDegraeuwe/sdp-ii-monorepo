@@ -2,19 +2,12 @@
 
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { AppContainer } from '@/components/design-system/AppContainer';
-import { PageContainer } from '@/components/design-system/PageContainer';
-import BreadcrumbInit from '@/components/overig/structuur/breadcrumb/BreadCrumbInit';
-import { TabSwitcher } from '@/components/design-system/TabSwitcher/TabSwitcher';
+import PageHeader from '@/components/design system/PageHeader/PageHeader';
+import { AppContainer } from '@/components/design system/AppContainer';
+import { PageContainer } from '@/components/design system/PageContainer';
+import BreadcrumbInit from '@/components/app/structuur/breadcrumb/BreadCrumbInit';
 
 type Filter = 'Alles' | 'Werk' | 'Afwezigheid' | 'Verlof';
-
-const tabs: { key: Filter; label: string }[] = [
-  { key: 'Alles', label: 'Overzicht' },
-  { key: 'Werk', label: 'Werk' },
-  { key: 'Afwezigheid', label: 'Afwezigheden' },
-  { key: 'Verlof', label: 'Verlof' },
-];
 
 interface Notificatie {
   id: number;
@@ -188,6 +181,7 @@ export default function NotificatiesPage() {
 
   const alle = gefilterd();
   const ongelezen = alle.filter((n) => n.gelezen === 'Nee');
+  const filters: Filter[] = ['Alles', 'Werk', 'Afwezigheid', 'Verlof'];
 
   return (
     <PageContainer className="h-full">
@@ -195,13 +189,17 @@ export default function NotificatiesPage() {
         <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
           <BreadcrumbInit pages={['notificaties']} />
           <div className="flex justify-center">
-            <TabSwitcher
-              tabs={tabs}
-              value={filter}
-              onChange={(key) => {
-                setFilter(key as Filter);
-              }}
-            />
+            <div className="flex gap-1 bg-gray-300/30 border border-gray-300/30 rounded-full p-1 shadow-sm">
+              {filters.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${filter === f ? 'bg-zinc-900 text-white shadow' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200/50'}`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Ongelezen */}

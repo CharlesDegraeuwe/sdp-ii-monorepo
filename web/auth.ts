@@ -4,7 +4,6 @@ import NextAuth from 'next-auth';
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
-      id: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
         code: { label: 'Code', type: 'text' },
@@ -18,48 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 email: credentials?.email,
-                token: credentials?.code,
-              }),
-            },
-          );
-
-          if (!loginResponse.ok) return null;
-
-          const data = await loginResponse.json();
-
-          return {
-            id: String(data.werknemer.id),
-            email: data.werknemer.email,
-            naam: data.werknemer.naam,
-            voornaam: data.werknemer.voornaam,
-            telefoonnummer: data.werknemer.telefoonnummer,
-            geboortedatum: data.werknemer.geboortedatum,
-            rol: data.werknemer.rol,
-            status: data.werknemer.status,
-            accessToken: data.token,
-          };
-        } catch (error) {
-          console.error('Auth error:', error);
-          return null;
-        }
-      },
-    }),
-    Credentials({
-      id: 'password',
-      credentials: {
-        email: { label: 'Email', type: 'email' },
-        wachtwoord: { label: 'Wachtwoord', type: 'password' },
-      },
-      authorize: async (credentials) => {
-        try {
-          const loginResponse = await fetch(
-            `${process.env.AUTH_API_URL}/werknemers/login-password`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                email: credentials?.email,
-                wachtwoord: credentials?.wachtwoord,
+                token: credentials?.code, // backend verwacht "token", niet "code"
               }),
             },
           );
@@ -100,7 +58,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: async ({ auth, request }) => {
       const { pathname } = request.nextUrl;
       const isLoggedIn = !!auth;
-      const userRole = (auth as { user?: { rol?: string } } | null)?.user?.rol;
       const authRoutes = ['/login', '/activeer'];
       const publicRoutes = ['/login', '/activeer', '/'];
 
@@ -119,34 +76,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (!isPublicRoute && !isLoggedIn) return false;
 
-      if (isLoggedIn) {
-        // Admin-only routes
-        if (pathname.startsWith('/admin') && userRole !== 'Admin') {
-          return Response.redirect(new URL('/overzicht', request.url));
-        }
-
-        // Routes for Admin, Manager, Supervisor (not Werknemer)
-        const elevatedRoutes = ['/locaties', '/teams'];
-        const isElevatedRoute = elevatedRoutes.some((r) =>
-          pathname.startsWith(r),
-        );
-        if (
-          isElevatedRoute &&
-          !['Admin', 'Manager', 'Supervisor'].includes(userRole ?? '')
-        ) {
-          return Response.redirect(new URL('/overzicht', request.url));
-        }
-      }
-
       return true;
     },
 
     jwt: async ({ token, user, account }) => {
-      if (
-        user &&
-        (account?.provider === 'credentials' ||
-          account?.provider === 'password')
-      ) {
+      if (user && account?.provider === 'credentials') {
         token.accessToken = user.accessToken;
         token.user = {
           id: user.id!,

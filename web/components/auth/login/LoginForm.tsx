@@ -1,58 +1,115 @@
 'use client';
-import EmailForm from '@/components/auth/login/EmailForm';
-import { Suspense, useState } from 'react';
-import PasswordForm from '@/components/auth/login/PasswordForm';
-import Button from '../../design-system/Button/Button';
-import { Label } from '@/components/design-system/Label';
-import ForgotPasswordForm from '@/components/auth/login/ForgotPasswordForm';
-import { IoArrowBack } from 'react-icons/io5';
+import FormHelper from '@/components/design system/Form/FormHelper';
+import { Input } from '@/components/design system/Input';
+import { Button } from '@/components/design system/Button';
+import { useState } from 'react';
+import { getSession, signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { FaArrowRight } from 'react-icons/fa';
+import { AnimateOnMount } from '@/components/design system/AnimateOnMount';
+
+interface Errors {
+  email: string;
+  password: string;
+}
+
+const initialErrors = {
+  email: '',
+  password: '',
+};
 
 const LoginForm = () => {
-  const date = new Date();
-  const [emailForm, setEmailForm] = useState<boolean>(true);
-  const [forgotForm, setForgotForm] = useState<boolean>(false);
+  const [email, setEmail] = useState('');
+  const [submittedEmail, setSubmittedEmail] = useState(false);
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Errors>(initialErrors);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || `/overzicht`;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors(initialErrors);
+    setLoading(true);
+
+    if (!submittedEmail) {
+      try {
+        const res = await fetch('/api/auth/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!res.ok) {
+          setErrors({ email: 'Email niet gevonden', password: '' });
+          setLoading(false);
+          return;
+        }
+
+        setSubmittedEmail(true);
+        setLoading(false);
+      } catch {
+        setErrors({ email: 'Er ging iets mis', password: '' });
+        setLoading(false);
+      }
+    } else {
+      try {
+        const result = await signIn('credentials', {
+          email,
+          code: password,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          setErrors({ email: '', password: 'Ongeldige code' });
+          setLoading(false);
+        } else {
+          const session = await getSession();
+          if (session?.user?.status !== 'Actief') {
+            router.push('/activeer');
+            return;
+          }
+          router.push(callbackUrl);
+        }
+      } catch {
+        setErrors({ email: '', password: 'Er ging iets mis' });
+        setLoading(false);
+      }
+    }
+  };
 
   return (
-    <div
-      className={
-        'relative max-w-[50rem] w-full sm:w-4/5 md:w-3/5 lg:w-1/2 gap-5 p-8 sm:p-10 lg:p-40 min-h-fit sm:h-full shadow-2xl flex-col flex items-center rounded-4xl bg-white justify-center mt-16 sm:mt-0'
-      }
-    >
-      <div className={'w-fit h-fit absolute top-5 right-5'}>
-        {!emailForm && (
-          <Button
-            onClick={() => setForgotForm((prev) => !prev)}
-            label={forgotForm ? 'Terug' : 'Wachtwoord vergeten'}
-            variant={'outline'}
-            size={'sm'}
-            iconLeft={forgotForm && <IoArrowBack />}
-          />
-        )}
-      </div>
-      <div className={'flex flex-col gap-3'}>
-        <Label
-          text={forgotForm ? 'Wachtwoord vergeten' : 'Log in op je account'}
-          variant={'title'}
-        />
-      </div>
-      <Suspense fallback={<div>Laden...</div>}>
-        {forgotForm ? (
-          <ForgotPasswordForm setForgotForm={setForgotForm} />
-        ) : emailForm ? (
-          <EmailForm setTab={setEmailForm} />
-        ) : (
-          <PasswordForm setTab={setEmailForm} />
-        )}
-      </Suspense>
+    <FormHelper onSubmit={handleSubmit}>
+      <Input
+        type="text"
+        placeholder="email..."
+        error={errors.email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-      <span
-        className={
-          'absolute bottom-10 left-1/2 text-sm opacity-50 -translate-1/2'
-        }
-      >
-        copyright {date.getFullYear()} • alle rechten voorbehouden
-      </span>
-    </div>
+      {submittedEmail && (
+        <AnimateOnMount>
+          <Input
+            type="text"
+            placeholder="verificatiecode..."
+            error={errors.password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </AnimateOnMount>
+      )}
+
+      <Button
+        color={'delaware_red'}
+        textColor={'white'}
+        type="submit"
+        label={submittedEmail ? 'Login' : 'Verdergaan'}
+        iconRight={<FaArrowRight />}
+        loading={loading}
+      />
+    </FormHelper>
   );
 };
 

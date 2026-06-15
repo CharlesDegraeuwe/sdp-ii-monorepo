@@ -30,11 +30,6 @@ export interface Machine {
 export interface Team {
   id: number;
   naam: string;
-  beschrijving: string;
-  managerId: number;
-  managerNaam: string;
-  siteId: number;
-  siteNaam: string;
 }
 
 export interface Site {
