@@ -6,6 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="BorderPane" styleClass="login_body" xmlns:fx="http://javafx.com/fxml">
-
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="page">
+    <children>
+        <Label text="planning page"/>
+    </children>
 </fx:root>

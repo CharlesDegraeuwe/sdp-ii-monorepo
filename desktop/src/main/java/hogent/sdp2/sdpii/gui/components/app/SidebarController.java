@@ -47,12 +47,13 @@ public class SidebarController extends VBox {
             loader.load();
 
             initSchermItems();
-            switch(Sessie.getInstance().userRole().toLowerCase()) {
-                case "admin"      -> showAdminOnly();
-                case "supervisor" -> showSupervisorOnly();
-                case "werknemer"  -> showEmployeeOnly();
-                case "manager"    -> showManagerOnly();
-                default           -> showEmployeeOnly();
+            System.out.println(Sessie.getInstance().userRole());
+            switch(Sessie.getInstance().userRole()) {
+
+                case "Admin" -> showAdminOnly();
+                case "Supervisor" -> showSupervisorOnly();
+                case "Werknemer" -> showEmployeeOnly();
+                case "Manager" -> showManagerOnly();
             }
 
         } catch (IOException e) {
@@ -72,7 +73,7 @@ public class SidebarController extends VBox {
         schermItems.put(Scherm.PLANNING, planning);
         schermItems.put(Scherm.TAKEN, tasks);
         schermItems.put(Scherm.LOCATIES, plants);
-        schermItems.put(Scherm.ZIEKTE, absense);
+        schermItems.put(Scherm.AFWEZIGHEID, absense);
         schermItems.put(Scherm.TEAMS, teams);
         schermItems.put(Scherm.ADMIN_HOME, admin);
     }
@@ -98,7 +99,7 @@ public class SidebarController extends VBox {
         planning.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.PLANNING));
         tasks.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TAKEN));
         plants.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.LOCATIES));
-        absense.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.ZIEKTE));
+        absense.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.AFWEZIGHEID));
         teams.setOnMouseClicked(e -> Router.getInstance().navigeerNaar(Scherm.TEAMS));
 
         if (admin != null) {
@@ -123,7 +124,7 @@ public class SidebarController extends VBox {
     }
 
     private void showEmployeeOnly() {
-        configureVisibility(Set.of(dashboard, planning, tasks, absense, teams));
+        configureVisibility(Set.of(dashboard, planning, tasks, absense));
         setActive(dashboard);
     }
 

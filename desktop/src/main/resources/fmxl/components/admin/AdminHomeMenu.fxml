@@ -12,17 +12,17 @@
         <Label mouseTransparent="true" fx:id="welcome_msg"/>
     </HBox>
     <HBox styleClass="popup-item" fx:id="rgstr_mngr">
-        <Label text="Registreer manager" mouseTransparent="true"/>
+        <Label text="Register a manager" mouseTransparent="true"/>
         <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
         <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
     </HBox>
     <HBox styleClass="popup-item" fx:id="rgstr_emp">
-        <Label text="Registreer medewerker" mouseTransparent="true"/>
+        <Label text="Register an employee" mouseTransparent="true"/>
         <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
         <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
     </HBox>
     <HBox styleClass="popup-item" fx:id="mng_usr">
-        <Label text="Beheer gebruikers" mouseTransparent="true"/>
+        <Label text="Manage users" mouseTransparent="true"/>
         <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
         <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
     </HBox>

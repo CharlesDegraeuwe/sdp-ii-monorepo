@@ -1,81 +1,53 @@
 package domain;
 
-import domain.auth.Sessie;
 import domain.facades.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+//voeg hier telkens gewoon getters vr facades toe
+//vergeet ze wel ni aan te maken in de constructor!!!
+
 public class Beheerder {
 
-    private static class BeheerderHolder {
-        private static final Beheerder INSTANCE = new Beheerder();
-    }
+    private static Beheerder instance;
+
+    //alle facades
+    @Getter private AfwezigheidFacade afwezigheidFacade;
+    @Getter private ChathistorieFacade chathistorieFacade;
+    @Getter private MachineFacade machineFacade;
+    @Getter private NotificatieFacade notificatieFacade;
+    @Getter private ShiftFacade shiftFacade;
+    @Getter private SiteFacade siteFacade;
+    @Getter private TakenFacade takenFacade;
+    @Getter private TeamFacade teamFacade;
+    @Getter private TeamKpiFacade teamKpiFacade;
+    @Getter private VerlofFacade verlofFacade;
+    @Getter private WerknemersFacade werknemersFacade;
+    @Getter private AuthFacade authFacade;
+
 
     private Beheerder() {
+        this.afwezigheidFacade = new AfwezigheidFacade();
+        this.chathistorieFacade = new ChathistorieFacade();
+        this.machineFacade = new MachineFacade();
+        this.notificatieFacade = new NotificatieFacade();
+        this.shiftFacade = new ShiftFacade();
+        this.siteFacade = new SiteFacade();
+        this.takenFacade = new TakenFacade();
+        this.teamFacade = new TeamFacade();
+        this.teamKpiFacade = new TeamKpiFacade();
+        this.verlofFacade = new VerlofFacade();
+        this.werknemersFacade = new WerknemersFacade();
+        this.authFacade = new AuthFacade();
     }
 
     public static Beheerder getInstance() {
-      return BeheerderHolder.INSTANCE;
+        if (instance == null) {
+            instance = new Beheerder();
+        }
+        return instance;
     }
 
-    public AfwezigheidFacade getAfwezigheidFacade() {
-        return new AfwezigheidFacade();
-    }
 
-    public ChathistorieFacade getChathistorieFacade() {
-        return new ChathistorieFacade();
-    }
-
-    public MachineFacade getMachineFacade() {
-        return new MachineFacade();
-    }
-
-    public NotificatieFacade getNotificatieFacade() {
-        return new NotificatieFacade();
-    }
-
-    public ShiftFacade getShiftFacade() {
-        return new ShiftFacade();
-    }
-
-    public SiteFacade getSiteFacade() {
-        return new SiteFacade();
-    }
-
-    public TakenFacade getTakenFacade() {
-        return new TakenFacade();
-    }
-
-    public TeamFacade getTeamFacade() {
-        return new TeamFacade();
-    }
-
-    public TeamKpiFacade getTeamKpiFacade() {
-        return new TeamKpiFacade();
-    }
-
-    public VerlofFacade getVerlofFacade(){
-        return new VerlofFacade();
-    }
-
-    public WerknemersFacade getWerknemersFacade() {
-        return new WerknemersFacade();
-    }
-
-    public AuthFacade getAuthFacade() {
-        return new AuthFacade();
-    }
-
-    public OverzichtsFacade getOverzichtFacade() {
-        return new OverzichtsFacade();
-    }
-
-    public PlanningFacade getPlanningFacade() {
-        return new PlanningFacade();
-    }
-
-    public GeschiedenisFacade getGeschiedenisFacade() {
-        return new GeschiedenisFacade();
-    }
 
 }

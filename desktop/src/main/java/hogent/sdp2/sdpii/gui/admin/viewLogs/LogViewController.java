@@ -4,7 +4,6 @@ import domain.auth.Sessie;
 import domain.dto.LogDTO;
 import domain.dto.WerknemerDTO;
 import domain.facades.LogFacade;
-import domain.facades.WerknemersFacade;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -14,9 +13,6 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class LogViewController extends VBox {
 
@@ -33,9 +29,7 @@ public class LogViewController extends VBox {
     @FXML private Label foutLabel;
 
     private final LogFacade service = new LogFacade();
-    private final WerknemersFacade werknemersFacade = new WerknemersFacade();
     private List<LogDTO> alleLogs;
-    private List<WerknemerDTO> alleWerknemers;
 
     public LogViewController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/admin/view_logs/ViewLogs.fxml"));
@@ -60,41 +54,24 @@ public class LogViewController extends VBox {
 
         // Kolommen instellen
         id.setCellValueFactory(data -> new SimpleStringProperty(Integer.toString(data.getValue().id())));
+        werknemer.setCellValueFactory(cellData -> {
+            WerknemerDTO w = cellData.getValue().werknemer();
+            String fullName = w.naam() + " " + w.voornaam();
+            return new SimpleStringProperty(fullName);
+        });
         type.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().type()));
         tabel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().tabel()));
         timestamp.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().timestamp().toString()));
-        details.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().details()));
+        details.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().test()));
 
         laadLogs();
         zoekField.textProperty().addListener((obs, oud, nieuw) -> filterWerknemers(nieuw));
-    }
-
-    @FXML
-    private void herlaad() {
-        zoekField.clear();
-        laadLogs();
 
     }
 
     private void laadLogs() {
-        try {
-            alleWerknemers = werknemersFacade.geefAlleWerknemers();
-            Map<Integer, WerknemerDTO> werknemersMap = alleWerknemers.stream()
-                    .collect(Collectors.toMap(WerknemerDTO::id, Function.identity()));
-
-            werknemer.setCellValueFactory(data -> {
-                WerknemerDTO w = werknemersMap.get(data.getValue().werknemerId());
-                String naam = w != null ? w.voornaam() + " " + w.naam() : "#" + data.getValue().werknemerId();
-                return new SimpleStringProperty(naam);
-            });
-
-            alleLogs = service.geefAlleLogs();
-            logsTable.setItems(FXCollections.observableArrayList(alleLogs));
-        } catch (Exception e) {
-            alleLogs = List.of();
-            foutLabel.setText("Logs konden niet geladen worden.");
-            foutLabel.setVisible(true);
-        }
+        alleLogs = service.geefAlleLogs();
+        logsTable.setItems(FXCollections.observableArrayList(alleLogs));
     }
 
     private void filterWerknemers(String zoekterm) {
@@ -103,18 +80,8 @@ public class LogViewController extends VBox {
             return;
         }
         String lower = zoekterm.toLowerCase();
-
-        alleWerknemers = werknemersFacade.geefAlleWerknemers();
-
-        Map<Integer, WerknemerDTO> werknemersMap = alleWerknemers.stream()
-                .collect(Collectors.toMap(WerknemerDTO::id, Function.identity()));
-
         List<LogDTO> gefilterd = alleLogs.stream()
-                .filter(log -> {
-                    WerknemerDTO w = werknemersMap.get(log.werknemerId());
-                    return w != null &&
-                            (w.voornaam() + " " + w.naam()).toLowerCase().contains(lower);
-                })
+                .filter(w -> w.werknemer().toString().toLowerCase().contains(lower))
                 .toList();
         logsTable.setItems(FXCollections.observableArrayList(gefilterd));
     }

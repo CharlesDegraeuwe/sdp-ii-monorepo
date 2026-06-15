@@ -12,6 +12,11 @@
 
         <HBox styleClass="left_header" alignment="CENTER">
             <children>
+                <Button styleClass="header_button" fx:id="search">
+                    <graphic>
+                        <FontIcon iconLiteral="mdmz-search" iconSize="20" />
+                    </graphic>
+                </Button>
 
                 <Button styleClass="header_button" fx:id="notifications">
                     <graphic>

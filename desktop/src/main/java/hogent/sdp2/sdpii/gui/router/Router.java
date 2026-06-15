@@ -12,7 +12,7 @@ public class Router {
     private static Router instance;
     private AppController app;
     private MainFrameController mf;
-
+    private final Beheerder beheerder = Beheerder.getInstance();
 
     private Router() {}
 
@@ -26,31 +26,23 @@ public class Router {
         this.app = app;
     }
 
-    public void navigeerNaarLocatie(Integer siteId) {
-        SchermFactory factory = new SchermFactory(app);
-        app.navigateTo(factory.locatieScherm(siteId));
-        app.getSidebar().setActiveScherm(Scherm.LOCATIES);
-    }
-
     public void navigeerNaar(Scherm scherm) {
         SchermFactory factory = new SchermFactory(app);
         switch (scherm) {
             //app
             case ACCOUNT -> app.navigateTo(factory.accountScherm());
-            case VERLOF -> app.navigateTo(factory.afwezigheidsScherm(true));
-            case ZIEKTE -> app.navigateTo(factory.afwezigheidsScherm(false));
+            case AFWEZIGHEID -> app.navigateTo(factory.afwezigheidsScherm());
             case DASHBOARD -> app.navigateTo(factory.dashboardScherm());
             case INSTELLINGEN -> app.navigateTo(factory.instellingenScherm());
             case LOCATIES -> app.navigateTo(factory.locatieScherm());
             case NOTIFICATIES -> app.navigateTo(factory.notificatieScherm());
             case PLANNING -> app.navigateTo(factory.planningScherm());
-            case TAKEN -> app.navigateTo(factory.taskenScherm(Beheerder.getInstance().getTakenFacade()));
+            case TAKEN -> app.navigateTo(factory.taskenScherm());
             case TEAMS -> app.navigateTo(factory.teamsScherm());
             case CREEER_MEDEWERKER -> app.navigateTo(factory.creeerMedewerkerScherm());
             case CREEER_MANAGER -> app.navigateTo(factory.creeerManagerScherm());
             case ADMIN_HOME -> app.navigateTo(factory.adminHomeScherm());
-            case BEHEER_GEBRUIKERS -> app.navigateTo(factory.beheerGebruikersScherm());
-            case VIEW_LOGS -> app.navigateTo(factory.logScherm());
+            case VIEW_LOGS -> app.navigateTo(factory.logViewScherm());
 
             //auth
             case LOGIN -> {}

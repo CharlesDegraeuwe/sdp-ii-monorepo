@@ -22,10 +22,9 @@ public class ProfilePopupController extends VBox {
         loader.setRoot(this);
         loader.setController(this);
         try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
-        settings_trigger.setVisible(false);
-        settings_trigger.setManaged(false);
 
-        if(!Sessie.getInstance().isAdmin()) {
+
+        if(!Sessie.getInstance().userRole().equals("Manager") && !Sessie.getInstance().isAdmin()) {
             admin_trigger.setVisible(false);
             admin_trigger.setManaged(false);
         }
@@ -40,7 +39,7 @@ public class ProfilePopupController extends VBox {
         });
 
         admin_trigger.setOnMouseClicked(e -> {
-            Router.getInstance().navigeerNaar(Scherm.ADMIN_HOME);
+            Router.getInstance().navigeerNaar(Scherm.INSTELLINGEN);
         });
 
         logout_trigger.setOnMouseClicked(e -> {

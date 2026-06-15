@@ -4,24 +4,20 @@
     -fx-background-color: #F6F6F6;
 }
 
-.dashboard_outer, .dashboard_left, .dashboard_right {
+.dashboard_outer {
     -fx-background-color: transparent;
 }
 
-/* Section titles — boven de cards */
-.section_title {
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #888888;
-    -fx-padding: 0 0 0 4;
+.dashboard_left, .dashboard_right {
+    -fx-background-color: transparent;
 }
 
 /* Cards */
 .card {
     -fx-background-color: #FFFFFF;
-    -fx-background-radius: 16;
-    -fx-border-radius: 16;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 4);
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 15, 0, 0, 4);
 }
 
 .card_title {
@@ -38,7 +34,7 @@
 
 /* Action Buttons */
 .action_btn {
-    -fx-background-color: rgba(240, 240, 240, 0.48);
+    -fx-background-color: #d6d6d6;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-padding: 10 14 10 14;
@@ -46,7 +42,7 @@
 }
 
 .action_btn:hover {
-    -fx-background-color: #E4E4E4;
+    -fx-background-color: #D9D9D9;
 }
 
 .action_label {
@@ -56,7 +52,7 @@
 }
 
 .action_icon {
-    -fx-icon-color: #E31B35;
+    -fx-icon-color: #2c3e50;
 }
 
 .action_icon_red {
@@ -65,7 +61,7 @@
 
 /* Tab buttons */
 .tab_active {
-    -fx-background-color: #E31B35;
+    -fx-background-color: #2c3e50;
     -fx-text-fill: white;
     -fx-font-size: 11px;
     -fx-font-weight: bold;
@@ -90,7 +86,7 @@
     -fx-background-color: #E4E4E4;
 }
 
-/* Kalender nav buttons */
+/* Icon button (kalender nav) */
 .btn_icon {
     -fx-background-color: #F0F0F0;
     -fx-background-radius: 999px;
@@ -103,40 +99,6 @@
 
 .btn_icon:hover {
     -fx-background-color: #E4E4E4;
-}
-
-/* Kalender dag headers */
-.cal_header {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #888888;
-    -fx-min-width: 28;
-    -fx-alignment: CENTER;
-}
-
-/* Kalender dag cellen */
-.cal_day {
-    -fx-font-size: 12px;
-    -fx-text-fill: #2c3e50;
-    -fx-min-width: 28;
-    -fx-min-height: 28;
-    -fx-alignment: CENTER;
-    -fx-background-radius: 999px;
-    -fx-cursor: hand;
-}
-
-.cal_day:hover {
-    -fx-background-color: #F0F0F0;
-}
-
-.cal_day_today {
-    -fx-background-color: #E31B35;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 999px;
-    -fx-min-width: 28;
-    -fx-min-height: 28;
-    -fx-alignment: CENTER;
 }
 
 /* TableView */
@@ -169,315 +131,12 @@
     -fx-text-fill: #2c3e50;
 }
 
-.see_more_button {
-    -fx-text-fill: #888888;
-    -fx-underline: solid;
-    -fx-border-color: transparent;
-    -fx-padding: 0;
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
-}
-
-.see_more_button:hover {
-    -fx-underline: true;
-}
-
-
-.notification_icon {
-    -fx-background-color: #00ff7f;
-}
-.notification_item {
-    -fx-background-color: rgba(240, 240, 240, 0.48);
-    -fx-background-radius: 50;
-    -fx-border-radius: 12;
-    -fx-padding: 10 14 10 14;
-}
-
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 0;
-}
-
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
-}
-
-.scroll-pane .scroll-bar {
-    -fx-opacity: 0;
-    -fx-padding: -10;
-}
-
-#item_container {
-    -fx-padding: 0 0 20 0;
-}
-
-.taakItem {
-    -fx-background-color: white;
-    -fx-background-radius: 999px;
-    -fx-border-radius: 999px;
-    -fx-background-color: rgba(240, 240, 240, 0.48);
-}
-
-.taak_title {
-    -fx-font-size: 13px;
-    -fx-text-fill: #2c3e50;
-}
-
-.taak_datum {
-    -fx-font-size: 11px;
-    -fx-text-fill: #aaaaaa;
-    -fx-alignment: CENTER_RIGHT;
-}
-
-.taak_checkbox .box {
-    -fx-background-radius: 50%;
-    -fx-border-radius: 50%;
-    -fx-border-color: #cccccc;
-    -fx-background-color: white;
-}
-
-.uur_title {
-    -fx-font-size: 13px;
-    -fx-text-fill: #2c3e50;
-    -fx-font-weight: bold;
-}
-
-.team_picker {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 30;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
-    -fx-padding: 4 12 4 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
-}
-
-.team_picker .arrow-button {
-    -fx-background-color: transparent;
-    -fx-padding: 0 0 0 4;
-}
-
-.team_picker .arrow {
-    -fx-background-color: #2c3e50;
-    -fx-scale-x: 0.8;
-    -fx-scale-y: 0.8;
-}
-
-.team_picker:hover {
-    -fx-background-color: #f9f9f9;
-}
-
-/* dropdown lijst */
-.team_picker .list-view {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-border-color: #e8e8e8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);
-}
-
-.team_picker .list-cell {
-    -fx-font-size: 12px;
-    -fx-text-fill: #2c3e50;
-    -fx-padding: 5 14 5 14;
-    -fx-background-color: transparent;
-}
-
-.team_picker .list-cell:hover {
-    -fx-background-color: #f5f5f5;
-    -fx-background-radius: 8;
-}
-
-.team_picker .list-cell:selected {
-    -fx-background-color: transparent;
-    -fx-text-fill: #2c3e50;
-    -fx-font-weight: bold;
-}
-
-
-/* Locatie */
-.locatie_table {
+/* ScrollPane */
+.scroll_pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
 
-.locatie_table .column-header {
+.scroll_pane > .viewport {
     -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-font-size: 11px;
-    -fx-text-fill: #aaaaaa;
-    -fx-font-weight: normal;
-    -fx-alignment: "CENTER_LEFT";
-}
-
-.locatie_table .column-header-background {
-    -fx-background-color: transparent;
-}
-
-.locatie_table .table-row-cell {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-font-size: 13px;
-    -fx-text-fill: #2c3e50;
-}
-
-.locatie_table .table-row-cell:selected {
-    -fx-background-color: #f5f5f5;
-}
-
-.locatie_table .table-cell {
-    -fx-border-color: transparent;
-    -fx-padding: 8 4 8 4;
-    -fx-alignment: "CENTER";
-    -fx-font-size: 13px;
-}
-
-
-/* kalender */
-.kalender_item {
-    -fx-pref-width: 30px;
-    -fx-min-width: 20px;
-    -fx-pref-height: 20px;
-    -fx-min-height: 20px;
-    -fx-background-radius: 999px;
-    -fx-alignment: CENTER;
-    -fx-cursor: hand;
-    -fx-font-size: 10;
-}
-
-.kalender_item:hover {
-    -fx-background-color: rgba(203, 213, 225, 0.25);
-}
-
-.notification_item {
-    -fx-pref-height: 30px;
-    -fx-min-height: 30px;
-    -fx-background-radius: 999px;
-    -fx-alignment: CENTER_LEFT;
-    -fx-cursor: hand;
-    -fx-font-size: 10;
-    -fx-background-color: rgba(240, 240, 240, 0.48);
-
-}
-
-.notification_icon {
-    -fx-pref-width: 5px;
-    -fx-min-width: 5px;
-    -fx-max-width: 5px;
-    -fx-pref-height: 5px;
-    -fx-min-height: 5px;
-    -fx-max-height: 5px;
-    -fx-background-radius: 999px;
-    -fx-background-color: #aaaaaa;
-}
-
-/* ── Notificaties footer ── */
-.notif_footer {
-    -fx-border-color: rgba(209,213,219,0.5) transparent transparent transparent;
-    -fx-border-width: 1 0 0 0;
-    -fx-padding: 7 12 7 12;
-    -fx-cursor: hand;
-}
-
-.notif_footer:hover {
-    -fx-background-color: rgba(0,0,0,0.04);
-}
-
-.notif_footer_label {
-    -fx-font-size: 10px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #9CA3AF;
-}
-
-/* ── Afwezigheid stats bar ── */
-.stats_bar {
-    -fx-border-color: rgba(209,213,219,0.5) transparent transparent transparent;
-    -fx-border-width: 1 0 0 0;
-    -fx-padding: 8 0 4 0;
-}
-
-.stats_bar_middel {
-    -fx-border-color: transparent rgba(209,213,219,0.5) transparent rgba(209,213,219,0.5);
-    -fx-border-width: 0 1 0 1;
-}
-
-.stat_getal {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #111827;
-}
-
-.stat_getal_amber {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #D97706;
-}
-
-.stat_getal_blauw {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2563EB;
-}
-
-.stat_label {
-    -fx-font-size: 9px;
-    -fx-text-fill: #9CA3AF;
-}
-
-/* ── Locatie info ── */
-.locatie_header {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #374151;
-}
-
-.locatie_icon {
-    -fx-icon-color: #6B7280;
-}
-
-.locatie_rij {
-    -fx-background-color: rgba(255,255,255,0.7);
-    -fx-border-color: rgba(209,213,219,0.6);
-    -fx-border-width: 1;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-padding: 7 10 7 10;
-}
-
-.locatie_sleutel {
-    -fx-font-size: 11px;
-    -fx-text-fill: #6B7280;
-}
-
-.locatie_waarde {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1F2937;
-}
-
-.locatie_kaart_btn {
-    -fx-background-color: rgba(255,255,255,0.7);
-    -fx-border-color: rgba(209,213,219,0.6);
-    -fx-border-width: 1;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-padding: 7 0 7 0;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #374151;
-    -fx-cursor: hand;
-}
-
-.locatie_kaart_btn:hover {
-    -fx-background-color: rgba(255,255,255,0.95);
-    -fx-border-color: rgba(156,163,175,0.8);
-}
-
-/* ── Section label ── */
-.section_label {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #6B7280;
 }

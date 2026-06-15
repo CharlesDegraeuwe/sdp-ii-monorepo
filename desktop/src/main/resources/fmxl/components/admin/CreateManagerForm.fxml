@@ -7,31 +7,31 @@
 <?import javafx.scene.image.ImageView?>
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import javafx.scene.control.DatePicker?>
 <fx:root type="VBox" styleClass="create-form-wrapper" xmlns:fx="http://javafx.com/fxml"
          stylesheets="@/css/create-manager.css">
 
     <HBox styleClass="form-back-btn-row">
-        <Button fx:id="backBtn" styleClass="back-btn" onAction="#handleBack">
-            <graphic>
-                <FontIcon iconLiteral="ion4-ios-arrow-round-back" iconSize="16" mouseTransparent="true"/>
-            </graphic>
+        <Button fx:id="backBtn" styleClass="back-btn">
+            <FontIcon iconLiteral="ion4-ios-arrow-round-back" iconSize="16" mouseTransparent="true"/>
         </Button>
     </HBox>
 
+    <Label text="Create Manager" styleClass="form-title"/>
 
-    <Label text="Creëer Manager" styleClass="form-title"/>
+    <Label text="Personal Info:" styleClass="form-section-label"/>
 
-    <Label text="Persoonlijke Info:" styleClass="form-section-label"/>
-
-    <TextField fx:id="nameField" promptText="naam" styleClass="form-input"/>
-    <TextField fx:id="surnameField" promptText="voornaam" styleClass="form-input"/>
-    <DatePicker fx:id="dobField" promptText="geboortedatum" styleClass="form-input"/>
-    <TextField fx:id="phoneField" promptText="gsm" styleClass="form-input"/>
+    <TextField fx:id="idField" promptText="id" styleClass="form-input"/>
+    <TextField fx:id="nameField" promptText="name" styleClass="form-input"/>
+    <TextField fx:id="surnameField" promptText="surname" styleClass="form-input"/>
+    <TextField fx:id="phoneField" promptText="phone" styleClass="form-input"/>
     <TextField fx:id="emailField" promptText="email" styleClass="form-input"/>
 
+    <Label text="Availability:" styleClass="form-section-label"/>
 
-    <Label fx:id="feedbackLabel" text="" style="-fx-font-weight: bold;" wrapText="true"/>
-    <Button text="Creëer manager" onAction="#handleRegistreerManager" styleClass="form-submit-btn"/>
+    <TextField fx:id="availabilityField" promptText="availability" styleClass="form-input"/>
+    <TextField fx:id="plantField" promptText="plant" styleClass="form-input"/>
+
+    <Button fx:id="createBtn" text="create a manager" styleClass="form-submit-btn"/>
+    <Label fx:id="loginLink" text="login" styleClass="form-login-link"/>
 
 </fx:root>

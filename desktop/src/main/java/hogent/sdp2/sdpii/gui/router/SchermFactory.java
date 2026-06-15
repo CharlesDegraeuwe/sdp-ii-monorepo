@@ -1,16 +1,15 @@
 package hogent.sdp2.sdpii.gui.router;
 
 import domain.Beheerder;
-import domain.facades.TakenFacade;
 import hogent.sdp2.sdpii.gui.admin.beheerGebruikers.BeheerGebruikersController;
-import hogent.sdp2.sdpii.gui.admin.viewLogs.LogViewController;
 import hogent.sdp2.sdpii.gui.admin.creeerManager.CreeerManagerController;
 import hogent.sdp2.sdpii.gui.admin.creeerMedewerker.CreeerMedewerkerController;
 import hogent.sdp2.sdpii.gui.admin.home.AdminHomeController;
+import hogent.sdp2.sdpii.gui.admin.viewLogs.LogViewController;
 import hogent.sdp2.sdpii.gui.app.AppController;
 import hogent.sdp2.sdpii.gui.app.account.AccountController;
 import hogent.sdp2.sdpii.gui.app.afwezigheid.AfwezigheidsController;
-import hogent.sdp2.sdpii.gui.app.overzicht.DashboardController;
+import hogent.sdp2.sdpii.gui.app.dashboard.DashboardController;
 import hogent.sdp2.sdpii.gui.app.instellingen.InstellingenController;
 import hogent.sdp2.sdpii.gui.app.locaties.LocatiesController;
 import hogent.sdp2.sdpii.gui.app.notificaties.NotificatiesController;
@@ -29,8 +28,8 @@ public class SchermFactory {
     //voeg hier telkens nieuwe schermen toe
 
     //app
-    public AfwezigheidsController afwezigheidsScherm(boolean verlof) {
-        return new AfwezigheidsController(verlof);
+    public AfwezigheidsController afwezigheidsScherm() {
+        return new AfwezigheidsController();
     }
 
     public AccountController accountScherm() {
@@ -38,37 +37,32 @@ public class SchermFactory {
     }
 
     public DashboardController dashboardScherm() {
-
-        return new DashboardController(Beheerder.getInstance().getOverzichtFacade());
+        return new DashboardController();
     }
 
     public NotificatiesController notificatieScherm() {
-        return new NotificatiesController(Beheerder.getInstance().getNotificatieFacade());
+        return new NotificatiesController();
     }
 
-    public PlanningController planningScherm() { return new PlanningController();}
+    public PlanningController planningScherm() {
+        return new PlanningController();
+    }
 
     public LocatiesController locatieScherm() {
         return new LocatiesController();
-    }
-
-    public LocatiesController locatieScherm(Integer siteId) {
-        return new LocatiesController(siteId);
     }
 
     public InstellingenController instellingenScherm() {
         return new InstellingenController();
     }
 
-    public TakenController taskenScherm(TakenFacade facade) {
-        return new TakenController(facade);
+    public TakenController taskenScherm() {
+        return new TakenController();
     }
 
     public TeamsController teamsScherm() {
-
-        return new TeamsController(Beheerder.getInstance().getTeamFacade(), Beheerder.getInstance().getWerknemersFacade());
+        return new TeamsController();
     }
-
 
     //auth
     public CreeerMedewerkerController creeerMedewerkerScherm() {
@@ -83,13 +77,10 @@ public class SchermFactory {
         return new BeheerGebruikersController();
     }
 
+    public LogViewController logViewScherm(){return new LogViewController();}
+
     public AdminHomeController adminHomeScherm() {
         return new AdminHomeController();
     }
-
-    public LogViewController logScherm() {
-        return new LogViewController();
-    }
-
 
 }

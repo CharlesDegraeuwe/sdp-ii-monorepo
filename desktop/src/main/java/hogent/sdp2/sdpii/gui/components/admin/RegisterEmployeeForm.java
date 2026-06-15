@@ -1,29 +1,11 @@
 package hogent.sdp2.sdpii.gui.components.admin;
 
-import domain.Beheerder;
-import hogent.sdp2.sdpii.gui.router.Router;
-import hogent.sdp2.sdpii.gui.router.Scherm;
-import javafx.concurrent.Task;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
 public class RegisterEmployeeForm extends VBox {
-
-    @FXML private TextField nameField;
-    @FXML private TextField surnameField;
-    @FXML private TextField phoneField;
-    @FXML private TextField emailField;
-    @FXML private DatePicker dobField;
-    @FXML private ComboBox<String> roleComboBox;
-    @FXML private Label feedbackLabel;
-
     public RegisterEmployeeForm() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/components/admin/CreateEmployeeForm.fxml"));
         loader.setRoot(this);
@@ -34,76 +16,5 @@ public class RegisterEmployeeForm extends VBox {
             throw new RuntimeException(e);
         }
 
-        roleComboBox.getItems().addAll("Werknemer", "Supervisor");
-        roleComboBox.getSelectionModel().select("Werknemer");
-    }
-
-    @FXML
-    private void handleBack() {
-        Router.getInstance().navigeerNaar(Scherm.ADMIN_HOME);
-    }
-
-    @FXML
-    private void handleRegistreer() {
-        resetFieldStyles();
-
-        String naam = nameField.getText();
-        String voornaam = surnameField.getText();
-        String email = emailField.getText();
-        String telefoon = phoneField.getText();
-        String geboortedatumStr = dobField.getValue() != null ? dobField.getValue().toString() : null;
-        String rol = roleComboBox.getValue();
-
-        Task<Boolean> task = new Task<>() {
-            @Override
-            protected Boolean call() {
-                // Validatie zit nu in de facade - gooit IllegalArgumentException bij fouten
-                return Beheerder.getInstance().getWerknemersFacade().registreerWerknemer(
-                        naam, voornaam, email, telefoon, geboortedatumStr, rol);
-            }
-        };
-
-        task.setOnSucceeded(e -> {
-            if (task.getValue()) {
-                nameField.clear(); surnameField.clear(); emailField.clear();
-                phoneField.clear(); dobField.setValue(null);
-                feedbackLabel.setText("Werknemer succesvol geregistreerd!");
-                feedbackLabel.setStyle("-fx-text-fill: green;");
-            } else {
-                feedbackLabel.setText("Fout bij opslaan. Bestaat deze e-mail al?");
-                feedbackLabel.setStyle("-fx-text-fill: red;");
-            }
-        });
-
-        task.setOnFailed(e -> {
-            Throwable oorzaak = task.getException();
-            if (oorzaak instanceof IllegalArgumentException) {
-                feedbackLabel.setText(oorzaak.getMessage());
-                highlightFout(oorzaak.getMessage());
-            } else {
-                feedbackLabel.setText("Netwerkfout.");
-            }
-            feedbackLabel.setStyle("-fx-text-fill: red;");
-        });
-
-        new Thread(task).start();
-    }
-
-    private void resetFieldStyles() {
-        String normal = "-fx-border-color: transparent;";
-        nameField.setStyle(normal);
-        surnameField.setStyle(normal);
-        emailField.setStyle(normal);
-        phoneField.setStyle(normal);
-        dobField.setStyle(normal);
-    }
-
-    private void highlightFout(String fout) {
-        String error = "-fx-border-color: #E31B35; -fx-border-radius: 20; -fx-border-width: 1.5;";
-        if (fout.contains("Naam")) nameField.setStyle(error);
-        else if (fout.contains("Voornaam")) surnameField.setStyle(error);
-        else if (fout.contains("mail")) emailField.setStyle(error);
-        else if (fout.contains("telefoon") || fout.contains("Telefoon")) phoneField.setStyle(error);
-        else if (fout.contains("Geboortedatum") || fout.contains("oud")) dobField.setStyle(error);
     }
 }

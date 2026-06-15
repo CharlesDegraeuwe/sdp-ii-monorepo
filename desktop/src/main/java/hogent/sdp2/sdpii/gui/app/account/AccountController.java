@@ -5,6 +5,7 @@ import hogent.sdp2.sdpii.gui.components.app.AccountFormController;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ public class AccountController extends BorderPane {
     public AccountController(AppController app) {
         this.app = app;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/account/AccountPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/AccountPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
