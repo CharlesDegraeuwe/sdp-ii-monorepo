@@ -3,6 +3,7 @@ package hogent.sdp2.sdpii.gui.components.admin;
 import domain.Beheerder;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +35,7 @@ public class RegisterEmployeeForm extends VBox {
             throw new RuntimeException(e);
         }
 
-        roleComboBox.getItems().addAll("Werknemer", "Supervisor");
+        roleComboBox.getItems().addAll("Werknemer", "Supervisor", "Manager", "Admin");
         roleComboBox.getSelectionModel().select("Werknemer");
     }
 
@@ -57,7 +58,6 @@ public class RegisterEmployeeForm extends VBox {
         Task<Boolean> task = new Task<>() {
             @Override
             protected Boolean call() {
-                // Validatie zit nu in de facade - gooit IllegalArgumentException bij fouten
                 return Beheerder.getInstance().getWerknemersFacade().registreerWerknemer(
                         naam, voornaam, email, telefoon, geboortedatumStr, rol);
             }
@@ -67,11 +67,11 @@ public class RegisterEmployeeForm extends VBox {
             if (task.getValue()) {
                 nameField.clear(); surnameField.clear(); emailField.clear();
                 phoneField.clear(); dobField.setValue(null);
-                feedbackLabel.setText("Werknemer succesvol geregistreerd!");
-                feedbackLabel.setStyle("-fx-text-fill: green;");
+                feedbackLabel.setText("Werknemer succesvol toegevoegd aan het systeem!");
+                feedbackLabel.setStyle("-fx-text-fill: #166534;"); // Modern donkergroen
             } else {
                 feedbackLabel.setText("Fout bij opslaan. Bestaat deze e-mail al?");
-                feedbackLabel.setStyle("-fx-text-fill: red;");
+                feedbackLabel.setStyle("-fx-text-fill: #e31b35;");
             }
         });
 
@@ -81,29 +81,29 @@ public class RegisterEmployeeForm extends VBox {
                 feedbackLabel.setText(oorzaak.getMessage());
                 highlightFout(oorzaak.getMessage());
             } else {
-                feedbackLabel.setText("Netwerkfout.");
+                feedbackLabel.setText("Er is een netwerkfout opgetreden.");
             }
-            feedbackLabel.setStyle("-fx-text-fill: red;");
+            feedbackLabel.setStyle("-fx-text-fill: #e31b35;");
         });
 
         new Thread(task).start();
     }
 
     private void resetFieldStyles() {
-        String normal = "-fx-border-color: transparent;";
-        nameField.setStyle(normal);
-        surnameField.setStyle(normal);
-        emailField.setStyle(normal);
-        phoneField.setStyle(normal);
-        dobField.setStyle(normal);
+        nameField.getStyleClass().remove("input-error");
+        surnameField.getStyleClass().remove("input-error");
+        emailField.getStyleClass().remove("input-error");
+        phoneField.getStyleClass().remove("input-error");
+        dobField.getStyleClass().remove("input-error");
     }
 
     private void highlightFout(String fout) {
-        String error = "-fx-border-color: #E31B35; -fx-border-radius: 20; -fx-border-width: 1.5;";
-        if (fout.contains("Naam")) nameField.setStyle(error);
-        else if (fout.contains("Voornaam")) surnameField.setStyle(error);
-        else if (fout.contains("mail")) emailField.setStyle(error);
-        else if (fout.contains("telefoon") || fout.contains("Telefoon")) phoneField.setStyle(error);
-        else if (fout.contains("Geboortedatum") || fout.contains("oud")) dobField.setStyle(error);
+        String f = fout.toLowerCase();
+
+        if (f.contains("voornaam")) surnameField.getStyleClass().add("input-error");
+        else if (f.contains("naam")) nameField.getStyleClass().add("input-error");
+        else if (f.contains("mail") || f.contains("e-mail")) emailField.getStyleClass().add("input-error");
+        else if (f.contains("telefoon") || f.contains("gsm")) phoneField.getStyleClass().add("input-error");
+        else if (f.contains("geboorte") || f.contains("oud")) dobField.getStyleClass().add("input-error");
     }
 }
