@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      contains(github.event.pull_request.labels.*.name, 'ci:all') ||
+      !contains(join(github.event.pull_request.*.changed_files, ','), 'SKIP')
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Lint
+        run: bun run lint
+      - name: Build
+        run: bun run build
+        env:
+          AUTH_SECRET: ci-dummy-secret-for-build
+      - name: Test
+        run: bun run test
+
+  api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: api/pom.xml
+      - name: Check formatting
+        run: ./mvnw spotless:check
+      - name: Compile
+        run: ./mvnw compile -q
+      - name: Test
+        run: ./mvnw test
+
+  desktop:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: desktop/pom.xml
+      - name: Check formatting
+        run: ./mvnw spotless:check
+      - name: Compile
+        run: ./mvnw compile -q
+      - name: Test
+        run: xvfb-run ./mvnw test
+
+  ci-passed:
+    runs-on: ubuntu-latest
+    needs: [web, api, desktop]
+    if: always()
+    steps:
+      - name: Check results
+        run: |
+          if [ "${{ needs.web.result }}" = "failure" ] || \
+             [ "${{ needs.api.result }}" = "failure" ] || \
+             [ "${{ needs.desktop.result }}" = "failure" ]; then
+            echo "One or more jobs failed"
+            exit 1
+          fi
+          echo "All checks passed"
