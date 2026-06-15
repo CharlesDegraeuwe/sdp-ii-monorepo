@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="VBox" spacing="0" xmlns:fx="http://javafx.com/fxml">
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                maxHeight="200" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
+        <VBox fx:id="itemContainer" spacing="5">
+            <padding><Insets top="10" right="10" bottom="6" left="10"/></padding>
+        </VBox>
+    </ScrollPane>
+    <HBox fx:id="footer" alignment="CENTER" styleClass="notif_footer">
+        <Label text="Bekijk alle taken" styleClass="notif_footer_label"/>
+    </HBox>
+</fx:root>

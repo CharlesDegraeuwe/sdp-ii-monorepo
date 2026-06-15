@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<fx:root type="VBox" styleClass="login-page" xmlns:fx="http://javafx.com/fxml">
+
+    <VBox styleClass="login-card">
+
+        <Label fx:id="lblTitle" text="Log in op je account" styleClass="login-title"/>
+
+        <!-- Email field — altijd zichtbaar -->
+        <TextField fx:id="txtEmail" promptText="email..." styleClass="login-input"/>
+
+        <!-- Wachtwoord sectie — alleen zichtbaar in wachtwoord-modus -->
+        <VBox fx:id="wachtwoordSection" visible="false" managed="false" spacing="0">
+            <PasswordField fx:id="txtWachtwoord" promptText="wachtwoord..." styleClass="login-input"/>
+        </VBox>
+
+        <!-- Code veld — alleen zichtbaar in code-modus stap 2 -->
+        <TextField fx:id="txtCode" promptText="verificatiecode..." styleClass="login-input"
+                   visible="false" managed="false"/>
+
+        <!-- Feedback label -->
+        <Label fx:id="lblFout" styleClass="login-error" wrapText="true"/>
+
+        <!-- Hoofd actie knop -->
+        <Button fx:id="mainBtn" text="Verdergaan" onAction="#handleBtn"
+                maxWidth="Infinity" styleClass="login-btn"/>
+
+        <!-- Wissel modus link -->
+        <Label fx:id="lblToggle" text="Login met wachtwoord"
+               styleClass="login-toggle-link" maxWidth="Infinity"
+               onMouseClicked="#toggleModus"/>
+
+    </VBox>
+
+</fx:root>

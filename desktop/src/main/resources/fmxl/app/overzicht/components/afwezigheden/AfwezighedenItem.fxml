@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="HBox" fx:id="container" spacing="10" alignment="CENTER_LEFT"
+         styleClass="notification_item" xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="6" right="12" bottom="6" left="12"/></padding>
+    <Label fx:id="emoji" styleClass="afwezig_emoji"/>
+    <Label fx:id="naam" text="naam" styleClass="taak_title"/>
+</fx:root>

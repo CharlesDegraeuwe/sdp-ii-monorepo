@@ -1,0 +1,71 @@
+package domain.services;
+
+import domain.dto.VerlofAanvragenDTO;
+import io.github.cdimascio.dotenv.Dotenv;
+
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class VerlofApiService extends ApiService {
+    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/verlof";
+
+    public String vraagVerlofAan(VerlofAanvragenDTO dto) {
+        try {
+            String json = mapper.writeValueAsString(dto);
+            HttpRequest request = authenticatedRequest(BASE_URL)
+                    .POST(HttpRequest.BodyPublishers.ofString(json)).build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() < 200 || response.statusCode() >= 300)
+                throw new RuntimeException("Server fout " + response.statusCode());
+            String body = response.body();
+            return body != null ? body : "";
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij indienen verlofaanvraag", e);
+        }
+    }
+
+    public String geefVerlofStatus(int verlofId) {
+        try {
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + verlofId + "/status").GET().build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij ophalen verlofstatus", e);
+        }
+    }
+
+    public String keurVerlofGoed(int verlofId) {
+        try {
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + verlofId + "/goedkeuren")
+                    .PUT(HttpRequest.BodyPublishers.noBody()).build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij goedkeuren verlof", e);
+        }
+    }
+
+    public String wijsVerlofAf(int verlofId) {
+        try {
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + verlofId + "/afwijzen")
+                    .PUT(HttpRequest.BodyPublishers.noBody()).build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij afwijzen verlof", e);
+        }
+    }
+
+    public String annuleerVerlof(int verlofId) {
+        try {
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + verlofId + "/annuleren")
+                    .PUT(HttpRequest.BodyPublishers.noBody()).build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij annuleren verlof", e);
+        }
+    }
+}

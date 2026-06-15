@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import java.lang.*?>
+        <?import java.util.*?>
+        <?import javafx.scene.*?>
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.layout.*?>
+
+<fx:root type="VBox" styleClass="page" alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+<VBox styleClass="account-card">
+
+    <Label text="Account informatie" styleClass=""/>
+    <GridPane hgap="20" vgap="20">
+
+        <Label text="Naam" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="naamField"
+                   promptText="naam"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="0"/>
+
+        <Label text="Voornaam" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="voornaamField"
+                   promptText="voornaam"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"/>
+
+        <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="emailField"
+                   promptText="email"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="2"/>
+
+        <Label text="Wachtwoord" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="wachtwoordField"
+                   promptText="password"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="3"/>
+
+        <Label text="Telefoonnummer" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <TextField fx:id="telefoonnummerField"
+                   promptText="telefoonnnummer"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="4"/>
+
+        <Label text="Geboortedatum" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <TextField fx:id="geboortedatumField"
+                   promptText="geboortedatum"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="5"/>
+    </GridPane>
+    <Button fx:id="editButton" styleClass="editButton" minWidth="100"
+            text="Wijzig"
+            onAction="#toggleEdit"/>
+</VBox>
+</fx:root>
+
+
+

@@ -1,0 +1,285 @@
+/* ═══ Absense ═══ */
+
+/* ── Input veld ── */
+.absense-input {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 30;
+    -fx-border-color: transparent;
+    -fx-padding: 12 20 12 20;
+    -fx-font-size: 13px;
+}
+
+.absense-input:focused {
+    -fx-background-color: #E8E8E8;
+}
+
+/* ── Toggle switch ── */
+.absense-toggle {
+    -fx-background-radius: 999px;
+    -fx-pref-width: 40;
+    -fx-pref-height: 20;
+    -fx-min-width: 40;
+    -fx-min-height: 20;
+    -fx-max-width: 40;
+    -fx-max-height: 20;
+    -fx-background-color: #D0D0D0;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.absense-toggle:selected {
+    -fx-background-color: #2c3e50;
+}
+
+/* ── Upload area ── */
+.upload-area {
+    -fx-border-color: #2c3e50;
+    -fx-border-radius: 14;
+    -fx-border-style: dashed;
+    -fx-border-width: 1.5;
+    -fx-background-color: #FAFAFA;
+    -fx-background-radius: 14;
+}
+
+.upload-icon {
+    -fx-font-size: 20px;
+    -fx-text-fill: #888888;
+}
+
+.browse-btn {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 999px;
+    -fx-background-radius: 999px;
+    -fx-padding: 4 16 4 16;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+}
+
+.browse-btn:hover {
+    -fx-background-color: #F0F0F0;
+}
+
+/* ── Textarea ── */
+.absense-textarea {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E8E8E8;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-padding: 12;
+    -fx-font-size: 13px;
+}
+
+.absense-textarea .content {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14;
+}
+
+.absense-textarea:focused {
+    -fx-border-color: #2c3e50;
+}
+
+/* ── Submit knop ── */
+.absense-report-btn {
+    -fx-background-color: #E31B35;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-padding: 10 28 10 28;
+    -fx-cursor: hand;
+}
+
+.absense-report-btn:hover {
+    -fx-background-color: #ba162b;
+}
+
+/* ── Feedback ── */
+.error-label {
+    -fx-text-fill: #E31B35;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.success-label {
+    -fx-text-fill: #1e8449;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+/* ── DatePicker ── */
+.date-picker {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 999px;
+    -fx-border-color: transparent;
+}
+
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 6 12 6 12;
+    -fx-font-size: 12px;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0 8 0 0;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #888888;
+}
+
+/* ── Spinner ── */
+.spinner {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 999px;
+    -fx-border-color: transparent;
+}
+
+.spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 4 8 4 8;
+    -fx-font-size: 12px;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* ── ComboBox ── */
+.combo-box {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 999px;
+    -fx-border-color: transparent;
+    -fx-padding: 2 8 2 8;
+    -fx-font-size: 12px;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #888888;
+}
+
+.combo-box:hover, .date-picker:hover, .spinner:hover {
+    -fx-background-color: #E8E8E8;
+}
+
+.filter-container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 30;
+    -fx-padding: 6 6 6 6;
+    -fx-spacing: 2;
+}
+
+.filter-knop {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 6 16 6 16;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.filter-knop:hover {
+    -fx-background-color: #F6F6F6;
+}
+
+.filter-knop-actief {
+    -fx-background-color: #F6F6F6;
+    -fx-border-color: transparent;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 6 16 6 16;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-text-fill: #1A1A1A;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 1);
+}
+
+
+.team_picker {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 30;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 4 12 4 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+}
+
+.team_picker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 4;
+}
+
+.team_picker .arrow {
+    -fx-background-color: #2c3e50;
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
+
+.team_picker:hover {
+    -fx-background-color: #f9f9f9;
+}
+
+/* dropdown lijst */
+.team_picker .list-view {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #e8e8e8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);
+}
+
+.team_picker .list-cell {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 5 14 5 14;
+    -fx-background-color: transparent;
+}
+
+.team_picker .list-cell:hover {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 8;
+}
+
+.team_picker .list-cell:selected {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+.teamlid-knop {
+    -fx-background-color: #f6f6f6;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-text-fill: #2c3e50;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.teamlid-knop:hover {
+    -fx-background-color: #eeeeee;
+}
+
+.teamlid-knop-eigen {
+    -fx-background-color: rgba(227, 27, 53, 0.06);
+    -fx-text-fill: #E31B35;
+    -fx-font-weight: bold;
+}
+
+.teamlid-knop-eigen:hover {
+    -fx-background-color: rgba(227, 27, 53, 0.12);
+}

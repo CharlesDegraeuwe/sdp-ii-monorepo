@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="planning_root" stylesheets="@/css/planning.css">
+    <center>
+        <HBox spacing="16" alignment="TOP_LEFT">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <VBox fx:id="kalender_container" HBox.hgrow="ALWAYS"/>
+            <VBox fx:id="sidebar_container" prefWidth="200" minWidth="200"/>
+        </HBox>
+    </center>
+</fx:root>

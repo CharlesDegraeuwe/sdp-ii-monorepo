@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<fx:root type="HBox" fx:id="container" spacing="8" alignment="CENTER_LEFT"
+         xmlns:fx="http://javafx.com/fxml">
+    <padding><Insets top="4" right="4" bottom="4" left="4"/></padding>
+
+    <HBox styleClass="taak_container" spacing="10" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+        <padding><Insets top="8" right="12" bottom="8" left="10"/></padding>
+        <CheckBox fx:id="taak_checkbox" styleClass="taak_checkbox"/>
+        <Label fx:id="title" HBox.hgrow="ALWAYS" styleClass="taak_title" wrapText="true"/>
+        <Label fx:id="datum" styleClass="taak_datum"/>
+    </HBox>
+
+    <HBox fx:id="taak_delete_btn" alignment="CENTER" styleClass="taak_delete_btn"
+          prefWidth="36" prefHeight="36" minWidth="36" minHeight="36">
+        <FontIcon iconLiteral="ion4-md-trash" iconSize="14" styleClass="taak_delete_icon"/>
+    </HBox>
+</fx:root>
