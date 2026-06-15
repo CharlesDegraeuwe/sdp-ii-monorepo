@@ -1,0 +1,128 @@
+### Maak een nieuwe werknemer aan in de database
+POST http://localhost:8080/api/werknemers
+Content-Type: application/json
+
+{
+  "naam": "Peeters",
+  "voornaam": "Jan",
+  "email": "jan.peeters@email.com",
+  "wachtwoord": "Wachtwoord123",
+  "telefoonnummer": "042345689",
+  "geboortedatum": "2000-05-15",
+  "rol": "Admin"
+}
+
+### Activeer het account
+POST http://localhost:8080/api/werknemers/15/activeer?code=418073
+
+### Test het inloggen
+POST http://localhost:8080/api/werknemers/login
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com",
+  "wachtwoord": "Wachtwoord123"
+}
+
+### Wijzig het wachtwoord
+PUT http://localhost:8080/api/werknemers/wachtwoord
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com",
+  "oudWachtwoord": "Wachtwoord123",
+  "nieuwWachtwoord": "NieuwWachtwoord123"
+}
+
+### Wachtwoord vergeten aanvragen
+POST http://localhost:8080/api/werknemers/wachtwoord-vergeten
+Content-Type: application/json
+
+{
+  "email": "jan.peeters@email.com"
+}
+
+### Het wachtwoord resetten
+POST http://localhost:8080/api/werknemers/wachtwoord-resetten
+Content-Type: application/json
+
+{
+  "resetCode": "9fdcb086-57e4-45d0-bc07-ff0ae2fe8cbe",
+  "nieuwWachtwoord": "GeresetWachtwoord123"
+}
+
+### Maak een nieuwe site aan
+POST http://localhost:8080/api/sites
+Content-Type: application/json
+
+{
+  "naam": "Hoofdgebouw A",
+  "locatie": "Nieuwstraat 10, 1000 Brussel",
+  "capaciteit": 250,
+  "status": "Actief"
+}
+
+### Wijzig een bestaande site
+PUT http://localhost:8080/api/sites/1
+Content-Type: application/json
+
+{
+  "naam": "HOGENT Campus Schoonmeersen (Geüpdatet)",
+  "stad": "Gent",
+  "land": "België",
+  "latitude": 51.03195,
+  "longitude": 3.70280
+}
+
+### Haal alle sites op
+GET http://localhost:8080/api/sites
+Accept: application/json
+
+### Haal één specifieke site op (vervang 1 door een bestaand ID)
+GET http://localhost:8080/api/sites/1
+Accept: application/json
+
+### Verwijder een site
+DELETE http://localhost:8080/api/sites/1
+
+### Maak een nieuwe machine aan op een bestaande site
+POST http://localhost:8080/api/machines
+Content-Type: application/json
+
+{
+  "naam": "Graafmachine CAT-320",
+  "status": "Actief",
+  "siteId": 2
+}
+
+### Wijzig een bestaande machine
+PUT http://localhost:8080/api/machines/1
+Content-Type: application/json
+
+{
+  "naam": "Graafmachine CAT-320",
+  "status": "Onderhoud",
+  "siteId": 2
+}
+
+### Haal alle machines op
+GET http://localhost:8080/api/sites/2/machines
+Accept: application/json
+
+### Verwijder een machine
+DELETE http://localhost:8080/api/machines/1
+
+### Haal de status van een specifieke machine op
+GET http://localhost:8080/api/machines/1/status
+
+### Verwijder een specifieke werknemer
+DELETE http://localhost:8080/api/werknemers/13
+
+### Blokkeer een werknemer
+PUT http://localhost:8080/api/werknemers/13/blokkeer
+
+### Activeer een werknemer
+PUT http://localhost:8080/api/werknemers/14/activeer
+
+### Deactiveer een werknemer
+PUT http://localhost:8080/api/werknemers/14/deactiveer
