@@ -1,6 +1,6 @@
 package hogent.sdp2.backend.rest.service.notificatie;
 
-import hogent.sdp2.backend.domain.Notificatie;
+import hogent.sdp2.backend.domain.Notificaty;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.rest.dto.request.NotificatieDTO;
 import hogent.sdp2.backend.rest.repository.NotificatieRepository;
@@ -28,7 +28,7 @@ public class NotificatieService {
         Werknemer werknemer = werknemerRepository.findById(werknemerId)
                 .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
 
-        Notificatie notificatie = new Notificatie();
+        Notificaty notificatie = new Notificaty();
         notificatie.setWerknemer(werknemer);
         notificatie.setTitel(titel);
         notificatie.setBericht(bericht);
@@ -69,7 +69,7 @@ public class NotificatieService {
     }
 
     public String markeerAlsGelezen(Integer notificatieId) {
-        Notificatie notificatie = notificatieRepository.findById(notificatieId)
+        Notificaty notificatie = notificatieRepository.findById(notificatieId)
                 .orElseThrow(() -> new RuntimeException("Notificatie niet gevonden"));
         notificatie.setGelezen("Ja");
         notificatieRepository.save(notificatie);

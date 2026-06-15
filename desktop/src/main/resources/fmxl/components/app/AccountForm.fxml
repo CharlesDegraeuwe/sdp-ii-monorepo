@@ -6,11 +6,11 @@
         <?import javafx.scene.control.*?>
         <?import javafx.scene.layout.*?>
 
-<fx:root type="VBox" styleClass="page" alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="VBox" styleClass="account-page" xmlns:fx="http://javafx.com/fxml">
 <VBox styleClass="account-card">
 
-    <Label text="Account informatie" styleClass=""/>
-    <GridPane hgap="20" vgap="20">
+    <Label text="Account informatie" styleClass="account-title"/>
+    <GridPane hgap="20" vgap="20" styleClass="account-card">
 
         <Label text="Naam" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
         <TextField fx:id="naamField"
@@ -48,7 +48,7 @@
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="5"/>
     </GridPane>
-    <Button fx:id="editButton" styleClass="editButton" minWidth="100"
+    <Button fx:id="editButton"
             text="Wijzig"
             onAction="#toggleEdit"/>
 </VBox>

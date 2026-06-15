@@ -63,17 +63,6 @@ public class WerknemerService {
         return new LoginResponseDTO(token, toDTO(werknemer));
     }
 
-    public LoginResponseDTO passwordLogin(LoginRequestDTO dto) {
-        var werknemer = findByEmailOrThrow(dto.email());
-
-        if (!passwordEncoder.matches(dto.wachtwoord(), werknemer.getWachtwoord()))
-            throw new RuntimeException("Ongeldige inloggegevens");
-
-        String token = generateToken(werknemer);
-        return new LoginResponseDTO(token, toDTO(werknemer));
-    }
-
-
     public String wijzigWachtwoord(WachtwoordWijzigenDTO dto) {
         var werknemer = findByEmailOrThrow(dto.email());
 

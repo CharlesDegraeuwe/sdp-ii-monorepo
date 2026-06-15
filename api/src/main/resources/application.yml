@@ -1,6 +1,6 @@
 jwt:
   expiration: 86400000
-  secret: ${JWT_SECRET:jouw-geheime-sleutel-minstens-256-bits-lang-voor-hs256}
+  secret: jouw-geheime-sleutel-minstens-256-bits-lang-voor-hs256
 
 spring:
   ai:
@@ -20,9 +20,9 @@ spring:
     name: backend
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: ${DB_PASSWORD:SDP_Ding_123}
-    url: ${DB_URL:jdbc:mysql://vichogent.be:41219/SDP2_2526_DB_G01?serverTimezone=UTC}
-    username: ${DB_USERNAME:SDP2-2526-G01}
+    password: SDP_Ding_123
+    url: jdbc:mysql://vichogent.be:41219/SDP2_2526_DB_G01?serverTimezone=UTC
+    username: SDP2-2526-G01
   jpa:
     hibernate:
       ddl-auto: none
@@ -30,5 +30,5 @@ spring:
 
 
 resend:
-  api-key: ${RESEND_API_KEY:re_DffPj88a_CmibEmhRSuNH7Zs9VEoxKGz8}
+  api-key: re_DffPj88a_CmibEmhRSuNH7Zs9VEoxKGz8
   from: ${EMAIL_FROM:delaware suite <no-reply@delaware-suite.com>}

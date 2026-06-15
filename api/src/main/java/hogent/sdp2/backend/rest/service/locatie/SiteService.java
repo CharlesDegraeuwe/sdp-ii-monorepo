@@ -1,19 +1,15 @@
 package hogent.sdp2.backend.rest.service.locatie;
 
-import hogent.sdp2.backend.domain.*;
+import hogent.sdp2.backend.domain.Site;
 import hogent.sdp2.backend.rest.dto.request.SiteAanmakenDTO;
-import hogent.sdp2.backend.rest.dto.request.SiteStatsDTO;
 import hogent.sdp2.backend.rest.dto.request.SiteWijzigenDTO;
-import hogent.sdp2.backend.rest.repository.*;
+import hogent.sdp2.backend.rest.repository.SiteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +17,6 @@ import java.util.Set;
 public class SiteService {
 
     private final SiteRepository siteRepository;
-    private final AfwezigheidRepository afwezigheidRepository;
-    private final TeamwerknemerRepository teamwerknemerRepository;
-    private final SiteteamRepository siteteamRepository;
-    private final WerknemerRepository werknemerRepository;
 
     public String maakSite(SiteAanmakenDTO dto) {
         log.info("Audit: Poging tot aanmaken nieuwe site: {}", dto.naam());
@@ -99,58 +91,7 @@ public class SiteService {
     }
 
     public List<Site> haalSitesVanWerknemer(Integer werknemerId) {
-        Werknemer ingelogdeGebruiker = werknemerRepository.findById(werknemerId)
-                .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
-
-        if (ingelogdeGebruiker.getRol() != null && ingelogdeGebruiker.getRol().equals("Admin")) {
-            return siteRepository.findAll();
-        } else {
-            return siteRepository.findSitesByWerknemerId(werknemerId);
-        }
-    }
-
-    public SiteStatsDTO getSiteStatsVoorWerknemer(Integer werknemerId) {
-
-        Werknemer ingelogdeGebruiker = werknemerRepository.findById(werknemerId)
-                .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
-
-        List<Site> sites;
-
-        if (ingelogdeGebruiker.getRol() != null && ingelogdeGebruiker.getRol().equals("Admin")) {
-            sites = siteRepository.findAll();
-        } else {
-            sites = siteRepository.findSitesByWerknemerId(werknemerId);
-        }
-
-        Set<Werknemer> uniekeWerknemers = new HashSet<>();
-
-        for (Site site : sites) {
-            List<Siteteam> siteKoppelingen = siteteamRepository.findBySite(site);
-
-            for (Siteteam st : siteKoppelingen) {
-                Team team = st.getTeam();
-
-                if (team != null) {
-                    List<Teamwerknemer> werknemerKoppelingen = teamwerknemerRepository.findByTeam(team);
-
-                    for (Teamwerknemer tw : werknemerKoppelingen) {
-                        if (tw.getWerknemer() != null) {
-                            uniekeWerknemers.add(tw.getWerknemer());
-                        }
-                    }
-                }
-            }
-        }
-
-        int afwezigen = 0;
-        LocalDate vandaag = LocalDate.now();
-
-        for (Werknemer w : uniekeWerknemers) {
-            boolean isAfwezig = afwezigheidRepository.isWerknemerAfwezigOpDatum(w.getId(), vandaag);
-            if (isAfwezig) {
-                afwezigen++;
-            }
-        }
-        return new SiteStatsDTO(uniekeWerknemers.size(), afwezigen);
+        log.info("Audit: Sites voor werknemer {} worden opgevraagd.", werknemerId);
+        return siteRepository.findAll();
     }
 }

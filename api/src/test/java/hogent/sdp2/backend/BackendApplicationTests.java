@@ -1,12 +1,13 @@
 package hogent.sdp2.backend;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 class BackendApplicationTests {
 
     @Test
-    void placeholder() {
-        // Volledige integratietests vereisen een draaiende database.
-        // Unit tests staan in de service package.
+    void contextLoads() {
     }
+
 }

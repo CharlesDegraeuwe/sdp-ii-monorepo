@@ -32,15 +32,6 @@ public class WerknemerController {
         return ResponseEntity.ok(werknemerService.tokenLogin(dto));
     }
 
-    @PostMapping("/login-password")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto) {
-        try {
-            return ResponseEntity.ok(werknemerService.passwordLogin(dto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
-    }
-
     @PostMapping("/activeer")
     public ResponseEntity<String> activeerWerknemer(@RequestParam String code) {
         return ResponseEntity.ok(werknemerService.activeerAccount(code));
@@ -53,22 +44,14 @@ public class WerknemerController {
     }
 
     @PostMapping("/wachtwoord-vergeten")
-    public ResponseEntity<?> wachtwoordVergeten(@RequestBody WachtwoordVergetenDTO dto) {
-        try {
-            werknemerService.wachtwoordVergetenAanvragen(dto);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public ResponseEntity<Void> wachtwoordVergeten(@RequestBody WachtwoordVergetenDTO dto) {
+        werknemerService.wachtwoordVergetenAanvragen(dto);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/wachtwoord-resetten")
-    public ResponseEntity<?> resetWachtwoord(@RequestBody WachtwoordResetDTO dto) {
-        try {
-            return ResponseEntity.ok(werknemerService.resetWachtwoord(dto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public ResponseEntity<String> resetWachtwoord(@RequestBody WachtwoordResetDTO dto) {
+        return ResponseEntity.ok(werknemerService.resetWachtwoord(dto));
     }
 
     @PreAuthorize("hasAnyRole('Admin', 'Manager')")
