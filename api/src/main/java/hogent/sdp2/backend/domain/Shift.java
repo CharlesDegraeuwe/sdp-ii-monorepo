@@ -1,11 +1,10 @@
 package hogent.sdp2.backend.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -38,5 +37,4 @@ public class Shift {
 
     @Column(name = "Pauze_eind")
     private LocalTime pauzeEind;
-
 }

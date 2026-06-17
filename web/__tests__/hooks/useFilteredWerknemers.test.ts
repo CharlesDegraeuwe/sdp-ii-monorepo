@@ -34,22 +34,20 @@ describe('useFilteredWerknemers', () => {
   });
 
   it('filtert op voornaam', () => {
-    useTeamsStore
-      .getState()
-      .setWerknemers([
-        maakWerknemer({
-          id: 1,
-          voornaam: 'Jan',
-          naam: 'Janssen',
-          email: 'jan@test.be',
-        }),
-        maakWerknemer({
-          id: 2,
-          voornaam: 'Piet',
-          naam: 'Pieters',
-          email: 'piet@test.be',
-        }),
-      ]);
+    useTeamsStore.getState().setWerknemers([
+      maakWerknemer({
+        id: 1,
+        voornaam: 'Jan',
+        naam: 'Janssen',
+        email: 'jan@test.be',
+      }),
+      maakWerknemer({
+        id: 2,
+        voornaam: 'Piet',
+        naam: 'Pieters',
+        email: 'piet@test.be',
+      }),
+    ]);
     const { result } = renderHook(() => useFilteredWerknemers('jan'));
     expect(result.current).toHaveLength(1);
     expect(result.current[0].voornaam).toBe('Jan');

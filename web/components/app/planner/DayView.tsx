@@ -1,8 +1,14 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { MdCheckCircle, MdDelete, MdClose, MdRadioButtonUnchecked } from 'react-icons/md';
+import {
+  MdCheckCircle,
+  MdDelete,
+  MdClose,
+  MdRadioButtonUnchecked,
+} from 'react-icons/md';
 import type { Afwezigheid, PlannerTaak, Shift } from './types';
 import type { FilterState } from './PlannerFilter';
 import type {
@@ -10,7 +16,13 @@ import type {
   WerknemerOptie,
   WerknemerMetTeam,
 } from '@/hooks/usePlanningFilters';
-import { afwezighedenOpDag, isVrij, mapTaakVanBackend, takenOpDag, taakBadgeKleur } from './utils';
+import {
+  afwezighedenOpDag,
+  isVrij,
+  mapTaakVanBackend,
+  takenOpDag,
+  taakBadgeKleur,
+} from './utils';
 import {
   VIS_START,
   UUR_BREEDTE,
@@ -115,7 +127,9 @@ export default function DayView({
   }, [geselecteerdeRij]);
 
   async function handleWerknemerTaakAfgewerkt(taakId: number) {
-    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, { method: 'PUT' });
+    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, {
+      method: 'PUT',
+    });
     if (res.ok) {
       setWerknemerTaken((prev) =>
         prev.map((t) => (t.id === taakId ? { ...t, afgewerkt: true } : t)),
@@ -279,8 +293,12 @@ export default function DayView({
           </div>
 
           {rijen.map((rij) => {
-            const rijShift = shifts.find((s) => s.werknemerId === rij.werknemerId);
-            const rijTaken = (teamTaken[rij.werknemerId] ?? []).filter((t) => !t.afgewerkt);
+            const rijShift = shifts.find(
+              (s) => s.werknemerId === rij.werknemerId,
+            );
+            const rijTaken = (teamTaken[rij.werknemerId] ?? []).filter(
+              (t) => !t.afgewerkt,
+            );
             return (
               <WerknemerRij
                 key={`w${rij.werknemerId}`}
@@ -293,7 +311,9 @@ export default function DayView({
                 isManager={isManager}
                 dagIsVrij={dagIsVrij}
                 huidigUurX={huidigUurX}
-                isGeselecteerd={geselecteerdeRij?.werknemerId === rij.werknemerId}
+                isGeselecteerd={
+                  geselecteerdeRij?.werknemerId === rij.werknemerId
+                }
                 onSelecteer={() =>
                   setGeselecteerdeRij((prev) =>
                     prev?.werknemerId === rij.werknemerId ? null : rij,
@@ -332,7 +352,8 @@ export default function DayView({
 
           {laadtTaken ? (
             <p className="text-xs text-zinc-400 italic">Laden...</p>
-          ) : dagTakenVoorGeselecteerde.length === 0 && werknemerTaken.length === 0 ? (
+          ) : dagTakenVoorGeselecteerde.length === 0 &&
+            werknemerTaken.length === 0 ? (
             <p className="text-xs text-zinc-400 italic">Geen taken gevonden.</p>
           ) : werknemerTaken.length === 0 ? (
             <p className="text-xs text-zinc-400 italic">
@@ -362,7 +383,9 @@ export default function DayView({
                           ? 'text-emerald-500 cursor-default'
                           : 'text-zinc-300 hover:text-emerald-500 cursor-pointer'
                       }`}
-                      title={t.afgewerkt ? 'Afgewerkt' : 'Markeer als afgewerkt'}
+                      title={
+                        t.afgewerkt ? 'Afgewerkt' : 'Markeer als afgewerkt'
+                      }
                     >
                       {t.afgewerkt ? (
                         <MdCheckCircle size={16} />
@@ -372,12 +395,19 @@ export default function DayView({
                     </button>
                   )}
                   {!isManager && t.afgewerkt && (
-                    <MdCheckCircle size={16} className="text-emerald-500 shrink-0" />
+                    <MdCheckCircle
+                      size={16}
+                      className="text-emerald-500 shrink-0"
+                    />
                   )}
                   <span
                     className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${taakBadgeKleur(t)}`}
                   >
-                    {t.afgewerkt ? 'Afgewerkt' : t.belangrijk ? 'Belangrijk' : 'Taak'}
+                    {t.afgewerkt
+                      ? 'Afgewerkt'
+                      : t.belangrijk
+                        ? 'Belangrijk'
+                        : 'Taak'}
                   </span>
                   <span
                     className={`text-xs font-semibold flex-1 truncate ${t.afgewerkt ? 'line-through text-zinc-400' : 'text-zinc-800'}`}

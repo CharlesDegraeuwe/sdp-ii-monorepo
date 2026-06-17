@@ -50,6 +50,7 @@ public class BeheerGebruikersController extends VBox {
         if (!Sessie.getInstance().isAdmin()) {
             foutLabel.setText("Toegang geweigerd: alleen admins kunnen deze pagina bekijken.");
             foutLabel.setVisible(true);
+            foutLabel.setManaged(true);
             gebruikersTable.setVisible(false);
             return;
         }
@@ -66,17 +67,6 @@ public class BeheerGebruikersController extends VBox {
             private final ComboBox<String> combo = new ComboBox<>(FXCollections.observableArrayList("Admin", "Manager", "Werknemer"));
             {
                 combo.setMaxWidth(Double.MAX_VALUE);
-                combo.setOnAction(e -> {
-                    WerknemerDTO w = getTableView().getItems().get(getIndex());
-                    String nieuweRol = combo.getValue();
-                    if (w != null && nieuweRol != null && !nieuweRol.equals(w.rol())) {
-                        updateRoleStyle(combo, nieuweRol);
-
-                        // API call om de rol in de database te updaten.
-                        // Bijv: service.updateRol(w.id(), nieuweRol);
-                        System.out.println("Rol updaten naar " + nieuweRol + " voor " + w.email());
-                    }
-                });
             }
 
             @Override
@@ -85,11 +75,46 @@ public class BeheerGebruikersController extends VBox {
                 if (empty || rol == null) {
                     setGraphic(null);
                 } else {
+                    // 1. Schakel de actie tijdelijk uit om valse API calls te voorkomen
+                    combo.setOnAction(null);
+
+                    // Omzetten van Supervisor naar Werknemer voor de weergave
                     String weergaveRol = rol.equalsIgnoreCase("Supervisor") ? "Werknemer" : rol;
 
                     combo.setValue(weergaveRol);
                     updateRoleStyle(combo, weergaveRol);
                     setGraphic(combo);
+
+                    combo.setOnAction(e -> {
+                        WerknemerDTO w = getTableView().getItems().get(getIndex());
+                        String nieuweRol = combo.getValue();
+
+                        if (w != null && nieuweRol != null && !nieuweRol.equals(weergaveRol)) {
+                            updateRoleStyle(combo, nieuweRol);
+
+                            new Thread(() -> {
+                                try {
+                                    boolean succes = service.veranderRol(w.id(), nieuweRol);
+
+                                    if (succes) {
+                                        Platform.runLater(() -> laadWerknemers());
+                                    } else {
+                                        Platform.runLater(() -> {
+                                            foutLabel.setText("Fout bij updaten rol op de server.");
+                                            foutLabel.setVisible(true);
+                                            foutLabel.setManaged(true);
+                                        });
+                                    }
+                                } catch (Exception ex) {
+                                    Platform.runLater(() -> {
+                                        foutLabel.setText("Connectiefout bij rol wijzigen: " + ex.getMessage());
+                                        foutLabel.setVisible(true);
+                                        foutLabel.setManaged(true);
+                                    });
+                                }
+                            }).start();
+                        }
+                    });
                 }
             }
         });
@@ -100,41 +125,6 @@ public class BeheerGebruikersController extends VBox {
             private final ComboBox<String> combo = new ComboBox<>(FXCollections.observableArrayList("Actief", "Inactief", "Geblokkeerd"));
             {
                 combo.setMaxWidth(Double.MAX_VALUE);
-                combo.setOnAction(e -> {
-                    WerknemerDTO w = getTableView().getItems().get(getIndex());
-                    String nieuweStatus = combo.getValue();
-                    if (w != null && nieuweStatus != null && !nieuweStatus.equals(w.status())) {
-                        updateStatusStyle(combo, nieuweStatus);
-
-                        String actie = switch (nieuweStatus.toLowerCase()) {
-                            case "actief" -> "activeer";
-                            case "inactief" -> "deactiveer";
-                            case "geblokkeerd" -> "blokkeer";
-                            default -> "";
-                        };
-
-                        new Thread(() -> {
-                            try {
-                                boolean succes = service.veranderStatus(w.id(), actie);
-                                if (succes) {
-                                    Platform.runLater(() -> laadWerknemers());
-                                } else {
-                                    Platform.runLater(() -> {
-                                        foutLabel.setText("Fout bij updaten status.");
-                                        foutLabel.setVisible(true);
-                                        foutLabel.setManaged(true);
-                                    });
-                                }
-                            } catch (Exception ex) {
-                                Platform.runLater(() -> {
-                                    foutLabel.setText("Connectiefout: " + ex.getMessage());
-                                    foutLabel.setVisible(true);
-                                    foutLabel.setManaged(true);
-                                });
-                            }
-                        }).start();
-                    }
-                });
             }
 
             @Override
@@ -143,9 +133,50 @@ public class BeheerGebruikersController extends VBox {
                 if (empty || status == null) {
                     setGraphic(null);
                 } else {
+                    // 1. Schakel de actie tijdelijk uit
+                    combo.setOnAction(null);
+
                     combo.setValue(status);
                     updateStatusStyle(combo, status);
                     setGraphic(combo);
+
+                    // 2. Koppel de actie voor echte gebruikersinteractie
+                    combo.setOnAction(e -> {
+                        WerknemerDTO w = getTableView().getItems().get(getIndex());
+                        String nieuweStatus = combo.getValue();
+
+                        if (w != null && nieuweStatus != null && !nieuweStatus.equals(status)) {
+                            updateStatusStyle(combo, nieuweStatus);
+
+                            String actie = switch (nieuweStatus.toLowerCase()) {
+                                case "actief" -> "activeer";
+                                case "inactief" -> "deactiveer";
+                                case "geblokkeerd" -> "blokkeer";
+                                default -> "";
+                            };
+
+                            new Thread(() -> {
+                                try {
+                                    boolean succes = service.veranderStatus(w.id(), actie);
+                                    if (succes) {
+                                        Platform.runLater(() -> laadWerknemers());
+                                    } else {
+                                        Platform.runLater(() -> {
+                                            foutLabel.setText("Fout bij updaten status.");
+                                            foutLabel.setVisible(true);
+                                            foutLabel.setManaged(true);
+                                        });
+                                    }
+                                } catch (Exception ex) {
+                                    Platform.runLater(() -> {
+                                        foutLabel.setText("Connectiefout: " + ex.getMessage());
+                                        foutLabel.setVisible(true);
+                                        foutLabel.setManaged(true);
+                                    });
+                                }
+                            }).start();
+                        }
+                    });
                 }
             }
         });
@@ -155,6 +186,11 @@ public class BeheerGebruikersController extends VBox {
         statusFilterBox.getItems().addAll("Alle", "Actief", "Inactief", "Geblokkeerd");
         statusFilterBox.getSelectionModel().selectFirst();
         laadWerknemers();
+    }
+
+    @FXML
+    private void handleBack() {
+        hogent.sdp2.sdpii.gui.router.Router.getInstance().navigeerNaar(hogent.sdp2.sdpii.gui.router.Scherm.ADMIN_HOME);
     }
 
     private void laadWerknemers() {
@@ -173,9 +209,9 @@ public class BeheerGebruikersController extends VBox {
                         filteredData.setPredicate(werknemer -> {
                             boolean statusMatch = "Alle".equals(gekozenStatus) || gekozenStatus.equalsIgnoreCase(werknemer.status());
                             boolean tekstMatch = zoekTekst.isBlank() ||
-                                    (werknemer.voornaam() != null && werknemer.voornaam().toLowerCase().contains(zoekTekst)) ||
-                                    (werknemer.naam() != null && werknemer.naam().toLowerCase().contains(zoekTekst)) ||
-                                    (werknemer.email() != null && werknemer.email().toLowerCase().contains(zoekTekst));
+                                (werknemer.voornaam() != null && werknemer.voornaam().toLowerCase().contains(zoekTekst)) ||
+                                (werknemer.naam() != null && werknemer.naam().toLowerCase().contains(zoekTekst)) ||
+                                (werknemer.email() != null && werknemer.email().toLowerCase().contains(zoekTekst));
                             return statusMatch && tekstMatch;
                         });
                     };
@@ -214,8 +250,8 @@ public class BeheerGebruikersController extends VBox {
         }
 
         combo.setStyle(String.format(
-                "-fx-background-color: %s; -fx-border-color: %s; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: bold; -fx-text-base-color: %s;",
-                bg, border, text
+            "-fx-background-color: %s; -fx-border-color: %s; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: bold; -fx-text-base-color: %s;",
+            bg, border, text
         ));
     }
 
@@ -232,8 +268,8 @@ public class BeheerGebruikersController extends VBox {
         }
 
         combo.setStyle(String.format(
-                "-fx-background-color: %s; -fx-border-color: %s; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: bold; -fx-text-base-color: %s;",
-                bg, border, text
+            "-fx-background-color: %s; -fx-border-color: %s; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: bold; -fx-text-base-color: %s;",
+            bg, border, text
         ));
     }
 }

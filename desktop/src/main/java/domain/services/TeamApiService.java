@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class TeamApiService extends ApiService {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private final String BASE_URL = dotenv.get("BASE_URL") + "/teams";
 
     public List<TeamDTO> getAlleTeams() {

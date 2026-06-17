@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WerknemersApiService extends ApiService {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private final String BASE_URL = dotenv.get("BASE_URL") +"/werknemers";
 
     //calls etc
@@ -124,6 +124,25 @@ public class WerknemersApiService extends ApiService {
             return response.statusCode() == 200 || response.statusCode() == 204;
         } catch (Exception e) {
             throw new RuntimeException("Fout bij status wijzigen", e);
+        }
+    }
+
+    public boolean veranderRol(int werknemerId, String nieuweRol) {
+        try {
+            java.net.http.HttpRequest request = authenticatedRequest(BASE_URL + "/" + werknemerId + "/rol?nieuweRol=" + nieuweRol)
+                .PUT(java.net.http.HttpRequest.BodyPublishers.noBody())
+                .build();
+
+            java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                System.err.println("Fout bij updaten rol: Status " + response.statusCode());
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("Crash in veranderRol API: " + e.getMessage());
+            return false;
         }
     }
 

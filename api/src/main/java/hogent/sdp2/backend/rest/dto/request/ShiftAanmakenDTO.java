@@ -10,5 +10,4 @@ public record ShiftAanmakenDTO(
         LocalTime startTijd,
         LocalTime eindTijd,
         LocalTime pauzeStart,
-        LocalTime pauzeEind
-) {}
+        LocalTime pauzeEind) {}

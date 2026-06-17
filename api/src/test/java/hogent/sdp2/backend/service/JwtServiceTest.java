@@ -1,15 +1,14 @@
 package hogent.sdp2.backend.service;
 
+import static org.assertj.core.api.Assertions.*;
+
 import hogent.sdp2.backend.auth.JwtService;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
 
 class JwtServiceTest {
 
@@ -20,13 +19,15 @@ class JwtServiceTest {
     void setUp() {
         jwtService = new JwtService();
         // minimum 32 chars voor HMAC-SHA256
-        ReflectionTestUtils.setField(jwtService, "secret", "testSecretKeyDieMinimaal32CharsLangMoetZijn!!");
+        ReflectionTestUtils.setField(
+                jwtService, "secret", "testSecretKeyDieMinimaal32CharsLangMoetZijn!!");
         ReflectionTestUtils.setField(jwtService, "expiration", 86400000L); // 24u
 
-        userDetails = User.withUsername("jan@test.be")
-                .password("password")
-                .authorities(List.of())
-                .build();
+        userDetails =
+                User.withUsername("jan@test.be")
+                        .password("password")
+                        .authorities(List.of())
+                        .build();
     }
 
     @Test
@@ -56,10 +57,8 @@ class JwtServiceTest {
     @Test
     void isTokenValid_metUserDetails_geeftFalseVoorVerkeerdeGebruiker() {
         String token = jwtService.generateToken(userDetails, 1);
-        UserDetails andere = User.withUsername("andere@test.be")
-                .password("pass")
-                .authorities(List.of())
-                .build();
+        UserDetails andere =
+                User.withUsername("andere@test.be").password("pass").authorities(List.of()).build();
 
         assertThat(jwtService.isTokenValid(token, andere)).isFalse();
     }
@@ -99,10 +98,8 @@ class JwtServiceTest {
 
     @Test
     void generateToken_tweeTokensVoorVerschillendeUsersZijnVerschillend() {
-        UserDetails andere = User.withUsername("andere@test.be")
-                .password("pass")
-                .authorities(List.of())
-                .build();
+        UserDetails andere =
+                User.withUsername("andere@test.be").password("pass").authorities(List.of()).build();
 
         String token1 = jwtService.generateToken(userDetails, 1);
         String token2 = jwtService.generateToken(andere, 2);

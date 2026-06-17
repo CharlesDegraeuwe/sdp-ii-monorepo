@@ -47,26 +47,41 @@ export function ShiftAanmakenModal({
 
   const [stap, setStap] = useState<Stap>(1);
   const [wieKeuze, setWieKeuze] = useState<WieKeuze>('eigen');
-  const [geselecteerdeTeamId, setGeselecteerdeTeamId] = useState<number | null>(null);
-  const [geselecteerdeWerknemerId, setGeselecteerdeWerknemerId] = useState<number | null>(null);
+  const [geselecteerdeTeamId, setGeselecteerdeTeamId] = useState<number | null>(
+    null,
+  );
+  const [geselecteerdeWerknemerId, setGeselecteerdeWerknemerId] = useState<
+    number | null
+  >(null);
 
-  const beschikbareWerknemers = isManager && geselecteerdeTeamId !== null
-    ? werknemers.filter((w) => w.teamId === geselecteerdeTeamId)
-    : werknemers;
+  const beschikbareWerknemers =
+    isManager && geselecteerdeTeamId !== null
+      ? werknemers.filter((w) => w.teamId === geselecteerdeTeamId)
+      : werknemers;
 
   const [startDatum, setStartDatum] = useState(vandaag);
   const [eindDatum, setEindDatum] = useState(vandaag);
-  const [startTijd, setStartTijd] = useState<string>(STANDAARD_TIJDEN.startTijd);
+  const [startTijd, setStartTijd] = useState<string>(
+    STANDAARD_TIJDEN.startTijd,
+  );
   const [eindTijd, setEindTijd] = useState<string>(STANDAARD_TIJDEN.eindTijd);
-  const [pauzeStart, setPauzeStart] = useState<string>(STANDAARD_TIJDEN.pauzeStart);
-  const [pauzeEind, setPauzeEind] = useState<string>(STANDAARD_TIJDEN.pauzeEind);
+  const [pauzeStart, setPauzeStart] = useState<string>(
+    STANDAARD_TIJDEN.pauzeStart,
+  );
+  const [pauzeEind, setPauzeEind] = useState<string>(
+    STANDAARD_TIJDEN.pauzeEind,
+  );
 
-  const [geselecteerdeTaken, setGeselecteerdeTaken] = useState<Set<string>>(new Set());
+  const [geselecteerdeTaken, setGeselecteerdeTaken] = useState<Set<string>>(
+    new Set(),
+  );
   const [bezig, setBezig] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const werknemerId = wieKeuze === 'eigen' ? eigenId : geselecteerdeWerknemerId;
-  const geselecteerdeWerknemer = werknemers.find((w) => w.id === geselecteerdeWerknemerId);
+  const geselecteerdeWerknemer = werknemers.find(
+    (w) => w.id === geselecteerdeWerknemerId,
+  );
   const werknemerLabel =
     wieKeuze === 'eigen'
       ? `${eigenVoornaam} ${eigenNaam}`
@@ -141,7 +156,8 @@ export function ShiftAanmakenModal({
     }
   }
 
-  const stapLabel = stap === 1 ? 'Voor wie?' : stap === 2 ? 'Shift details' : 'Taken toevoegen';
+  const stapLabel =
+    stap === 1 ? 'Voor wie?' : stap === 2 ? 'Shift details' : 'Taken toevoegen';
 
   return (
     <Modal onClose={onClose}>
@@ -149,7 +165,9 @@ export function ShiftAanmakenModal({
         {/* Header */}
         <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-zinc-100">
           <div>
-            <h2 className="font-bold text-zinc-900 text-base">Shift aanmaken</h2>
+            <h2 className="font-bold text-zinc-900 text-base">
+              Shift aanmaken
+            </h2>
             <p className="text-xs text-zinc-400 mt-0.5">
               Stap {stap} van 3 — {stapLabel}
             </p>
@@ -173,8 +191,16 @@ export function ShiftAanmakenModal({
             <div className="flex flex-col gap-2">
               {(
                 [
-                  { key: 'eigen', label: 'Eigen planning', sub: `${eigenVoornaam} ${eigenNaam}` },
-                  { key: 'teamlid', label: 'Teamlid', sub: 'Kies een werknemer' },
+                  {
+                    key: 'eigen',
+                    label: 'Eigen planning',
+                    sub: `${eigenVoornaam} ${eigenNaam}`,
+                  },
+                  {
+                    key: 'teamlid',
+                    label: 'Teamlid',
+                    sub: 'Kies een werknemer',
+                  },
                 ] as { key: WieKeuze; label: string; sub: string }[]
               ).map(({ key, label, sub }) => (
                 <button
@@ -188,11 +214,15 @@ export function ShiftAanmakenModal({
                 >
                   <span
                     className={`w-3 h-3 rounded-full border-2 flex-shrink-0 transition ${
-                      wieKeuze === key ? 'bg-zinc-800 border-zinc-800' : 'border-zinc-300'
+                      wieKeuze === key
+                        ? 'bg-zinc-800 border-zinc-800'
+                        : 'border-zinc-300'
                     }`}
                   />
                   <div>
-                    <p className={wieKeuze === key ? 'font-medium' : ''}>{label}</p>
+                    <p className={wieKeuze === key ? 'font-medium' : ''}>
+                      {label}
+                    </p>
                     <p className="text-[11px] text-zinc-400 mt-0.5">{sub}</p>
                   </div>
                 </button>
@@ -202,28 +232,41 @@ export function ShiftAanmakenModal({
               <Select
                 label="Team"
                 placeholder="Selecteer een team"
-                options={teams.map((t) => ({ value: String(t.id), label: t.naam }))}
-                value={geselecteerdeTeamId !== null ? String(geselecteerdeTeamId) : undefined}
+                options={teams.map((t) => ({
+                  value: String(t.id),
+                  label: t.naam,
+                }))}
+                value={
+                  geselecteerdeTeamId !== null
+                    ? String(geselecteerdeTeamId)
+                    : undefined
+                }
                 onChange={(v) => {
                   setGeselecteerdeTeamId(Number(v));
                   setGeselecteerdeWerknemerId(null);
                 }}
               />
             )}
-            {wieKeuze === 'teamlid' && (!isManager || geselecteerdeTeamId !== null) && !isSupervisor && (
-              <Select
-                label="Teamlid"
-                placeholder="Selecteer een teamlid"
-                options={beschikbareWerknemers.map((w) => ({
-                  value: String(w.id),
-                  label: isManager
-                    ? `${w.voornaam} ${w.naam}`
-                    : `${w.voornaam} ${w.naam} — ${w.teamNaam}`,
-                }))}
-                value={geselecteerdeWerknemerId !== null ? String(geselecteerdeWerknemerId) : undefined}
-                onChange={(v) => setGeselecteerdeWerknemerId(Number(v))}
-              />
-            )}
+            {wieKeuze === 'teamlid' &&
+              (!isManager || geselecteerdeTeamId !== null) &&
+              !isSupervisor && (
+                <Select
+                  label="Teamlid"
+                  placeholder="Selecteer een teamlid"
+                  options={beschikbareWerknemers.map((w) => ({
+                    value: String(w.id),
+                    label: isManager
+                      ? `${w.voornaam} ${w.naam}`
+                      : `${w.voornaam} ${w.naam} — ${w.teamNaam}`,
+                  }))}
+                  value={
+                    geselecteerdeWerknemerId !== null
+                      ? String(geselecteerdeWerknemerId)
+                      : undefined
+                  }
+                  onChange={(v) => setGeselecteerdeWerknemerId(Number(v))}
+                />
+              )}
             {wieKeuze === 'teamlid' && isSupervisor && (
               <Select
                 label="Teamlid"
@@ -232,7 +275,11 @@ export function ShiftAanmakenModal({
                   value: String(w.id),
                   label: `${w.voornaam} ${w.naam} — ${w.teamNaam}`,
                 }))}
-                value={geselecteerdeWerknemerId !== null ? String(geselecteerdeWerknemerId) : undefined}
+                value={
+                  geselecteerdeWerknemerId !== null
+                    ? String(geselecteerdeWerknemerId)
+                    : undefined
+                }
                 onChange={(v) => setGeselecteerdeWerknemerId(Number(v))}
               />
             )}
@@ -325,12 +372,17 @@ export function ShiftAanmakenModal({
           <div className="px-6 py-5 flex flex-col gap-3">
             <p className="text-sm text-zinc-500">
               Wijs direct taken toe aan{' '}
-              <span className="font-medium text-zinc-800">{werknemerLabel}</span>.
-              Dit is optioneel.
+              <span className="font-medium text-zinc-800">
+                {werknemerLabel}
+              </span>
+              . Dit is optioneel.
             </p>
             {onbezetteTaken.length === 0 ? (
               <div className="flex items-center justify-center py-10">
-                <Label text="Geen onbezette taken beschikbaar" variant="emptystate" />
+                <Label
+                  text="Geen onbezette taken beschikbaar"
+                  variant="emptystate"
+                />
               </div>
             ) : (
               <div className="flex flex-col gap-1.5 max-h-56 overflow-y-auto pr-1">
@@ -348,15 +400,22 @@ export function ShiftAanmakenModal({
                     >
                       <span
                         className={`w-3.5 h-3.5 rounded border-2 flex-shrink-0 transition ${
-                          selected ? 'bg-zinc-800 border-zinc-800' : 'border-zinc-300'
+                          selected
+                            ? 'bg-zinc-800 border-zinc-800'
+                            : 'border-zinc-300'
                         }`}
                       />
                       <HiOutlineClipboardDocumentList className="w-4 h-4 text-zinc-400 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <p className={`truncate ${selected ? 'font-medium' : ''}`}>{t.name}</p>
+                        <p
+                          className={`truncate ${selected ? 'font-medium' : ''}`}
+                        >
+                          {t.name}
+                        </p>
                         {t.dueDate && (
                           <p className="text-[10px] text-zinc-400 mt-0.5">
-                            Deadline: {new Date(t.dueDate).toLocaleDateString('nl-BE')}
+                            Deadline:{' '}
+                            {new Date(t.dueDate).toLocaleDateString('nl-BE')}
                           </p>
                         )}
                       </div>

@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DashboardApiService extends ApiService {
-    private final String BASE_URL = Dotenv.load().get("BASE_URL");
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private final String BASE_URL = dotenv.get("BASE_URL");
 
     public int getTotaalWerknemers() {
         try {

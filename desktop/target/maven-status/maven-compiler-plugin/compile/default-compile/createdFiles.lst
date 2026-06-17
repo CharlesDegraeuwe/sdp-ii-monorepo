@@ -1,8 +1,11 @@
 hogent\sdp2\sdpii\gui\components\auth\LoginFormController$3.class
 hogent\sdp2\sdpii\gui\components\auth\LoginFormController$2.class
+domain\dto\WerknemerKortDTO.class
 hogent\sdp2\sdpii\gui\app\overzicht\components\notificaties\NotificatieController.class
+domain\dto\ActiviteitLogDTO.class
 domain\services\ShiftApiService.class
 hogent\sdp2\sdpii\gui\app\overzicht\components\jouw_uren\JouwUrenController.class
+domain\services\DashboardApiService.class
 domain\dto\LoginResponseDTO.class
 hogent\sdp2\sdpii\gui\app\overzicht\components\locatie_info\LocatieInfoController.class
 hogent\sdp2\sdpii\gui\components\app\AccountFormController.class
@@ -15,3 +18,4 @@ hogent\sdp2\sdpii\gui\components\auth\LoginFormController$1.class
 hogent\sdp2\sdpii\gui\app\overzicht\components\notificaties\NotificatieItemController.class
 hogent\sdp2\sdpii\gui\app\overzicht\components\jouw_uren\JouwUrenController$1.class
 hogent\sdp2\sdpii\gui\components\auth\LoginFormController$Stap.class
+hogent\sdp2\sdpii\gui\admin\beheerGebruikers\BeheerGebruikersController$2.class

@@ -40,7 +40,9 @@ export function usePlanningFilters(
 
   // Ref zodat callbacks stabiel blijven ook al verandert authHeader (token refresh)
   const authRef = useRef(authHeader);
-  authRef.current = authHeader;
+  useEffect(() => {
+    authRef.current = authHeader;
+  }, [authHeader]);
 
   useEffect(() => {
     const bearer = authHeader.Authorization;
@@ -48,14 +50,19 @@ export function usePlanningFilters(
 
     if (isSupervisor && eigenId) {
       fetch(`${BASE}/teams/werknemer/${eigenId}`, { headers: authHeader })
-        .then((r) => (r.ok ? (r.json() as Promise<TeamOptie[]>) : Promise.resolve([])))
+        .then((r) =>
+          r.ok ? (r.json() as Promise<TeamOptie[]>) : Promise.resolve([]),
+        )
         .then((supervisorTeams) => {
           setTeams(supervisorTeams);
           const uniekeSites = Array.from(
             new Map(
               supervisorTeams
                 .filter((t) => t.siteId)
-                .map((t) => [t.siteId, { id: t.siteId, naam: t.siteNaam, locatie: '' }]),
+                .map((t) => [
+                  t.siteId,
+                  { id: t.siteId, naam: t.siteNaam, locatie: '' },
+                ]),
             ).values(),
           );
           setSites(uniekeSites);

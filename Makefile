@@ -77,5 +77,5 @@ lint:
 
 lint-fix:
 	cd web/ && bunx prettier --write "**/*.{ts,tsx,js,jsx,json,css,md}" && bun run lint --fix
-	cd api/ && ./mvnw spotless:apply -q
-	cd desktop/ && ./mvnw spotless:apply -q
+	cd api/ && mvnw spotless:apply -q
+	cd desktop/ && mvnw spotless:apply -q

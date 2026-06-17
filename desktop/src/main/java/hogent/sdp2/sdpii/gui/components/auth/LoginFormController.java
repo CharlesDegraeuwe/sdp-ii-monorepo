@@ -103,7 +103,16 @@ public class LoginFormController extends VBox {
             }
         });
 
-        task.setOnFailed(e -> toonFout("Ongeldig email of wachtwoord."));
+        task.setOnFailed(e -> {
+            Throwable exception = task.getException();
+            if (exception != null) {
+                toonFout(exception.getMessage());
+
+                exception.printStackTrace();
+            } else {
+                toonFout("Onbekende fout tijdens inloggen.");
+            }
+        });
 
         new Thread(task).start();
     }

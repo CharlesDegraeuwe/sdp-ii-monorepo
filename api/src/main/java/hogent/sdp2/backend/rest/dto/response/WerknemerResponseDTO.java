@@ -10,5 +10,4 @@ public record WerknemerResponseDTO(
         String telefoonnummer,
         LocalDate geboortedatum,
         String rol,
-        String status
-) {}
+        String status) {}

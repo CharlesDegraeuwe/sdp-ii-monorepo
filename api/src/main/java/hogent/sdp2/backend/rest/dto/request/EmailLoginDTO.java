@@ -1,4 +1,3 @@
 package hogent.sdp2.backend.rest.dto.request;
 
-public record EmailLoginDTO(String email) {
-}
+public record EmailLoginDTO(String email) {}

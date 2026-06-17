@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ComboBox?>
 
-<fx:root type="VBox" stylesheets="@/css/manageUsers.css" styleClass="page" spacing="20" xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-    <Label text="Beheer gebruikers" styleClass="page-title"/>
+<fx:root type="VBox" stylesheets="@/css/manageUsers.css" styleClass="page" xmlns:fx="http://javafx.com/fxml">
 
-    <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false" text=""/>
-
-    <HBox spacing="10" styleClass="toolbar">
-        <TextField fx:id="zoekField" promptText="Zoek op naam of email..." prefWidth="300"/>
-        <ComboBox fx:id="statusFilterBox" promptText="Filter op status..." prefWidth="150"/>
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Button onAction="#handleBack" styleClass="icon-btn">
+            <graphic>
+                <FontIcon iconLiteral="ion4-ios-arrow-round-back" iconSize="26" iconColor="#475569" mouseTransparent="true"/>
+            </graphic>
+        </Button>
+        <VBox spacing="2">
+            <Label text="Beheer gebruikers" styleClass="page-title"/>
+            <Label text="Details van het personeel wijzigen." styleClass="page-subtitle"/>
+        </VBox>
     </HBox>
 
-    <TableView fx:id="gebruikersTable" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="naamCol" text="Naam" prefWidth="120"/>
-            <TableColumn fx:id="voornaamCol" text="Voornaam" prefWidth="120"/>
-            <TableColumn fx:id="emailCol" text="Email" prefWidth="200"/>
-            <TableColumn fx:id="rolCol" text="Rol" prefWidth="100"/>
-            <TableColumn fx:id="statusCol" text="Status" prefWidth="100"/>
-            <TableColumn fx:id="telefoonCol" text="Telefoonnummer" prefWidth="140"/>
-        </columns>
-    </TableView>
+    <Label fx:id="foutLabel" styleClass="error-label" visible="false" managed="false" text="" style="-fx-text-fill: #e31b35; -fx-font-weight: bold;"/>
+
+    <VBox styleClass="modern-table-container" VBox.vgrow="ALWAYS" spacing="15">
+
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <TextField fx:id="zoekField" promptText="Zoek op naam, email..." styleClass="modern-input" prefWidth="350"/>
+            <Region HBox.hgrow="ALWAYS" /> <Label text="Filter:" style="-fx-text-fill: #64748b; -fx-font-weight: bold;"/>
+            <ComboBox fx:id="statusFilterBox" promptText="Filter op status" styleClass="modern-input" prefWidth="180"/>
+        </HBox>
+
+        <TableView fx:id="gebruikersTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="naamCol" text="NAAM" prefWidth="140"/>
+                <TableColumn fx:id="voornaamCol" text="VOORNAAM" prefWidth="140"/>
+                <TableColumn fx:id="emailCol" text="EMAILADRES" prefWidth="250"/>
+                <TableColumn fx:id="rolCol" text="ROL" prefWidth="150"/>
+                <TableColumn fx:id="statusCol" text="STATUS" prefWidth="150"/>
+                <TableColumn fx:id="telefoonCol" text="TELEFOON" prefWidth="140"/>
+            </columns>
+        </TableView>
+
+    </VBox>
 
 </fx:root>

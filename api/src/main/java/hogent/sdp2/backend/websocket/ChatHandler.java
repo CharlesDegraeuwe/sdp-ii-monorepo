@@ -2,6 +2,7 @@ package hogent.sdp2.backend.websocket;
 
 import hogent.sdp2.backend.websocket.dto.IncomingMsgDTO;
 import hogent.sdp2.backend.websocket.dto.OutGoingMsgDTO;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -9,8 +10,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import tools.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
@@ -22,13 +21,15 @@ public class ChatHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         Integer userId = (Integer) session.getAttributes().get("userId");
-        System.out.println("=== WS CONNECTED === session: " + session.getId() + " userId: " + userId);
+        System.out.println(
+                "=== WS CONNECTED === session: " + session.getId() + " userId: " + userId);
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         try {
-            IncomingMsgDTO incoming = objectMapper.readValue(message.getPayload(), IncomingMsgDTO.class);
+            IncomingMsgDTO incoming =
+                    objectMapper.readValue(message.getPayload(), IncomingMsgDTO.class);
             int userId = (Integer) session.getAttributes().get("userId");
             String userRole = (String) session.getAttributes().get("userRole");
 
@@ -39,8 +40,7 @@ public class ChatHandler extends TextWebSocketHandler {
                     userId,
                     userRole,
                     chunk -> send(session, OutGoingMsgDTO.chunk(chunk)),
-                    () -> send(session, OutGoingMsgDTO.done())
-            );
+                    () -> send(session, OutGoingMsgDTO.done()));
 
         } catch (Exception e) {
             send(session, OutGoingMsgDTO.error(e.getMessage()));

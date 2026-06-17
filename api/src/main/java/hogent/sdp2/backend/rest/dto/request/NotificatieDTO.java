@@ -9,5 +9,4 @@ public record NotificatieDTO(
         String bericht,
         String gelezen,
         LocalDate datum,
-        Integer referentieId
-) {}
+        Integer referentieId) {}

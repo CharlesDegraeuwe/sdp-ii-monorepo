@@ -1,5 +1,10 @@
 package hogent.sdp2.backend.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
 import hogent.sdp2.backend.domain.Notificatie;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.rest.dto.request.NotificatieDTO;
@@ -7,6 +12,9 @@ import hogent.sdp2.backend.rest.repository.NotificatieRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
 import hogent.sdp2.backend.rest.service.sse.SseService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,15 +22,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class NotificatieServiceTest {
@@ -57,11 +56,13 @@ class NotificatieServiceTest {
     @Test
     void maakNotificatie_slaatOpEnPushSSE() {
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
-        when(notificatieRepository.save(any(Notificatie.class))).thenAnswer(inv -> {
-            Notificatie n = inv.getArgument(0);
-            n.setId(100);
-            return n;
-        });
+        when(notificatieRepository.save(any(Notificatie.class)))
+                .thenAnswer(
+                        inv -> {
+                            Notificatie n = inv.getArgument(0);
+                            n.setId(100);
+                            return n;
+                        });
 
         notificatieService.maakNotificatie(1, "Titel", "Bericht");
 
@@ -72,11 +73,13 @@ class NotificatieServiceTest {
     @Test
     void maakNotificatie_zetCorrectVelden() {
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
-        when(notificatieRepository.save(any(Notificatie.class))).thenAnswer(inv -> {
-            Notificatie n = inv.getArgument(0);
-            n.setId(99);
-            return n;
-        });
+        when(notificatieRepository.save(any(Notificatie.class)))
+                .thenAnswer(
+                        inv -> {
+                            Notificatie n = inv.getArgument(0);
+                            n.setId(99);
+                            return n;
+                        });
 
         notificatieService.maakNotificatie(1, "Mijn Titel", "Mijn Bericht");
 
@@ -94,11 +97,13 @@ class NotificatieServiceTest {
     @Test
     void maakNotificatie_metReferentieId_slaatReferentieOp() {
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
-        when(notificatieRepository.save(any(Notificatie.class))).thenAnswer(inv -> {
-            Notificatie n = inv.getArgument(0);
-            n.setId(100);
-            return n;
-        });
+        when(notificatieRepository.save(any(Notificatie.class)))
+                .thenAnswer(
+                        inv -> {
+                            Notificatie n = inv.getArgument(0);
+                            n.setId(100);
+                            return n;
+                        });
 
         notificatieService.maakNotificatie(1, "Verlof", "Bericht", 42);
 

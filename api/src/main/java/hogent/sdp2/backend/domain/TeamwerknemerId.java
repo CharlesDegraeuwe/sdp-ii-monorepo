@@ -2,17 +2,17 @@ package hogent.sdp2.backend.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
 @Embeddable
 public class TeamwerknemerId implements Serializable {
     private static final long serialVersionUID = 5551010681777690664L;
+
     @Column(name = "Team_ID", nullable = false)
     private Integer teamId;
 
@@ -24,13 +24,12 @@ public class TeamwerknemerId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TeamwerknemerId entity = (TeamwerknemerId) o;
-        return Objects.equals(this.werknemerId, entity.werknemerId) &&
-                Objects.equals(this.teamId, entity.teamId);
+        return Objects.equals(this.werknemerId, entity.werknemerId)
+                && Objects.equals(this.teamId, entity.teamId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(werknemerId, teamId);
     }
-
 }

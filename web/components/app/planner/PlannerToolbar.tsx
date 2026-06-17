@@ -60,7 +60,9 @@ export function PlannerToolbar({
   onFilterChange,
   onShiftAanmaken,
 }: PlannerToolbarProps) {
-  const zichtbareTabs = kanTeamZien ? tabs : tabs.filter((t) => t.key !== 'team');
+  const zichtbareTabs = kanTeamZien
+    ? tabs
+    : tabs.filter((t) => t.key !== 'team');
   return (
     <div className="flex flex-col gap-2.5 w-full">
       {/* Row 1: navigation + view switcher + today button */}
@@ -88,7 +90,11 @@ export function PlannerToolbar({
           />
           <Button onClick={onVandaag} variant="primary" label="Vandaag" />
           {kanShiftAanmaken && (
-            <Button onClick={onShiftAanmaken} variant="secondary" label="+ Shift" />
+            <Button
+              onClick={onShiftAanmaken}
+              variant="secondary"
+              label="+ Shift"
+            />
           )}
           {/* Team switcher inline on desktop, in its own row slot on mobile */}
           {kanTeamZien && (

@@ -8,5 +8,4 @@ public record GeschiedenisItemDTO(
         LocalDate startDatum,
         LocalDate eindDatum,
         String status,
-        String omschrijving
-) {}
+        String omschrijving) {}

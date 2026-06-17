@@ -2,11 +2,10 @@ package hogent.sdp2.backend.rest.controller;
 
 import hogent.sdp2.backend.rest.dto.request.LogDTO;
 import hogent.sdp2.backend.rest.service.logger.LogService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/logs")
@@ -31,4 +30,8 @@ public class LogController {
         return logService.getByID(id);
     }
 
+    @GetMapping("/recent")
+    public List<LogDTO> getRecenteLogs() {
+        return logService.getRecenteLogs();
+    }
 }

@@ -36,5 +36,4 @@ public class MachineController {
     public String getMachineStatus(@PathVariable Integer id) {
         return machineService.getMachineStatus(id);
     }
-
 }

@@ -8,5 +8,7 @@ export async function GET(
   const { werknemerId } = await params;
   const van = req.nextUrl.searchParams.get('van') ?? '';
   const tot = req.nextUrl.searchParams.get('tot') ?? '';
-  return proxyGET(`/shifts/werknemer/${werknemerId}/bereik?van=${van}&tot=${tot}`);
+  return proxyGET(
+    `/shifts/werknemer/${werknemerId}/bereik?van=${van}&tot=${tot}`,
+  );
 }

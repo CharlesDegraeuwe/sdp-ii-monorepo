@@ -1,10 +1,9 @@
 package hogent.sdp2.backend.domain;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -34,5 +33,4 @@ public class Verlof {
 
     @Column(name = "Type", nullable = false, length = 45)
     private String type;
-
 }

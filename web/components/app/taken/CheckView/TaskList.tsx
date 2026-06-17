@@ -36,12 +36,7 @@ export const TaskList = () => {
               <Label text="Geen taken gevonden" variant="emptystate" />
             </div>
           ) : (
-            filtered.map((t) => (
-              <TaskListItem
-                key={t.id}
-                task={t}
-              />
-            ))
+            filtered.map((t) => <TaskListItem key={t.id} task={t} />)
           )}
         </div>
         <div className="absolute bottom-0 w-full h-10 bg-linear-0 from-gray-200 to-transparent" />

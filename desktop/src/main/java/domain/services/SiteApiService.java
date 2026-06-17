@@ -10,7 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class SiteApiService extends ApiService {
-    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/sites";
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private final String BASE_URL = dotenv.get("BASE_URL") + "/sites";
 
     public List<LocatieDTO> geefSitesVanManager(int managerId) {
         try {

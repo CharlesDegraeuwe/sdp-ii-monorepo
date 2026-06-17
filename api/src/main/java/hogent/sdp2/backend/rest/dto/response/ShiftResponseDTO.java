@@ -12,5 +12,4 @@ public record ShiftResponseDTO(
         LocalTime startTijd,
         LocalTime eindTijd,
         LocalTime pauzeStart,
-        LocalTime pauzeEind
-) {}
+        LocalTime pauzeEind) {}

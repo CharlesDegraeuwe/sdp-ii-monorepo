@@ -13,7 +13,9 @@ export const TaskDetails = () => {
   const { mutateAsync: markeerAfgewerkt, isPending } = useMarkeerAfgewerkt();
   const toast = useToast();
 
-  const task = selectedTaskId ? tasks.find((t) => t.id === selectedTaskId) ?? null : null;
+  const task = selectedTaskId
+    ? (tasks.find((t) => t.id === selectedTaskId) ?? null)
+    : null;
 
   if (!task) {
     return (

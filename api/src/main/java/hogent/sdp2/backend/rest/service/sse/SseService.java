@@ -1,15 +1,14 @@
 package hogent.sdp2.backend.rest.service.sse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +22,11 @@ public class SseService {
 
         emitters.computeIfAbsent(werknemerId, k -> new CopyOnWriteArrayList<>()).add(emitter);
 
-        Runnable cleanup = () -> {
-            List<SseEmitter> list = emitters.get(werknemerId);
-            if (list != null) list.remove(emitter);
-        };
+        Runnable cleanup =
+                () -> {
+                    List<SseEmitter> list = emitters.get(werknemerId);
+                    if (list != null) list.remove(emitter);
+                };
 
         emitter.onCompletion(cleanup);
         emitter.onTimeout(cleanup);

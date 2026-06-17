@@ -7,5 +7,4 @@ public record AfwezigheidAanmakenDTO(
         LocalDate startDatum,
         LocalDate eindDatum,
         String reden,
-        byte[] certificaat
-) {}
+        byte[] certificaat) {}

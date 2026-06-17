@@ -10,7 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ShiftApiService extends ApiService {
-    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/shifts";
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private final String BASE_URL = dotenv.get("BASE_URL") + "/shifts";
 
     public List<ShiftDTO> geefShiftenVanWerknemerBereik(int werknemerId, LocalDate van, LocalDate tot) {
         try {
