@@ -10,6 +10,4 @@ public record AuthDTO(
         String telefoonnummer,
         LocalDate geboortedatum,
         String rol,
-        String status
-) {
-}
+        String status) {}

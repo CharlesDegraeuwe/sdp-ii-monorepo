@@ -1,139 +1,107 @@
-.create-form-wrapper {
-    -fx-background-color: white;
-    -fx-padding: 24 28 28 28;
-    -fx-spacing: 10;
-    -fx-background-radius: 16;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 16, 0, 0, 4);
-    -fx-max-width: 340;
-    -fx-min-width: 340;
-}
-
-.form-back-btn-row {
-    -fx-padding: 0 0 4 0;
-}
-
-.back-btn {
-    -fx-background-color: #f0f0f0;
-    -fx-background-radius: 50;
-    -fx-min-width: 28;
-    -fx-min-height: 28;
-    -fx-max-width: 28;
-    -fx-max-height: 28;
-    -fx-font-size: 14px;
-    -fx-cursor: hand;
-    -fx-border-color: transparent;
-}
-
-.back-btn:hover {
-    -fx-background-color: #e0e0e0;
-}
-
-.form-title {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1a1a1a;
-    -fx-padding: 0 0 4 0;
-}
-
-.form-section-label {
-    -fx-font-size: 12px;
-    -fx-text-fill: #888888;
-    -fx-padding: 6 0 2 0;
-}
-
-.form-input {
-    -fx-background-color: #f5f5f5;
-    -fx-background-radius: 20;
-    -fx-border-color: transparent;
-    -fx-border-radius: 20;
-    -fx-padding: 10 16;
-    -fx-font-size: 13px;
-    -fx-text-fill: #333333;
-    -fx-prompt-text-fill: #aaaaaa;
-}
-
-.form-input:focused {
-    -fx-background-color: #efefef;
-    -fx-border-color: #cccccc;
-    -fx-border-radius: 20;
-    -fx-border-width: 1;
-}
-
-.form-submit-btn {
-    -fx-background-color: #E31B35;
-    -fx-text-fill: white;
-    -fx-background-radius: 20;
-    -fx-padding: 12 0;
-    -fx-font-size: 13px;
-    -fx-cursor: hand;
-    -fx-border-color: transparent;
-    -fx-max-width: infinity;
-    -fx-pref-width: 10000;
-    -fx-margin: 8 0 0 0;
-}
-
-.form-submit-btn:hover {
-    -fx-background-color: #ba182d;
-}
-
-.form-login-link {
-    -fx-font-size: 12px;
-    -fx-text-fill: #333333;
-    -fx-underline: true;
-    -fx-cursor: hand;
+/* De achtergrond centreert de kaart mooi op het scherm */
+.page-background {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 40;
     -fx-alignment: center;
-    -fx-padding: 2 0 0 0;
 }
 
-.form-input.date-picker {
-    -fx-background-color: #f5f5f5;
-    -fx-background-radius: 20;
-    -fx-border-color: transparent;
-    -fx-border-radius: 20;
+/* De strakke, brede witte kaart met een subtiele border */
+.modern-card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 40;
+    -fx-background-radius: 16;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 25, 0, 0, 10);
+    -fx-max-width: 650;
 }
 
-.form-input.date-picker > .text-field {
-    -fx-background-color: transparent;
-    -fx-padding: 10 16;
+/* Het kader rondom het icoontje linksboven */
+.header-icon-box {
+    -fx-background-color: #f1f5f9;
+    -fx-padding: 12;
+    -fx-background-radius: 12;
+}
+
+/* Typografie */
+.card-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #0f172a;
+}
+.card-subtitle {
     -fx-font-size: 13px;
-    -fx-text-fill: #333333;
-    -fx-prompt-text-fill: #aaaaaa;
+    -fx-text-fill: #64748b;
+}
+.input-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #334155;
 }
 
-.form-input.date-picker > .arrow-button {
+/* --- De Invoervelden --- */
+.modern-input {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-padding: 10 12;
+    -fx-font-size: 14px;
+    -fx-text-fill: #0f172a;
+    -fx-prompt-text-fill: #94a3b8;
+}
+
+/* Focus effect: Blauwe rand + lichte glow */
+.modern-input:focused {
+    -fx-border-color: #3b82f6;
+    -fx-effect: dropshadow(three-pass-box, rgba(59,130,246,0.15), 10, 0, 0, 0);
+}
+
+/* Foutmelding effect */
+.input-error {
+    -fx-border-color: #ef4444;
+    -fx-background-color: #fef2f2;
+}
+.input-error:focused {
+    -fx-border-color: #ef4444;
+    -fx-effect: dropshadow(three-pass-box, rgba(239,68,68,0.15), 10, 0, 0, 0);
+}
+
+/* --- Knoppen onderaan --- */
+/* De ghost 'Annuleer' knop */
+.btn-secondary {
     -fx-background-color: transparent;
-    -fx-padding: 0 12 0 0;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-text-fill: #475569;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #0f172a;
 }
 
-.form-input.date-picker > .arrow-button > .arrow {
-    -fx-background-color: #888888;
-}
-
-.date-picker-popup > .month-year-pane {
-    -fx-background-color: white;
-}
-
-.date-picker-popup > * > .spinner > .button {
-    -fx-background-color: transparent;
-}
-
-.date-picker-popup > * > .day-cell {
-    -fx-background-color: transparent;
-    -fx-font-size: 12px;
-}
-
-.date-picker-popup > * > .day-cell:hover {
-    -fx-background-color: #f0f0f0;
-    -fx-background-radius: 50;
-}
-
-.date-picker-popup > * > .selected {
-    -fx-background-color: #E31B35;
-    -fx-background-radius: 50;
+/* De donkere 'Toevoegen' knop */
+.btn-primary {
+    -fx-background-color: #ff1414;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-primary:hover {
+    -fx-background-color: #d51313;
 }
 
-.date-picker-popup > * > .today {
-    -fx-border-color: #E31B35;
-    -fx-border-radius: 50;
+.date-picker > .text-field, .combo-box > .list-cell {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
 }

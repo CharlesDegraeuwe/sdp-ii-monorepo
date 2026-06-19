@@ -23,5 +23,4 @@ public class Machine {
 
     @Column(name = "Status", nullable = false, length = 45)
     private String status;
-
 }

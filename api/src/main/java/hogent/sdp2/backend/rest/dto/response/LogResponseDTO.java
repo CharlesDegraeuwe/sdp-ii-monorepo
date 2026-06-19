@@ -10,5 +10,4 @@ public record LogResponseDTO(
         String tabel,
         Integer recordId,
         LocalDate timestamp,
-        String beschrijving
-) {}
+        String beschrijving) {}

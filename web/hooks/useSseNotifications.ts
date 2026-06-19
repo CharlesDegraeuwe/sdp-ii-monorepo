@@ -42,7 +42,10 @@ export function useSseNotifications() {
   const { data: session } = useSession();
   const toast = useToast();
   const toastRef = useRef(toast);
-  toastRef.current = toast;
+
+  useEffect(() => {
+    toastRef.current = toast;
+  }, [toast]);
 
   useEffect(() => {
     const token = session?.accessToken;

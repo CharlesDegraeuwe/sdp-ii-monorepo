@@ -10,7 +10,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class GeschiedenisApiService extends ApiService {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private final String BASE_URL = dotenv.get("BASE_URL") + "/geschiedenis";
 
     public List<GeschiedenisItemDTO> geefGeschiedenisVanWerknemer(int werknemerId) {

@@ -11,8 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocatieApiService extends ApiService {
-    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/sites";
-    private final String MACHINES_URL = Dotenv.load().get("BASE_URL") + "/machines";
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private final String BASE_URL = dotenv.get("BASE_URL") + "/sites";
+    private final String MACHINES_URL = dotenv.get("BASE_URL") + "/machines";
 
     public List<LocatieDTO> geefAlleLocaties() {
         try {

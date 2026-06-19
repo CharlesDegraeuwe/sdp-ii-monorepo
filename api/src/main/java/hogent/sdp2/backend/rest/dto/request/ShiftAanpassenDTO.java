@@ -9,5 +9,4 @@ public record ShiftAanpassenDTO(
         LocalTime startTijd,
         LocalTime eindTijd,
         LocalTime pauzeStart,
-        LocalTime pauzeEind
-) {}
+        LocalTime pauzeEind) {}

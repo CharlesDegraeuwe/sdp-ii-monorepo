@@ -1,35 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<fx:root type="VBox" styleClass="create-form-wrapper" xmlns:fx="http://javafx.com/fxml"
-         stylesheets="@/css/create-manager.css">
 
-    <HBox styleClass="form-back-btn-row">
-        <Button fx:id="backBtn" styleClass="back-btn" onAction="#handleBack">
-            <graphic>
-                <FontIcon iconLiteral="ion4-ios-arrow-round-back" iconSize="16" mouseTransparent="true"/>
-            </graphic>
-        </Button>
-    </HBox>
+<fx:root type="VBox" stylesheets="@/css/create-manager.css" styleClass="page-background" xmlns:fx="http://javafx.com/fxml">
 
-    <Label text="Creëer Medewerker" styleClass="form-title"/>
+    <VBox styleClass="modern-card" spacing="25">
 
-    <Label text="Persoonlijke Info:" styleClass="form-section-label"/>
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <StackPane styleClass="header-icon-box">
+                <FontIcon iconLiteral="ion4-md-person-add" iconSize="26" iconColor="#334155"/>
+            </StackPane>
+            <VBox spacing="2">
+                <Label text="Nieuwe Medewerker" styleClass="card-title"/>
+                <Label text="Vul de persoonlijke gegevens in om een nieuw profiel aan te maken." styleClass="card-subtitle"/>
+            </VBox>
+        </HBox>
 
-    <TextField fx:id="nameField" promptText="naam" styleClass="form-input"/>
-    <TextField fx:id="surnameField" promptText="voornaam" styleClass="form-input"/>
-    <DatePicker fx:id="dobField" promptText="geboortedatum" styleClass="form-input"/>
-    <TextField fx:id="phoneField" promptText="gsm" styleClass="form-input"/>
-    <TextField fx:id="emailField" promptText="email" styleClass="form-input"/>
-    <ComboBox fx:id="roleComboBox" promptText="rol" styleClass="form-input"/>
+        <Separator style="-fx-border-width: 1 0 0 0; -fx-border-color: #f1f5f9; -fx-background-color: transparent;"/>
 
-    <Label fx:id="feedbackLabel" text="" style="-fx-font-weight: bold;" wrapText="true"/>
-    <Button text="Creëer medewerker" onAction="#handleRegistreer" styleClass="form-submit-btn"/>
+        <VBox spacing="18">
+            <HBox spacing="15">
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Voornaam" styleClass="input-label"/>
+                    <TextField fx:id="surnameField" promptText="Bijv. Jan" styleClass="modern-input" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Achternaam" styleClass="input-label"/>
+                    <TextField fx:id="nameField" promptText="Bijv. Peeters" styleClass="modern-input" maxWidth="Infinity"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="6">
+                <Label text="Zakelijk E-mailadres" styleClass="input-label"/>
+                <TextField fx:id="emailField" promptText="jan.peeters@bedrijf.be" styleClass="modern-input" maxWidth="Infinity"/>
+            </VBox>
+
+            <HBox spacing="15">
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Telefoonnummer" styleClass="input-label"/>
+                    <TextField fx:id="phoneField" promptText="04..." styleClass="modern-input" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                    <Label text="Geboortedatum" styleClass="input-label"/>
+                    <DatePicker fx:id="dobField" promptText="DD/MM/JJJJ" styleClass="modern-input" maxWidth="Infinity"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="6">
+                <Label text="Systeemrol &amp; Rechten" styleClass="input-label"/>
+                <ComboBox fx:id="roleComboBox" styleClass="modern-input" maxWidth="Infinity"/>
+            </VBox>
+        </VBox>
+
+        <Label fx:id="feedbackLabel" text="" wrapText="true" style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+
+        <Separator style="-fx-border-width: 1 0 0 0; -fx-border-color: #f1f5f9; -fx-background-color: transparent;"/>
+
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button text="Annuleren" onAction="#handleBack" styleClass="btn-secondary"/>
+            <Button text="Medewerker toevoegen" onAction="#handleRegistreer" styleClass="btn-primary"/>
+        </HBox>
+
+    </VBox>
 
 </fx:root>

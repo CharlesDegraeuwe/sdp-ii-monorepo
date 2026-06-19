@@ -2,25 +2,29 @@ package hogent.sdp2.backend.rest.service.werknemer;
 
 import com.resend.Resend;
 import com.resend.services.emails.model.CreateEmailOptions;
+import hogent.sdp2.backend.auth.JwtService;
+import hogent.sdp2.backend.domain.Log;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.rest.dto.request.*;
 import hogent.sdp2.backend.rest.dto.response.WerknemerResponseDTO;
+import hogent.sdp2.backend.rest.repository.LogRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
-import hogent.sdp2.backend.auth.JwtService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class WerknemerService {
 
     private final WerknemerRepository werknemerRepository;
+    private final LogRepository logRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
@@ -39,11 +43,7 @@ public class WerknemerService {
         werknemer.setActivatieCode(code);
         werknemerRepository.save(werknemer);
 
-        sendEmail(
-                dto.email(),
-                "Login code voor delware suite",
-                buildEmailHtml(code)
-        );
+        sendEmail(dto.email(), "Login code voor delware suite", buildEmailHtml(code));
     }
 
     public LoginResponseDTO tokenLogin(TokenLoginDto dto) {
@@ -54,6 +54,10 @@ public class WerknemerService {
 
         if ("Inactief".equalsIgnoreCase(werknemer.getStatus())) {
             werknemer.setStatus("Actief");
+            logActie(
+                    "UPDATE",
+                    "Account automatisch geactiveerd via token-login voor: " + werknemer.getEmail(),
+                    werknemer.getId());
         }
 
         werknemer.setActivatieCode(null);
@@ -73,7 +77,6 @@ public class WerknemerService {
         return new LoginResponseDTO(token, toDTO(werknemer));
     }
 
-
     public String wijzigWachtwoord(WachtwoordWijzigenDTO dto) {
         var werknemer = findByEmailOrThrow(dto.email());
 
@@ -85,6 +88,12 @@ public class WerknemerService {
 
         werknemer.setWachtwoord(passwordEncoder.encode(dto.nieuwWachtwoord()));
         werknemerRepository.save(werknemer);
+
+        logActie(
+                "UPDATE",
+                "Wachtwoord handmatig gewijzigd door gebruiker: " + werknemer.getEmail(),
+                werknemer.getId());
+
         return "Wachtwoord succesvol gewijzigd";
     }
 
@@ -95,24 +104,28 @@ public class WerknemerService {
         werknemer.setActivatieCode(resetToken);
         werknemerRepository.save(werknemer);
 
-        sendEmail(
-                dto.email(),
-                "Wachtwoord resetten",
-                "<h1>Je reset code: " + resetToken + "</h1>"
-        );
+        sendEmail(dto.email(), "Wachtwoord resetten", "<h1>Je reset code: " + resetToken + "</h1>");
     }
 
     public String resetWachtwoord(WachtwoordResetDTO dto) {
-        var werknemer = werknemerRepository.findByActivatieCode(dto.resetCode())
-                .orElseThrow(() -> new RuntimeException("Ongeldige reset-code"));
+        var werknemer =
+                werknemerRepository
+                        .findByActivatieCode(dto.resetCode())
+                        .orElseThrow(() -> new RuntimeException("Ongeldige reset-code"));
 
         werknemer.setWachtwoord(passwordEncoder.encode(dto.nieuwWachtwoord()));
         werknemer.setActivatieCode(null);
         werknemerRepository.save(werknemer);
+
+        logActie(
+                "UPDATE",
+                "Wachtwoord succesvol gereset via e-mail herstelcode voor: " + werknemer.getEmail(),
+                werknemer.getId());
+
         return "Wachtwoord succesvol gereset";
     }
 
-    // ==================== CRUD ====================
+    // ==================== CRUD & LOGICA ====================
 
     public String maakWerknemer(WerknemerAanmakenDTO dto) {
         if (werknemerRepository.existsByEmail(dto.email()))
@@ -129,11 +142,32 @@ public class WerknemerService {
         werknemer.setStatus("Inactief");
 
         werknemerRepository.save(werknemer);
+
+        logActie(
+                "CREATE",
+                "Nieuwe medewerker aangemaakt: "
+                        + werknemer.getVoornaam()
+                        + " "
+                        + werknemer.getNaam()
+                        + " ("
+                        + werknemer.getEmail()
+                        + ")",
+                werknemer.getId());
+
         return "Werknemer " + dto.voornaam() + " " + dto.naam() + " succesvol aangemaakt";
     }
 
     public WerknemerResponseDTO updateUser(UpdateUserDTO dto) {
         var werknemer = findByEmailOrThrow(dto.email());
+
+        // We houden oude waarden bij om een duidelijke logbeschrijving te kunnen maken
+        String oudDetails =
+                String.format(
+                        "Naam: %s %s, Status: %s, GSM: %s",
+                        werknemer.getVoornaam(),
+                        werknemer.getNaam(),
+                        werknemer.getStatus(),
+                        werknemer.getTelefoonnummer());
 
         werknemer.setNaam(dto.naam());
         werknemer.setVoornaam(dto.voornaam());
@@ -142,13 +176,28 @@ public class WerknemerService {
         werknemer.setGeboortedatum(dto.geboortedatum());
 
         werknemerRepository.save(werknemer);
+
+        String nieuwDetails =
+                String.format(
+                        "Naam: %s %s, Status: %s, GSM: %s",
+                        dto.voornaam(), dto.naam(), dto.status(), dto.telefoonnummer());
+
+        logActie(
+                "UPDATE",
+                "Profielgegevens gewijzigd voor "
+                        + werknemer.getEmail()
+                        + " | Oud: ["
+                        + oudDetails
+                        + "] -> Nieuw: ["
+                        + nieuwDetails
+                        + "]",
+                werknemer.getId());
+
         return toDTO(werknemer);
     }
 
     public List<WerknemerResponseDTO> getAlleUsers() {
-        return werknemerRepository.findAll().stream()
-                .map(this::toDTO)
-                .toList();
+        return werknemerRepository.findAll().stream().map(this::toDTO).toList();
     }
 
     public WerknemerResponseDTO getByEmail(String email) {
@@ -156,55 +205,195 @@ public class WerknemerService {
     }
 
     public WerknemerResponseDTO getByID(Integer id) {
-        return werknemerRepository.findById(id)
+        return werknemerRepository
+                .findById(id)
                 .map(this::toDTO)
                 .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
     }
 
+    public String activeerAccount(String activatieCode) {
+        var werknemer =
+                werknemerRepository
+                        .findByActivatieCode(activatieCode)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Ongeldige of al gebruikte activatiecode"));
+
+        werknemer.setStatus("Actief");
+        werknemer.setActivatieCode(null);
+        werknemerRepository.save(werknemer);
+
+        logActie(
+                "UPDATE",
+                "Account succesvol geactiveerd via activatiecode: " + werknemer.getEmail(),
+                werknemer.getId());
+
+        return "Account succesvol geactiveerd";
+    }
+
+    // ==================== ADMIN DIRECTE MUTATIES ====================
+
+    public String updateRolAdmin(Integer id, String nieuweRol) {
+        Werknemer werknemer =
+                werknemerRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Werknemer met ID " + id + " niet gevonden."));
+
+        String oudeRol = werknemer.getRol();
+        werknemer.setRol(nieuweRol);
+        werknemerRepository.save(werknemer);
+
+        logActie(
+                "UPDATE",
+                "Rol gewijzigd van "
+                        + oudeRol
+                        + " naar "
+                        + nieuweRol
+                        + " voor: "
+                        + werknemer.getEmail(),
+                werknemer.getId());
+
+        return "Rol succesvol gewijzigd.";
+    }
+
+    public String verwijderWerknemerAdmin(Integer id) {
+        Werknemer werknemer =
+                werknemerRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Werknemer met ID " + id + " niet gevonden."));
+
+        // Belangrijk: Eerst loggen vóór de delete-actie, zodat we de data nog uit het
+        // werknemer-object kunnen lezen!
+        logActie(
+                "DELETE",
+                "Medewerker volledig verwijderd uit systeem: "
+                        + werknemer.getVoornaam()
+                        + " "
+                        + werknemer.getNaam()
+                        + " ("
+                        + werknemer.getEmail()
+                        + ")",
+                id);
+
+        werknemerRepository.delete(werknemer);
+        return "Werknemer succesvol verwijderd.";
+    }
+
+    public String blokkeerWerknemerAdmin(Integer id) {
+        Werknemer werknemer =
+                werknemerRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Werknemer met ID " + id + " niet gevonden."));
+
+        werknemer.setStatus("Geblokkeerd");
+        werknemerRepository.save(werknemer);
+
+        logActie(
+                "UPDATE",
+                "Status gewijzigd naar [Geblokkeerd] voor: " + werknemer.getEmail(),
+                werknemer.getId());
+
+        return "Werknemer succesvol geblokkeerd.";
+    }
+
+    public String deactiveerWerknemerAdmin(Integer id) {
+        Werknemer werknemer =
+                werknemerRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Werknemer met ID " + id + " niet gevonden."));
+
+        werknemer.setStatus("Inactief");
+        werknemerRepository.save(werknemer);
+
+        logActie(
+                "UPDATE",
+                "Status gewijzigd naar [Inactief] voor: " + werknemer.getEmail(),
+                werknemer.getId());
+
+        return "Werknemer succesvol gedeactiveerd.";
+    }
+
+    public String activeerWerknemerAdmin(Integer id) {
+        Werknemer werknemer =
+                werknemerRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Werknemer met ID " + id + " niet gevonden."));
+
+        werknemer.setStatus("Actief");
+        werknemerRepository.save(werknemer);
+
+        logActie(
+                "UPDATE",
+                "Status gewijzigd naar [Actief] voor: " + werknemer.getEmail(),
+                werknemer.getId());
+
+        return "Werknemer succesvol geactiveerd.";
+    }
+
+    public long telAlleWerknemers() {
+        return werknemerRepository.count();
+    }
+
+    // ==================== HELPER FUNCTIES ====================
+
     private Werknemer findByEmailOrThrow(String email) {
-        return werknemerRepository.findByEmail(email)
+        return werknemerRepository
+                .findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
     }
 
     private WerknemerResponseDTO toDTO(Werknemer w) {
         return new WerknemerResponseDTO(
-                w.getId(), w.getNaam(), w.getVoornaam(), w.getEmail(),
-                w.getTelefoonnummer(), w.getGeboortedatum(), w.getRol(), w.getStatus()
-        );
+                w.getId(),
+                w.getNaam(),
+                w.getVoornaam(),
+                w.getEmail(),
+                w.getTelefoonnummer(),
+                w.getGeboortedatum(),
+                w.getRol(),
+                w.getStatus());
     }
 
     private String generateToken(Werknemer werknemer) {
-        var userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(werknemer.getEmail())
-                .password(werknemer.getWachtwoord())
-                .roles(werknemer.getRol())
-                .build();
+        var userDetails =
+                org.springframework.security.core.userdetails.User.builder()
+                        .username(werknemer.getEmail())
+                        .password(werknemer.getWachtwoord())
+                        .roles(werknemer.getRol())
+                        .build();
         return jwtService.generateToken(userDetails, werknemer.getId());
     }
 
     private void sendEmail(String to, String subject, String html) {
         try {
             Resend resend = new Resend(resendApiKey);
-            CreateEmailOptions params = CreateEmailOptions.builder()
-                    .from(emailFrom)
-                    .to(to)
-                    .subject(subject)
-                    .html(html)
-                    .build();
+            CreateEmailOptions params =
+                    CreateEmailOptions.builder()
+                            .from(emailFrom)
+                            .to(to)
+                            .subject(subject)
+                            .html(html)
+                            .build();
             resend.emails().send(params);
         } catch (Exception e) {
             throw new RuntimeException("Email verzenden mislukt: " + e.getMessage());
         }
-    }
-
-    public String activeerAccount(String activatieCode) {
-        var werknemer = werknemerRepository.findByActivatieCode(activatieCode)
-                .orElseThrow(() -> new RuntimeException("Ongeldige of al gebruikte activatiecode"));
-
-        werknemer.setStatus("Actief");
-        werknemer.setActivatieCode(null);
-        werknemerRepository.save(werknemer);
-        return "Account succesvol geactiveerd";
     }
 
     private String buildEmailHtml(String code) {
@@ -220,6 +409,36 @@ public class WerknemerService {
                 </span>
             </div>
         </div>
-        """.formatted(code);
+        """
+                .formatted(code);
+    }
+
+    /**
+     * Centrale private methode om logs direct weg te schrijven. Haalt via Spring Security Context
+     * automatisch de uitvoerder (admin/manager) op!
+     */
+    private void logActie(String type, String beschrijving, Integer recordId) {
+        try {
+            Werknemer actor = null;
+
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null
+                    && auth.isAuthenticated()
+                    && !auth.getPrincipal().equals("anonymousUser")) {
+                actor = werknemerRepository.findByEmail(auth.getName()).orElse(null);
+            }
+
+            Log log = new Log();
+            log.setWerknemer(actor);
+            log.setType(type.toUpperCase());
+            log.setTabel("WERKNEMERS");
+            log.setRecordId(recordId);
+            log.setTimestamp(LocalDateTime.now());
+            log.setBeschrijving(beschrijving);
+
+            logRepository.save(log);
+        } catch (Exception e) {
+            System.err.println("Gefaald om audit-log op te slaan: " + e.getMessage());
+        }
     }
 }

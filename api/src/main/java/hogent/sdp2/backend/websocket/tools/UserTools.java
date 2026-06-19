@@ -2,11 +2,11 @@ package hogent.sdp2.backend.websocket.tools;
 
 import hogent.sdp2.backend.rest.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.rest.service.werknemer.WerknemerService;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
-import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
@@ -26,12 +26,20 @@ public class UserTools {
             return "er ging iets grondig mis, user niet ingelogd.";
         }
 
-        StringBuilder sb = new StringBuilder(ctx.getContext().get("userName") + " zijn persoonlijke info:\n");
+        StringBuilder sb =
+                new StringBuilder(ctx.getContext().get("userName") + " zijn persoonlijke info:\n");
         sb.append("- ")
-                .append("voornaam & achternaam: ").append(werknemer.voornaam() + " " + werknemer.naam()).append("\n")
-                .append("De rol van de gebruiker: ").append(werknemer.rol()).append("\n")
-                .append("De geboortedatum van de gebruiker: ").append(werknemer.geboortedatum())
-                .append("De huidige datum is: ").append(date).append(" (wens de gebruiker eventueel een gelukkige verjaardag");
+                .append("voornaam & achternaam: ")
+                .append(werknemer.voornaam() + " " + werknemer.naam())
+                .append("\n")
+                .append("De rol van de gebruiker: ")
+                .append(werknemer.rol())
+                .append("\n")
+                .append("De geboortedatum van de gebruiker: ")
+                .append(werknemer.geboortedatum())
+                .append("De huidige datum is: ")
+                .append(date)
+                .append(" (wens de gebruiker eventueel een gelukkige verjaardag");
 
         return sb.toString();
     }

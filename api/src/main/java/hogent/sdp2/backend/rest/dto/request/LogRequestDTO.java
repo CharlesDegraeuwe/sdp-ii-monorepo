@@ -6,5 +6,4 @@ public record LogRequestDTO(
         String type,
         String tabel,
         Integer recordId,
-        String beschrijving
-) {}
+        String beschrijving) {}

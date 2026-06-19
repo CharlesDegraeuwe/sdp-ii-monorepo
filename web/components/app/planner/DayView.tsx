@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -316,6 +317,11 @@ export default function DayView({
                 huidigUurX={huidigUurX}
                 isGeselecteerd={
                   geselecteerdeRij?.werknemerId === rij.werknemerId
+                }
+                onSelecteer={() =>
+                  setGeselecteerdeRij((prev) =>
+                    prev?.werknemerId === rij.werknemerId ? null : rij,
+                  )
                 }
                 onSelecteer={() => {
                   const next =

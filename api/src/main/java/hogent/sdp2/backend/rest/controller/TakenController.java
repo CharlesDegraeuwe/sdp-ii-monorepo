@@ -1,15 +1,14 @@
 package hogent.sdp2.backend.rest.controller;
 
+import hogent.sdp2.backend.auth.SessieService;
 import hogent.sdp2.backend.rest.dto.request.TaakAanmakenDTO;
 import hogent.sdp2.backend.rest.dto.request.TaakResponseDTO;
 import hogent.sdp2.backend.rest.service.taken.TakenService;
-import hogent.sdp2.backend.auth.SessieService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/taken")

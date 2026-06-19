@@ -11,7 +11,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class TakenApiService extends ApiService {
-    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/taken";
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private final String BASE_URL = dotenv.get("BASE_URL") + "/taken";
 
     public List<TaakDTO> geefTakenVanWerknemer(int werknemerId) {
         try {

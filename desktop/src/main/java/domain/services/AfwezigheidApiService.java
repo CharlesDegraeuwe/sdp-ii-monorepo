@@ -7,7 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class AfwezigheidApiService extends ApiService {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private final String BASE_URL = dotenv.get("BASE_URL") + "/afwezigheid";
 
     public String meldAfwezigheid(AfwezigheidAanmakenDTO dto) {

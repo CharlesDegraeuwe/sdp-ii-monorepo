@@ -1,5 +1,9 @@
 package hogent.sdp2.backend.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import hogent.sdp2.backend.auth.SessieService;
 import hogent.sdp2.backend.domain.Taken;
 import hogent.sdp2.backend.domain.Werknemer;
@@ -10,6 +14,9 @@ import hogent.sdp2.backend.rest.repository.TakenRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.rest.service.taken.TakenService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,14 +24,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TakenServiceTest {
@@ -83,7 +82,8 @@ class TakenServiceTest {
 
     @Test
     void maakTaakAan_slaatTaakOp() {
-        TaakAanmakenDTO dto = new TaakAanmakenDTO(1, "Nieuwe taak", "Omschrijving", LocalDate.of(2025, 6, 1));
+        TaakAanmakenDTO dto =
+                new TaakAanmakenDTO(1, "Nieuwe taak", "Omschrijving", LocalDate.of(2025, 6, 1));
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
         when(takenRepository.save(any(Taken.class))).thenReturn(taak);
 
@@ -95,7 +95,8 @@ class TakenServiceTest {
 
     @Test
     void maakTaakAan_gooidExceptionBijOnbekendeWerknemer() {
-        TaakAanmakenDTO dto = new TaakAanmakenDTO(999, "Taak", "Omschrijving", LocalDate.of(2025, 6, 1));
+        TaakAanmakenDTO dto =
+                new TaakAanmakenDTO(999, "Taak", "Omschrijving", LocalDate.of(2025, 6, 1));
         when(werknemerRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> takenService.maakTaakAan(dto))
@@ -194,8 +195,8 @@ class TakenServiceTest {
         SessieService sessieService = mock(SessieService.class);
         when(sessieService.isAdminOfManager()).thenReturn(true);
 
-        assertThatNoException().isThrownBy(() ->
-                takenService.assertEigenaarVanTaak(10, sessieService));
+        assertThatNoException()
+                .isThrownBy(() -> takenService.assertEigenaarVanTaak(10, sessieService));
 
         verify(takenRepository, never()).findById(any());
     }
@@ -218,7 +219,7 @@ class TakenServiceTest {
         when(sessieService.getIngelogdeWerknemerId()).thenReturn(1);
         when(takenRepository.findById(10)).thenReturn(Optional.of(taak));
 
-        assertThatNoException().isThrownBy(() ->
-                takenService.assertEigenaarVanTaak(10, sessieService));
+        assertThatNoException()
+                .isThrownBy(() -> takenService.assertEigenaarVanTaak(10, sessieService));
     }
 }

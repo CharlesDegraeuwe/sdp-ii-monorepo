@@ -1,34 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<fx:root type="VBox" fx:id="admin_landingbox" alignment="CENTER" xmlns:fx="http://javafx.com/fxml">
-    <HBox fx:id="admin_landing_title">
-        <Label mouseTransparent="true" fx:id="welcome_msg"/>
+
+<fx:root type="VBox" stylesheets="@/css/manageUsers.css" spacing="30" xmlns:fx="http://javafx.com/fxml" style="-fx-padding: 40; -fx-background-color: #f8fafc;">
+
+    <HBox spacing="30" alignment="CENTER" maxWidth="Infinity">
+
+        <HBox HBox.hgrow="ALWAYS" spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #eff3f6; -fx-padding: 20; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 4); -fx-min-width: 250; -fx-max-width: 600;">
+            <StackPane style="-fx-background-color: rgba(2, 132, 199, 0.06); -fx-padding: 15; -fx-background-radius: 10;">
+                <FontIcon iconLiteral="ion4-md-people" iconSize="24" iconColor="#0284c7"/>
+            </StackPane>
+            <VBox alignment="CENTER_LEFT" spacing="5">
+                <Label text="Totale Werknemers" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #64748b;"/>
+                <Label fx:id="lblTotaalWerknemers" text="..." style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+            </VBox>
+        </HBox>
+
+        <HBox HBox.hgrow="ALWAYS" spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #eff3f6; -fx-padding: 20; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 4); -fx-min-width: 250; -fx-max-width: 600;">
+            <StackPane style="-fx-background-color: rgba(147, 51, 234, 0.06); -fx-padding: 15; -fx-background-radius: 10;">
+                <FontIcon iconLiteral="ion4-md-business" iconSize="24" iconColor="#9333ea"/>
+            </StackPane>
+            <VBox alignment="CENTER_LEFT" spacing="5">
+                <Label text="Actieve Locaties" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #64748b;"/>
+                <Label fx:id="lblActieveLocaties" text="..." style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+            </VBox>
+        </HBox>
+
+        <HBox HBox.hgrow="ALWAYS" spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #eff3f6; -fx-padding: 20; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 4); -fx-min-width: 250; -fx-max-width: 600;">
+            <StackPane style="-fx-background-color: rgba(234, 88, 12, 0.06); -fx-padding: 15; -fx-background-radius: 10;">
+                <FontIcon iconLiteral="ion4-md-time" iconSize="24" iconColor="#ea580c"/>
+            </StackPane>
+            <VBox alignment="CENTER_LEFT" spacing="5">
+                <Label text="Afwezige Werknemers" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #64748b;"/>
+                <Label fx:id="lblAfwezigeWerknemers" text="..." style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+            </VBox>
+        </HBox>
     </HBox>
-    <HBox styleClass="popup-item" fx:id="rgstr_mngr">
-        <Label text="Registreer manager" mouseTransparent="true"/>
-        <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
-        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
+
+    <HBox spacing="40" maxWidth="Infinity">
+
+        <VBox spacing="20" HBox.hgrow="SOMETIMES" prefWidth="400" minWidth="350" maxWidth="500">
+            <Label text="Snelle Acties" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+
+            <VBox spacing="20">
+                <VBox fx:id="rgstr_usr" spacing="8" styleClass="action-group" style="-fx-cursor: hand;">
+                    <HBox styleClass="action-btn" alignment="CENTER_LEFT" spacing="15">
+                        <FontIcon iconLiteral="ion4-md-add-circle-outline" iconSize="22" iconColor="#334155"/>
+                        <Label text="Creëer gebruiker" styleClass="action-title" style="-fx-font-size: 15px; -fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="26" iconColor="#334155"/>
+                    </HBox>
+                    <Label text="Vlug een nieuwe werknemer of manager toevoegen" style="-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-padding: 0 0 0 15;"/>
+                </VBox>
+
+                <VBox fx:id="mng_usr" spacing="8" styleClass="action-group" style="-fx-cursor: hand;">
+                    <HBox styleClass="action-btn" alignment="CENTER_LEFT" spacing="15">
+                        <FontIcon iconLiteral="ion4-md-albums" iconSize="22" iconColor="#334155"/>
+                        <Label text="Beheer werknemers" styleClass="action-title" style="-fx-font-size: 15px; -fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="26" iconColor="#334155"/>
+                    </HBox>
+                    <Label text="Rechten, details en rollen wijzigen" style="-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-padding: 0 0 0 15;"/>
+                </VBox>
+            </VBox>
+        </VBox>
+
+        <VBox spacing="20" HBox.hgrow="ALWAYS" prefWidth="500">
+            <Label text="Recente Activiteit" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+
+            <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background: #eff3f6; -fx-background-color: transparent; -fx-padding: 0; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 4);"
+                        hbarPolicy="NEVER">
+                <VBox fx:id="logsContainer" spacing="0" style="-fx-background-color: #eff3f6; -fx-padding: 20;">
+                    <Label text="Gegevens laden..." style="-fx-font-size: 14px; -fx-font-style: italic; -fx-text-fill: #94a3b8;"/>
+                </VBox>
+            </ScrollPane>
+        </VBox>
     </HBox>
-    <HBox styleClass="popup-item" fx:id="rgstr_emp">
-        <Label text="Registreer medewerker" mouseTransparent="true"/>
-        <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
-        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
-    </HBox>
-    <HBox styleClass="popup-item" fx:id="mng_usr">
-        <Label text="Beheer gebruikers" mouseTransparent="true"/>
-        <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
-        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
-    </HBox>
-    <HBox styleClass="popup-item" fx:id="log">
-        <Label text="Logs bekijkens" mouseTransparent="true"/>
-        <Region HBox.hgrow="ALWAYS" mouseTransparent="true"/>
-        <FontIcon iconLiteral="ion4-ios-arrow-round-forward" iconSize="16" mouseTransparent="true"/>
-    </HBox>
+
 </fx:root>

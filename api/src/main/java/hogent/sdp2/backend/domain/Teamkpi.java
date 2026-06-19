@@ -23,5 +23,4 @@ public class Teamkpi {
 
     @Column(name = "Gemiddeld_taak_doorlooptijd", nullable = false)
     private Integer gemiddeldTaakDoorlooptijd;
-
 }

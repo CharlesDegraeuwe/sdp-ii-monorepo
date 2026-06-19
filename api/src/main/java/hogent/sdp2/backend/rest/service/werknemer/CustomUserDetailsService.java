@@ -16,8 +16,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var werknemer = werknemerRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Gebruiker niet gevonden: " + email));
+        var werknemer =
+                werknemerRepository
+                        .findByEmail(email)
+                        .orElseThrow(
+                                () ->
+                                        new UsernameNotFoundException(
+                                                "Gebruiker niet gevonden: " + email));
 
         return User.builder()
                 .username(werknemer.getEmail())

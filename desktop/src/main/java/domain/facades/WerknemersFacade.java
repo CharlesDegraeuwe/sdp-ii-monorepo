@@ -51,6 +51,14 @@ public class WerknemersFacade {
         return result;
     }
 
+    public boolean veranderRol(int werknemerId, String nieuweRol) {
+        boolean result = api.veranderRol(werknemerId, nieuweRol);
+        if (result) {
+            LogService.log("UPDATE", "werknemers", "Rol gewijzigd – werknemerId: " + werknemerId + ", nieuwe rol: " + nieuweRol);
+        }
+        return result;
+    }
+
     /**
      * Registreert een nieuwe werknemer met validatie.
      * Gooit IllegalArgumentException als de input ongeldig is.

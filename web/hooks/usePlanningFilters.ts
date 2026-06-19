@@ -40,10 +40,9 @@ export function usePlanningFilters(
 
   // Ref zodat callbacks stabiel blijven ook al verandert authHeader (token refresh)
   const authRef = useRef(authHeader);
-
   useEffect(() => {
     authRef.current = authHeader;
-  });
+  }, [authHeader]);
 
   useEffect(() => {
     const bearer = authHeader.Authorization;
