@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import {
   MdCheckCircle,
@@ -75,6 +75,15 @@ export default function DayView({
   const [werknemerTaken, setWerknemerTaken] = useState<PlannerTaak[]>([]);
   const [laadtTaken, setLaadtTaken] = useState(false);
 
+  // Reset geselecteerde rij wanneer datum/filter/tab wijzigt
+  const resetKey = `${huidigeDatum.toISOString()}-${JSON.stringify(filter)}-${tab}`;
+  const prevResetKey = useRef(resetKey);
+  if (prevResetKey.current !== resetKey) {
+    prevResetKey.current = resetKey;
+    setGeselecteerdeRij(null);
+    setWerknemerTaken([]);
+  }
+
   const werknemersToLoad = useMemo(() => {
     if (tab === 'you') return eigenId ? [eigenId] : [];
     if (filter.werknemerId) return [filter.werknemerId];
@@ -107,24 +116,19 @@ export default function DayView({
     fetches.then(setShifts).catch(() => setShifts([]));
   }, [werknemersToLoad, huidigeDatum]);
 
-  // Reset geselecteerde rij wanneer datum/filter/tab wijzigt
-  useEffect(() => {
-    setGeselecteerdeRij(null);
-    setWerknemerTaken([]);
-  }, [huidigeDatum, filter, tab]);
-
   // Laad taken voor geselecteerde werknemer (team view)
-  useEffect(() => {
-    if (!geselecteerdeRij) return;
+  const laadTakenVoorWerknemer = useCallback(async (rij: Rij) => {
     setLaadtTaken(true);
-    fetch(`/api/taken/werknemer/${geselecteerdeRij.werknemerId}`)
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: Record<string, unknown>[]) =>
-        setWerknemerTaken(data.map(mapTaakVanBackend)),
-      )
-      .catch(() => setWerknemerTaken([]))
-      .finally(() => setLaadtTaken(false));
-  }, [geselecteerdeRij]);
+    try {
+      const r = await fetch(`/api/taken/werknemer/${rij.werknemerId}`);
+      const data: Record<string, unknown>[] = r.ok ? await r.json() : [];
+      setWerknemerTaken(data.map(mapTaakVanBackend));
+    } catch {
+      setWerknemerTaken([]);
+    } finally {
+      setLaadtTaken(false);
+    }
+  }, []);
 
   async function handleWerknemerTaakAfgewerkt(taakId: number) {
     const res = await fetch(`/api/taken/${taakId}/afgewerkt`, {
@@ -319,6 +323,15 @@ export default function DayView({
                     prev?.werknemerId === rij.werknemerId ? null : rij,
                   )
                 }
+                onSelecteer={() => {
+                  const next =
+                    geselecteerdeRij?.werknemerId === rij.werknemerId
+                      ? null
+                      : rij;
+                  setGeselecteerdeRij(next);
+                  if (next) laadTakenVoorWerknemer(next);
+                  else setWerknemerTaken([]);
+                }}
                 onEdit={() => {
                   if (rijShift) openEdit(rijShift, rij);
                 }}

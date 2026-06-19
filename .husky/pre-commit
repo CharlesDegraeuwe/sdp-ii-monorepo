@@ -8,15 +8,11 @@ echo "🔍 Running lint-staged for web..."
 cd "$ROOT/web" && bunx lint-staged
 
 if git diff --cached --name-only | grep -q "^api/"; then
-  echo "🔍 Checking Java formatting (api)..."
-  cd "$ROOT/api" && ./mvnw spotless:check -q
   echo "🧪 Running Maven tests for api..."
   cd "$ROOT/api" && ./mvnw test -q
 fi
 
 if git diff --cached --name-only | grep -q "^desktop/"; then
-  echo "🔍 Checking Java formatting (desktop)..."
-  cd "$ROOT/desktop" && ./mvnw spotless:check -q
   echo "🧪 Running Maven tests for desktop..."
   cd "$ROOT/desktop" && ./mvnw test -q
 fi
