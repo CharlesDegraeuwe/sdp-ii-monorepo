@@ -3,6 +3,8 @@ package hogent.sdp2.sdpii.gui.app.afwezigheid;
 import domain.Beheerder;
 import domain.auth.Sessie;
 import domain.dto.GeschiedenisItemDTO;
+import domain.dto.GeschiedenisItemMetWerknemerDTO;
+import domain.dto.TeamMetLedenDTO;
 import domain.dto.WerknemerDTO;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
 import javafx.application.Platform;
@@ -110,7 +112,6 @@ public class AfwezigheidsController extends BorderPane {
         succesLabel.setVisible(false);
         succesLabel.setManaged(false);
 
-        // Iedereen kan eigen geschiedenis zien
         geschiedenisKnop.setVisible(true);
         geschiedenisKnop.setManaged(true);
     }
@@ -151,11 +152,9 @@ public class AfwezigheidsController extends BorderPane {
         WerknemerDTO ingelogde = Sessie.getInstance().getIngelogdeWerknemer();
         boolean heeftTeamToegang = Sessie.getInstance().isMangerOrAdmin() || Sessie.getInstance().isSuperVisor();
 
-        // Teamledenlijst links alleen zichtbaar voor manager/supervisor
         teamledenPanel.setVisible(heeftTeamToegang);
         teamledenPanel.setManaged(heeftTeamToegang);
 
-        // Eigen geschiedenis altijd meteen laden
         geschiedenisTitel.setText("Mijn afwezigheidsgeschiedenis");
         laadGeschiedenisVanWerknemer(ingelogde);
 
@@ -174,12 +173,11 @@ public class AfwezigheidsController extends BorderPane {
 
         new Thread(() -> {
             try {
-                List<WerknemerDTO> teamleden = Beheerder.getInstance()
+                List<TeamMetLedenDTO> teams = Beheerder.getInstance()
                         .getGeschiedenisFacade()
-                        .geefTeamledenVanManager(ingelogde.id());
+                        .geefTeamsVanManager(ingelogde.id());
 
                 Platform.runLater(() -> {
-                    // "Mijn geschiedenis" bovenaan
                     Button eigenKnop = new Button("Mijn geschiedenis");
                     eigenKnop.setMaxWidth(Double.MAX_VALUE);
                     eigenKnop.getStyleClass().addAll("teamlid-knop", "teamlid-knop-eigen");
@@ -189,18 +187,43 @@ public class AfwezigheidsController extends BorderPane {
                     });
                     teamledenLijst.getChildren().add(eigenKnop);
 
-                    if (teamleden.isEmpty()) {
-                        Label leeg = new Label("Geen teamleden gevonden.");
+                    if (teams.isEmpty()) {
+                        Label leeg = new Label("Geen teams gevonden.");
                         leeg.setStyle("-fx-text-fill: #aaaaaa; -fx-font-size: 12px;");
                         teamledenLijst.getChildren().add(leeg);
-                    } else {
-                        for (WerknemerDTO w : teamleden) {
+                        return;
+                    }
+
+                    for (TeamMetLedenDTO team : teams) {
+                        // Leden container — initieel verborgen
+                        VBox ledenContainer = new VBox(4);
+                        ledenContainer.setVisible(false);
+                        ledenContainer.setManaged(false);
+                        ledenContainer.setPadding(new Insets(2, 0, 4, 8));
+
+                        for (WerknemerDTO w : team.leden()) {
                             Button knop = new Button(w.voornaam() + " " + w.naam());
                             knop.setMaxWidth(Double.MAX_VALUE);
                             knop.getStyleClass().add("teamlid-knop");
                             knop.setOnAction(e -> laadGeschiedenisVanWerknemer(w));
-                            teamledenLijst.getChildren().add(knop);
+                            ledenContainer.getChildren().add(knop);
                         }
+
+                        // Team header — toggle leden + laad overzicht rechts
+                        Button teamHeader = new Button("▶  " + team.teamNaam());
+                        teamHeader.setMaxWidth(Double.MAX_VALUE);
+                        teamHeader.getStyleClass().add("team-header-knop");
+                        teamHeader.setOnAction(e -> {
+                            boolean open = ledenContainer.isVisible();
+                            ledenContainer.setVisible(!open);
+                            ledenContainer.setManaged(!open);
+                            teamHeader.setText((open ? "▶  " : "▼  ") + team.teamNaam());
+                            if (!open) {
+                                laadTeamOverzicht(team.teamId(), team.teamNaam());
+                            }
+                        });
+
+                        teamledenLijst.getChildren().addAll(teamHeader, ledenContainer);
                     }
                 });
             } catch (Exception e) {
@@ -241,6 +264,48 @@ public class AfwezigheidsController extends BorderPane {
         }).start();
     }
 
+    private void laadTeamOverzicht(int teamId, String teamNaam) {
+        geschiedenisTitel.setText("Overzicht – " + teamNaam);
+        geschiedenisLijst.getChildren().clear();
+
+        Label laadLabel = new Label("Laden...");
+        laadLabel.setStyle("-fx-text-fill: #aaaaaa;");
+        geschiedenisLijst.getChildren().add(laadLabel);
+
+        new Thread(() -> {
+            try {
+                List<GeschiedenisItemMetWerknemerDTO> items = Beheerder.getInstance()
+                        .getGeschiedenisFacade()
+                        .geefTeamOverzicht(teamId);
+
+                Platform.runLater(() -> {
+                    geschiedenisLijst.getChildren().clear();
+                    if (items.isEmpty()) {
+                        Label leeg = new Label("Geen afwezigheden gevonden.");
+                        leeg.setStyle("-fx-text-fill: #aaaaaa; -fx-font-size: 12px;");
+                        geschiedenisLijst.getChildren().add(leeg);
+                        return;
+                    }
+
+                    int huidigWerknemerId = -1;
+                    for (GeschiedenisItemMetWerknemerDTO item : items) {
+                        if (item.werknemerId() != huidigWerknemerId) {
+                            huidigWerknemerId = item.werknemerId();
+                            Label werknemerLabel = new Label(item.werknemerVoornaam() + " " + item.werknemerNaam());
+                            werknemerLabel.setStyle(
+                                    "-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"
+                                    + " -fx-padding: 8 0 2 0;");
+                            geschiedenisLijst.getChildren().add(werknemerLabel);
+                        }
+                        geschiedenisLijst.getChildren().add(maakGeschiedenisRijMetWerknemer(item));
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
     private HBox maakGeschiedenisRij(GeschiedenisItemDTO item) {
         HBox rij = new HBox(12);
         rij.setAlignment(Pos.CENTER_LEFT);
@@ -258,14 +323,12 @@ public class AfwezigheidsController extends BorderPane {
 
         rij.setStyle("-fx-background-color: " + achtergrond + "; -fx-background-radius: 10;");
 
-        // Type indicator
         Label typeLabel = new Label(isZiekte ? "Ziekte" : "Verlof");
         typeLabel.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: "
                 + (isZiekte ? "#E31B35" : isAfgewezen || isGeannuleerd ? "#888888" : isWachten ? "#a07d00" : "#1e8449")
                 + "; -fx-background-color: " + achtergrond
                 + "; -fx-background-radius: 6; -fx-padding: 3 8 3 8;");
 
-        // Info
         VBox info = new VBox(2);
         HBox.setHgrow(info, Priority.ALWAYS);
 
@@ -284,7 +347,6 @@ public class AfwezigheidsController extends BorderPane {
 
         rij.getChildren().addAll(typeLabel, info);
 
-        // Status badge
         if (item.status() != null) {
             Label statusLabel = new Label(item.status());
             String statusKleur = switch (item.status()) {
@@ -300,6 +362,13 @@ public class AfwezigheidsController extends BorderPane {
         }
 
         return rij;
+    }
+
+    private HBox maakGeschiedenisRijMetWerknemer(GeschiedenisItemMetWerknemerDTO item) {
+        GeschiedenisItemDTO basis = new GeschiedenisItemDTO(
+                item.id(), item.type(), item.startDatum(), item.eindDatum(),
+                item.status(), item.omschrijving());
+        return maakGeschiedenisRij(basis);
     }
 
     // ─── VERLOF / ZIEKTE INDIENEN ────────────────────────────────────────────────

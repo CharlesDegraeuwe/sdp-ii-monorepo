@@ -13,8 +13,12 @@ import javafx.scene.text.Font;
 import java.io.IOException;
 
 public class ManagementApplication extends javafx.application.Application {
-    @Override
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
     public void start(Stage primaryStage) throws IOException {
         Scene scene = new Scene(new MainFrameController(primaryStage), 1380, 900);
         scene.getStylesheets().add("css/application.css");
