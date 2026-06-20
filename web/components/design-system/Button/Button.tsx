@@ -11,6 +11,9 @@ const textSizeMap = {
   lg: 'text-lg',
 } as const;
 
+const form = {
+  rectangle: '',
+};
 const borderMap = {
   default:
     'border border-gray-300/30 dark:border-gray-200/30 hover:border-gray-200/30',

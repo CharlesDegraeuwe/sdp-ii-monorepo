@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/design-system/Button';
 import { MdCheck } from 'react-icons/md';
 import { IoCalendarOutline } from 'react-icons/io5';
@@ -9,6 +9,9 @@ import { FormHelper } from '@/components/design-system/Form';
 import ChatMessage from '@/components/app/chat/Message';
 import ChatInput from '@/components/app/chat/ChatInput';
 import { useChatSocket } from '@/hooks/useChatSocket';
+import { AnimateOnMount } from '@/components/design-system/AnimateOnMount';
+import { AiOutlineWechatWork } from 'react-icons/ai';
+import BaseTooltip from '@/components/design-system/Tooltip/Tooltip';
 
 const SUGGESTIONS = [
   { icon: <MdCheck />, label: 'Wat zijn mijn taken?' },
@@ -16,7 +19,12 @@ const SUGGESTIONS = [
   { icon: <IoIosAirplane />, label: 'Hoeveel verlof heb ik?' },
 ];
 
-const ChatClient = () => {
+interface ChatCLientProps {
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+const ChatClient = (props: ChatCLientProps) => {
+  const { isOpen, setIsOpen } = props;
   const [input, setInput] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -48,9 +56,9 @@ const ChatClient = () => {
 
   return (
     <FormHelper onSubmit={handleSubmit}>
-      <div className={'relative w-full h-full'}>
+      <div className={'relative min-h-0 flex-1 w-full h-full bg-bg-white'}>
         <div
-          className={`absolute ${isAgentic ? 'opacity-100 animate-pulse' : 'opacity-0'} transition-opacity duration-250 w-full h-full rounded-3xl overflow-hidden flex items-center justify-center bg-white`}
+          className={`absolute ${isAgentic ? 'opacity-0' : 'opacity-100 animate-pulse'} transition-opacity duration-250 w-full h-full rounded-3xl overflow-hidden flex items-center justify-center bg-white`}
           style={{
             boxShadow: `
             inset 200px 200px 250px -150px #60a5fa,
@@ -62,6 +70,16 @@ const ChatClient = () => {
         />
 
         <div className="relative z-20 w-full h-full flex items-center justify-center">
+          <div className={'absolute top-2 left-1/2 -translate-x-1/2 z-20'}>
+            <BaseTooltip content={isOpen ? 'samenvouwen' : 'uitvouwen'}>
+              <Button
+                variant={'ghost'}
+                form={'square'}
+                icon={<AiOutlineWechatWork size={20} />}
+                onClick={() => setIsOpen((prevState) => !prevState)}
+              />
+            </BaseTooltip>
+          </div>
           <div className="z-10 flex flex-col items-center justify-center w-full h-full">
             {!hasMessages && (
               <div
@@ -78,7 +96,7 @@ const ChatClient = () => {
                 />
                 <div
                   className={
-                    'w-full sm:w-4/5 md:w-3/5 lg:w-1/3 flex flex-col gap-2 items-center justify-center'
+                    'w-full sm:w-4/5 md:w-4/5 lg:w-1/2 flex flex-col gap-2 items-center justify-center'
                   }
                 >
                   <div
@@ -105,19 +123,22 @@ const ChatClient = () => {
                     />
                   </div>
                   <div
-                    className={'w-full flex flex-col sm:flex-row gap-2 mt-3'}
+                    className={
+                      'w-full flex flex-col justify-center sm:flex-row gap-2 mt-3'
+                    }
                   >
-                    {SUGGESTIONS.map((s) => (
-                      <Button
-                        key={s.label}
-                        type="button"
-                        iconLeft={s.icon}
-                        variant="prompt"
-                        textSize="sm"
-                        label={s.label}
-                        color="zinc-400"
-                        onClick={() => handleSuggestion(s.label)}
-                      />
+                    {SUGGESTIONS.map((s, i) => (
+                      <AnimateOnMount key={s.label} delay={100 * i}>
+                        <Button
+                          type="button"
+                          iconLeft={s.icon}
+                          variant="prompt"
+                          textSize="sm"
+                          label={s.label}
+                          color="zinc-400"
+                          onClick={() => handleSuggestion(s.label)}
+                        />
+                      </AnimateOnMount>
                     ))}
                   </div>
                 </div>

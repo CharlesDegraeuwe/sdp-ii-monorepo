@@ -107,9 +107,10 @@ export function PlannerToolbar({
             </div>
           )}
         </div>
+        <div className={'flex-1 w-full'} />
         {/* Team switcher visible on mobile only (below view controls) */}
         {kanTeamZien && (
-          <div className={'flex sm:hidden w-full justify-start'}>
+          <div className={'flex sm:hidden w-full'}>
             <TabSwitcher
               tabs={zichtbareTabs}
               value={tab}
@@ -119,15 +120,17 @@ export function PlannerToolbar({
         )}
       </div>
 
-      {tab === 'team' && (
-        <PlannerFilter
-          filter={filter}
-          onChange={onFilterChange}
-          sites={sites}
-          teams={teams}
-          werknemers={teamWerknemers}
-        />
-      )}
+      <div className={'min-w-full flex justify-end'}>
+        {tab === 'team' && (
+          <PlannerFilter
+            filter={filter}
+            onChange={onFilterChange}
+            sites={sites}
+            teams={teams}
+            werknemers={teamWerknemers}
+          />
+        )}
+      </div>
     </div>
   );
 }
