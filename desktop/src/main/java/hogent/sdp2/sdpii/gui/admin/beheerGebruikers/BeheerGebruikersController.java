@@ -1,6 +1,7 @@
 package hogent.sdp2.sdpii.gui.admin.beheerGebruikers;
 
 import domain.auth.Sessie;
+import domain.dto.UpdateWerknemerDTO;
 import domain.dto.WerknemerDTO;
 import domain.facades.WerknemersFacade;
 import javafx.application.Platform;
@@ -12,10 +13,13 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class BeheerGebruikersController extends VBox {
 
@@ -26,6 +30,7 @@ public class BeheerGebruikersController extends VBox {
     @FXML private TableColumn<WerknemerDTO, String> rolCol;
     @FXML private TableColumn<WerknemerDTO, String> statusCol;
     @FXML private TableColumn<WerknemerDTO, String> telefoonCol;
+    @FXML private TableColumn<WerknemerDTO, Void> actieCol; // NIEUW
 
     @FXML private TextField zoekField;
     @FXML private Label foutLabel;
@@ -55,13 +60,27 @@ public class BeheerGebruikersController extends VBox {
             return;
         }
 
-        // Standaard Tekstkolommen instellen
-        naamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().naam()));
-        voornaamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().voornaam()));
-        emailCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().email()));
-        telefoonCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().telefoonnummer()));
+        // Zorg dat de tabel bewerkbaar is
+        gebruikersTable.setEditable(true);
 
-        // --- ROL KOLOM (Interactieve Dropdown) ---
+        // --- TEXT KOLOMMEN (Inline bewerkbaar) ---
+        naamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().naam()));
+        naamCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        naamCol.setOnEditCommit(event -> verwerkTekstUpdate(event.getRowValue(), "naam", event.getNewValue()));
+
+        voornaamCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().voornaam()));
+        voornaamCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        voornaamCol.setOnEditCommit(event -> verwerkTekstUpdate(event.getRowValue(), "voornaam", event.getNewValue()));
+
+        emailCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().email()));
+        emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        emailCol.setOnEditCommit(event -> verwerkTekstUpdate(event.getRowValue(), "email", event.getNewValue()));
+
+        telefoonCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().telefoonnummer()));
+        telefoonCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        telefoonCol.setOnEditCommit(event -> verwerkTekstUpdate(event.getRowValue(), "telefoonnummer", event.getNewValue()));
+
+        // --- ROL KOLOM ---
         rolCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().rol()));
         rolCol.setCellFactory(tc -> new TableCell<>() {
             private final ComboBox<String> combo = new ComboBox<>(FXCollections.observableArrayList("Admin", "Manager", "Werknemer"));
@@ -75,10 +94,8 @@ public class BeheerGebruikersController extends VBox {
                 if (empty || rol == null) {
                     setGraphic(null);
                 } else {
-                    // 1. Schakel de actie tijdelijk uit om valse API calls te voorkomen
                     combo.setOnAction(null);
 
-                    // Omzetten van Supervisor naar Werknemer voor de weergave
                     String weergaveRol = rol.equalsIgnoreCase("Supervisor") ? "Werknemer" : rol;
 
                     combo.setValue(weergaveRol);
@@ -95,22 +112,13 @@ public class BeheerGebruikersController extends VBox {
                             new Thread(() -> {
                                 try {
                                     boolean succes = service.veranderRol(w.id(), nieuweRol);
-
                                     if (succes) {
                                         Platform.runLater(() -> laadWerknemers());
                                     } else {
-                                        Platform.runLater(() -> {
-                                            foutLabel.setText("Fout bij updaten rol op de server.");
-                                            foutLabel.setVisible(true);
-                                            foutLabel.setManaged(true);
-                                        });
+                                        toonFout("Fout bij updaten rol op de server.");
                                     }
                                 } catch (Exception ex) {
-                                    Platform.runLater(() -> {
-                                        foutLabel.setText("Connectiefout bij rol wijzigen: " + ex.getMessage());
-                                        foutLabel.setVisible(true);
-                                        foutLabel.setManaged(true);
-                                    });
+                                    toonFout("Connectiefout bij rol wijzigen: " + ex.getMessage());
                                 }
                             }).start();
                         }
@@ -119,7 +127,7 @@ public class BeheerGebruikersController extends VBox {
             }
         });
 
-        // --- STATUS KOLOM (Interactieve Dropdown) ---
+        // --- STATUS KOLOM ---
         statusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().status()));
         statusCol.setCellFactory(tc -> new TableCell<>() {
             private final ComboBox<String> combo = new ComboBox<>(FXCollections.observableArrayList("Actief", "Inactief", "Geblokkeerd"));
@@ -133,14 +141,11 @@ public class BeheerGebruikersController extends VBox {
                 if (empty || status == null) {
                     setGraphic(null);
                 } else {
-                    // 1. Schakel de actie tijdelijk uit
                     combo.setOnAction(null);
-
                     combo.setValue(status);
                     updateStatusStyle(combo, status);
                     setGraphic(combo);
 
-                    // 2. Koppel de actie voor echte gebruikersinteractie
                     combo.setOnAction(e -> {
                         WerknemerDTO w = getTableView().getItems().get(getIndex());
                         String nieuweStatus = combo.getValue();
@@ -161,22 +166,73 @@ public class BeheerGebruikersController extends VBox {
                                     if (succes) {
                                         Platform.runLater(() -> laadWerknemers());
                                     } else {
-                                        Platform.runLater(() -> {
-                                            foutLabel.setText("Fout bij updaten status.");
-                                            foutLabel.setVisible(true);
-                                            foutLabel.setManaged(true);
-                                        });
+                                        toonFout("Fout bij updaten status.");
                                     }
                                 } catch (Exception ex) {
-                                    Platform.runLater(() -> {
-                                        foutLabel.setText("Connectiefout: " + ex.getMessage());
-                                        foutLabel.setVisible(true);
-                                        foutLabel.setManaged(true);
-                                    });
+                                    toonFout("Connectiefout: " + ex.getMessage());
                                 }
                             }).start();
                         }
                     });
+                }
+            }
+        });
+
+        // --- ACTIE KOLOM (Vuilbakje) ---
+        actieCol.setCellFactory(param -> new TableCell<>() {
+            private final Button deleteBtn = new Button();
+            {
+                FontIcon trashIcon = new FontIcon("fas-trash"); // Zorg dat ikonli-fontawesome5-pack in je pom.xml zit
+                trashIcon.setIconSize(16);
+                trashIcon.setIconColor(javafx.scene.paint.Color.valueOf("#ef4444")); // Rode kleur
+
+                deleteBtn.setGraphic(trashIcon);
+                deleteBtn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+                deleteBtn.setOnAction(event -> {
+                    WerknemerDTO w = getTableView().getItems().get(getIndex());
+
+                    if (w.email().equals(Sessie.getInstance().getIngelogdeWerknemer().email())) {
+                        toonFout("Je kunt je eigen account niet verwijderen.");
+                        return;
+                    }
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Gebruiker verwijderen");
+                    alert.setHeaderText("Weet je zeker dat je " + w.voornaam() + " wilt verwijderen?");
+                    alert.setContentText("Deze actie kan niet ongedaan worden gemaakt.");
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                        new Thread(() -> {
+                            try {
+                                boolean succes = service.verwijderWerknemer(w.id());
+                                if (succes) {
+                                    Platform.runLater(() -> laadWerknemers());
+                                } else {
+                                    toonFout("Fout bij verwijderen van gebruiker.");
+                                }
+                            } catch (Exception ex) {
+                                toonFout("Connectiefout: " + ex.getMessage());
+                            }
+                        }).start();
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    // Check of het de huidige ingelogde gebruiker is, zo ja: geen vuilbak tonen
+                    WerknemerDTO w = getTableView().getItems().get(getIndex());
+                    if (w != null && w.email().equals(Sessie.getInstance().getIngelogdeWerknemer().email())) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteBtn);
+                    }
                 }
             }
         });
@@ -186,6 +242,53 @@ public class BeheerGebruikersController extends VBox {
         statusFilterBox.getItems().addAll("Alle", "Actief", "Inactief", "Geblokkeerd");
         statusFilterBox.getSelectionModel().selectFirst();
         laadWerknemers();
+    }
+
+    // --- HELPER METHODE VOOR INLINE UPDATES ---
+// --- HELPER METHODE VOOR INLINE UPDATES ---
+    private void verwerkTekstUpdate(WerknemerDTO werknemer, String veld, String nieuweWaarde) {
+        new Thread(() -> {
+            try {
+                String naam = werknemer.naam();
+                String voornaam = werknemer.voornaam();
+                String email = werknemer.email();
+                String telefoon = werknemer.telefoonnummer();
+
+                switch (veld) {
+                    case "naam" -> naam = nieuweWaarde;
+                    case "voornaam" -> voornaam = nieuweWaarde;
+                    case "email" -> email = nieuweWaarde;
+                    case "telefoonnummer" -> telefoon = nieuweWaarde;
+                }
+
+                UpdateWerknemerDTO updateDTO = new UpdateWerknemerDTO(
+                    werknemer.id(),
+                    naam,
+                    voornaam,
+                    email,
+                    telefoon,
+                    werknemer.geboortedatum(),
+                    werknemer.rol(),
+                    werknemer.status()
+                );
+
+                service.update(updateDTO);
+
+                Platform.runLater(this::laadWerknemers);
+
+            } catch (Exception ex) {
+                toonFout("Fout bij opslaan wijziging: " + ex.getMessage());
+                Platform.runLater(this::laadWerknemers);
+            }
+        }).start();
+    }
+
+    private void toonFout(String bericht) {
+        Platform.runLater(() -> {
+            foutLabel.setText(bericht);
+            foutLabel.setVisible(true);
+            foutLabel.setManaged(true);
+        });
     }
 
     @FXML
@@ -225,12 +328,8 @@ public class BeheerGebruikersController extends VBox {
                     gebruikersTable.setPlaceholder(new Label("Geen gebruikers gevonden."));
                 });
             } catch (Exception e) {
-                Platform.runLater(() -> {
-                    foutLabel.setText("Fout bij laden van gebruikers: " + e.getMessage());
-                    foutLabel.setVisible(true);
-                    foutLabel.setManaged(true);
-                    gebruikersTable.setPlaceholder(new Label("Fout bij laden."));
-                });
+                toonFout("Fout bij laden van gebruikers: " + e.getMessage());
+                Platform.runLater(() -> gebruikersTable.setPlaceholder(new Label("Fout bij laden.")));
             }
         }).start();
     }

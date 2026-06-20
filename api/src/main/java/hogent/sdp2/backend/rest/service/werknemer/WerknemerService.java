@@ -15,9 +15,11 @@ import java.util.Random;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -440,5 +442,15 @@ public class WerknemerService {
         } catch (Exception e) {
             System.err.println("Gefaald om audit-log op te slaan: " + e.getMessage());
         }
+    }
+
+    public void verwijderWerknemer(int id) {
+        // Check eerst of de werknemer wel bestaat
+        if (!werknemerRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Werknemer met ID " + id + " niet gevonden.");
+        }
+
+        // Verwijder de werknemer
+        werknemerRepository.deleteById(id);
     }
 }

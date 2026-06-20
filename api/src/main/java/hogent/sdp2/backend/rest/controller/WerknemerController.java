@@ -149,4 +149,10 @@ public class WerknemerController {
             return ResponseEntity.badRequest().body("Fout bij updaten rol: " + e.getMessage());
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> verwijderWerknemer(@PathVariable int id) {
+        werknemerService.verwijderWerknemer(id);
+        return ResponseEntity.noContent().build();
+    }
 }
