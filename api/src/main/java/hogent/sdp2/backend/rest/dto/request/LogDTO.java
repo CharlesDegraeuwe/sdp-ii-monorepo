@@ -19,6 +19,12 @@ public record LogDTO(
             Integer recordId,
             LocalDateTime timestamp,
             String beschrijving) {
-        this(id, werknemer != null ? werknemer.getId() : null, type, tabel, timestamp, beschrijving);
+        this(
+                id,
+                werknemer != null ? werknemer.getId() : null,
+                type,
+                tabel,
+                timestamp,
+                beschrijving);
     }
 }

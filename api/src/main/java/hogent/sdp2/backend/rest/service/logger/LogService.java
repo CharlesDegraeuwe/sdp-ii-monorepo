@@ -39,41 +39,47 @@ public class LogService {
 
     public List<LogDTO> getAlleLogs() {
         return logRepository.findAll().stream()
-                .map(l -> new LogDTO(
-                        l.getId(),
-                        l.getWerknemer(),
-                        l.getType(),
-                        l.getTabel(),
-                        l.getRecordId(),
-                        l.getTimestamp(),
-                        l.getBeschrijving()))
+                .map(
+                        l ->
+                                new LogDTO(
+                                        l.getId(),
+                                        l.getWerknemer(),
+                                        l.getType(),
+                                        l.getTabel(),
+                                        l.getRecordId(),
+                                        l.getTimestamp(),
+                                        l.getBeschrijving()))
                 .toList();
     }
 
     public LogDTO getByID(Integer id) {
         return logRepository
                 .findById(id)
-                .map(l -> new LogDTO(
-                        l.getId(),
-                        l.getWerknemer(),
-                        l.getType(),
-                        l.getTabel(),
-                        l.getRecordId(),
-                        l.getTimestamp(),
-                        l.getBeschrijving()))
+                .map(
+                        l ->
+                                new LogDTO(
+                                        l.getId(),
+                                        l.getWerknemer(),
+                                        l.getType(),
+                                        l.getTabel(),
+                                        l.getRecordId(),
+                                        l.getTimestamp(),
+                                        l.getBeschrijving()))
                 .orElseThrow(() -> new RuntimeException("Log niet gevonden"));
     }
 
     public List<LogDTO> getRecenteLogs() {
         return logRepository.findTop10ByOrderByTimestampDesc().stream()
-                .map(l -> new LogDTO(
-                        l.getId(),
-                        l.getWerknemer(),
-                        l.getType(),
-                        l.getTabel(),
-                        l.getRecordId(),
-                        l.getTimestamp(),
-                        l.getBeschrijving()))
+                .map(
+                        l ->
+                                new LogDTO(
+                                        l.getId(),
+                                        l.getWerknemer(),
+                                        l.getType(),
+                                        l.getTabel(),
+                                        l.getRecordId(),
+                                        l.getTimestamp(),
+                                        l.getBeschrijving()))
                 .toList();
     }
 }

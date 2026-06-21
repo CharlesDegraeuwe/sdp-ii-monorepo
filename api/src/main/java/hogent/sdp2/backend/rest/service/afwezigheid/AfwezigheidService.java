@@ -48,38 +48,52 @@ public class AfwezigheidService {
 
         afwezigheidRepository.save(afwezigheid);
 
-        String afwezigheidBericht = werknemer.getVoornaam() + " " + werknemer.getNaam()
-                + " is ziek van " + dto.startDatum() + " tot " + dto.eindDatum() + ".";
+        String afwezigheidBericht =
+                werknemer.getVoornaam()
+                        + " "
+                        + werknemer.getNaam()
+                        + " is ziek van "
+                        + dto.startDatum()
+                        + " tot "
+                        + dto.eindDatum()
+                        + ".";
 
         teamwerknemerRepository.findByWerknemerId(dto.werknemerId()).stream()
                 .findFirst()
-                .ifPresent(tw -> {
-                    teamwerknemerRepository.findByTeamId(tw.getTeam().getId())
-                            .forEach(teamlid -> {
-                                if (!teamlid.getWerknemer().getId().equals(dto.werknemerId())) {
-                                    notificatieService.maakNotificatie(
-                                            teamlid.getWerknemer().getId(),
-                                            "Teamlid afwezig",
-                                            afwezigheidBericht);
-                                    sseService.pushEvent(
-                                            teamlid.getWerknemer().getId(),
-                                            "afwezigheid_gemeld",
-                                            Map.of("werknemerId", dto.werknemerId()));
-                                }
-                            });
-                });
+                .ifPresent(
+                        tw -> {
+                            teamwerknemerRepository
+                                    .findByTeamId(tw.getTeam().getId())
+                                    .forEach(
+                                            teamlid -> {
+                                                if (!teamlid.getWerknemer()
+                                                        .getId()
+                                                        .equals(dto.werknemerId())) {
+                                                    notificatieService.maakNotificatie(
+                                                            teamlid.getWerknemer().getId(),
+                                                            "Teamlid afwezig",
+                                                            afwezigheidBericht);
+                                                    sseService.pushEvent(
+                                                            teamlid.getWerknemer().getId(),
+                                                            "afwezigheid_gemeld",
+                                                            Map.of(
+                                                                    "werknemerId",
+                                                                    dto.werknemerId()));
+                                                }
+                                            });
+                        });
 
-        teamRepository.findManagerByWerknemerId(dto.werknemerId())
-                .forEach(manager -> {
-                    notificatieService.maakNotificatie(
-                            manager.getId(),
-                            "Afwezigheid teamlid",
-                            afwezigheidBericht);
-                    sseService.pushEvent(
-                            manager.getId(),
-                            "afwezigheid_gemeld",
-                            Map.of("werknemerId", dto.werknemerId()));
-                });
+        teamRepository
+                .findManagerByWerknemerId(dto.werknemerId())
+                .forEach(
+                        manager -> {
+                            notificatieService.maakNotificatie(
+                                    manager.getId(), "Afwezigheid teamlid", afwezigheidBericht);
+                            sseService.pushEvent(
+                                    manager.getId(),
+                                    "afwezigheid_gemeld",
+                                    Map.of("werknemerId", dto.werknemerId()));
+                        });
 
         sseService.pushEvent(
                 dto.werknemerId(),

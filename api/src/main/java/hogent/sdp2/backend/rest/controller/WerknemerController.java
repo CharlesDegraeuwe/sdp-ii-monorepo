@@ -149,5 +149,4 @@ public class WerknemerController {
             return ResponseEntity.badRequest().body("Fout bij updaten rol: " + e.getMessage());
         }
     }
-
 }

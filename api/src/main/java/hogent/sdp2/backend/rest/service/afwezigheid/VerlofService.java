@@ -1,11 +1,11 @@
 package hogent.sdp2.backend.rest.service.afwezigheid;
 
 import hogent.sdp2.backend.auth.SessieService;
+import hogent.sdp2.backend.domain.Teamwerknemer;
 import hogent.sdp2.backend.domain.Verlof;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.rest.dto.request.VerlofAanvragenDTO;
 import hogent.sdp2.backend.rest.dto.response.GeschiedenisItemDTO;
-import hogent.sdp2.backend.rest.repository.TeamRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.VerlofRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
@@ -24,7 +24,6 @@ public class VerlofService {
     private final VerlofRepository verlofRepository;
     private final WerknemerRepository werknemerRepository;
     private final TeamwerknemerRepository teamwerknemerRepository;
-    private final TeamRepository teamRepository;
     private final NotificatieService notificatieService;
     private final SessieService sessieService;
     private final SseService sseService;
@@ -40,7 +39,18 @@ public class VerlofService {
             throw new RuntimeException("Einddatum mag niet voor startdatum liggen.");
         }
 
-        List<Werknemer> managers = teamRepository.findManagerByWerknemerId(dto.werknemerId());
+        List<Teamwerknemer> memberships =
+                teamwerknemerRepository.findByWerknemerId(dto.werknemerId());
+        if (memberships.isEmpty()) {
+            throw new RuntimeException("Geen manager gevonden voor deze werknemer.");
+        }
+
+        List<Werknemer> managers =
+                teamwerknemerRepository
+                        .findGoedkeurderVanTeam(memberships.get(0).getTeam().getId())
+                        .stream()
+                        .map(Teamwerknemer::getWerknemer)
+                        .toList();
 
         if (managers.isEmpty()) {
             throw new RuntimeException("Geen manager gevonden voor deze werknemer.");
@@ -58,13 +68,22 @@ public class VerlofService {
 
         verlofRepository.save(verlof);
 
-        String bericht = werknemer.getVoornaam() + " " + werknemer.getNaam()
-                + " heeft verlof aangevraagd van " + dto.startDatum()
-                + " tot " + dto.eindDatum() + ".";
+        String bericht =
+                werknemer.getVoornaam()
+                        + " "
+                        + werknemer.getNaam()
+                        + " heeft verlof aangevraagd van "
+                        + dto.startDatum()
+                        + " tot "
+                        + dto.eindDatum()
+                        + ".";
 
         for (Werknemer manager : managers) {
-            notificatieService.maakNotificatie(manager.getId(), "Nieuwe verlofaanvraag", bericht, verlof.getId());
-            sseService.pushEvent(manager.getId(), "verlof_aangevraagd",
+            notificatieService.maakNotificatie(
+                    manager.getId(), "Nieuwe verlofaanvraag", bericht, verlof.getId());
+            sseService.pushEvent(
+                    manager.getId(),
+                    "verlof_aangevraagd",
                     Map.of("verlofId", verlof.getId(), "werknemerId", dto.werknemerId()));
         }
 
@@ -138,40 +157,63 @@ public class VerlofService {
 
         Werknemer werknemer = verlof.getWerknemer();
 
-        String annuleerBericht = werknemer.getVoornaam() + " " + werknemer.getNaam()
-                + " heeft zijn verlof van " + verlof.getStartDatum()
-                + " tot " + verlof.getEindDatum() + " geannuleerd.";
+        String annuleerBericht =
+                werknemer.getVoornaam()
+                        + " "
+                        + werknemer.getNaam()
+                        + " heeft zijn verlof van "
+                        + verlof.getStartDatum()
+                        + " tot "
+                        + verlof.getEindDatum()
+                        + " geannuleerd.";
 
         teamwerknemerRepository.findByWerknemerId(werknemer.getId()).stream()
                 .findFirst()
-                .ifPresent(tw -> {
-                    teamwerknemerRepository.findByTeamId(tw.getTeam().getId())
-                            .forEach(teamlid -> {
-                                if (!teamlid.getWerknemer().getId().equals(werknemer.getId())) {
-                                    notificatieService.maakNotificatie(
-                                            teamlid.getWerknemer().getId(),
-                                            "Verlof geannuleerd",
-                                            annuleerBericht);
-                                    sseService.pushEvent(
-                                            teamlid.getWerknemer().getId(),
-                                            "verlof_geannuleerd",
-                                            Map.of("verlofId", verlofId, "werknemerId", werknemer.getId()));
-                                }
-                            });
-                });
+                .ifPresent(
+                        tw -> {
+                            teamwerknemerRepository
+                                    .findByTeamId(tw.getTeam().getId())
+                                    .forEach(
+                                            teamlid -> {
+                                                if (!teamlid.getWerknemer()
+                                                        .getId()
+                                                        .equals(werknemer.getId())) {
+                                                    notificatieService.maakNotificatie(
+                                                            teamlid.getWerknemer().getId(),
+                                                            "Verlof geannuleerd",
+                                                            annuleerBericht);
+                                                    sseService.pushEvent(
+                                                            teamlid.getWerknemer().getId(),
+                                                            "verlof_geannuleerd",
+                                                            Map.of(
+                                                                    "verlofId",
+                                                                    verlofId,
+                                                                    "werknemerId",
+                                                                    werknemer.getId()));
+                                                }
+                                            });
 
-        teamRepository.findManagerByWerknemerId(werknemer.getId())
-                .forEach(manager -> {
-                    notificatieService.maakNotificatie(
-                            manager.getId(),
-                            "Verlof geannuleerd",
-                            annuleerBericht,
-                            verlofId);
-                    sseService.pushEvent(
-                            manager.getId(),
-                            "verlof_geannuleerd",
-                            Map.of("verlofId", verlofId, "werknemerId", werknemer.getId()));
-                });
+                            teamwerknemerRepository
+                                    .findGoedkeurderVanTeam(tw.getTeam().getId())
+                                    .stream()
+                                    .map(Teamwerknemer::getWerknemer)
+                                    .forEach(
+                                            manager -> {
+                                                notificatieService.maakNotificatie(
+                                                        manager.getId(),
+                                                        "Verlof geannuleerd",
+                                                        annuleerBericht,
+                                                        verlofId);
+                                                sseService.pushEvent(
+                                                        manager.getId(),
+                                                        "verlof_geannuleerd",
+                                                        Map.of(
+                                                                "verlofId",
+                                                                verlofId,
+                                                                "werknemerId",
+                                                                werknemer.getId()));
+                                            });
+                        });
 
         sseService.pushEvent(werknemer.getId(), "verlof_geannuleerd", Map.of("verlofId", verlofId));
 

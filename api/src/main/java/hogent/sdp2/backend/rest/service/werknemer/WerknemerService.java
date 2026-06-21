@@ -15,11 +15,9 @@ import java.util.Random;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -399,7 +397,8 @@ public class WerknemerService {
     }
 
     private String buildEmailHtml(String code) {
-        return """
+        return
+"""
 <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 40px; height: 100vh">
     <img src="https://i.ibb.co/ksS3Wh05/logo-dark.png" alt="logo" style="height: 50px; margin-bottom: 20px;" />
     <hr style="border: 1px solid #eee;" />
@@ -443,5 +442,4 @@ public class WerknemerService {
             System.err.println("Gefaald om audit-log op te slaan: " + e.getMessage());
         }
     }
-
 }

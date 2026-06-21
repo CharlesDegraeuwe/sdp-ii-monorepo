@@ -14,5 +14,6 @@ public interface NotificatieRepository extends JpaRepository<Notificatie, Intege
 
     long countByWerknemerIdAndGelezen(Integer werknemerId, String gelezen);
 
-    boolean existsByWerknemerIdAndTitelAndReferentieId(Integer werknemerId, String titel, Integer referentieId);
+    boolean existsByWerknemerIdAndTitelAndReferentieId(
+            Integer werknemerId, String titel, Integer referentieId);
 }

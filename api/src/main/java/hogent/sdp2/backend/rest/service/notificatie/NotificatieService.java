@@ -55,7 +55,8 @@ public class NotificatieService {
 
     public List<NotificatieDTO> geefNotificatiesVanWerknemer(Integer werknemerId) {
         return notificatieRepository.findByWerknemerIdOrderByDatumDesc(werknemerId).stream()
-                .map(n ->
+                .map(
+                        n ->
                                 new NotificatieDTO(
                                         n.getId(),
                                         n.getWerknemer().getId(),
@@ -87,6 +88,7 @@ public class NotificatieService {
     }
 
     public boolean bestaatAl(Integer werknemerId, String titel, Integer referentieId) {
-        return notificatieRepository.existsByWerknemerIdAndTitelAndReferentieId(werknemerId, titel, referentieId);
+        return notificatieRepository.existsByWerknemerIdAndTitelAndReferentieId(
+                werknemerId, titel, referentieId);
     }
 }

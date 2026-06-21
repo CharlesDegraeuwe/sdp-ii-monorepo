@@ -11,8 +11,11 @@ import hogent.sdp2.backend.rest.dto.request.TaakAanmakenDTO;
 import hogent.sdp2.backend.rest.dto.request.TaakResponseDTO;
 import hogent.sdp2.backend.rest.repository.SiteteamRepository;
 import hogent.sdp2.backend.rest.repository.TakenRepository;
+import hogent.sdp2.backend.rest.repository.TeamRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
+import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
+import hogent.sdp2.backend.rest.service.sse.SseService;
 import hogent.sdp2.backend.rest.service.taken.TakenService;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,7 +34,10 @@ class TakenServiceTest {
     @Mock private TakenRepository takenRepository;
     @Mock private WerknemerRepository werknemerRepository;
     @Mock private TeamwerknemerRepository teamwerknemerRepository;
+    @Mock private TeamRepository teamRepository;
     @Mock private SiteteamRepository siteteamRepository;
+    @Mock private NotificatieService notificatieService;
+    @Mock private SseService sseService;
 
     @InjectMocks private TakenService takenService;
 

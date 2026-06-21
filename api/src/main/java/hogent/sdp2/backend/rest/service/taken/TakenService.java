@@ -56,14 +56,19 @@ public class TakenService {
         taak.setAfgewerkt("nee");
         taak.setDeadline(dto.deadline());
 
-        takenRepository.save(taak);
+        Taken opgeslagen = takenRepository.save(taak);
 
         notificatieService.maakNotificatie(
                 werknemer.getId(),
                 "Nieuwe taak",
-                "Je hebt een nieuwe taak: '" + dto.titel() + "' (deadline: " + dto.deadline() + ").",
-                taak.getId());
-        sseService.pushEvent(werknemer.getId(), "nieuwe_taak", Map.of("taakId", taak.getId()));
+                "Je hebt een nieuwe taak: '"
+                        + dto.titel()
+                        + "' (deadline: "
+                        + dto.deadline()
+                        + ").",
+                opgeslagen.getId());
+        sseService.pushEvent(
+                werknemer.getId(), "nieuwe_taak", Map.of("taakId", opgeslagen.getId()));
 
         return "Taak '" + dto.titel() + "' succesvol aangemaakt";
     }
@@ -99,18 +104,31 @@ public class TakenService {
         notificatieService.maakNotificatie(
                 werknemer.getId(),
                 "Taak toegewezen",
-                "De taak '" + taak.getTitel() + "' is aan jou toegewezen (deadline: " + taak.getDeadline() + ").",
+                "De taak '"
+                        + taak.getTitel()
+                        + "' is aan jou toegewezen (deadline: "
+                        + taak.getDeadline()
+                        + ").",
                 taak.getId());
         sseService.pushEvent(werknemer.getId(), "taak_toegewezen", Map.of("taakId", taakId));
 
-        teamRepository.findManagerByWerknemerId(werknemerId)
-                .forEach(manager -> notificatieService.maakNotificatie(
-                        manager.getId(),
-                        "Taak toegewezen",
-                        "Taak '" + taak.getTitel() + "' is toegewezen aan "
-                                + werknemer.getVoornaam() + " " + werknemer.getNaam()
-                                + " (deadline: " + taak.getDeadline() + ").",
-                        taak.getId()));
+        teamRepository
+                .findManagerByWerknemerId(werknemerId)
+                .forEach(
+                        manager ->
+                                notificatieService.maakNotificatie(
+                                        manager.getId(),
+                                        "Taak toegewezen",
+                                        "Taak '"
+                                                + taak.getTitel()
+                                                + "' is toegewezen aan "
+                                                + werknemer.getVoornaam()
+                                                + " "
+                                                + werknemer.getNaam()
+                                                + " (deadline: "
+                                                + taak.getDeadline()
+                                                + ").",
+                                        taak.getId()));
 
         return "Taak '"
                 + taak.getTitel()
@@ -147,20 +165,31 @@ public class TakenService {
         LocalDate vandaag = LocalDate.now();
         takenRepository.findAll().stream()
                 .filter(t -> "nee".equals(t.getAfgewerkt()) && t.getDeadline().isBefore(vandaag))
-                .forEach(t -> {
-                    teamRepository.findManagerByWerknemerId(t.getWerknemer().getId())
-                            .forEach(manager -> {
-                                if (!notificatieService.bestaatAl(manager.getId(), "Taak vervallen", t.getId())) {
-                                    notificatieService.maakNotificatie(
-                                            manager.getId(),
-                                            "Taak vervallen",
-                                            t.getWerknemer().getVoornaam() + " " + t.getWerknemer().getNaam()
-                                                    + "'s taak '" + t.getTitel() + "' is vervallen (deadline: "
-                                                    + t.getDeadline() + ").",
-                                            t.getId());
-                                }
-                            });
-                });
+                .forEach(
+                        t -> {
+                            teamRepository
+                                    .findManagerByWerknemerId(t.getWerknemer().getId())
+                                    .forEach(
+                                            manager -> {
+                                                if (!notificatieService.bestaatAl(
+                                                        manager.getId(),
+                                                        "Taak vervallen",
+                                                        t.getId())) {
+                                                    notificatieService.maakNotificatie(
+                                                            manager.getId(),
+                                                            "Taak vervallen",
+                                                            t.getWerknemer().getVoornaam()
+                                                                    + " "
+                                                                    + t.getWerknemer().getNaam()
+                                                                    + "'s taak '"
+                                                                    + t.getTitel()
+                                                                    + "' is vervallen (deadline: "
+                                                                    + t.getDeadline()
+                                                                    + ").",
+                                                            t.getId());
+                                                }
+                                            });
+                        });
     }
 
     private TaakResponseDTO toDTO(Taken taak) {
