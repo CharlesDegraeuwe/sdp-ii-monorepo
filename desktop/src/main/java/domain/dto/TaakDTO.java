@@ -14,11 +14,15 @@ public record TaakDTO(
         Object belangrijk,
         Object afgewerkt,
         String afgewerktOp,
-        Integer werknemerId
+        WerknemerDTO werknemer
 ) {
     public boolean isAfgewerkt() {
         if (afgewerkt == null) return false;
         if (afgewerkt instanceof Boolean b) return b;
         return "ja".equalsIgnoreCase(afgewerkt.toString());
+    }
+
+    public Integer werknemerId() {
+        return werknemer != null ? werknemer.id() : null;
     }
 }

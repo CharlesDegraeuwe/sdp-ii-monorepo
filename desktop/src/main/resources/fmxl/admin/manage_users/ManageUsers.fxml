@@ -36,7 +36,6 @@
                 <TableColumn fx:id="rolCol" text="ROL" prefWidth="150"/>
                 <TableColumn fx:id="statusCol" text="STATUS" prefWidth="150"/>
                 <TableColumn fx:id="telefoonCol" text="TELEFOON" prefWidth="140"/>
-                <TableColumn fx:id="actieCol" text="" prefWidth="60"/>
             </columns>
         </TableView>
 

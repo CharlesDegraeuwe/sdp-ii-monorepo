@@ -58,6 +58,7 @@ public class TeamLedenController extends VBox {
     private void init() {
         naam.setText(team.naam());
         locatie.setText(team.siteNaam() != null ? team.siteNaam() : "Geen locatie");
+        manager.setText(team.managerNaam() != null ? team.managerNaam() : "Geen manager");
 
         locatie.setOnMouseClicked(e -> {
             Router.getInstance().navigeerNaar(Scherm.LOCATIES);

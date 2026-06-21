@@ -3,7 +3,7 @@
     <option name="MAIN_CLASS_NAME" value="hogent.sdp2.sdpii.ManagementApplication" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <module name="SDPII" />
-    <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\joeri\.m2\repository\org\openjfx\javafx-base\21.0.6\javafx-base-21.0.6.jar;C:\Users\joeri\.m2\repository\org\openjfx\javafx-graphics\21.0.6\javafx-graphics-21.0.6.jar;C:\Users\joeri\.m2\repository\org\openjfx\javafx-controls\21.0.6\javafx-controls-21.0.6.jar;C:\Users\joeri\.m2\repository\org\openjfx\javafx-fxml\21.0.6\javafx-fxml-21.0.6.jar&quot; --add-modules javafx.controls,javafx.fxml --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="--add-modules javafx.controls,javafx.fxml --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

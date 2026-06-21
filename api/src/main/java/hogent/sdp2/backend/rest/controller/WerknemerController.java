@@ -150,9 +150,4 @@ public class WerknemerController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> verwijderWerknemer(@PathVariable int id) {
-        werknemerService.verwijderWerknemer(id);
-        return ResponseEntity.noContent().build();
-    }
 }

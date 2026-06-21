@@ -35,7 +35,7 @@ public class RegisterEmployeeForm extends VBox {
             throw new RuntimeException(e);
         }
 
-        roleComboBox.getItems().addAll("Werknemer", "Supervisor", "Manager", "Admin");
+        roleComboBox.getItems().addAll("Werknemer", "Supervisor");
         roleComboBox.getSelectionModel().select("Werknemer");
     }
 

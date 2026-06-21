@@ -24,4 +24,7 @@ public interface TeamwerknemerRepository extends JpaRepository<Teamwerknemer, Te
     List<Teamwerknemer> findGoedkeurderVanTeam(@Param("teamId") Integer teamId);
 
     List<Teamwerknemer> findByTeam(Team team);
+
+    @Query("SELECT tw.team.manager FROM Teamwerknemer tw WHERE tw.id.werknemerId = :werknemerId AND tw.team.manager IS NOT NULL")
+    List<hogent.sdp2.backend.domain.Werknemer> findManagersByWerknemerId(@Param("werknemerId") Integer werknemerId);
 }

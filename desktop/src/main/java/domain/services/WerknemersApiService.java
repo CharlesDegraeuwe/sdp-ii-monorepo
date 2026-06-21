@@ -162,17 +162,4 @@ public class WerknemersApiService extends ApiService {
         }
     }
 
-    public boolean verwijderWerknemer(int werknemerId) {
-        try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/" + werknemerId)
-                .DELETE()
-                .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            return response.statusCode() == 200 || response.statusCode() == 204;
-        } catch (Exception e) {
-            throw new RuntimeException("Fout bij verwijderen van werknemer", e);
-        }
-    }
 }

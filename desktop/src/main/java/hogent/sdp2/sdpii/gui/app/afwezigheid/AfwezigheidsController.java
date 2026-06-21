@@ -14,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import org.kordamp.ikonli.javafx.FontIcon;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -70,6 +71,7 @@ public class AfwezigheidsController extends BorderPane {
 
     private byte[] certificaatBytes;
     private boolean isVerlof = true;
+    private Runnable herlaadActie;
 
     private static final DateTimeFormatter DAG_FORMAT = DateTimeFormatter.ofPattern("d MMM yyyy", new Locale("nl", "BE"));
 
@@ -210,14 +212,17 @@ public class AfwezigheidsController extends BorderPane {
                         }
 
                         // Team header — toggle leden + laad overzicht rechts
-                        Button teamHeader = new Button("▶  " + team.teamNaam());
+                        FontIcon chevron = new FontIcon("fas-chevron-right");
+                        chevron.setIconSize(12);
+                        Button teamHeader = new Button(team.teamNaam());
+                        teamHeader.setGraphic(chevron);
                         teamHeader.setMaxWidth(Double.MAX_VALUE);
                         teamHeader.getStyleClass().add("team-header-knop");
                         teamHeader.setOnAction(e -> {
                             boolean open = ledenContainer.isVisible();
                             ledenContainer.setVisible(!open);
                             ledenContainer.setManaged(!open);
-                            teamHeader.setText((open ? "▶  " : "▼  ") + team.teamNaam());
+                            chevron.setIconLiteral(open ? "fas-chevron-right" : "fas-chevron-down");
                             if (!open) {
                                 laadTeamOverzicht(team.teamId(), team.teamNaam());
                             }
@@ -233,6 +238,7 @@ public class AfwezigheidsController extends BorderPane {
     }
 
     private void laadGeschiedenisVanWerknemer(WerknemerDTO werknemer) {
+        herlaadActie = () -> laadGeschiedenisVanWerknemer(werknemer);
         geschiedenisTitel.setText(werknemer.voornaam() + " " + werknemer.naam());
         geschiedenisLijst.getChildren().clear();
 
@@ -265,6 +271,7 @@ public class AfwezigheidsController extends BorderPane {
     }
 
     private void laadTeamOverzicht(int teamId, String teamNaam) {
+        herlaadActie = () -> laadTeamOverzicht(teamId, teamNaam);
         geschiedenisTitel.setText("Overzicht – " + teamNaam);
         geschiedenisLijst.getChildren().clear();
 
@@ -348,17 +355,37 @@ public class AfwezigheidsController extends BorderPane {
         rij.getChildren().addAll(typeLabel, info);
 
         if (item.status() != null) {
-            Label statusLabel = new Label(item.status());
-            String statusKleur = switch (item.status()) {
-                case "Goedgekeurd" -> "#1e8449";
-                case "Afgewezen" -> "#E31B35";
-                case "Geannuleerd" -> "#888888";
-                default -> "#a07d00";
-            };
-            statusLabel.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: " + statusKleur
-                    + "; -fx-background-radius: 999px; -fx-padding: 3 10 3 10;"
-                    + "-fx-background-color: " + achtergrond + ";");
-            rij.getChildren().add(statusLabel);
+            boolean kanGoedkeuren = !isZiekte && isWachten
+                    && item.id() != null
+                    && Sessie.getInstance().isMangerOrAdmin();
+
+            if (kanGoedkeuren) {
+                Button goedkeurenKnop = new Button("Goedkeuren");
+                goedkeurenKnop.setStyle("-fx-background-color: #1e8449; -fx-text-fill: white;"
+                        + " -fx-background-radius: 6; -fx-font-size: 11px; -fx-padding: 4 10;");
+                Button afwijzenKnop = new Button("Afwijzen");
+                afwijzenKnop.setStyle("-fx-background-color: #E31B35; -fx-text-fill: white;"
+                        + " -fx-background-radius: 6; -fx-font-size: 11px; -fx-padding: 4 10;");
+
+                goedkeurenKnop.setOnAction(e -> verwerkVerlofActie(item.id(), true, goedkeurenKnop, afwijzenKnop));
+                afwijzenKnop.setOnAction(e -> verwerkVerlofActie(item.id(), false, goedkeurenKnop, afwijzenKnop));
+
+                HBox acties = new HBox(6, goedkeurenKnop, afwijzenKnop);
+                acties.setAlignment(Pos.CENTER_RIGHT);
+                rij.getChildren().add(acties);
+            } else {
+                Label statusLabel = new Label(item.status());
+                String statusKleur = switch (item.status()) {
+                    case "Goedgekeurd" -> "#1e8449";
+                    case "Afgewezen" -> "#E31B35";
+                    case "Geannuleerd" -> "#888888";
+                    default -> "#a07d00";
+                };
+                statusLabel.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: " + statusKleur
+                        + "; -fx-background-radius: 999px; -fx-padding: 3 10 3 10;"
+                        + "-fx-background-color: " + achtergrond + ";");
+                rij.getChildren().add(statusLabel);
+            }
         }
 
         return rij;
@@ -369,6 +396,30 @@ public class AfwezigheidsController extends BorderPane {
                 item.id(), item.type(), item.startDatum(), item.eindDatum(),
                 item.status(), item.omschrijving());
         return maakGeschiedenisRij(basis);
+    }
+
+    private void verwerkVerlofActie(int verlofId, boolean goedkeuren, Button goedkeurenKnop, Button afwijzenKnop) {
+        goedkeurenKnop.setDisable(true);
+        afwijzenKnop.setDisable(true);
+        new Thread(() -> {
+            try {
+                if (goedkeuren) {
+                    Beheerder.getInstance().getVerlofFacade().keurVerlofGoed(verlofId);
+                } else {
+                    Beheerder.getInstance().getVerlofFacade().wijsVerlofAf(verlofId);
+                }
+                Platform.runLater(() -> {
+                    if (herlaadActie != null) herlaadActie.run();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    goedkeurenKnop.setDisable(false);
+                    afwijzenKnop.setDisable(false);
+                    toonFout("Fout bij verwerken verlof: " + e.getMessage());
+                });
+            }
+        }).start();
     }
 
     // ─── VERLOF / ZIEKTE INDIENEN ────────────────────────────────────────────────

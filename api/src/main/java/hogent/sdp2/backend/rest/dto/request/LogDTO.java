@@ -4,10 +4,21 @@ import hogent.sdp2.backend.domain.Werknemer;
 import java.time.LocalDateTime;
 
 public record LogDTO(
-        int id,
-        Werknemer werknemer,
+        Integer id,
+        Integer werknemerId,
         String type,
         String tabel,
-        Integer recordId,
         LocalDateTime timestamp,
-        String beschrijving) {}
+        String beschrijving) {
+
+    public LogDTO(
+            Integer id,
+            Werknemer werknemer,
+            String type,
+            String tabel,
+            Integer recordId,
+            LocalDateTime timestamp,
+            String beschrijving) {
+        this(id, werknemer != null ? werknemer.getId() : null, type, tabel, timestamp, beschrijving);
+    }
+}

@@ -9,11 +9,17 @@ import hogent.sdp2.backend.rest.dto.request.TaakResponseDTO;
 import hogent.sdp2.backend.rest.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.rest.repository.SiteteamRepository;
 import hogent.sdp2.backend.rest.repository.TakenRepository;
+import hogent.sdp2.backend.rest.repository.TeamRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
+import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
+import hogent.sdp2.backend.rest.service.sse.SseService;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +33,10 @@ public class TakenService {
     private final TakenRepository takenRepository;
     private final WerknemerRepository werknemerRepository;
     private final TeamwerknemerRepository teamwerknemerRepository;
+    private final TeamRepository teamRepository;
     private final SiteteamRepository siteteamRepository;
+    private final NotificatieService notificatieService;
+    private final SseService sseService;
 
     public List<TaakResponseDTO> geefTakenVanWerknemer(int werknemerId) {
         return takenRepository.findByWerknemer_Id(werknemerId).stream().map(this::toDTO).toList();
@@ -48,6 +57,14 @@ public class TakenService {
         taak.setDeadline(dto.deadline());
 
         takenRepository.save(taak);
+
+        notificatieService.maakNotificatie(
+                werknemer.getId(),
+                "Nieuwe taak",
+                "Je hebt een nieuwe taak: '" + dto.titel() + "' (deadline: " + dto.deadline() + ").",
+                taak.getId());
+        sseService.pushEvent(werknemer.getId(), "nieuwe_taak", Map.of("taakId", taak.getId()));
+
         return "Taak '" + dto.titel() + "' succesvol aangemaakt";
     }
 
@@ -78,6 +95,23 @@ public class TakenService {
                         .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
         taak.setWerknemer(werknemer);
         takenRepository.save(taak);
+
+        notificatieService.maakNotificatie(
+                werknemer.getId(),
+                "Taak toegewezen",
+                "De taak '" + taak.getTitel() + "' is aan jou toegewezen (deadline: " + taak.getDeadline() + ").",
+                taak.getId());
+        sseService.pushEvent(werknemer.getId(), "taak_toegewezen", Map.of("taakId", taakId));
+
+        teamRepository.findManagerByWerknemerId(werknemerId)
+                .forEach(manager -> notificatieService.maakNotificatie(
+                        manager.getId(),
+                        "Taak toegewezen",
+                        "Taak '" + taak.getTitel() + "' is toegewezen aan "
+                                + werknemer.getVoornaam() + " " + werknemer.getNaam()
+                                + " (deadline: " + taak.getDeadline() + ").",
+                        taak.getId()));
+
         return "Taak '"
                 + taak.getTitel()
                 + "' toegewezen aan "
@@ -105,6 +139,28 @@ public class TakenService {
         if (!taak.getWerknemer().getId().equals(sessieService.getIngelogdeWerknemerId())) {
             throw new AccessDeniedException("Je kunt alleen je eigen taken als afgewerkt markeren");
         }
+    }
+
+    @Scheduled(cron = "0 0 9 * * MON-FRI")
+    @Transactional
+    public void controleerVervallenTaken() {
+        LocalDate vandaag = LocalDate.now();
+        takenRepository.findAll().stream()
+                .filter(t -> "nee".equals(t.getAfgewerkt()) && t.getDeadline().isBefore(vandaag))
+                .forEach(t -> {
+                    teamRepository.findManagerByWerknemerId(t.getWerknemer().getId())
+                            .forEach(manager -> {
+                                if (!notificatieService.bestaatAl(manager.getId(), "Taak vervallen", t.getId())) {
+                                    notificatieService.maakNotificatie(
+                                            manager.getId(),
+                                            "Taak vervallen",
+                                            t.getWerknemer().getVoornaam() + " " + t.getWerknemer().getNaam()
+                                                    + "'s taak '" + t.getTitel() + "' is vervallen (deadline: "
+                                                    + t.getDeadline() + ").",
+                                            t.getId());
+                                }
+                            });
+                });
     }
 
     private TaakResponseDTO toDTO(Taken taak) {

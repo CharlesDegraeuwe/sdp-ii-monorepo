@@ -19,7 +19,7 @@ public class NotificatieApiService extends ApiService {
             if (response.statusCode() != 200) return List.of();
             String body = response.body();
             if (body == null || body.isBlank()) return List.of();
-            return mapper.readValue(body, new TypeReference<>() {});
+            return mapper.readValue(body, new TypeReference<List<NotificatieDTO>>() {});
         } catch (Exception e) {
             return List.of();
         }
