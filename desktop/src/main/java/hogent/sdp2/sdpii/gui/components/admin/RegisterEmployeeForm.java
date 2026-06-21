@@ -3,7 +3,6 @@ package hogent.sdp2.sdpii.gui.components.admin;
 import domain.Beheerder;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
