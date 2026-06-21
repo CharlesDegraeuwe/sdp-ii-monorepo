@@ -326,26 +326,28 @@ function PlannerPageInner() {
       <AppContainer>
         <BreadcrumbInit pages={['planner']} />
         <div className="w-full h-full flex flex-col gap-4 relative">
-          <PlannerToolbar
-            view={view}
-            tab={tab}
-            huidigeDatum={huidigeDatum}
-            filter={filter}
-            sites={sites}
-            teams={teams}
-            teamWerknemers={teamWerknemers}
-            kanTeamZien={kanTeamZien}
-            kanShiftAanmaken={kanShiftAanmaken}
-            onViewChange={setView}
-            onTabChange={(t) => {
-              setTab(t);
-              if (t !== 'team') setFilter(LEEG_FILTER);
-            }}
-            onNavigate={navigeer}
-            onVandaag={handleVandaag}
-            onFilterChange={handleFilterChange}
-            onShiftAanmaken={() => setShiftAanmakenOpen(true)}
-          />
+          <div className={'w-full h-fit'}>
+            <PlannerToolbar
+              view={view}
+              tab={tab}
+              huidigeDatum={huidigeDatum}
+              filter={filter}
+              sites={sites}
+              teams={teams}
+              teamWerknemers={teamWerknemers}
+              kanTeamZien={kanTeamZien}
+              kanShiftAanmaken={kanShiftAanmaken}
+              onViewChange={setView}
+              onTabChange={(t) => {
+                setTab(t);
+                if (t !== 'team') setFilter(LEEG_FILTER);
+              }}
+              onNavigate={navigeer}
+              onVandaag={handleVandaag}
+              onFilterChange={handleFilterChange}
+              onShiftAanmaken={() => setShiftAanmakenOpen(true)}
+            />
+          </div>
 
           <div className="flex flex-col lg:flex-row gap-4 w-full flex-1 min-h-0">
             <div className="flex-1 min-w-0 rounded-xl h-full min-h-64 overflow-y-auto scroll-hidden">

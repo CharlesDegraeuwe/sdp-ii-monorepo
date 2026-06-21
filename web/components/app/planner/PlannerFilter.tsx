@@ -1,13 +1,14 @@
 'use client';
 
-import { MdFilterList, MdClose } from 'react-icons/md';
+import * as React from 'react';
+import { FilterChip } from './filter/FilterChip';
+import { FilterMenu, type IFilterCategory } from './filter/FilterMenu';
+import type { IFilterOption } from './filter/types';
 import type {
   SiteOptie,
   TeamOptie,
   WerknemerOptie,
 } from '@/hooks/usePlanningFilters';
-import Select from '@/components/design-system/Select/Select';
-import Button from '@/components/design-system/Button/Button';
 
 export interface FilterState {
   locatieId: number | null;
@@ -30,100 +31,119 @@ export function PlannerFilter({
   teams,
   werknemers,
 }: PlannerFilterProps) {
-  const isFiltered =
-    filter.locatieId !== null ||
-    filter.teamId !== null ||
-    filter.werknemerId !== null;
-
   const teamsVoorLocatie = filter.locatieId
     ? teams.filter((t) => t.siteId === filter.locatieId)
     : teams;
 
-  const siteOptions = [
-    { value: '', label: 'Alle locaties' },
-    ...sites.map((s) => ({ value: String(s.id), label: s.naam })),
-  ];
+  const siteOptions: IFilterOption[] = sites.map((s) => ({
+    value: String(s.id),
+    label: s.naam,
+  }));
 
-  const teamOptions = [
-    { value: '', label: 'Alle teams' },
-    ...teamsVoorLocatie.map((t) => ({ value: String(t.id), label: t.naam })),
-  ];
+  const teamOptions: IFilterOption[] = teamsVoorLocatie.map((t) => ({
+    value: String(t.id),
+    label: t.naam,
+  }));
 
-  const werknemerOptions = [
+  const werknemerOptions: IFilterOption[] = werknemers.map((w) => ({
+    value: String(w.id),
+    label: `${w.voornaam} ${w.naam}`,
+  }));
+
+  const categories: IFilterCategory[] = [
     {
-      value: '',
-      label: filter.teamId ? 'Alle werknemers' : 'Kies eerst een team',
+      key: 'locatie',
+      label: 'Locatie',
+      options: siteOptions,
+      selectedValues:
+        filter.locatieId != null ? [String(filter.locatieId)] : [],
     },
-    ...werknemers.map((w) => ({
-      value: String(w.id),
-      label: `${w.voornaam} ${w.naam}`,
-    })),
+    {
+      key: 'team',
+      label: 'Team',
+      options: teamOptions,
+      selectedValues: filter.teamId != null ? [String(filter.teamId)] : [],
+    },
+    {
+      key: 'werknemer',
+      label: 'Werknemer',
+      options: werknemerOptions,
+      selectedValues:
+        filter.werknemerId != null ? [String(filter.werknemerId)] : [],
+    },
   ];
+
+  function handleToggle(categoryKey: string, value: string) {
+    if (categoryKey === 'locatie') {
+      const id = Number(value);
+      const alSelected = filter.locatieId === id;
+      onChange({
+        locatieId: alSelected ? null : id,
+        teamId: null,
+        werknemerId: null,
+      });
+    } else if (categoryKey === 'team') {
+      const id = Number(value);
+      const alSelected = filter.teamId === id;
+      onChange({ teamId: alSelected ? null : id, werknemerId: null });
+    } else if (categoryKey === 'werknemer') {
+      const id = Number(value);
+      const alSelected = filter.werknemerId === id;
+      onChange({ werknemerId: alSelected ? null : id });
+    }
+  }
+
+  function handleDelete(categoryKey: string) {
+    if (categoryKey === 'locatie')
+      onChange({ locatieId: null, teamId: null, werknemerId: null });
+    else if (categoryKey === 'team')
+      onChange({ teamId: null, werknemerId: null });
+    else if (categoryKey === 'werknemer') onChange({ werknemerId: null });
+  }
+
+  function handleClearAll() {
+    onChange({ locatieId: null, teamId: null, werknemerId: null });
+  }
+
+  const activeFilters = categories.filter((c) => c.selectedValues.length > 0);
+  const hasActive = activeFilters.length > 0;
 
   return (
-    <div className="flex flex-col sm:flex-row w-full items-start sm:items-end gap-3">
-      <span className="flex items-center gap-1 text-[11px] font-bold text-zinc-400 pb-0 sm:pb-2 shrink-0">
-        <MdFilterList size={14} />
-        Filter
-      </span>
+    <div className="flex flex-wrap items-center gap-2 min-h-9">
+      <FilterMenu
+        categories={categories}
+        onToggleFilter={handleToggle}
+        showSearch={sites.length + teams.length > 8}
+      />
 
-      <div className="flex flex-col sm:flex-row gap-3 flex-1 w-full">
-        <div className={'flex-1 min-w-28'}>
-          <Select
-            size={'sm'}
-            label="Locaties"
-            options={siteOptions}
-            value={filter.locatieId != null ? String(filter.locatieId) : ''}
-            placeholder="Alle locaties"
-            onChange={(val) => {
-              const id = val ? Number(val) : null;
-              onChange({ locatieId: id, teamId: null, werknemerId: null });
-            }}
-          />
-        </div>
-        <div className={'flex-1 min-w-28'}>
-          <Select
-            size={'sm'}
-            label="Team"
-            options={teamOptions}
-            value={filter.teamId != null ? String(filter.teamId) : ''}
-            placeholder="Alle teams"
-            onChange={(val) => {
-              const id = val ? Number(val) : null;
-              onChange({ teamId: id, werknemerId: null });
-            }}
-          />
-        </div>
-        <div className={'flex-1 min-w-28'}>
-          <Select
-            size={'sm'}
-            label="Werknemer"
-            options={werknemerOptions}
-            value={filter.werknemerId != null ? String(filter.werknemerId) : ''}
-            placeholder={
-              filter.teamId ? 'Alle werknemers' : 'Kies eerst een team'
+      {activeFilters.map((f) => (
+        <FilterChip
+          key={f.key}
+          label={f.label}
+          options={f.options}
+          selectedValues={f.selectedValues}
+          onSelectionChange={(values) => {
+            const current = new Set(f.selectedValues);
+            const next = new Set(values);
+            for (const v of current) {
+              if (!next.has(v)) handleToggle(f.key, v);
             }
-            disabled={!filter.teamId}
-            onChange={(val) => {
-              const id = val ? Number(val) : null;
-              onChange({ werknemerId: id });
-            }}
-          />
-        </div>
-      </div>
+            for (const v of next) {
+              if (!current.has(v)) handleToggle(f.key, v);
+            }
+          }}
+          onDelete={() => handleDelete(f.key)}
+        />
+      ))}
 
-      {isFiltered && (
-        <div className="shrink-0">
-          <Button
-            size={'sm'}
-            iconLeft={<MdClose size={11} />}
-            variant={'outline'}
-            label={'Wis filters'}
-            onClick={() =>
-              onChange({ locatieId: null, teamId: null, werknemerId: null })
-            }
-          />
-        </div>
+      {hasActive && (
+        <button
+          type="button"
+          className="h-8 px-3 rounded-full inline-flex items-center text-sm text-zinc-500 hover:bg-zinc-100 transition-colors cursor-pointer"
+          onClick={handleClearAll}
+        >
+          Wis filters
+        </button>
       )}
     </div>
   );
