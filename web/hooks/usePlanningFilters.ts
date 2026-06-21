@@ -55,9 +55,8 @@ export function usePlanningFilters(
     initialData: [],
   });
 
-  // Normal: laad sites
   const sitesQuery = useQuery<SiteOptie[]>({
-    queryKey: ['planner-sites'],
+    queryKey: ['planner-sites', token],
     queryFn: async () => {
       const res = await fetch(`${BASE}/teams/sites`, { headers: authHeader! });
       if (!res.ok) return [];
