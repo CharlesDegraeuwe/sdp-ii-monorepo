@@ -158,8 +158,8 @@ export function PersonalDayView({
         )}
       </div>
 
-      {/* Taken sectie (niet tonen als afwezig of vrij) */}
-      {!isAfwezig && !dagIsVrij && (
+      {/* Taken sectie (niet tonen als afwezig, vrij of geen shift) */}
+      {!isAfwezig && !dagIsVrij && !!eigenShift && (
         <>
           {/* Filter */}
           <div className="relative">

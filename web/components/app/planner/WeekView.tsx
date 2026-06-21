@@ -183,9 +183,10 @@ export default function WeekView({
             {/* Dag kolommen */}
             <div className="grid grid-cols-7 flex-1 gap-px relative">
               {dagen.map((datum, i) => {
-                const dagTaken = takenOpDag(taken, datum).filter(
-                  (t) => !t.afgewerkt,
-                );
+                const dagShift = getShiftVoorDag(datum, eigenShiften);
+                const dagTaken = dagShift
+                  ? takenOpDag(taken, datum).filter((t) => !t.afgewerkt)
+                  : [];
                 const weekend = datum.getDay() === 0 || datum.getDay() === 6;
                 const feestdag = isVrij(datum) && !weekend;
                 const vrij = weekend || feestdag;

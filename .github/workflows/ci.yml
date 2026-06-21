@@ -67,7 +67,7 @@ jobs:
       - name: Compile
         run: ./mvnw compile -q
       - name: Test
-        run: xvfb-run ./mvnw test
+        run: ./mvnw test
 
   ci-passed:
     runs-on: ubuntu-latest
