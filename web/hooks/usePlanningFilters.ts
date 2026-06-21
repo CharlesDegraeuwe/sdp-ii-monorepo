@@ -43,7 +43,7 @@ export function usePlanningFilters(
 
   // Supervisor: laad teams van eigen werknemer
   const supervisorTeamsQuery = useQuery<TeamOptie[]>({
-    queryKey: ['supervisor-teams', eigenId],
+    queryKey: ['supervisor-teams', eigenId, token],
     queryFn: async () => {
       const res = await fetch(`${BASE}/teams/werknemer/${eigenId}`, {
         headers: authHeader!,
