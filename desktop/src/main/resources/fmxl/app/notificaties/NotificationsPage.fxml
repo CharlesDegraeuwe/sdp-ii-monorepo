@@ -11,14 +11,15 @@
                 <VBox spacing="30" alignment="TOP_CENTER">
                     <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
 
-                    <!-- Filter knoppen -->
-                    <HBox alignment="CENTER">
+                    <!-- Filter knoppen + herlaad -->
+                    <HBox alignment="CENTER" spacing="12">
                         <HBox styleClass="filter-container" alignment="CENTER" maxWidth="400">
                             <Button fx:id="allesKnop" id="allesKnop" text="Alles" onAction="#filterAlles" styleClass="filter-knop-actief"/>
                             <Button fx:id="werkKnop" id="werkKnop" text="Werk" onAction="#filterWerk" styleClass="filter-knop,filter-knop-werk"/>
                             <Button fx:id="afwezigheidKnop" id="afwezigheidKnop" text="Afwezigheid" onAction="#filterAfwezigheid" styleClass="filter-knop,filter-knop-afwezigheid"/>
                             <Button fx:id="verlofKnop" id="verlofKnop" text="Verlof" onAction="#filterVerlof" styleClass="filter-knop,filter-knop-verlof"/>
                         </HBox>
+                        <Button fx:id="herlaadKnop" text="↻" styleClass="filter-knop" prefWidth="36"/>
                     </HBox>
 
 

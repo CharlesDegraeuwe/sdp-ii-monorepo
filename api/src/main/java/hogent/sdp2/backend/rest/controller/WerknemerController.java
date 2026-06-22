@@ -1,16 +1,15 @@
 package hogent.sdp2.backend.rest.controller;
 
+import hogent.sdp2.backend.auth.SessieService;
 import hogent.sdp2.backend.rest.dto.request.*;
 import hogent.sdp2.backend.rest.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.rest.service.werknemer.WerknemerService;
-import hogent.sdp2.backend.auth.SessieService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/werknemers")
@@ -19,7 +18,6 @@ public class WerknemerController {
 
     private final WerknemerService werknemerService;
     private final SessieService sessieService;
-
 
     @PostMapping("/login-mail")
     public ResponseEntity<Void> loginMail(@RequestBody EmailLoginDTO dto) {
@@ -45,7 +43,6 @@ public class WerknemerController {
     public ResponseEntity<String> activeerWerknemer(@RequestParam String code) {
         return ResponseEntity.ok(werknemerService.activeerAccount(code));
     }
-
 
     @PutMapping("/wachtwoord")
     public ResponseEntity<String> wijzigWachtwoord(@RequestBody WachtwoordWijzigenDTO dto) {
@@ -75,7 +72,8 @@ public class WerknemerController {
     @PostMapping
     public ResponseEntity<String> createWerknemer(@RequestBody WerknemerAanmakenDTO dto) {
         // Alleen admins mogen Admin/Manager rollen aanmaken
-        if (("Admin".equals(dto.rol()) || "Manager".equals(dto.rol())) && !sessieService.isAdmin()) {
+        if (("Admin".equals(dto.rol()) || "Manager".equals(dto.rol()))
+                && !sessieService.isAdmin()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("Alleen admins mogen admins of managers aanmaken");
         }
@@ -83,9 +81,11 @@ public class WerknemerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WerknemerResponseDTO> update(@PathVariable Integer id, @RequestBody UpdateUserDTO dto) {
+    public ResponseEntity<WerknemerResponseDTO> update(
+            @PathVariable Integer id, @RequestBody UpdateUserDTO dto) {
         // Admin/Manager mag iedereen updaten, anders alleen jezelf
-        if (!sessieService.isAdminOfManager() && !sessieService.getIngelogdeWerknemerId().equals(id)) {
+        if (!sessieService.isAdminOfManager()
+                && !sessieService.getIngelogdeWerknemerId().equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(werknemerService.updateUser(dto));
@@ -113,5 +113,40 @@ public class WerknemerController {
             }
         }
         return ResponseEntity.ok(werknemerService.getByEmail(email));
+    }
+
+    @PreAuthorize("hasRole('Admin')")
+    @PutMapping("/{id}/blokkeer")
+    public ResponseEntity<String> blokkeerWerknemerAdmin(@PathVariable Integer id) {
+        return ResponseEntity.ok(werknemerService.blokkeerWerknemerAdmin(id));
+    }
+
+    @PreAuthorize("hasRole('Admin')")
+    @PutMapping("/{id}/deactiveer")
+    public ResponseEntity<String> deactiveerWerknemerAdmin(@PathVariable Integer id) {
+        return ResponseEntity.ok(werknemerService.deactiveerWerknemerAdmin(id));
+    }
+
+    @PreAuthorize("hasRole('Admin')")
+    @PutMapping("/{id}/activeer")
+    public ResponseEntity<String> activeerWerknemerAdmin(@PathVariable Integer id) {
+        return ResponseEntity.ok(werknemerService.activeerWerknemerAdmin(id));
+    }
+
+    @GetMapping("/totaal")
+    public ResponseEntity<Long> getTotaalWerknemers() {
+        return ResponseEntity.ok(werknemerService.telAlleWerknemers());
+    }
+
+    @PutMapping("/{id}/rol")
+    @PreAuthorize("hasRole('Admin')")
+    public ResponseEntity<String> updateRolAdmin(
+            @PathVariable Integer id, @RequestParam String nieuweRol) {
+        try {
+            String result = werknemerService.updateRolAdmin(id, nieuweRol);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Fout bij updaten rol: " + e.getMessage());
+        }
     }
 }

@@ -6,11 +6,10 @@ import hogent.sdp2.backend.rest.dto.request.NotificatieDTO;
 import hogent.sdp2.backend.rest.repository.NotificatieRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.rest.service.sse.SseService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +23,12 @@ public class NotificatieService {
         maakNotificatie(werknemerId, titel, bericht, null);
     }
 
-    public void maakNotificatie(Integer werknemerId, String titel, String bericht, Integer referentieId) {
-        Werknemer werknemer = werknemerRepository.findById(werknemerId)
-                .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
+    public void maakNotificatie(
+            Integer werknemerId, String titel, String bericht, Integer referentieId) {
+        Werknemer werknemer =
+                werknemerRepository
+                        .findById(werknemerId)
+                        .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
 
         Notificatie notificatie = new Notificatie();
         notificatie.setWerknemer(werknemer);
@@ -38,29 +40,31 @@ public class NotificatieService {
 
         notificatieRepository.save(notificatie);
 
-        sseService.pushEvent(werknemerId, "nieuwe_notificatie", new NotificatieDTO(
-                notificatie.getId(),
+        sseService.pushEvent(
                 werknemerId,
-                notificatie.getTitel(),
-                notificatie.getBericht(),
-                notificatie.getGelezen(),
-                notificatie.getDatum(),
-                notificatie.getReferentieId()
-        ));
+                "nieuwe_notificatie",
+                new NotificatieDTO(
+                        notificatie.getId(),
+                        werknemerId,
+                        notificatie.getTitel(),
+                        notificatie.getBericht(),
+                        notificatie.getGelezen(),
+                        notificatie.getDatum(),
+                        notificatie.getReferentieId()));
     }
 
     public List<NotificatieDTO> geefNotificatiesVanWerknemer(Integer werknemerId) {
-        return notificatieRepository.findByWerknemerIdOrderByDatumDesc(werknemerId)
-                .stream()
-                .map(n -> new NotificatieDTO(
-                        n.getId(),
-                        n.getWerknemer().getId(),
-                        n.getTitel(),
-                        n.getBericht(),
-                        n.getGelezen(),
-                        n.getDatum(),
-                        n.getReferentieId()
-                ))
+        return notificatieRepository.findByWerknemerIdOrderByDatumDesc(werknemerId).stream()
+                .map(
+                        n ->
+                                new NotificatieDTO(
+                                        n.getId(),
+                                        n.getWerknemer().getId(),
+                                        n.getTitel(),
+                                        n.getBericht(),
+                                        n.getGelezen(),
+                                        n.getDatum(),
+                                        n.getReferentieId()))
                 .toList();
     }
 
@@ -69,8 +73,10 @@ public class NotificatieService {
     }
 
     public String markeerAlsGelezen(Integer notificatieId) {
-        Notificatie notificatie = notificatieRepository.findById(notificatieId)
-                .orElseThrow(() -> new RuntimeException("Notificatie niet gevonden"));
+        Notificatie notificatie =
+                notificatieRepository
+                        .findById(notificatieId)
+                        .orElseThrow(() -> new RuntimeException("Notificatie niet gevonden"));
         notificatie.setGelezen("Ja");
         notificatieRepository.save(notificatie);
         return "Notificatie gemarkeerd als gelezen.";
@@ -79,5 +85,10 @@ public class NotificatieService {
     public String verwijderNotificatie(Integer notificatieId) {
         notificatieRepository.deleteById(notificatieId);
         return "Notificatie verwijderd.";
+    }
+
+    public boolean bestaatAl(Integer werknemerId, String titel, Integer referentieId) {
+        return notificatieRepository.existsByWerknemerIdAndTitelAndReferentieId(
+                werknemerId, titel, referentieId);
     }
 }

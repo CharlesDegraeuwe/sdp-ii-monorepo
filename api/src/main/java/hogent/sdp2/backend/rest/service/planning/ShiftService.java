@@ -9,11 +9,10 @@ import hogent.sdp2.backend.rest.dto.response.ShiftResponseDTO;
 import hogent.sdp2.backend.rest.repository.ShiftRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +25,18 @@ public class ShiftService {
     public List<ShiftResponseDTO> geefShiftenVanTeamOpDatum(Integer teamId, LocalDate datum) {
         List<Teamwerknemer> teamleden = teamwerknemerRepository.findByTeamId(teamId);
         return teamleden.stream()
-                .flatMap(tw -> shiftRepository.findByWerknemer_Id(tw.getWerknemer().getId()).stream())
+                .flatMap(
+                        tw ->
+                                shiftRepository
+                                        .findByWerknemer_Id(tw.getWerknemer().getId())
+                                        .stream())
                 .filter(s -> !datum.isBefore(s.getStartDatum()) && !datum.isAfter(s.getEindDatum()))
                 .map(this::mapToDTO)
                 .toList();
     }
 
-    public List<ShiftResponseDTO> geefShiftenVanWerknemerOpDatum(Integer werknemerId, LocalDate datum) {
+    public List<ShiftResponseDTO> geefShiftenVanWerknemerOpDatum(
+            Integer werknemerId, LocalDate datum) {
         return shiftRepository.findByWerknemer_Id(werknemerId).stream()
                 .filter(s -> !datum.isBefore(s.getStartDatum()) && !datum.isAfter(s.getEindDatum()))
                 .map(this::mapToDTO)
@@ -40,8 +44,13 @@ public class ShiftService {
     }
 
     public ShiftResponseDTO maakShift(ShiftAanmakenDTO dto) {
-        Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
-                .orElseThrow(() -> new IllegalArgumentException("Werknemer niet gevonden: " + dto.werknemerId()));
+        Werknemer werknemer =
+                werknemerRepository
+                        .findById(dto.werknemerId())
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "Werknemer niet gevonden: " + dto.werknemerId()));
         Shift shift = new Shift();
         shift.setWerknemer(werknemer);
         shift.setStartDatum(dto.startDatum());
@@ -54,8 +63,13 @@ public class ShiftService {
     }
 
     public ShiftResponseDTO pasAan(Integer shiftId, ShiftAanpassenDTO dto) {
-        Shift shift = shiftRepository.findById(shiftId)
-                .orElseThrow(() -> new IllegalArgumentException("Shift niet gevonden: " + shiftId));
+        Shift shift =
+                shiftRepository
+                        .findById(shiftId)
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "Shift niet gevonden: " + shiftId));
         shift.setStartDatum(dto.startDatum());
         shift.setEindDatum(dto.eindDatum());
         shift.setStartTijd(dto.startTijd());
@@ -76,7 +90,6 @@ public class ShiftService {
                 shift.getStartTijd(),
                 shift.getEindTijd(),
                 shift.getPauzeStart(),
-                shift.getPauzeEind()
-        );
+                shift.getPauzeEind());
     }
 }

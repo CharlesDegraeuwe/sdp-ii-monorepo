@@ -182,6 +182,10 @@ export default function DetailPanel({
               <p className="text-xs text-zinc-400 italic">
                 Geen taken op afwezige dag.
               </p>
+            ) : !wShift ? (
+              <p className="text-xs text-zinc-400 italic">
+                Geen shift gepland.
+              </p>
             ) : (
               <>
                 <div className="flex flex-col gap-1.5">
@@ -257,8 +261,15 @@ export default function DetailPanel({
               geselecteerdeDag,
             );
             const isAfwezig = wAfwezig.length > 0;
+            const wShiftOverzicht = getShiftVoorDag(
+              geselecteerdeDag,
+              teamShiften,
+              w.id,
+            );
             const alleTaken = teamTaken[w.id] ?? [];
-            const dagTaken = takenOpDag(alleTaken, geselecteerdeDag);
+            const dagTaken = wShiftOverzicht
+              ? takenOpDag(alleTaken, geselecteerdeDag)
+              : [];
             const todoTaken = dagTaken.filter((t) => !t.afgewerkt);
             const doneTaken = dagTaken.filter((t) => t.afgewerkt);
 
@@ -281,11 +292,13 @@ export default function DetailPanel({
                   )}
                   {!isAfwezig && !weekend && (
                     <span className="text-[9px] text-zinc-400 ml-auto">
-                      {todoTaken.length > 0
-                        ? `${todoTaken.length} open`
-                        : doneTaken.length > 0
-                          ? 'Alles klaar'
-                          : 'Geen taken'}
+                      {!wShiftOverzicht
+                        ? 'Geen shift'
+                        : todoTaken.length > 0
+                          ? `${todoTaken.length} open`
+                          : doneTaken.length > 0
+                            ? 'Alles klaar'
+                            : 'Geen taken'}
                     </span>
                   )}
                 </div>
@@ -301,11 +314,19 @@ export default function DetailPanel({
                       onVerwijder={() => onTeamTaakVerwijder?.(t.id, w.id)}
                     />
                   ))}
-                {!isAfwezig && !weekend && dagTaken.length === 0 && (
+                {!isAfwezig && !weekend && !wShiftOverzicht && (
                   <p className="text-[10px] text-zinc-400 italic pl-4">
-                    Geen taken
+                    Geen shift gepland
                   </p>
                 )}
+                {!isAfwezig &&
+                  !weekend &&
+                  wShiftOverzicht &&
+                  dagTaken.length === 0 && (
+                    <p className="text-[10px] text-zinc-400 italic pl-4">
+                      Geen taken
+                    </p>
+                  )}
               </div>
             );
           })}
@@ -359,7 +380,11 @@ export default function DetailPanel({
           </p>
         )}
 
-        {!isAfwezig && (
+        {!isAfwezig && !shift && (
+          <p className="text-xs text-zinc-400 italic">Geen shift gepland.</p>
+        )}
+
+        {!isAfwezig && shift && (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wide">
@@ -391,7 +416,7 @@ export default function DetailPanel({
           </div>
         )}
 
-        {!isAfwezig && doneTaken.length > 0 && (
+        {!isAfwezig && shift && doneTaken.length > 0 && (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wide">

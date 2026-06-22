@@ -11,17 +11,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WerknemersApiService extends ApiService {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private final String BASE_URL = dotenv.get("BASE_URL") +"/werknemers";
 
     //calls etc
     // ====================================================================
     public List<WerknemerDTO> getAlleWerknemers() {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL + "/users"))
-                    .GET()
-                    .build();
+            HttpRequest request = authenticatedRequest(BASE_URL)
+                .GET()
+                .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) return List.of();
@@ -40,8 +39,8 @@ public class WerknemersApiService extends ApiService {
     public String activeerWerknemer(String code) {
         try {
             HttpRequest request = authenticatedRequest(BASE_URL + "/activeer?code=" + code)
-                    .POST(HttpRequest.BodyPublishers.noBody())
-                    .build();
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
@@ -62,9 +61,9 @@ public class WerknemersApiService extends ApiService {
     // ====================================================================
     public WerknemerDTO zoekOpEmail(String email) {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/user?email=" + email)
-                    .GET()
-                    .build();
+            HttpRequest request = authenticatedRequest(BASE_URL + "/email/" + email)
+                .GET()
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) return null;
             String body = response.body();
@@ -83,8 +82,8 @@ public class WerknemersApiService extends ApiService {
             String json = mapper.writeValueAsString(dto);
 
             HttpRequest request = authenticatedRequest(BASE_URL + "/" + dto.id())
-                    .PUT(HttpRequest.BodyPublishers.ofString(json))
-                    .build();
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() < 200 || response.statusCode() >= 300)
@@ -103,9 +102,9 @@ public class WerknemersApiService extends ApiService {
     // ====================================================================
     public WerknemerDTO zoekOpId(int id) {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/user?id=" + id)
-                    .GET()
-                    .build();
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + id)
+                .GET()
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) return null;
             String body = response.body();
@@ -119,8 +118,8 @@ public class WerknemersApiService extends ApiService {
     public boolean veranderStatus(int werknemerId, String actie) {
         try {
             HttpRequest request = authenticatedRequest(BASE_URL + "/" + werknemerId + "/" + actie)
-                    .PUT(HttpRequest.BodyPublishers.noBody())
-                    .build();
+                .PUT(HttpRequest.BodyPublishers.noBody())
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.statusCode() == 200 || response.statusCode() == 204;
         } catch (Exception e) {
@@ -128,19 +127,39 @@ public class WerknemersApiService extends ApiService {
         }
     }
 
+    public boolean veranderRol(int werknemerId, String nieuweRol) {
+        try {
+            java.net.http.HttpRequest request = authenticatedRequest(BASE_URL + "/" + werknemerId + "/rol?nieuweRol=" + nieuweRol)
+                .PUT(java.net.http.HttpRequest.BodyPublishers.noBody())
+                .build();
+
+            java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                System.err.println("Fout bij updaten rol: Status " + response.statusCode());
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("Crash in veranderRol API: " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean registreerWerknemer(String naam, String voornaam, String email, String telefoon, String geboortedatum, String rol) {
         try {
             String jsonBody = String.format(
-                    "{\"naam\":\"%s\",\"voornaam\":\"%s\",\"email\":\"%s\",\"wachtwoord\":\"Wachtwoord123\",\"telefoonnummer\":\"%s\",\"geboortedatum\":\"%s\",\"rol\":\"%s\"}",
-                    naam, voornaam, email, telefoon, geboortedatum, rol
+                "{\"naam\":\"%s\",\"voornaam\":\"%s\",\"email\":\"%s\",\"wachtwoord\":\"Wachtwoord123\",\"telefoonnummer\":\"%s\",\"geboortedatum\":\"%s\",\"rol\":\"%s\"}",
+                naam, voornaam, email, telefoon, geboortedatum, rol
             );
             HttpRequest request = authenticatedRequest(BASE_URL)
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                    .build();
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.statusCode() == 200 || response.statusCode() == 201;
         } catch (Exception e) {
             throw new RuntimeException("Fout bij registreren werknemer", e);
         }
     }
+
 }

@@ -2,19 +2,20 @@ package hogent.sdp2.backend.websocket.tools;
 
 import hogent.sdp2.backend.rest.dto.request.TaakResponseDTO;
 import hogent.sdp2.backend.rest.service.taken.TakenService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class TakenTools {
     private final TakenService takenService;
 
-    @Tool(description = "Haalt alle taken op van de ingelogde gebruiker. Gebruik deze tool wanneer de gebruiker vraagt naar zijn taken, opdrachten, to-dos of werk.")
+    @Tool(
+            description =
+                    "Haalt alle taken op van de ingelogde gebruiker. Gebruik deze tool wanneer de gebruiker vraagt naar zijn taken, opdrachten, to-dos of werk.")
     public String getMyTasks(ToolContext ctx) {
         System.out.println("=== TOOL CALL === getMyTasks");
         System.out.println("=== TOOL CTX === " + ctx.getContext());
@@ -32,8 +33,10 @@ public class TakenTools {
         for (TaakResponseDTO t : taken) {
             sb.append("- ")
                     .append(t.titel())
-                    .append(" (status: ").append(t.afgewerkt())
-                    .append(", deadline: ").append(t.deadline())
+                    .append(" (status: ")
+                    .append(t.afgewerkt())
+                    .append(", deadline: ")
+                    .append(t.deadline())
                     .append(")");
             if (t.beschrijving() != null && !t.beschrijving().isBlank()) {
                 sb.append(" - ").append(t.beschrijving());

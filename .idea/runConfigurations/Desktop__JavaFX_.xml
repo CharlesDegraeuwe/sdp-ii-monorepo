@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Desktop (JavaFX)" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="hogent.sdp2.sdpii.ManagementApplication" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <module name="SDPII" />
     <option name="VM_PARAMETERS" value="--add-modules javafx.controls,javafx.fxml --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED" />
     <method v="2">

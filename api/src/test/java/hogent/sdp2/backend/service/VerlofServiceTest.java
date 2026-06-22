@@ -1,5 +1,10 @@
 package hogent.sdp2.backend.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
 import hogent.sdp2.backend.auth.SessieService;
 import hogent.sdp2.backend.domain.Team;
 import hogent.sdp2.backend.domain.Teamwerknemer;
@@ -14,22 +19,15 @@ import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.rest.service.afwezigheid.VerlofService;
 import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
 import hogent.sdp2.backend.rest.service.sse.SseService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class VerlofServiceTest {
@@ -100,30 +98,37 @@ class VerlofServiceTest {
 
     @Test
     void vraagVerlofAan_slaatVerlofOpEnStuurtNotificatie() {
-        VerlofAanvragenDTO dto = new VerlofAanvragenDTO(
-                1, LocalDate.of(2025, 6, 1), LocalDate.of(2025, 6, 5), "Jaarlijks verlof");
+        VerlofAanvragenDTO dto =
+                new VerlofAanvragenDTO(
+                        1, LocalDate.of(2025, 6, 1), LocalDate.of(2025, 6, 5), "Jaarlijks verlof");
 
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
-        when(teamwerknemerRepository.findByWerknemerId(1)).thenReturn(List.of(teamwerknemerWerknemer));
-        when(teamwerknemerRepository.findGoedkeurderVanTeam(1)).thenReturn(List.of(teamwerknemerManager));
-        when(verlofRepository.save(any(Verlof.class))).thenAnswer(inv -> {
-            Verlof v = inv.getArgument(0);
-            v.setId(50);
-            return v;
-        });
+        when(teamwerknemerRepository.findByWerknemerId(1))
+                .thenReturn(List.of(teamwerknemerWerknemer));
+        when(teamwerknemerRepository.findGoedkeurderVanTeam(1))
+                .thenReturn(List.of(teamwerknemerManager));
+        when(verlofRepository.save(any(Verlof.class)))
+                .thenAnswer(
+                        inv -> {
+                            Verlof v = inv.getArgument(0);
+                            v.setId(50);
+                            return v;
+                        });
 
         String result = verlofService.vraagVerlofAan(dto);
 
         assertThat(result).contains("succesvol");
         verify(verlofRepository, times(1)).save(any(Verlof.class));
-        verify(notificatieService, times(1)).maakNotificatie(eq(10), anyString(), anyString(), any());
+        verify(notificatieService, times(1))
+                .maakNotificatie(eq(10), anyString(), anyString(), any());
         verify(sseService, times(1)).pushEvent(eq(10), eq("verlof_aangevraagd"), any());
     }
 
     @Test
     void vraagVerlofAan_gooidExceptionAlsEindDatumVoorStartDatum() {
-        VerlofAanvragenDTO dto = new VerlofAanvragenDTO(
-                1, LocalDate.of(2025, 6, 5), LocalDate.of(2025, 6, 1), "Jaarlijks verlof");
+        VerlofAanvragenDTO dto =
+                new VerlofAanvragenDTO(
+                        1, LocalDate.of(2025, 6, 5), LocalDate.of(2025, 6, 1), "Jaarlijks verlof");
 
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
 
@@ -134,8 +139,9 @@ class VerlofServiceTest {
 
     @Test
     void vraagVerlofAan_gooidExceptionAlsGeenManagerGevonden() {
-        VerlofAanvragenDTO dto = new VerlofAanvragenDTO(
-                1, LocalDate.of(2025, 6, 1), LocalDate.of(2025, 6, 5), "Jaarlijks verlof");
+        VerlofAanvragenDTO dto =
+                new VerlofAanvragenDTO(
+                        1, LocalDate.of(2025, 6, 1), LocalDate.of(2025, 6, 5), "Jaarlijks verlof");
 
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
         when(teamwerknemerRepository.findByWerknemerId(1)).thenReturn(List.of());
@@ -147,8 +153,12 @@ class VerlofServiceTest {
 
     @Test
     void vraagVerlofAan_gooidExceptionBijOnbekendeWerknemer() {
-        VerlofAanvragenDTO dto = new VerlofAanvragenDTO(
-                999, LocalDate.of(2025, 6, 1), LocalDate.of(2025, 6, 5), "Jaarlijks verlof");
+        VerlofAanvragenDTO dto =
+                new VerlofAanvragenDTO(
+                        999,
+                        LocalDate.of(2025, 6, 1),
+                        LocalDate.of(2025, 6, 5),
+                        "Jaarlijks verlof");
 
         when(werknemerRepository.findById(999)).thenReturn(Optional.empty());
 

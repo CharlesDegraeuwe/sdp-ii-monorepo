@@ -10,12 +10,6 @@ spring:
       chat:
         options:
           model: gemini-2.5-flash
-  logging:
-    level:
-      org.springframework.ai: DEBUG
-      com.openai: TRACE
-      org.springframework.web.client: TRACE
-
   application:
     name: backend
   datasource:
@@ -23,6 +17,9 @@ spring:
     password: ${DB_PASSWORD}
     url: ${DB_URL}
     username: ${DB_USERNAME}
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
   jpa:
     hibernate:
       ddl-auto: none
@@ -30,5 +27,5 @@ spring:
 
 
 resend:
-  api-key: ${RESEND_API_KEY}
+  api-key: ${RESEND_API_KEY:}
   from: ${EMAIL_FROM:delaware suite <no-reply@delaware-suite.com>}

@@ -6,13 +6,12 @@ import hogent.sdp2.backend.rest.dto.request.MachineAanmakenDTO;
 import hogent.sdp2.backend.rest.dto.request.MachineWijzigenDTO;
 import hogent.sdp2.backend.rest.repository.MachineRepository;
 import hogent.sdp2.backend.rest.repository.SiteRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -119,11 +118,10 @@ public class MachineService {
         List<Machine> machines = machineRepository.findBySiteId(siteId);
 
         return machines.stream()
-                .map(machine -> new MachineWijzigenDTO(
-                        machine.getNaam(),
-                        machine.getStatus(),
-                        machine.getId()
-                ))
+                .map(
+                        machine ->
+                                new MachineWijzigenDTO(
+                                        machine.getNaam(), machine.getStatus(), machine.getId()))
                 .collect(Collectors.toList());
     }
 }

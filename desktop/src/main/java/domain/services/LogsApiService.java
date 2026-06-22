@@ -10,7 +10,7 @@ import java.util.List;
 
 public class LogsApiService extends ApiService {
 
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private final String BASE_URL = dotenv.get("BASE_URL") +"/logs";
 
     //calls etc

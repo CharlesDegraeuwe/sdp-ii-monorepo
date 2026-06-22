@@ -8,7 +8,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class AuthApiService extends ApiService {
-    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/werknemers";
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private final String BASE_URL = dotenv.get("BASE_URL") + "/werknemers";
 
     public void verzendLoginEmail(String email) {
         try {
@@ -45,7 +46,7 @@ public class AuthApiService extends ApiService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Ongeldig email of wachtwoord");
+                throw new RuntimeException("Ongeldig email of wachtwoord.");
             }
 
             String body = response.body();

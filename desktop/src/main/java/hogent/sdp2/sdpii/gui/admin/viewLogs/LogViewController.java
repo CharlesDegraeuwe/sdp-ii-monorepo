@@ -63,7 +63,7 @@ public class LogViewController extends VBox {
         type.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().type()));
         tabel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().tabel()));
         timestamp.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().timestamp().toString()));
-        details.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().details()));
+        details.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().beschrijving()));
 
         laadLogs();
         zoekField.textProperty().addListener((obs, oud, nieuw) -> filterWerknemers(nieuw));

@@ -1,12 +1,11 @@
 package hogent.sdp2.backend.rest.controller;
 
+import hogent.sdp2.backend.auth.SessieService;
 import hogent.sdp2.backend.rest.dto.request.NotificatieDTO;
 import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
-import hogent.sdp2.backend.auth.SessieService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/notificaties")

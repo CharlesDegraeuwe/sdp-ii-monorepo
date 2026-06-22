@@ -14,10 +14,10 @@ public class WerknemersFacade {
     private WerknemersApiService api = new WerknemersApiService();
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
-            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+        "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
     );
     private static final Pattern TELEFOON_PATTERN = Pattern.compile(
-            "^\\+?[0-9]{8,15}$"
+        "^\\+?[0-9]{8,15}$"
     );
 
     public List<WerknemerDTO> geefAlleWerknemers() {
@@ -48,6 +48,14 @@ public class WerknemersFacade {
     public boolean veranderStatus(int werknemerId, String actie) {
         boolean result = api.veranderStatus(werknemerId, actie);
         if (result) LogService.log("UPDATE", "werknemers", "Status gewijzigd – werknemerId: " + werknemerId + ", actie: " + actie);
+        return result;
+    }
+
+    public boolean veranderRol(int werknemerId, String nieuweRol) {
+        boolean result = api.veranderRol(werknemerId, nieuweRol);
+        if (result) {
+            LogService.log("UPDATE", "werknemers", "Rol gewijzigd – werknemerId: " + werknemerId + ", nieuwe rol: " + nieuweRol);
+        }
         return result;
     }
 

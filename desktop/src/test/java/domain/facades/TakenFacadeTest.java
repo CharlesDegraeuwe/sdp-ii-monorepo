@@ -60,12 +60,12 @@ class TakenFacadeTest {
     @Test
     void maakTaakAan_metGeldigeData_roeptApiAan() {
         LocalDate deadline = LocalDate.now().plusDays(5);
-        when(api.maakTaakAan(5, "Titel", "Beschrijving", deadline, 1)).thenReturn("ok");
+        when(api.maakTaakAan( "Titel", "Beschrijving", deadline, 1)).thenReturn("ok");
 
         String result = facade.maakTaakAan("Titel", "Beschrijving", deadline, 1);
 
         assertEquals("ok", result);
-        verify(api).maakTaakAan(5, "Titel", "Beschrijving", deadline, 1);
+        verify(api).maakTaakAan( "Titel", "Beschrijving", deadline, 1);
     }
 
     @Test

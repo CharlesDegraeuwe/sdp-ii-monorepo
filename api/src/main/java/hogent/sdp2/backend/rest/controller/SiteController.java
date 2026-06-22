@@ -1,5 +1,6 @@
 package hogent.sdp2.backend.rest.controller;
 
+import hogent.sdp2.backend.auth.SessieService;
 import hogent.sdp2.backend.domain.Site;
 import hogent.sdp2.backend.rest.dto.request.MachineWijzigenDTO;
 import hogent.sdp2.backend.rest.dto.request.SiteAanmakenDTO;
@@ -7,13 +8,11 @@ import hogent.sdp2.backend.rest.dto.request.SiteStatsDTO;
 import hogent.sdp2.backend.rest.dto.request.SiteWijzigenDTO;
 import hogent.sdp2.backend.rest.service.locatie.MachineService;
 import hogent.sdp2.backend.rest.service.locatie.SiteService;
-import hogent.sdp2.backend.auth.SessieService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/sites")
@@ -82,5 +81,10 @@ public class SiteController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping("/actief-percentage")
+    public ResponseEntity<Integer> getActieveSitesPercentage() {
+        return ResponseEntity.ok(siteService.getActieveSitesPercentage());
     }
 }

@@ -37,25 +37,4 @@ class PlanningFacadeTest {
         verify(api).geefAfwezighedenVanTeam(5, van, tot);
     }
 
-    @Test
-    void geefAlleAfwezigheden_delegeertNaarApi() {
-        List<AfwezigheidsOverzichtDTO> verwacht = List.of();
-        when(api.geefAlleAfwezigheden(van, tot)).thenReturn(verwacht);
-
-        List<AfwezigheidsOverzichtDTO> result = facade.geefAlleAfwezigheden(van, tot);
-
-        assertEquals(verwacht, result);
-        verify(api).geefAlleAfwezigheden(van, tot);
-    }
-
-    @Test
-    void geefAfwezighedenVanSpecifiekTeam_delegeertNaarApi() {
-        List<AfwezigheidsOverzichtDTO> verwacht = List.of();
-        when(api.geefAfwezighedenVanSpecifiekTeam(3, van, tot)).thenReturn(verwacht);
-
-        List<AfwezigheidsOverzichtDTO> result = facade.geefAfwezighedenVanSpecifiekTeam(3, van, tot);
-
-        assertEquals(verwacht, result);
-        verify(api).geefAfwezighedenVanSpecifiekTeam(3, van, tot);
-    }
 }

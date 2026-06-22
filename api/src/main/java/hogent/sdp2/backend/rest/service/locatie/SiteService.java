@@ -5,15 +5,14 @@ import hogent.sdp2.backend.rest.dto.request.SiteAanmakenDTO;
 import hogent.sdp2.backend.rest.dto.request.SiteStatsDTO;
 import hogent.sdp2.backend.rest.dto.request.SiteWijzigenDTO;
 import hogent.sdp2.backend.rest.repository.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -99,8 +98,10 @@ public class SiteService {
     }
 
     public List<Site> haalSitesVanWerknemer(Integer werknemerId) {
-        Werknemer ingelogdeGebruiker = werknemerRepository.findById(werknemerId)
-                .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
+        Werknemer ingelogdeGebruiker =
+                werknemerRepository
+                        .findById(werknemerId)
+                        .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
 
         if (ingelogdeGebruiker.getRol() != null && ingelogdeGebruiker.getRol().equals("Admin")) {
             return siteRepository.findAll();
@@ -111,8 +112,10 @@ public class SiteService {
 
     public SiteStatsDTO getSiteStatsVoorWerknemer(Integer werknemerId) {
 
-        Werknemer ingelogdeGebruiker = werknemerRepository.findById(werknemerId)
-                .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
+        Werknemer ingelogdeGebruiker =
+                werknemerRepository
+                        .findById(werknemerId)
+                        .orElseThrow(() -> new RuntimeException("Gebruiker niet gevonden"));
 
         List<Site> sites;
 
@@ -131,7 +134,8 @@ public class SiteService {
                 Team team = st.getTeam();
 
                 if (team != null) {
-                    List<Teamwerknemer> werknemerKoppelingen = teamwerknemerRepository.findByTeam(team);
+                    List<Teamwerknemer> werknemerKoppelingen =
+                            teamwerknemerRepository.findByTeam(team);
 
                     for (Teamwerknemer tw : werknemerKoppelingen) {
                         if (tw.getWerknemer() != null) {
@@ -152,5 +156,17 @@ public class SiteService {
             }
         }
         return new SiteStatsDTO(uniekeWerknemers.size(), afwezigen);
+    }
+
+    public int getActieveSitesPercentage() {
+        long totaalSites = siteRepository.count();
+
+        if (totaalSites == 0) {
+            return 0;
+        }
+
+        long actieveSites = siteRepository.countByStatus("Actief");
+
+        return (int) Math.round((double) actieveSites / totaalSites * 100);
     }
 }

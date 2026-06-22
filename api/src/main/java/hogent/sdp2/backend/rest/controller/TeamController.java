@@ -1,17 +1,16 @@
 package hogent.sdp2.backend.rest.controller;
 
+import hogent.sdp2.backend.auth.SessieService;
 import hogent.sdp2.backend.rest.dto.request.CreateTeamRequestDTO;
 import hogent.sdp2.backend.rest.dto.request.TeamResponseDTO;
 import hogent.sdp2.backend.rest.dto.response.SiteResponseDTO;
 import hogent.sdp2.backend.rest.dto.response.TeamLidResponseDTO;
 import hogent.sdp2.backend.rest.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.rest.service.teams.TeamService;
-import hogent.sdp2.backend.auth.SessieService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/teams")
@@ -77,7 +76,8 @@ public class TeamController {
 
     @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PutMapping("/{teamId}/{werknemerId}")
-    public List<WerknemerResponseDTO> voegToeAanTeam(@PathVariable Integer teamId, @PathVariable Integer werknemerId) {
+    public List<WerknemerResponseDTO> voegToeAanTeam(
+            @PathVariable Integer teamId, @PathVariable Integer werknemerId) {
         return teamService.voegToeAanTeam(teamId, werknemerId);
     }
 
@@ -89,7 +89,8 @@ public class TeamController {
 
     @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @DeleteMapping("/{teamId}/{werknemerId}")
-    public List<WerknemerResponseDTO> verwijderUitTeam(@PathVariable Integer teamId, @PathVariable Integer werknemerId) {
+    public List<WerknemerResponseDTO> verwijderUitTeam(
+            @PathVariable Integer teamId, @PathVariable Integer werknemerId) {
         return teamService.verwijderUitTeam(teamId, werknemerId);
     }
 

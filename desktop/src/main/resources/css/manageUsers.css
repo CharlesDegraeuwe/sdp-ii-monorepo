@@ -1,111 +1,120 @@
-.page {
-    -fx-padding: 24 28 24 28;
-    -fx-background-color: #F6F6F6;
+/* Pagina basis */
+.page-background {
+  -fx-background-color: #f8fafc;
+  -fx-padding: 40;
 }
 
+/* De container waar de tabel in zweeft */
+.modern-table-container {
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 12;
+  -fx-border-color: #e2e8f0;
+  -fx-border-radius: 12;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 15, 0, 0, 5);
+  -fx-padding: 20;
+}
+
+/* Terug knop */
+.icon-btn {
+  -fx-background-color: #f1f5f9;
+  -fx-background-radius: 50;
+  -fx-min-width: 40;
+  -fx-min-height: 40;
+  -fx-cursor: hand;
+  -fx-padding: 0;
+}
+.icon-btn:hover {
+  -fx-background-color: #e2e8f0;
+}
+
+/* Teksten */
 .page-title {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
+  -fx-font-size: 24px;
+  -fx-font-weight: 800;
+  -fx-text-fill: #0f172a;
+}
+.page-subtitle {
+  -fx-font-size: 13px;
+  -fx-text-fill: #64748b;
 }
 
-.toolbar {
-    -fx-alignment: CENTER_LEFT;
+/* Toolbar & Zoekbalk */
+.modern-input {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #e2e8f0;
+  -fx-border-radius: 8;
+  -fx-background-radius: 8;
+  -fx-border-width: 1.5;
+  -fx-padding: 8 12;
+  -fx-font-size: 13px;
+  -fx-text-fill: #0f172a;
+}
+.modern-input:focused {
+  -fx-border-color: #3b82f6;
 }
 
-.toolbar .text-field {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 999px;
-    -fx-border-color: #E8E8E8;
-    -fx-border-radius: 999px;
-    -fx-padding: 8 16 8 16;
-    -fx-font-size: 13px;
-}
-
-.toolbar .combo-box {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 999px;
-    -fx-border-color: #E8E8E8;
-    -fx-border-radius: 999px;
-    -fx-padding: 4 8 4 8;
-    -fx-font-size: 13px;
-}
-
+/* --- TABEL OVERRIDE --- */
 .table-view {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 14;
-    -fx-border-color: transparent;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-padding: 10 0 0 0;
 }
 
+/* Tabel headers (kolom titels) */
 .table-view .column-header-background {
-    -fx-background-color: #F0F0F0;
-    -fx-background-radius: 14 14 0 0;
+  -fx-background-color: transparent;
 }
-
 .table-view .column-header {
-    -fx-background-color: transparent;
-    -fx-font-weight: bold;
-    -fx-font-size: 12px;
-    -fx-text-fill: #2c3e50;
+  -fx-background-color: transparent; /* OPGELOST: Dit was #f8fafc en maakte de lelijke balk! */
+  -fx-border-width: 0 0 1 0;
+  -fx-border-color: #e2e8f0;
+  -fx-padding: 12 5;
+}
+.table-view .column-header .label {
+  -fx-text-fill: #64748b;
+  -fx-font-weight: bold;
+  -fx-font-size: 12px;
 }
 
+/* Tabel cellen (algemeen) */
+.table-view .table-cell {
+  -fx-text-fill: #334155;
+  -fx-border-color: transparent;
+  -fx-padding: 8 10;
+  -fx-font-size: 13px;
+  -fx-alignment: center-left;
+}
+
+/* Tabel rijen */
 .table-row-cell {
-    -fx-border-color: transparent transparent #F0F0F0 transparent;
-    -fx-font-size: 13px;
+  -fx-background-color: transparent;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-color: #f1f5f9;
+}
+.table-row-cell:hover {
+  -fx-background-color: #f8fafc;
 }
 
+/* HET FIXEN VAN DE SELECTIE */
 .table-row-cell:selected {
-    -fx-background-color: rgba(44,62,80,0.08);
-    -fx-text-fill: #2c3e50;
+  -fx-background-color: #eff6ff;
+  -fx-table-cell-border-color: transparent;
+}
+.table-row-cell:selected .text {
+  -fx-fill: #0f172a;
 }
 
-.error-label {
-    -fx-text-fill: #E31B35;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
+/* SCROLLBARS VERBERGEN */
+.table-view .scroll-bar:vertical,
+.table-view .scroll-bar:horizontal {
+  -fx-pref-width: 0;
+  -fx-pref-height: 0;
+  -fx-max-width: 0;
+  -fx-max-height: 0;
+  -fx-opacity: 0;
+  -fx-padding: 0;
 }
-
-.btn-activeer {
-    -fx-background-color: #4CAF50;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8 15 8 15;
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
-}
-
-.btn-activeer:hover {
-    -fx-background-color: #45a049;
-}
-
-.btn-deactiveer {
-    -fx-background-color: #ff9800;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8 15 8 15;
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
-}
-
-.btn-deactiveer:hover {
-    -fx-background-color: #e68a00;
-}
-
-.btn-blokkeer {
-    -fx-background-color: #E31B35;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8 15 8 15;
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
-}
-
-.btn-blokkeer:hover {
-    -fx-background-color: #da190b;
-}
-
-.button:disabled {
-    -fx-opacity: 0.5;
-    -fx-cursor: default;
+.table-view .corner {
+  -fx-background-color: transparent;
 }

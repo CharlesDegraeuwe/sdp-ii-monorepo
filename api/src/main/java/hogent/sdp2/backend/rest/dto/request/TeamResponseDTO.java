@@ -7,5 +7,4 @@ public record TeamResponseDTO(
         Integer managerId,
         String managerNaam,
         Integer siteId,
-        String siteNaam
-) {}
+        String siteNaam) {}

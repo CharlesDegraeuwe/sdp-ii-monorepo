@@ -2,6 +2,8 @@ package domain.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import domain.dto.GeschiedenisItemDTO;
+import domain.dto.GeschiedenisItemMetWerknemerDTO;
+import domain.dto.TeamMetLedenDTO;
 import domain.dto.WerknemerDTO;
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -10,7 +12,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class GeschiedenisApiService extends ApiService {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private final String BASE_URL = dotenv.get("BASE_URL") + "/geschiedenis";
 
     public List<GeschiedenisItemDTO> geefGeschiedenisVanWerknemer(int werknemerId) {
@@ -38,6 +40,34 @@ public class GeschiedenisApiService extends ApiService {
             return mapper.readValue(body, new TypeReference<>() {});
         } catch (Exception e) {
             throw new RuntimeException("Fout bij ophalen teamleden", e);
+        }
+    }
+
+    public List<TeamMetLedenDTO> geefTeamsVanManager(int managerId) {
+        try {
+            HttpRequest request = authenticatedRequest(BASE_URL + "/teams/" + managerId)
+                    .GET().build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) return List.of();
+            String body = response.body();
+            if (body == null || body.isBlank()) return List.of();
+            return mapper.readValue(body, new TypeReference<>() {});
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij ophalen teams", e);
+        }
+    }
+
+    public List<GeschiedenisItemMetWerknemerDTO> geefTeamOverzicht(int teamId) {
+        try {
+            HttpRequest request = authenticatedRequest(BASE_URL + "/team-overzicht/" + teamId)
+                    .GET().build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) return List.of();
+            String body = response.body();
+            if (body == null || body.isBlank()) return List.of();
+            return mapper.readValue(body, new TypeReference<>() {});
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij ophalen teamoverzicht", e);
         }
     }
 }

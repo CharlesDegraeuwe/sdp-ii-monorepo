@@ -79,3 +79,33 @@ lint-fix:
 	cd web/ && bunx prettier --write "**/*.{ts,tsx,js,jsx,json,css,md}" && bun run lint --fix
 	cd api/ && ./mvnw spotless:apply -q
 	cd desktop/ && ./mvnw spotless:apply -q
+
+# ── ci ────────────────────────────────────────────
+ci-web:
+	@echo "Dependencies checken..."
+	cd web/ && bun install --frozen-lockfile
+	@echo "Linter runnen..."
+	cd web/ && bun run lint
+	@echo "Build checken..."
+	cd web/ && bun run build
+	@echo "Tests runnen..."
+	cd web/ && bun run test
+
+ci-api:
+	@echo "Linter runnen..."
+	cd api/ && ./mvnw spotless:check
+	@echo "Build checken..."
+	cd api/ && ./mvnw compile -q
+	@echo "Tests runnen..."
+	cd api/ && ./mvnw test
+
+ci-desktop:
+	@echo "Linter runnen..."
+	cd desktop/ && ./mvnw spotless:check
+	@echo "Build checken..."
+	cd desktop/ && ./mvnw compile -q
+	@echo "Tests runnen..."
+	cd desktop/ && ./mvnw test
+
+ci-all: ci-web ci-api ci-desktop
+	@echo "ci-pipeline succesvol"

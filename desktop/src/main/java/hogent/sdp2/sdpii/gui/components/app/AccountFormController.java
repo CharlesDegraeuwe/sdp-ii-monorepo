@@ -81,6 +81,7 @@ public class AccountFormController extends VBox {
                 emailField.getText(),
                 telefoonnummerField.getText(),
                 java.time.LocalDate.parse(geboortedatumField.getText()),
+                huidigeWerknemer.rol(),
                 huidigeWerknemer.status()
         );
         facade.update(update);

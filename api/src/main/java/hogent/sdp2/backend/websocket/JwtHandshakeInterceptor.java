@@ -1,17 +1,16 @@
 package hogent.sdp2.backend.websocket;
 
-import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.auth.JwtService;
 import hogent.sdp2.backend.domain.Werknemer;
+import hogent.sdp2.backend.rest.repository.WerknemerRepository;
+import java.util.Arrays;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
-
-import java.util.Arrays;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -25,8 +24,7 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
             ServerHttpRequest request,
             ServerHttpResponse response,
             WebSocketHandler wsHandler,
-            Map<String, Object> attributes
-    ) {
+            Map<String, Object> attributes) {
         System.out.println("=== WS HANDSHAKE === " + request.getURI());
 
         String query = request.getURI().getQuery();
@@ -35,11 +33,12 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
             return false;
         }
 
-        String token = Arrays.stream(query.split("&"))
-                .filter(p -> p.startsWith("token="))
-                .map(p -> p.substring("token=".length()))
-                .findFirst()
-                .orElse(null);
+        String token =
+                Arrays.stream(query.split("&"))
+                        .filter(p -> p.startsWith("token="))
+                        .map(p -> p.substring("token=".length()))
+                        .findFirst()
+                        .orElse(null);
 
         if (token == null) {
             System.out.println("=== WS HANDSHAKE FAIL === no token in query");
@@ -77,8 +76,7 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
             ServerHttpRequest request,
             ServerHttpResponse response,
             WebSocketHandler wsHandler,
-            Exception exception
-    ) {
+            Exception exception) {
         // niks te doen
     }
 }

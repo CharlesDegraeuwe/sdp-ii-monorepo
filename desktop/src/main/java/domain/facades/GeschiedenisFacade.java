@@ -1,6 +1,8 @@
 package domain.facades;
 
 import domain.dto.GeschiedenisItemDTO;
+import domain.dto.GeschiedenisItemMetWerknemerDTO;
+import domain.dto.TeamMetLedenDTO;
 import domain.dto.WerknemerDTO;
 import domain.services.GeschiedenisApiService;
 
@@ -15,5 +17,13 @@ public class GeschiedenisFacade {
 
     public List<WerknemerDTO> geefTeamledenVanManager(int managerId) {
         return api.geefTeamledenVanManager(managerId);
+    }
+
+    public List<TeamMetLedenDTO> geefTeamsVanManager(int managerId) {
+        return api.geefTeamsVanManager(managerId);
+    }
+
+    public List<GeschiedenisItemMetWerknemerDTO> geefTeamOverzicht(int teamId) {
+        return api.geefTeamOverzicht(teamId);
     }
 }

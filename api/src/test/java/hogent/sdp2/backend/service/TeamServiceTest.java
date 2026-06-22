@@ -1,5 +1,9 @@
 package hogent.sdp2.backend.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import hogent.sdp2.backend.domain.*;
 import hogent.sdp2.backend.rest.dto.request.CreateTeamRequestDTO;
 import hogent.sdp2.backend.rest.dto.request.TeamLidRequestDTO;
@@ -7,20 +11,15 @@ import hogent.sdp2.backend.rest.dto.request.TeamResponseDTO;
 import hogent.sdp2.backend.rest.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.rest.repository.*;
 import hogent.sdp2.backend.rest.service.teams.TeamService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TeamServiceTest {
@@ -119,14 +118,17 @@ class TeamServiceTest {
 
     @Test
     void maakTeam_maaktTeamAan() {
-        CreateTeamRequestDTO dto = new CreateTeamRequestDTO("Nieuw Team", "Omschrijving", 10, null, List.of());
+        CreateTeamRequestDTO dto =
+                new CreateTeamRequestDTO("Nieuw Team", "Omschrijving", 10, null, List.of());
 
         when(werknemerRepository.findById(10)).thenReturn(Optional.of(manager));
-        when(teamRepository.save(any(Team.class))).thenAnswer(inv -> {
-            Team t = inv.getArgument(0);
-            t.setId(99);
-            return t;
-        });
+        when(teamRepository.save(any(Team.class)))
+                .thenAnswer(
+                        inv -> {
+                            Team t = inv.getArgument(0);
+                            t.setId(99);
+                            return t;
+                        });
         when(siteteamRepository.findByTeamId(99)).thenReturn(List.of());
 
         TeamResponseDTO result = teamService.maakTeam(dto);
@@ -138,7 +140,8 @@ class TeamServiceTest {
 
     @Test
     void maakTeam_gooidExceptionBijOnbekendeManager() {
-        CreateTeamRequestDTO dto = new CreateTeamRequestDTO("Team", "Omschrijving", 999, null, List.of());
+        CreateTeamRequestDTO dto =
+                new CreateTeamRequestDTO("Team", "Omschrijving", 999, null, List.of());
         when(werknemerRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> teamService.maakTeam(dto))
@@ -148,22 +151,29 @@ class TeamServiceTest {
 
     @Test
     void maakTeam_voegMaxVierLedenToe() {
-        List<TeamLidRequestDTO> leden = List.of(
-                new TeamLidRequestDTO(1, false),
-                new TeamLidRequestDTO(2, false),
-                new TeamLidRequestDTO(3, false),
-                new TeamLidRequestDTO(4, false),
-                new TeamLidRequestDTO(5, false)
-        );
-        CreateTeamRequestDTO dto = new CreateTeamRequestDTO("Team", "Omschrijving", null, null, leden);
+        List<TeamLidRequestDTO> leden =
+                List.of(
+                        new TeamLidRequestDTO(1, false),
+                        new TeamLidRequestDTO(2, false),
+                        new TeamLidRequestDTO(3, false),
+                        new TeamLidRequestDTO(4, false),
+                        new TeamLidRequestDTO(5, false));
+        CreateTeamRequestDTO dto =
+                new CreateTeamRequestDTO("Team", "Omschrijving", null, null, leden);
 
-        Werknemer w1 = maakWerknemer(1); Werknemer w2 = maakWerknemer(2);
-        Werknemer w3 = maakWerknemer(3); Werknemer w4 = maakWerknemer(4);
+        Werknemer w1 = maakWerknemer(1);
+        Werknemer w2 = maakWerknemer(2);
+        Werknemer w3 = maakWerknemer(3);
+        Werknemer w4 = maakWerknemer(4);
         Werknemer w5 = maakWerknemer(5);
 
-        when(teamRepository.save(any(Team.class))).thenAnswer(inv -> {
-            Team t = inv.getArgument(0); t.setId(1); return t;
-        });
+        when(teamRepository.save(any(Team.class)))
+                .thenAnswer(
+                        inv -> {
+                            Team t = inv.getArgument(0);
+                            t.setId(1);
+                            return t;
+                        });
         when(siteteamRepository.findByTeamId(1)).thenReturn(List.of());
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(w1));
         when(werknemerRepository.findById(2)).thenReturn(Optional.of(w2));

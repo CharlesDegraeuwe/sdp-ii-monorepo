@@ -7,7 +7,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class VerlofApiService extends ApiService {
-    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/verlof";
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private final String BASE_URL = dotenv.get("BASE_URL") + "/verlof";
 
     public String vraagVerlofAan(VerlofAanvragenDTO dto) {
         try {

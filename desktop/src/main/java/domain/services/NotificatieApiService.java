@@ -9,7 +9,8 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 public class NotificatieApiService extends ApiService {
-    private final String BASE_URL = Dotenv.load().get("BASE_URL") + "/notificaties";
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private final String BASE_URL = dotenv.get("BASE_URL") + "/notificaties";
 
     public List<NotificatieDTO> geefNotificaties(int werknemerId) {
         try {
@@ -18,7 +19,7 @@ public class NotificatieApiService extends ApiService {
             if (response.statusCode() != 200) return List.of();
             String body = response.body();
             if (body == null || body.isBlank()) return List.of();
-            return mapper.readValue(body, new TypeReference<>() {});
+            return mapper.readValue(body, new TypeReference<List<NotificatieDTO>>() {});
         } catch (Exception e) {
             return List.of();
         }
