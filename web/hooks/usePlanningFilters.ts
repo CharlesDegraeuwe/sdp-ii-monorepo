@@ -70,6 +70,7 @@ export function usePlanningFilters(
   const teamsQuery = useQuery<TeamOptie[]>({
     queryKey: ['planner-teams', token],
     queryFn: async () => {
+      const res = await fetch(`${BASE}/teams`, { headers: authHeader! });
       if (!res.ok) return [];
       return res.json() as Promise<TeamOptie[]>;
     },
