@@ -1,6 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
 
@@ -29,106 +31,132 @@ export interface WerknemerMetTeam extends WerknemerOptie {
 }
 
 export function usePlanningFilters(
-  authHeader: Record<string, string>,
-  eigenId?: number,
-  isSupervisor?: boolean,
+  eigenId: number | undefined,
+  isSupervisor: boolean,
+  teamId: number | null,
+  laadAlle: boolean,
 ) {
-  const [sites, setSites] = useState<SiteOptie[]>([]);
-  const [teams, setTeams] = useState<TeamOptie[]>([]);
-  const [teamWerknemers, setTeamWerknemers] = useState<WerknemerOptie[]>([]);
-  const [alleWerknemers, setAlleWerknemers] = useState<WerknemerMetTeam[]>([]);
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+  const authHeader = token ? { Authorization: `Bearer ${token}` } : undefined;
+  const hasToken = !!token;
 
-  // Ref zodat callbacks stabiel blijven ook al verandert authHeader (token refresh)
-  const authRef = useRef(authHeader);
-  useEffect(() => {
-    authRef.current = authHeader;
-  }, [authHeader]);
+  // Supervisor: laad teams van eigen werknemer
+  const supervisorTeamsQuery = useQuery<TeamOptie[]>({
+    queryKey: ['supervisor-teams', eigenId, token],
+    queryFn: async () => {
+      const res = await fetch(`${BASE}/teams/werknemer/${eigenId}`, {
+        headers: authHeader!,
+      });
+      if (!res.ok) return [];
+      return res.json() as Promise<TeamOptie[]>;
+    },
+    enabled: isSupervisor && !!eigenId && hasToken,
+    initialData: [],
+  });
 
-  useEffect(() => {
-    const bearer = authHeader.Authorization;
-    if (!bearer || bearer === 'Bearer undefined') return;
+  const sitesQuery = useQuery<SiteOptie[]>({
+    queryKey: ['planner-sites', token],
+    queryFn: async () => {
+      const res = await fetch(`${BASE}/teams/sites`, { headers: authHeader! });
+      if (!res.ok) return [];
+      return res.json() as Promise<SiteOptie[]>;
+    },
+    enabled: !isSupervisor && hasToken,
+    initialData: [],
+  });
 
-    if (isSupervisor && eigenId) {
-      fetch(`${BASE}/teams/werknemer/${eigenId}`, { headers: authHeader })
-        .then((r) =>
-          r.ok ? (r.json() as Promise<TeamOptie[]>) : Promise.resolve([]),
-        )
-        .then((supervisorTeams) => {
-          setTeams(supervisorTeams);
-          const uniekeSites = Array.from(
-            new Map(
-              supervisorTeams
-                .filter((t) => t.siteId)
-                .map((t) => [
-                  t.siteId,
-                  { id: t.siteId, naam: t.siteNaam, locatie: '' },
-                ]),
-            ).values(),
-          );
-          setSites(uniekeSites);
-        })
-        .catch(console.error);
-      return;
-    }
+  // Normal: laad teams
+  const teamsQuery = useQuery<TeamOptie[]>({
+    queryKey: ['planner-teams', token],
+    queryFn: async () => {
+      const res = await fetch(`${BASE}/teams`, { headers: authHeader! });
+      if (!res.ok) return [];
+      return res.json() as Promise<TeamOptie[]>;
+    },
+    enabled: !isSupervisor && hasToken,
+    initialData: [],
+  });
 
-    Promise.all([
-      fetch(`${BASE}/teams/sites`, { headers: authHeader }),
-      fetch(`${BASE}/teams`, { headers: authHeader }),
-    ])
-      .then(async ([sitesRes, teamsRes]) => {
-        if (sitesRes.ok) setSites(await sitesRes.json());
-        if (teamsRes.ok) setTeams(await teamsRes.json());
-      })
-      .catch(console.error);
-  }, [authHeader, eigenId, isSupervisor]);
+  const teams: TeamOptie[] = isSupervisor
+    ? supervisorTeamsQuery.data
+    : teamsQuery.data;
 
-  const laadWerknemersVanTeam = useCallback(async (teamId: number) => {
-    setTeamWerknemers([]);
-    const res = await fetch(`${BASE}/teams/${teamId}/werknemers`, {
-      headers: authRef.current,
-    }).catch(() => null);
-    if (res?.ok) setTeamWerknemers(await res.json());
-  }, []);
-
-  const resetTeamWerknemers = useCallback(() => setTeamWerknemers([]), []);
-
-  const laadAlleWerknemers = useCallback(async (teamsToLoad: TeamOptie[]) => {
-    if (teamsToLoad.length === 0) return;
-    setAlleWerknemers([]);
-    const results = await Promise.all(
-      teamsToLoad.map((t) =>
-        fetch(`${BASE}/teams/${t.id}/werknemers`, { headers: authRef.current })
-          .then((r) =>
-            r.ok
-              ? (r.json() as Promise<WerknemerOptie[]>)
-              : Promise.resolve([]),
-          )
-          .then((ws: WerknemerOptie[]) =>
-            ws.map((w) => ({ ...w, teamId: t.id, teamNaam: t.naam })),
-          )
-          .catch(() => [] as WerknemerMetTeam[]),
+  const calcSupervisorSites = useMemo(
+    () =>
+      Array.from(
+        new Map(
+          supervisorTeamsQuery.data
+            .filter((t) => t.siteId)
+            .map((t) => [
+              t.siteId,
+              { id: t.siteId, naam: t.siteNaam, locatie: '' },
+            ]),
+        ).values(),
       ),
-    );
-    const seen = new Set<number>();
-    const unique: WerknemerMetTeam[] = [];
-    for (const batch of results) {
-      for (const w of batch) {
-        if (!seen.has(w.id)) {
-          seen.add(w.id);
-          unique.push(w);
+    [supervisorTeamsQuery.data],
+  );
+  const sites: SiteOptie[] = isSupervisor
+    ? calcSupervisorSites
+    : sitesQuery.data;
+
+  // Team werknemers voor geselecteerd team
+  const teamWerknemersQuery = useQuery<WerknemerOptie[]>({
+    queryKey: ['team-werknemers', teamId],
+    queryFn: async () => {
+      const res = await fetch(`${BASE}/teams/${teamId}/werknemers`, {
+        headers: authHeader!,
+      });
+      if (!res.ok) return [];
+      return res.json() as Promise<WerknemerOptie[]>;
+    },
+    enabled: teamId !== null && hasToken,
+    initialData: [],
+  });
+
+  // Alle werknemers voor alle teams (wanneer laadAlle=true)
+  const sortedTeamIds = useMemo(
+    () => [...teams.map((t) => t.id)].sort((a, b) => a - b),
+    [teams],
+  );
+
+  const alleWerknemersQuery = useQuery<WerknemerMetTeam[]>({
+    queryKey: ['alle-team-werknemers', sortedTeamIds],
+    queryFn: async () => {
+      const results = await Promise.all(
+        teams.map((t) =>
+          fetch(`${BASE}/teams/${t.id}/werknemers`, { headers: authHeader! })
+            .then((r) =>
+              r.ok
+                ? (r.json() as Promise<WerknemerOptie[]>)
+                : Promise.resolve([]),
+            )
+            .then((ws: WerknemerOptie[]) =>
+              ws.map((w) => ({ ...w, teamId: t.id, teamNaam: t.naam })),
+            )
+            .catch(() => [] as WerknemerMetTeam[]),
+        ),
+      );
+      const seen = new Set<number>();
+      const unique: WerknemerMetTeam[] = [];
+      for (const batch of results) {
+        for (const w of batch) {
+          if (!seen.has(w.id)) {
+            seen.add(w.id);
+            unique.push(w);
+          }
         }
       }
-    }
-    setAlleWerknemers(unique);
-  }, []);
+      return unique;
+    },
+    enabled: laadAlle && teams.length > 0 && hasToken,
+    initialData: [],
+  });
 
   return {
     sites,
     teams,
-    teamWerknemers,
-    alleWerknemers,
-    laadWerknemersVanTeam,
-    laadAlleWerknemers,
-    resetTeamWerknemers,
+    teamWerknemers: teamWerknemersQuery.data,
+    alleWerknemers: alleWerknemersQuery.data,
   };
 }

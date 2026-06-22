@@ -6,6 +6,7 @@ import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.rest.dto.request.AfwezigheidAanmakenDTO;
 import hogent.sdp2.backend.rest.dto.response.AfwezigheidsOverzichtDTO;
 import hogent.sdp2.backend.rest.repository.AfwezigheidRepository;
+import hogent.sdp2.backend.rest.repository.TeamRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
@@ -23,6 +24,7 @@ public class AfwezigheidService {
     private final AfwezigheidRepository afwezigheidRepository;
     private final WerknemerRepository werknemerRepository;
     private final TeamwerknemerRepository teamwerknemerRepository;
+    private final TeamRepository teamRepository;
     private final NotificatieService notificatieService;
     private final SessieService sessieService;
     private final SseService sseService;
@@ -46,6 +48,16 @@ public class AfwezigheidService {
 
         afwezigheidRepository.save(afwezigheid);
 
+        String afwezigheidBericht =
+                werknemer.getVoornaam()
+                        + " "
+                        + werknemer.getNaam()
+                        + " is ziek van "
+                        + dto.startDatum()
+                        + " tot "
+                        + dto.eindDatum()
+                        + ".";
+
         teamwerknemerRepository.findByWerknemerId(dto.werknemerId()).stream()
                 .findFirst()
                 .ifPresent(
@@ -60,14 +72,7 @@ public class AfwezigheidService {
                                                     notificatieService.maakNotificatie(
                                                             teamlid.getWerknemer().getId(),
                                                             "Teamlid afwezig",
-                                                            werknemer.getVoornaam()
-                                                                    + " "
-                                                                    + werknemer.getNaam()
-                                                                    + " is ziek van "
-                                                                    + dto.startDatum()
-                                                                    + " tot "
-                                                                    + dto.eindDatum()
-                                                                    + ".");
+                                                            afwezigheidBericht);
                                                     sseService.pushEvent(
                                                             teamlid.getWerknemer().getId(),
                                                             "afwezigheid_gemeld",
@@ -76,6 +81,18 @@ public class AfwezigheidService {
                                                                     dto.werknemerId()));
                                                 }
                                             });
+                        });
+
+        teamRepository
+                .findManagerByWerknemerId(dto.werknemerId())
+                .forEach(
+                        manager -> {
+                            notificatieService.maakNotificatie(
+                                    manager.getId(), "Afwezigheid teamlid", afwezigheidBericht);
+                            sseService.pushEvent(
+                                    manager.getId(),
+                                    "afwezigheid_gemeld",
+                                    Map.of("werknemerId", dto.werknemerId()));
                         });
 
         sseService.pushEvent(

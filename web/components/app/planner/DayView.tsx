@@ -1,8 +1,10 @@
-/* eslint-disable react-hooks/set-state-in-effect */
+ 
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useDagShiften } from '@/hooks/useDagShiften';
 import {
   MdCheckCircle,
   MdDelete,
@@ -69,7 +71,7 @@ export default function DayView({
 }: DayViewProps) {
   const { data: session } = useSession();
   const eigenId = Number((session?.user as Record<string, unknown>)?.id ?? 0);
-  const [shifts, setShifts] = useState<Shift[]>([]);
+  const queryClient = useQueryClient();
   const [modal, setModal] = useState<ModalForm | null>(null);
   const [geselecteerdeRij, setGeselecteerdeRij] = useState<Rij | null>(null);
   const [werknemerTaken, setWerknemerTaken] = useState<PlannerTaak[]>([]);
@@ -100,21 +102,8 @@ export default function DayView({
     return [];
   }, [eigenId, filter, tab, teamWerknemers, alleWerknemers, teams]);
 
-  useEffect(() => {
-    const datum = huidigeDatum.toISOString().split('T')[0];
-    const fetches =
-      werknemersToLoad.length === 0
-        ? Promise.resolve<Shift[]>([])
-        : Promise.all(
-            werknemersToLoad.map((wid) =>
-              fetch(`/api/shifts/werknemer/${wid}?datum=${datum}`).then((r) =>
-                r.ok ? (r.json() as Promise<Shift[]>) : ([] as Shift[]),
-              ),
-            ),
-          ).then((results) => results.flat());
-
-    fetches.then(setShifts).catch(() => setShifts([]));
-  }, [werknemersToLoad, huidigeDatum]);
+  const datum = huidigeDatum.toISOString().split('T')[0];
+  const { data: shifts } = useDagShiften(werknemersToLoad, datum);
 
   // Laad taken voor geselecteerde werknemer (team view)
   const laadTakenVoorWerknemer = useCallback(async (rij: Rij) => {
@@ -262,8 +251,7 @@ export default function DayView({
       body: JSON.stringify(body),
     });
     if (res.ok) {
-      const saved: Shift = await res.json();
-      setShifts((prev) => [...prev.filter((s) => s.id !== saved.id), saved]);
+      void queryClient.invalidateQueries({ queryKey: ['dag-shiften'] });
     }
   }
 
@@ -317,11 +305,6 @@ export default function DayView({
                 huidigUurX={huidigUurX}
                 isGeselecteerd={
                   geselecteerdeRij?.werknemerId === rij.werknemerId
-                }
-                onSelecteer={() =>
-                  setGeselecteerdeRij((prev) =>
-                    prev?.werknemerId === rij.werknemerId ? null : rij,
-                  )
                 }
                 onSelecteer={() => {
                   const next =

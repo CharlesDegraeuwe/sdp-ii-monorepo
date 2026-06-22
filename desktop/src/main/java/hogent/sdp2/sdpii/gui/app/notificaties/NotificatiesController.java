@@ -6,6 +6,8 @@ import domain.dto.NotificatieDTO;
 import domain.dto.WerknemerDTO;
 import domain.facades.NotificatieFacade;
 import hogent.sdp2.sdpii.gui.components.app.PageTitleController;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,12 +32,15 @@ public class NotificatiesController extends BorderPane {
     @FXML private Button werkKnop;
     @FXML private Button afwezigheidKnop;
     @FXML private Button verlofKnop;
+    @FXML private Button herlaadKnop;
 
     private List<NotificatieDTO> alleNotificaties;
     private String actieveFilter = "Alles";
     private NotificatieFacade nf;
+    private Timeline autoRefresh;
 
     public NotificatiesController(NotificatieFacade nf) {
+        this.nf = nf;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/notificaties/NotificationsPage.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -43,13 +49,21 @@ public class NotificatiesController extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.nf = nf;
         setTop(new PageTitleController("Notificaties"));
     }
 
     @FXML
     public void initialize() {
         laadNotificaties();
+        if (herlaadKnop != null) {
+            herlaadKnop.setOnAction(e -> laadNotificaties());
+        }
+        autoRefresh = new Timeline(new KeyFrame(Duration.seconds(30), e -> laadNotificaties()));
+        autoRefresh.setCycleCount(Timeline.INDEFINITE);
+        autoRefresh.play();
+        sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene == null) autoRefresh.stop();
+        });
     }
 
     private void laadNotificaties() {

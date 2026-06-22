@@ -32,24 +32,22 @@ public class SecurityConfig {
         return http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(
-                auth ->
-                    auth.requestMatchers(HttpMethod.OPTIONS, "/**")
-                        .permitAll()
-                        .requestMatchers(
-                            "/api/werknemers/login-mail",
-                            "/api/werknemers/login-token",
-                            "/api/werknemers/login-password",
-                            "/api/werknemers/activeer",
-                            "/api/werknemers/wachtwoord-vergeten",
-                            "/api/werknemers/wachtwoord-resetten",
-                            "/ws/**",
-                            "/api/sse/subscribe/**",
-                            "/error"
-                        )
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+                .authorizeHttpRequests(
+                        auth ->
+                                auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                                        .permitAll()
+                                        .requestMatchers(
+                                                "/api/werknemers/login-mail",
+                                                "/api/werknemers/login-token",
+                                                "/api/werknemers/login-password",
+                                                "/api/werknemers/activeer",
+                                                "/api/werknemers/wachtwoord-vergeten",
+                                                "/api/werknemers/wachtwoord-resetten",
+                                                "/ws/**",
+                                                "/api/sse/subscribe/**")
+                                        .permitAll()
+                                        .anyRequest()
+                                        .authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

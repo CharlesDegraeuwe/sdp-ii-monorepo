@@ -161,7 +161,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>hogent.sdp2.sdpii.ManagementApplication</mainClass>
+                            <mainClass>hogent.sdp2.sdpii.Launcher</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

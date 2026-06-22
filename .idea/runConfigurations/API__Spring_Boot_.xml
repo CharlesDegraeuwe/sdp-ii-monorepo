@@ -1,12 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="API (Spring Boot)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <envs>
-      <env name="DB_URL" value="jdbc:mysql://vichogent.be:41219/SDP2_2526_DB_G01?serverTimezone=UTC" />
-      <env name="DB_USERNAME" value="SDP2-2526-G01" />
-      <env name="DB_PASSWORD" value="SDP_Ding_123" />
-      <env name="JWT_SECRET" value="jouw-geheime-sleutel-minstens-256-bits-lang-voor-hs256" />
-    </envs>
-    <module name="backend" />
+<module name="backend" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="hogent.sdp2.backend.BackendApplication" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />

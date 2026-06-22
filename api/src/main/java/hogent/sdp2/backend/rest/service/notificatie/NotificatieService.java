@@ -86,4 +86,9 @@ public class NotificatieService {
         notificatieRepository.deleteById(notificatieId);
         return "Notificatie verwijderd.";
     }
+
+    public boolean bestaatAl(Integer werknemerId, String titel, Integer referentieId) {
+        return notificatieRepository.existsByWerknemerIdAndTitelAndReferentieId(
+                werknemerId, titel, referentieId);
+    }
 }

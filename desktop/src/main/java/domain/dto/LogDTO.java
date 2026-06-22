@@ -12,6 +12,6 @@ public record LogDTO(@JsonProperty(access = JsonProperty.Access.READ_ONLY) Integ
                      String type,
                      String tabel,
                      LocalDateTime timestamp,
-                     String details) {
+                     String beschrijving) {
 
 }

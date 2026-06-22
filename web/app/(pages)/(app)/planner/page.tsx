@@ -4,21 +4,19 @@ import { Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { AppContainer } from '@/components/design-system/AppContainer';
 import MonthView from '../../../../components/app/planner/MonthView';
 import WeekView from '../../../../components/app/planner/WeekView';
 import DayView from '../../../../components/app/planner/DayView';
 import DetailPanel from '../../../../components/app/planner/DetailPanel';
 import type {
-  Afwezigheid,
   PlannerTaak,
-  Shift,
   View,
 } from '../../../../components/app/planner/types';
 import {
   getPeriodBounds,
   getMaandag,
-  mapTaakVanBackend,
 } from '../../../../components/app/planner/utils';
 import { PlannerAanvraagModal } from '../../../../components/app/planner/PlannerAanvraagModal';
 import { ShiftAanmakenModal } from '../../../../components/app/planner/ShiftAanmakenModal';
@@ -30,8 +28,11 @@ import {
 } from '../../../../components/app/planner/PlannerToolbar';
 import { type FilterState } from '../../../../components/app/planner/PlannerFilter';
 import { usePlanningFilters } from '@/hooks/usePlanningFilters';
-
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
+import { usePlannerAfwezigheid } from '@/hooks/usePlannerAfwezigheid';
+import { useEigenPlannerShiften } from '@/hooks/useEigenPlannerShiften';
+import { usePlannerEigenTaken } from '@/hooks/usePlannerEigenTaken';
+import { useTeamPlannerShiften } from '@/hooks/useTeamPlannerShiften';
+import { useTeamPlannerTaken } from '@/hooks/useTeamPlannerTaken';
 
 const LEEG_FILTER: FilterState = {
   locatieId: null,
@@ -41,7 +42,6 @@ const LEEG_FILTER: FilterState = {
 
 function PlannerPageInner() {
   const { data: session } = useSession();
-  const token = session?.accessToken;
   const user = session?.user;
   const rol = ((session?.user as Record<string, unknown>)?.rol as string) ?? '';
   const isManager = ['Manager', 'Admin'].includes(rol);
@@ -67,55 +67,28 @@ function PlannerPageInner() {
     }
     return new Date();
   });
-  const [afwezigheden, setAfwezigheden] = useState<Afwezigheid[]>([]);
-  const [taken, setTaken] = useState<PlannerTaak[]>([]);
   const [tab, setTab] = useState<Tab>('you');
   const [geselecteerdeDag, setGeselecteerdeDag] = useState<Date | null>(
     new Date(),
   );
   const [filter, setFilter] = useState<FilterState>(LEEG_FILTER);
-  const [eigenShiften, setEigenShiften] = useState<Shift[]>([]);
   const [plannerModal, setPlannerModal] = useState<{
     type: 'verlof' | 'afwezigheid';
     datum: Date;
   } | null>(null);
-
-  const [teamShiften, setTeamShiften] = useState<Shift[]>([]);
-  const [teamTaken, setTeamTaken] = useState<Record<number, PlannerTaak[]>>({});
   const [shiftAanmakenOpen, setShiftAanmakenOpen] = useState(false);
-  const [shiftenRefresh, setShiftenRefresh] = useState(0);
   const [geselecteerdeTeamWerknemer, setGeselecteerdeTeamWerknemer] = useState<
     number | null
   >(null);
 
-  const authHeader = useMemo(
-    () => ({ Authorization: `Bearer ${token}` }),
-    [token],
+  const queryClient = useQueryClient();
+
+  const { sites, teams, teamWerknemers, alleWerknemers } = usePlanningFilters(
+    eigenId || undefined,
+    isSupervisor,
+    filter.teamId,
+    tab === 'team',
   );
-
-  const {
-    sites,
-    teams,
-    teamWerknemers,
-    alleWerknemers,
-    laadWerknemersVanTeam,
-    laadAlleWerknemers,
-    resetTeamWerknemers,
-  } = usePlanningFilters(authHeader, eigenId, isSupervisor);
-
-  useEffect(() => {
-    if (filter.teamId) {
-      laadWerknemersVanTeam(filter.teamId);
-    } else {
-      resetTeamWerknemers();
-    }
-  }, [filter.teamId, laadWerknemersVanTeam, resetTeamWerknemers]);
-
-  useEffect(() => {
-    if (tab === 'team' && teams.length > 0) {
-      laadAlleWerknemers(teams);
-    }
-  }, [tab, teams, laadAlleWerknemers]);
 
   // Auto-selecteer eerste team bij switchen naar teamtab
   useEffect(() => {
@@ -129,6 +102,80 @@ function PlannerPageInner() {
     setFilter((prev) => ({ ...prev, ...update }));
   }
 
+  // Compute period bounds
+  const { van: afwezigheidVan, tot: afwezigheidTot } = useMemo(
+    () => getPeriodBounds(view, huidigeDatum),
+    [view, huidigeDatum],
+  );
+
+  const { van: eigenShiftenVan, tot: eigenShiftenTot } = useMemo(() => {
+    if (view === 'maand') {
+      return {
+        van: new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), 1)
+          .toISOString()
+          .split('T')[0],
+        tot: new Date(
+          huidigeDatum.getFullYear(),
+          huidigeDatum.getMonth() + 1,
+          0,
+        )
+          .toISOString()
+          .split('T')[0],
+      };
+    } else if (view === 'week') {
+      const ma = getMaandag(huidigeDatum);
+      const zo = new Date(ma);
+      zo.setDate(zo.getDate() + 6);
+      return {
+        van: ma.toISOString().split('T')[0],
+        tot: zo.toISOString().split('T')[0],
+      };
+    } else {
+      const dag = huidigeDatum.toISOString().split('T')[0];
+      return { van: dag, tot: dag };
+    }
+  }, [view, huidigeDatum]);
+
+  const teamShiftenVan = eigenShiftenVan;
+  const teamShiftenTot = eigenShiftenTot;
+
+  // React Query hooks
+  const { data: afwezigheden } = usePlannerAfwezigheid(
+    eigenId || undefined,
+    afwezigheidVan,
+    afwezigheidTot,
+  );
+
+  const { data: eigenShiften } = useEigenPlannerShiften(
+    eigenId || undefined,
+    eigenShiftenVan,
+    eigenShiftenTot,
+  );
+
+  const { data: taken } = usePlannerEigenTaken(eigenId || undefined);
+
+  const teamWerknemerIds = useMemo(
+    () => teamWerknemers.map((w) => w.id),
+    [teamWerknemers],
+  );
+
+  const { data: teamShiften } = useTeamPlannerShiften(
+    teamWerknemerIds,
+    teamShiftenVan,
+    teamShiftenTot,
+    tab === 'team' && view !== 'dag',
+  );
+
+  const { data: teamTaken } = useTeamPlannerTaken(
+    teamWerknemerIds,
+    tab === 'team',
+  );
+
+  // Reset team member selection on tab/datum/filter changes
+  useEffect(() => {
+    setGeselecteerdeTeamWerknemer(null);
+  }, [tab, huidigeDatum, filter]);
+
   const filteredAfwezigheden = useMemo(() => {
     if (tab !== 'team') return afwezigheden;
     if (filter.werknemerId !== null) {
@@ -141,135 +188,18 @@ function PlannerPageInner() {
     return afwezigheden;
   }, [afwezigheden, tab, filter.werknemerId, filter.teamId, teamWerknemers]);
 
-  // Fetch afwezigheid voor de huidige periode
-  useEffect(() => {
-    if (!user?.id) return;
-    const { van, tot } = getPeriodBounds(view, huidigeDatum);
-    fetch(`${BASE}/planning/team/${user.id}?van=${van}&tot=${tot}`, {
-      headers: authHeader,
-    })
-      .then((res) => res.json())
-      .then(setAfwezigheden)
-      .catch(console.error);
-  }, [user?.id, authHeader, huidigeDatum, view]);
-
-  // Fetch eigen shiften via bereik endpoint
-  useEffect(() => {
-    if (!user?.id) return;
-    let van: string;
-    let tot: string;
-
-    if (view === 'maand') {
-      van = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), 1)
-        .toISOString()
-        .split('T')[0];
-      tot = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth() + 1, 0)
-        .toISOString()
-        .split('T')[0];
-    } else if (view === 'week') {
-      const ma = getMaandag(huidigeDatum);
-      van = ma.toISOString().split('T')[0];
-      const zo = new Date(ma);
-      zo.setDate(zo.getDate() + 6);
-      tot = zo.toISOString().split('T')[0];
-    } else {
-      van = huidigeDatum.toISOString().split('T')[0];
-      tot = van;
-    }
-
-    fetch(`/api/shifts/werknemer/${user.id}/bereik?van=${van}&tot=${tot}`)
-      .then((r) => (r.ok ? (r.json() as Promise<Shift[]>) : []))
-      .then(setEigenShiften)
-      .catch(() => setEigenShiften([]));
-  }, [user?.id, view, huidigeDatum, shiftenRefresh]);
-
-  useEffect(() => {
-    if (!user?.id) return;
-    fetch(`/api/taken/werknemer/${user.id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed');
-        return res.json();
-      })
-      .then((data: Record<string, unknown>[]) =>
-        setTaken(data.map(mapTaakVanBackend)),
-      )
-      .catch(console.error);
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (tab !== 'team' || view === 'dag' || teamWerknemers.length === 0) {
-      setTeamShiften([]);
-      return;
-    }
-    let van: string;
-    let tot: string;
-    if (view === 'maand') {
-      van = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), 1)
-        .toISOString()
-        .split('T')[0];
-      tot = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth() + 1, 0)
-        .toISOString()
-        .split('T')[0];
-    } else {
-      const ma = getMaandag(huidigeDatum);
-      van = ma.toISOString().split('T')[0];
-      const zo = new Date(ma);
-      zo.setDate(zo.getDate() + 6);
-      tot = zo.toISOString().split('T')[0];
-    }
-    Promise.all(
-      teamWerknemers.map((w) =>
-        fetch(`/api/shifts/werknemer/${w.id}/bereik?van=${van}&tot=${tot}`)
-          .then((r) => (r.ok ? (r.json() as Promise<Shift[]>) : []))
-          .catch(() => [] as Shift[]),
-      ),
-    )
-      .then((results) => setTeamShiften(results.flat()))
-      .catch(() => setTeamShiften([]));
-  }, [tab, view, huidigeDatum, teamWerknemers]);
-
-  // Fetch taken voor alle teamleden
-  useEffect(() => {
-    if (tab !== 'team' || teamWerknemers.length === 0) {
-      setTeamTaken({});
-      return;
-    }
-    Promise.all(
-      teamWerknemers.map((w) =>
-        fetch(`/api/taken/werknemer/${w.id}`)
-          .then((r) => (r.ok ? r.json() : []))
-          .then(
-            (data: Record<string, unknown>[]) =>
-              [w.id, data.map(mapTaakVanBackend)] as [number, PlannerTaak[]],
-          )
-          .catch(() => [w.id, []] as [number, PlannerTaak[]]),
-      ),
-    )
-      .then((results) => setTeamTaken(Object.fromEntries(results)))
-      .catch(() => setTeamTaken({}));
-  }, [tab, teamWerknemers]);
-
-  // Reset team member selection on tab/datum/filter changes
-  useEffect(() => {
-    setGeselecteerdeTeamWerknemer(null);
-  }, [tab, huidigeDatum, filter]);
-
   async function handleTaakAfgewerkt(taakId: number) {
-    const res = await fetch(`/api/taken/${taakId}/afgewerkt`, {
-      method: 'PUT',
+    await fetch(`/api/taken/${taakId}/afgewerkt`, { method: 'PUT' });
+    void queryClient.invalidateQueries({
+      queryKey: ['planner-taken-werknemer'],
     });
-    if (res.ok) {
-      setTaken((prev) =>
-        prev.map((t) => (t.id === taakId ? { ...t, afgewerkt: true } : t)),
-      );
-    }
   }
 
   async function handleTaakVerwijder(taakId: number) {
-    const res = await fetch(`/api/taken/${taakId}`, { method: 'DELETE' });
-    if (res.ok) {
-      setTaken((prev) => prev.filter((t) => t.id !== taakId));
-    }
+    await fetch(`/api/taken/${taakId}`, { method: 'DELETE' });
+    void queryClient.invalidateQueries({
+      queryKey: ['planner-taken-werknemer'],
+    });
   }
 
   async function handleTeamTaakAfgewerkt(taakId: number, werknemerId: number) {
@@ -277,23 +207,17 @@ function PlannerPageInner() {
       method: 'PUT',
     });
     if (res.ok) {
-      setTeamTaken((prev) => ({
-        ...prev,
-        [werknemerId]: (prev[werknemerId] ?? []).map((t) =>
-          t.id === taakId ? { ...t, afgewerkt: true } : t,
-        ),
-      }));
+      void queryClient.invalidateQueries({ queryKey: ['team-planner-taken'] });
     }
+    void werknemerId;
   }
 
   async function handleTeamTaakVerwijder(taakId: number, werknemerId: number) {
     const res = await fetch(`/api/taken/${taakId}`, { method: 'DELETE' });
     if (res.ok) {
-      setTeamTaken((prev) => ({
-        ...prev,
-        [werknemerId]: (prev[werknemerId] ?? []).filter((t) => t.id !== taakId),
-      }));
+      void queryClient.invalidateQueries({ queryKey: ['team-planner-taken'] });
     }
+    void werknemerId;
   }
 
   function navigeerNaarDag(datum: Date) {
@@ -320,6 +244,9 @@ function PlannerPageInner() {
     () => afwezigheden.filter((a) => a.werknemerId === eigenId),
     [afwezigheden, eigenId],
   );
+
+  // taken as mutable for local optimistic updates on task handlers
+  const takenLocal: PlannerTaak[] = taken;
 
   return (
     <PageContainer className="h-full">
@@ -395,7 +322,7 @@ function PlannerPageInner() {
                   afwezigheden={
                     tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid
                   }
-                  taken={taken}
+                  taken={takenLocal}
                   eigenShiften={eigenShiften}
                   geselecteerdeDag={geselecteerdeDag}
                   onSelectDag={(datum) => {
@@ -417,7 +344,7 @@ function PlannerPageInner() {
                 <DayView
                   huidigeDatum={huidigeDatum}
                   afwezigheden={filteredAfwezigheden}
-                  taken={taken}
+                  taken={takenLocal}
                   filter={filter}
                   teams={teams}
                   teamWerknemers={teamWerknemers}
@@ -438,7 +365,7 @@ function PlannerPageInner() {
                   tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid
                 }
                 eigenShiften={eigenShiften}
-                taken={taken}
+                taken={takenLocal}
                 isManager={isManager}
                 onAfgewerkt={handleTaakAfgewerkt}
                 onVerwijder={isManager ? handleTaakVerwijder : undefined}
@@ -482,7 +409,11 @@ function PlannerPageInner() {
           isSupervisor={isSupervisor}
           huidigeDatum={huidigeDatum}
           onClose={() => setShiftAanmakenOpen(false)}
-          onSuccess={() => setShiftenRefresh((n) => n + 1)}
+          onSuccess={() => {
+            void queryClient.invalidateQueries({
+              queryKey: ['eigen-planner-shiften'],
+            });
+          }}
         />
       )}
     </PageContainer>
