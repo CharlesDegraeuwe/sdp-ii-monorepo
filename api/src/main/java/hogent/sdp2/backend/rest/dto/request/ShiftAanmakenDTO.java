@@ -1,13 +1,10 @@
 package hogent.sdp2.backend.rest.dto.request;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public record ShiftAanmakenDTO(
-        Integer werknemerId,
-        LocalDate startDatum,
-        LocalDate eindDatum,
-        LocalTime startTijd,
-        LocalTime eindTijd,
-        LocalTime pauzeStart,
-        LocalTime pauzeEind) {}
+    Integer werknemerId,
+    String startDatum,
+    String eindDatum,
+    String startTijd,
+    String eindTijd,
+    String pauzeStart,
+    String pauzeEind) {}

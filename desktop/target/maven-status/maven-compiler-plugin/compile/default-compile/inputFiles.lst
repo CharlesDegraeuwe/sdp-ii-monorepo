@@ -93,13 +93,8 @@ C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\p
 C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\planning\components\sidebar\PlanningTaakItemController.java
 C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\planning\PlanningController.java
 C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\settings\SettingsController.java
-C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\items\AssignMemberItemController.java
-C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\items\AssignTaakItemController.java
-C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\items\AssignTeamItemController.java
 C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\items\FinishedTaakItem.java
 C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\items\TaakItemController.java
-C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\manager\assign\AssignTaskController.java
-C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\manager\check\CheckTaskController.java
 C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\manager\create\CreateTaskController.java
 C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\manager\TeamTaskController.java
 C:\Users\leand\sdp-ii-monorepo\desktop\src\main\java\hogent\sdp2\sdpii\gui\app\taken\components\TakenLayoutController.java

@@ -16,9 +16,9 @@ public class Shift {
     @Column(name = "Shift_ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Werknemer_ID", nullable = false)
-    private Werknemer werknemer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Team_ID", nullable = true)
+    private Team team;
 
     @Column(name = "Start_datum", nullable = false)
     private LocalDate startDatum;
@@ -37,4 +37,8 @@ public class Shift {
 
     @Column(name = "Pauze_eind")
     private LocalTime pauzeEind;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "Werknemer_ID", nullable = false)
+    private Werknemer werknemer;
 }

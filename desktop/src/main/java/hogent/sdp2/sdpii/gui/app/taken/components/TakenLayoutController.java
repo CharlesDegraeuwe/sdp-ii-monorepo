@@ -2,141 +2,134 @@ package hogent.sdp2.sdpii.gui.app.taken.components;
 
 import domain.auth.Sessie;
 import domain.facades.TakenFacade;
-import hogent.sdp2.sdpii.gui.app.taken.components.manager.*;
-import hogent.sdp2.sdpii.gui.app.taken.components.manager.assign.AssignTaskController;
-import hogent.sdp2.sdpii.gui.app.taken.components.manager.check.CheckTaskController;
+import hogent.sdp2.sdpii.gui.app.taken.components.manager.TeamTaskController;
 import hogent.sdp2.sdpii.gui.app.taken.components.manager.create.CreateTaskController;
 import hogent.sdp2.sdpii.gui.app.taken.components.werknemer.OwnTaskController;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import lombok.Getter;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class TakenLayoutController extends VBox {
-    @FXML HBox controls;
-    @FXML @Getter Button checkKnop;
-    @FXML @Getter Button creeerKnop;
-    @FXML @Getter Button toewijzenKnop;
+public class TakenLayoutController extends StackPane { // <-- Aangepast van VBox naar StackPane
+    @FXML private HBox controls;
+    @FXML private HBox page_buttons;
 
-    @FXML HBox tab_buttons;
-    @FXML Button jouwTaken;
-    @FXML Button teamTaken;
-    @FXML BorderPane outer_container;
+    @FXML private Button jouwTaken;
+    @FXML private Button teamTaken;
+    @FXML private Button creeerKnop;
+
+    @FXML private BorderPane outer_container;
+    @FXML private StackPane overlayContainer; // <-- Onze nieuwe popup laag
 
     private OwnTaskController ownTaskController;
     private TeamTaskController teamTaskController;
-    private CheckTaskController checkTaskController;
-    private CreateTaskController createTaskController;
-    private AssignTaskController assignTaskController;
-    private String tab = "check";
-    private String pagina = "jouwTaken";
+    private String actieveTab = "jouwTaken";
+    private TakenFacade takenFacade;
 
     public TakenLayoutController(TakenFacade takenFacade) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fmxl/app/taken/components/TakenLayout.fxml"));
         loader.setRoot(this);
         loader.setController(this);
-        try {
-            loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        try { loader.load(); } catch (IOException e) { throw new RuntimeException(e); }
         this.init(takenFacade);
     }
 
     public void init(TakenFacade takenFacade) {
+        this.takenFacade = takenFacade;
         boolean isWerknemer = Sessie.getInstance().isWerknemer();
-        boolean isMgrOrAdmin = Sessie.getInstance().isMangerOrAdmin();
 
         ownTaskController = new OwnTaskController(takenFacade);
         outer_container.setCenter(ownTaskController);
 
         if (!isWerknemer) {
-            teamTaskController = new TeamTaskController();
-            checkTaskController = new CheckTaskController(takenFacade);
-            BorderPane inner_container = teamTaskController.getPage_container();
+            teamTaskController = new TeamTaskController(takenFacade);
 
-            setTabButtonsVisible(false);
-
-            jouwTaken.setOnMouseClicked(e -> {
-                outer_container.setCenter(ownTaskController);
-                pagina = "jouwTaken";
-                setTabButtonsVisible(false);
-                setPage();
-            });
-
+            jouwTaken.setOnMouseClicked(e -> schakelNaarTab("jouwTaken", ownTaskController));
             teamTaken.setOnMouseClicked(e -> {
-                ownTaskController.verbergDetails();
-                outer_container.setCenter(teamTaskController);
-                pagina = "teamTaken";
-                tab = "check";
-                inner_container.setCenter(checkTaskController);
-                setTabButtonsVisible(true);
-                setPage();
-                updateTabs();
+                teamTaskController.herlaad();
+                schakelNaarTab("teamTaken", teamTaskController);
             });
 
-            checkKnop.setOnMouseClicked(e -> {
-                inner_container.setCenter(checkTaskController);
-                BorderPane.setAlignment(checkTaskController, javafx.geometry.Pos.TOP_CENTER);
-                tab = "check";
-                updateTabs();
-            });
+            // Als we op Creëer klikken, openen we de interne popup!
+            creeerKnop.setOnMouseClicked(e -> openNieuweTaakPopup());
 
-            creeerKnop.setOnMouseClicked(e -> {
-                if (createTaskController == null) {
-                    createTaskController = new CreateTaskController(takenFacade);
-                    createTaskController.setOnAangemaakt(() -> {
-                        checkTaskController.herlaad();
-                        ownTaskController.herlaad();
-                        if (assignTaskController != null) assignTaskController.herlaad();
-                        inner_container.setCenter(checkTaskController);
-                        tab = "check";
-                        updateTabs();
-                    });
-                }
-
-                inner_container.setCenter(createTaskController);
-                tab = "create";
-                updateTabs();
-            });
-
-            toewijzenKnop.setOnMouseClicked(e -> {
-                if (assignTaskController == null) {
-                    assignTaskController = new AssignTaskController(takenFacade);
-                }
-                inner_container.setCenter(assignTaskController);
-                tab = "toewijzen";
-                updateTabs();
-            });
-            if (!isMgrOrAdmin) {
-                creeerKnop.setVisible(false);
-                creeerKnop.setManaged(false);
-            }
         } else {
-            controls.setVisible(false);
+            teamTaken.setVisible(false); teamTaken.setManaged(false);
+            creeerKnop.setVisible(false); creeerKnop.setManaged(false);
         }
 
-        setPage();
+        updateTabStyling();
     }
 
-    private void setTabButtonsVisible(boolean visible) {
-        tab_buttons.setVisible(visible);
-        tab_buttons.setManaged(visible);
+    // --- IN-APP POPUP LOGICA MET ANIMATIE ---
+    private void openNieuweTaakPopup() {
+        try {
+            // 1. Maak het formulier aan
+            CreateTaskController createTaskController = new CreateTaskController(takenFacade);
+
+            // 2. Maak een transparante StackPane die als donkere waas dient
+            StackPane overlay = new StackPane(createTaskController);
+            // Je kunt hier de kleur donkerder/lichter maken (0.4 = 40% zichtbaar)
+            overlay.setStyle("-fx-background-color: rgba(15, 23, 42, 0.4); -fx-padding: 40;");
+
+            // 3. Maak de nieuwe Stage aan ZONDER Windows/Mac randen
+            Stage popupStage = new Stage();
+            popupStage.initStyle(StageStyle.TRANSPARENT); // Geen titelbalk of randen!
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Blokkeer de rest van de app
+
+            // Zorg dat hij de hoofdapplicatie als 'eigenaar' heeft
+            Window mainWindow = this.getScene().getWindow();
+            popupStage.initOwner(mainWindow);
+
+            // 4. Acties voor annuleren en succes
+            createTaskController.setOnAnnuleer(() -> popupStage.close());
+            createTaskController.setOnAangemaakt(() -> {
+                teamTaskController.herlaad();
+                ownTaskController.herlaad();
+                popupStage.close();
+            });
+
+            // 5. Maak de Scene transparant
+            Scene scene = new Scene(overlay);
+            scene.setFill(Color.TRANSPARENT); // De scene zelf is doorzichtig
+            scene.getStylesheets().add(getClass().getResource("/css/tasks.css").toExternalForm());
+            popupStage.setScene(scene);
+
+            // 6. Zorg dat de popup EXACT over je huidige applicatie valt
+            popupStage.setX(mainWindow.getX());
+            popupStage.setY(mainWindow.getY());
+            popupStage.setWidth(mainWindow.getWidth());
+            popupStage.setHeight(mainWindow.getHeight());
+
+            // Toon de perfecte popup!
+            popupStage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setPage() {
-        jouwTaken.getStyleClass().setAll(pagina.equals("jouwTaken") ? "filter-knop-actief" : "filter-knop");
-        teamTaken.getStyleClass().setAll(pagina.equals("teamTaken") ? "filter-knop-actief" : "filter-knop", "filter-knop-werk");
+    private void schakelNaarTab(String tabNaam, javafx.scene.Node scherm) {
+        this.actieveTab = tabNaam;
+        outer_container.setCenter(scherm);
+        updateTabStyling();
     }
 
-    public void updateTabs() {
-        checkKnop.getStyleClass().setAll(tab.equals("check") ? "filter-knop-actief" : "filter-knop");
-        creeerKnop.getStyleClass().setAll(tab.equals("create") ? "filter-knop-actief" : "filter-knop", "filter-knop-werk");
-        toewijzenKnop.getStyleClass().setAll(tab.equals("toewijzen") ? "filter-knop-actief" : "filter-knop", "filter-knop-afwezigheid");
+    private void updateTabStyling() {
+        jouwTaken.getStyleClass().setAll(actieveTab.equals("jouwTaken") ? "filter-knop-actief" : "filter-knop");
+        if (teamTaken != null) {
+            teamTaken.getStyleClass().setAll(actieveTab.equals("teamTaken") ? "filter-knop-actief" : "filter-knop");
+        }
     }
 }
