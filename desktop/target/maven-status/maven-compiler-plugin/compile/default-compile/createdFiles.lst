@@ -1,9 +1,0 @@
-domain/dto/GeschiedenisItemMetWerknemerDTO.class
-domain/dto/TeamMetLedenDTO.class
-hogent/sdp2/sdpii/gui/admin/beheerGebruikers/BeheerGebruikersController$2.class
-hogent/sdp2/sdpii/gui/admin/beheerGebruikers/BeheerGebruikersController$3.class
-domain/dto/WerknemerKortDTO.class
-domain/dto/ActiviteitLogDTO.class
-domain/services/GeschiedenisApiService$4.class
-domain/services/GeschiedenisApiService$3.class
-domain/services/DashboardApiService.class

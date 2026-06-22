@@ -6,10 +6,14 @@ import java.time.LocalDateTime;
 public record LogDTO(
         Integer id,
         Integer werknemerId,
+        WerknemerInfo werknemer,
         String type,
         String tabel,
+        Integer recordId,
         LocalDateTime timestamp,
         String beschrijving) {
+
+    public record WerknemerInfo(String voornaam, String naam) {}
 
     public LogDTO(
             Integer id,
@@ -22,8 +26,12 @@ public record LogDTO(
         this(
                 id,
                 werknemer != null ? werknemer.getId() : null,
+                werknemer != null
+                        ? new WerknemerInfo(werknemer.getVoornaam(), werknemer.getNaam())
+                        : null,
                 type,
                 tabel,
+                recordId,
                 timestamp,
                 beschrijving);
     }

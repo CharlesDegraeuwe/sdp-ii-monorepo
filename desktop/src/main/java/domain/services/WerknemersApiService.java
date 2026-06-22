@@ -61,7 +61,7 @@ public class WerknemersApiService extends ApiService {
     // ====================================================================
     public WerknemerDTO zoekOpEmail(String email) {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/user?email=" + email)
+            HttpRequest request = authenticatedRequest(BASE_URL + "/email/" + email)
                 .GET()
                 .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -102,7 +102,7 @@ public class WerknemersApiService extends ApiService {
     // ====================================================================
     public WerknemerDTO zoekOpId(int id) {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/user?id=" + id)
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + id)
                 .GET()
                 .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
