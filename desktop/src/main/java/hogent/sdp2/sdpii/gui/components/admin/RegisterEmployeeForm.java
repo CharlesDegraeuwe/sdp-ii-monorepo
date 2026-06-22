@@ -3,6 +3,7 @@ package hogent.sdp2.sdpii.gui.components.admin;
 import domain.Beheerder;
 import hogent.sdp2.sdpii.gui.router.Router;
 import hogent.sdp2.sdpii.gui.router.Scherm;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +35,7 @@ public class RegisterEmployeeForm extends VBox {
             throw new RuntimeException(e);
         }
 
-        roleComboBox.getItems().addAll("Werknemer", "Supervisor");
+        roleComboBox.getItems().addAll("Werknemer", "Supervisor", "Manager", "Admin");
         roleComboBox.getSelectionModel().select("Werknemer");
     }
 

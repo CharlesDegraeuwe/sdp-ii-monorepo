@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<fx:root type="VBox" stylesheets="@/css/manageUsers.css" styleClass="page-background" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="VBox" stylesheets="@/css/manageUsers.css" styleClass="page" xmlns:fx="http://javafx.com/fxml">
 
     <HBox spacing="15" alignment="CENTER_LEFT">
         <Button onAction="#handleBack" styleClass="icon-btn">
@@ -36,6 +36,7 @@
                 <TableColumn fx:id="rolCol" text="ROL" prefWidth="150"/>
                 <TableColumn fx:id="statusCol" text="STATUS" prefWidth="150"/>
                 <TableColumn fx:id="telefoonCol" text="TELEFOON" prefWidth="140"/>
+                <TableColumn fx:id="actieCol" text="" prefWidth="60"/>
             </columns>
         </TableView>
 

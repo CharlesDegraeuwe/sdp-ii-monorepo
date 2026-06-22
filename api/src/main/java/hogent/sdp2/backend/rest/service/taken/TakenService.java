@@ -1,25 +1,18 @@
 package hogent.sdp2.backend.rest.service.taken;
 
 import hogent.sdp2.backend.auth.SessieService;
+import hogent.sdp2.backend.domain.Site; // <-- Vergeet deze import niet!
+import hogent.sdp2.backend.domain.TaakWerknemer;
 import hogent.sdp2.backend.domain.Taken;
 import hogent.sdp2.backend.domain.Teamwerknemer;
 import hogent.sdp2.backend.domain.Werknemer;
 import hogent.sdp2.backend.rest.dto.request.TaakAanmakenDTO;
 import hogent.sdp2.backend.rest.dto.request.TaakResponseDTO;
 import hogent.sdp2.backend.rest.dto.response.WerknemerResponseDTO;
-import hogent.sdp2.backend.rest.repository.SiteteamRepository;
-import hogent.sdp2.backend.rest.repository.TakenRepository;
-import hogent.sdp2.backend.rest.repository.TeamRepository;
-import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
-import hogent.sdp2.backend.rest.repository.WerknemerRepository;
-import hogent.sdp2.backend.rest.service.notificatie.NotificatieService;
-import hogent.sdp2.backend.rest.service.sse.SseService;
-import java.time.LocalDate;
+import hogent.sdp2.backend.rest.repository.*;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +26,9 @@ public class TakenService {
     private final TakenRepository takenRepository;
     private final WerknemerRepository werknemerRepository;
     private final TeamwerknemerRepository teamwerknemerRepository;
-    private final TeamRepository teamRepository;
     private final SiteteamRepository siteteamRepository;
-    private final NotificatieService notificatieService;
-    private final SseService sseService;
+    private final TaakWerknemerRepository taakWerknemerRepository;
+    private final SiteRepository siteRepository; // <-- Toegevoegd!
 
     public List<TaakResponseDTO> geefTakenVanWerknemer(int werknemerId) {
         return takenRepository.findByWerknemer_Id(werknemerId).stream().map(this::toDTO).toList();
@@ -50,26 +42,29 @@ public class TakenService {
                         .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
 
         Taken taak = new Taken();
-        taak.setWerknemer(werknemer);
+        taak.setWerknemer(werknemer); // De maker / eigenaar van de taak
         taak.setTitel(dto.titel());
         taak.setBeschrijving(dto.beschrijving());
         taak.setAfgewerkt("nee");
         taak.setDeadline(dto.deadline());
 
-        Taken opgeslagen = takenRepository.save(taak);
+        if (dto.startuur() != null && !dto.startuur().isBlank()) {
+            taak.setStartuur(java.time.LocalTime.parse(dto.startuur()));
+        }
+        if (dto.einduur() != null && !dto.einduur().isBlank()) {
+            taak.setEinduur(java.time.LocalTime.parse(dto.einduur()));
+        }
 
-        notificatieService.maakNotificatie(
-                werknemer.getId(),
-                "Nieuwe taak",
-                "Je hebt een nieuwe taak: '"
-                        + dto.titel()
-                        + "' (deadline: "
-                        + dto.deadline()
-                        + ").",
-                opgeslagen.getId());
-        sseService.pushEvent(
-                werknemer.getId(), "nieuwe_taak", Map.of("taakId", opgeslagen.getId()));
+        // <-- HIER WORDT DE SITE GEKOPPELD AAN DE TAAK
+        if (dto.siteId() > 0) {
+            Site site =
+                    siteRepository
+                            .findById(dto.siteId())
+                            .orElseThrow(() -> new RuntimeException("Site niet gevonden"));
+            taak.setSite(site);
+        }
 
+        takenRepository.save(taak);
         return "Taak '" + dto.titel() + "' succesvol aangemaakt";
     }
 
@@ -98,38 +93,9 @@ public class TakenService {
                 werknemerRepository
                         .findById(werknemerId)
                         .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
+
         taak.setWerknemer(werknemer);
         takenRepository.save(taak);
-
-        notificatieService.maakNotificatie(
-                werknemer.getId(),
-                "Taak toegewezen",
-                "De taak '"
-                        + taak.getTitel()
-                        + "' is aan jou toegewezen (deadline: "
-                        + taak.getDeadline()
-                        + ").",
-                taak.getId());
-        sseService.pushEvent(werknemer.getId(), "taak_toegewezen", Map.of("taakId", taakId));
-
-        teamRepository
-                .findManagerByWerknemerId(werknemerId)
-                .forEach(
-                        manager ->
-                                notificatieService.maakNotificatie(
-                                        manager.getId(),
-                                        "Taak toegewezen",
-                                        "Taak '"
-                                                + taak.getTitel()
-                                                + "' is toegewezen aan "
-                                                + werknemer.getVoornaam()
-                                                + " "
-                                                + werknemer.getNaam()
-                                                + " (deadline: "
-                                                + taak.getDeadline()
-                                                + ").",
-                                        taak.getId()));
-
         return "Taak '"
                 + taak.getTitel()
                 + "' toegewezen aan "
@@ -159,50 +125,21 @@ public class TakenService {
         }
     }
 
-    @Scheduled(cron = "0 0 9 * * MON-FRI")
-    @Transactional
-    public void controleerVervallenTaken() {
-        LocalDate vandaag = LocalDate.now();
-        takenRepository.findAll().stream()
-                .filter(t -> "nee".equals(t.getAfgewerkt()) && t.getDeadline().isBefore(vandaag))
-                .forEach(
-                        t -> {
-                            teamRepository
-                                    .findManagerByWerknemerId(t.getWerknemer().getId())
-                                    .forEach(
-                                            manager -> {
-                                                if (!notificatieService.bestaatAl(
-                                                        manager.getId(),
-                                                        "Taak vervallen",
-                                                        t.getId())) {
-                                                    notificatieService.maakNotificatie(
-                                                            manager.getId(),
-                                                            "Taak vervallen",
-                                                            t.getWerknemer().getVoornaam()
-                                                                    + " "
-                                                                    + t.getWerknemer().getNaam()
-                                                                    + "'s taak '"
-                                                                    + t.getTitel()
-                                                                    + "' is vervallen (deadline: "
-                                                                    + t.getDeadline()
-                                                                    + ").",
-                                                            t.getId());
-                                                }
-                                            });
-                        });
-    }
-
     private TaakResponseDTO toDTO(Taken taak) {
         Werknemer w = taak.getWerknemer();
 
         List<Teamwerknemer> teamwerknemers = teamwerknemerRepository.findByWerknemerId(w.getId());
-        log.info("Werknemer {} heeft teams: {}", w.getId(), teamwerknemers);
         Integer teamId = teamwerknemers.isEmpty() ? null : teamwerknemers.get(0).getTeam().getId();
 
-        List<Integer> siteIds =
-                teamId != null ? siteteamRepository.findSiteIdsByTeamId(teamId) : List.of();
-        log.info("Team {} heeft sites: {}", teamId, siteIds);
-        Integer siteId = siteIds.isEmpty() ? null : siteIds.get(0);
+        Integer siteId = taak.getSite() != null ? taak.getSite().getId() : null;
+
+        String locatieNaam =
+                taak.getSite() != null ? taak.getSite().getNaam() : "Onbekende locatie";
+
+        List<Integer> werknemerIds =
+                taakWerknemerRepository.findByIdTaakId(taak.getId()).stream()
+                        .map(tw -> tw.getWerknemer().getId())
+                        .toList();
 
         return new TaakResponseDTO(
                 taak.getId(),
@@ -220,6 +157,57 @@ public class TakenService {
                 taak.getAfgewerkt(),
                 taak.getDeadline(),
                 teamId,
-                siteId);
+                siteId,
+                locatieNaam,
+                werknemerIds,
+                taak.getStartuur() != null ? taak.getStartuur().toString() : null,
+                taak.getEinduur() != null ? taak.getEinduur().toString() : null);
+    }
+
+    @Transactional
+    public void updateToewijzingen(Integer taakId, List<Integer> werknemerIds) {
+        Taken taken = takenRepository.findById(taakId).orElseThrow();
+
+        taakWerknemerRepository.deleteByIdTaakId(taakId);
+
+        for (Integer wId : werknemerIds) {
+            Werknemer werknemer = werknemerRepository.findById(wId).orElseThrow();
+
+            TaakWerknemer toewijzing = new TaakWerknemer();
+            toewijzing.setTaken(taken);
+            toewijzing.setWerknemer(werknemer);
+
+            taakWerknemerRepository.save(toewijzing);
+        }
+    }
+
+    @Transactional
+    public void planTaakIn(int taakId, String datum, String startuur, String einduur) {
+        Taken taak =
+                takenRepository
+                        .findById(taakId)
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "Taak niet gevonden: " + taakId));
+
+        System.out.println(
+                "-> DEBUG: Taak "
+                        + taakId
+                        + " verplaatsen van "
+                        + taak.getDeadline()
+                        + " naar "
+                        + datum);
+
+        taak.setDeadline(java.time.LocalDate.parse(datum));
+
+        // Vul de uren in voor de kalender
+        taak.setStartuur(java.time.LocalTime.parse(startuur));
+        taak.setEinduur(java.time.LocalTime.parse(einduur));
+
+        takenRepository.save(taak);
+
+        System.out.println(
+                "-> DEBUG: Taak " + taakId + " is succesvol vastgepind op " + datum + "!");
     }
 }

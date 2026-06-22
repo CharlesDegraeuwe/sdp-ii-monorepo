@@ -59,6 +59,15 @@ public class WerknemersFacade {
         return result;
     }
 
+    // --- NIEUW: VERWIJDER WERKNEMER ---
+    public boolean verwijderWerknemer(int werknemerId) {
+        boolean result = api.verwijderWerknemer(werknemerId);
+        if (result) {
+            LogService.log("DELETE", "werknemers", "Werknemer verwijderd – id: " + werknemerId);
+        }
+        return result;
+    }
+
     /**
      * Registreert een nieuwe werknemer met validatie.
      * Gooit IllegalArgumentException als de input ongeldig is.

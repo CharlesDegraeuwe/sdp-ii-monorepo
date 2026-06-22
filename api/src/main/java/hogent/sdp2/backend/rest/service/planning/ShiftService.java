@@ -10,6 +10,7 @@ import hogent.sdp2.backend.rest.repository.ShiftRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,12 +54,29 @@ public class ShiftService {
                                                 "Werknemer niet gevonden: " + dto.werknemerId()));
         Shift shift = new Shift();
         shift.setWerknemer(werknemer);
-        shift.setStartDatum(dto.startDatum());
-        shift.setEindDatum(dto.eindDatum());
-        shift.setStartTijd(dto.startTijd());
-        shift.setEindTijd(dto.eindTijd());
-        shift.setPauzeStart(dto.pauzeStart());
-        shift.setPauzeEind(dto.pauzeEind());
+
+        // =======================================================
+        // DE FIX: Koppel automatisch het team aan deze shift!
+        // =======================================================
+        List<Teamwerknemer> teamwerknemers =
+                teamwerknemerRepository.findByWerknemerId(werknemer.getId());
+        if (!teamwerknemers.isEmpty()) {
+            shift.setTeam(teamwerknemers.get(0).getTeam());
+        }
+        // =======================================================
+
+        shift.setStartDatum(LocalDate.parse(dto.startDatum()));
+        shift.setEindDatum(LocalDate.parse(dto.eindDatum()));
+        shift.setStartTijd(LocalTime.parse(dto.startTijd()));
+        shift.setEindTijd(LocalTime.parse(dto.eindTijd()));
+
+        if (dto.pauzeStart() != null && !dto.pauzeStart().isBlank()) {
+            shift.setPauzeStart(LocalTime.parse(dto.pauzeStart()));
+        }
+        if (dto.pauzeEind() != null && !dto.pauzeEind().isBlank()) {
+            shift.setPauzeEind(LocalTime.parse(dto.pauzeEind()));
+        }
+
         return mapToDTO(shiftRepository.save(shift));
     }
 
@@ -70,12 +88,24 @@ public class ShiftService {
                                 () ->
                                         new IllegalArgumentException(
                                                 "Shift niet gevonden: " + shiftId));
-        shift.setStartDatum(dto.startDatum());
-        shift.setEindDatum(dto.eindDatum());
-        shift.setStartTijd(dto.startTijd());
-        shift.setEindTijd(dto.eindTijd());
-        shift.setPauzeStart(dto.pauzeStart());
-        shift.setPauzeEind(dto.pauzeEind());
+
+        shift.setStartDatum(LocalDate.parse(dto.startDatum()));
+        shift.setEindDatum(LocalDate.parse(dto.eindDatum()));
+        shift.setStartTijd(LocalTime.parse(dto.startTijd()));
+        shift.setEindTijd(LocalTime.parse(dto.eindTijd()));
+
+        if (dto.pauzeStart() != null && !dto.pauzeStart().isBlank()) {
+            shift.setPauzeStart(LocalTime.parse(dto.pauzeStart()));
+        } else {
+            shift.setPauzeStart(null); // Pauze verwijderd
+        }
+
+        if (dto.pauzeEind() != null && !dto.pauzeEind().isBlank()) {
+            shift.setPauzeEind(LocalTime.parse(dto.pauzeEind()));
+        } else {
+            shift.setPauzeEind(null); // Pauze verwijderd
+        }
+
         return mapToDTO(shiftRepository.save(shift));
     }
 

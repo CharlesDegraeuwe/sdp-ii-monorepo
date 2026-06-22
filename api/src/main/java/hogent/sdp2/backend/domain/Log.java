@@ -25,12 +25,12 @@ public class Log {
     @Column(name = "Tabel", nullable = false, length = 45)
     private String tabel;
 
-    @Column(name = "Record_ID")
+    @Column(name = "Record_ID", nullable = false)
     private Integer recordId;
 
     @Column(name = "Timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-    @Column(name = "Beschrijving", length = 255)
-    private String beschrijving;
+    @Column(name = "Beschrijving", nullable = false, length = 45)
+    private String Beschrijving;
 }

@@ -17,8 +17,8 @@ public class TakenApiService extends ApiService {
     public List<TaakDTO> geefTakenVanWerknemer(int werknemerId) {
         try {
             HttpRequest request = authenticatedRequest(BASE_URL + "/werknemer/" + werknemerId)
-                    .GET()
-                    .build();
+                .GET()
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) return Collections.emptyList();
             String body = response.body();
@@ -44,44 +44,62 @@ public class TakenApiService extends ApiService {
         }
     }
 
-    public String wijsTaakToe(int taakId, int werknemerId) {
+    // ========================================================
+    // NIEUW: Stuurt de lijst van ID's als JSON naar de backend
+    // ========================================================
+    public String updateTaakToewijzingen(int taakId, List<Integer> werknemerIds) {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/" + taakId + "/toewijzen?werknemerId=" + werknemerId)
-                    .PUT(HttpRequest.BodyPublishers.noBody())
-                    .build();
+            // Zet de Java List om naar een JSON array (bijv: "[1, 2, 5]")
+            String json = mapper.writeValueAsString(werknemerIds);
+
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + taakId + "/toewijzingen")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                throw new RuntimeException("Server fout " + response.statusCode() + ": " + response.body());
+            }
+
             return response.body();
         } catch (Exception e) {
-            throw new RuntimeException("Fout bij toewijzen taak", e);
+            throw new RuntimeException("Fout bij updaten toewijzingen", e);
         }
     }
 
-    public String maakTaakAan(String titel, String beschrijving, LocalDate deadline, int siteId) {
+    public String maakTaakAan(String titel, String beschrijving, LocalDate deadline, int siteId, String startuur, String einduur) {
         try {
             int werknemerId = domain.auth.Sessie.getInstance().getIngelogdeWerknemer().id();
-            String json = mapper.writeValueAsString(new TaakAanmakenRequest(werknemerId, titel, beschrijving, deadline, siteId));
+
+            String json = mapper.writeValueAsString(new TaakAanmakenRequest(werknemerId, titel, beschrijving, deadline.toString(), siteId, startuur, einduur));
+
             HttpRequest request = authenticatedRequest(BASE_URL)
-                    .POST(HttpRequest.BodyPublishers.ofString(json))
-                    .build();
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() < 200 || response.statusCode() >= 300)
+
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                System.out.println("CRASH IN BACKEND: " + response.body());
                 throw new RuntimeException("Server fout " + response.statusCode() + ": " + response.body());
+            }
             return "Taak succesvol aangemaakt!";
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Fout bij aanmaken taak", e);
         }
     }
 
-    private record TaakAanmakenRequest(int werknemerId, String titel, String beschrijving, LocalDate deadline, int siteId) {}
+    private record TaakAanmakenRequest(int werknemerId, String titel, String beschrijving, String deadline, int siteId, String startuur, String einduur) {}
 
     public String wijzigTaak(int taakId, String titel, String beschrijving) {
         try {
             String json = mapper.writeValueAsString(new TaakWijzigenRequest(titel, beschrijving));
             HttpRequest request = authenticatedRequest(BASE_URL + "/" + taakId)
-                    .PUT(HttpRequest.BodyPublishers.ofString(json))
-                    .build();
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (Exception e) {
@@ -94,8 +112,8 @@ public class TakenApiService extends ApiService {
     public String verwijderTaak(int taakId) {
         try {
             HttpRequest request = authenticatedRequest(BASE_URL + "/" + taakId)
-                    .DELETE()
-                    .build();
+                .DELETE()
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (Exception e) {
@@ -106,12 +124,36 @@ public class TakenApiService extends ApiService {
     public String markeerAfgewerkt(int taakId) {
         try {
             HttpRequest request = authenticatedRequest(BASE_URL + "/" + taakId + "/afgewerkt")
-                    .PUT(HttpRequest.BodyPublishers.noBody())
-                    .build();
+                .PUT(HttpRequest.BodyPublishers.noBody())
+                .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (Exception e) {
             throw new RuntimeException("Fout bij markeren als afgewerkt", e);
         }
+    }
+
+    public void planTaakIn(int taakId, String datum, String startuur, String einduur) {
+        System.out.println("=== START INPLANNEN TAAK " + taakId + " ===");
+        try {
+            String url = BASE_URL + "/" + taakId + "/inplannen?datum=" + datum + "&startuur=" + startuur + "&einduur=" + einduur;
+            System.out.println("1. Frontend verstuurt PUT naar: " + url);
+
+            HttpRequest request = authenticatedRequest(url).PUT(HttpRequest.BodyPublishers.noBody()).build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("2. Backend antwoord code: " + response.statusCode());
+            System.out.println("3. Backend antwoord body: " + response.body());
+
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                System.err.println("❌ CRASH: Backend weigert de taak in te plannen!");
+            } else {
+                System.out.println("✅ SUCCES: Taak is geüpdatet in de database!");
+            }
+        } catch (Exception e) {
+            System.err.println("❌ CRASH: Frontend kon de request niet versturen: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("=========================================");
     }
 }

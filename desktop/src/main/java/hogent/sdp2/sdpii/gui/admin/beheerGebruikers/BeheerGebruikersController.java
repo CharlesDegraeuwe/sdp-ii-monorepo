@@ -19,6 +19,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class BeheerGebruikersController extends VBox {
 
@@ -29,6 +30,7 @@ public class BeheerGebruikersController extends VBox {
     @FXML private TableColumn<WerknemerDTO, String> rolCol;
     @FXML private TableColumn<WerknemerDTO, String> statusCol;
     @FXML private TableColumn<WerknemerDTO, String> telefoonCol;
+    @FXML private TableColumn<WerknemerDTO, Void> actieCol; // NIEUW
 
     @FXML private TextField zoekField;
     @FXML private Label foutLabel;
@@ -172,6 +174,65 @@ public class BeheerGebruikersController extends VBox {
                             }).start();
                         }
                     });
+                }
+            }
+        });
+
+        // --- ACTIE KOLOM (Vuilbakje) ---
+        actieCol.setCellFactory(param -> new TableCell<>() {
+            private final Button deleteBtn = new Button();
+            {
+                FontIcon trashIcon = new FontIcon("fas-trash"); // Zorg dat ikonli-fontawesome5-pack in je pom.xml zit
+                trashIcon.setIconSize(16);
+                trashIcon.setIconColor(javafx.scene.paint.Color.valueOf("#ef4444")); // Rode kleur
+
+                deleteBtn.setGraphic(trashIcon);
+                deleteBtn.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+
+                deleteBtn.setOnAction(event -> {
+                    WerknemerDTO w = getTableView().getItems().get(getIndex());
+
+                    if (w.email().equals(Sessie.getInstance().getIngelogdeWerknemer().email())) {
+                        toonFout("Je kunt je eigen account niet verwijderen.");
+                        return;
+                    }
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Gebruiker verwijderen");
+                    alert.setHeaderText("Weet je zeker dat je " + w.voornaam() + " wilt verwijderen?");
+                    alert.setContentText("Deze actie kan niet ongedaan worden gemaakt.");
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                        new Thread(() -> {
+                            try {
+                                boolean succes = service.verwijderWerknemer(w.id());
+                                if (succes) {
+                                    Platform.runLater(() -> laadWerknemers());
+                                } else {
+                                    toonFout("Fout bij verwijderen van gebruiker.");
+                                }
+                            } catch (Exception ex) {
+                                toonFout("Connectiefout: " + ex.getMessage());
+                            }
+                        }).start();
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    // Check of het de huidige ingelogde gebruiker is, zo ja: geen vuilbak tonen
+                    WerknemerDTO w = getTableView().getItems().get(getIndex());
+                    if (w != null && w.email().equals(Sessie.getInstance().getIngelogdeWerknemer().email())) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteBtn);
+                    }
                 }
             }
         });

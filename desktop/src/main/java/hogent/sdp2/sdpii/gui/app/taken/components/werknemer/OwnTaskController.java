@@ -5,6 +5,7 @@ import domain.dto.TaakDTO;
 import domain.facades.TakenFacade;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.FinishedTaakItem;
 import hogent.sdp2.sdpii.gui.app.taken.components.items.TaakItemController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OwnTaskController extends BorderPane {
     @FXML Label titel_taken;
@@ -114,10 +116,22 @@ public class OwnTaskController extends BorderPane {
         herlaad();
     }
 
+    // =========================================================
+    // DE MAGIE ZIT HIER: Filter de taken op JOUW toewijzingen!
+    // =========================================================
     public void herlaad() {
         new Thread(() -> {
-            List<TaakDTO> taken = takenFacade.geefEigenTaken();
-            javafx.application.Platform.runLater(() -> vulIn(taken));
+            int mijnId = Sessie.getInstance().getIngelogdeWerknemer().id();
+
+            // Haal alle taken op in het systeem
+            List<TaakDTO> alleTaken = takenFacade.geefAlleTaken();
+
+            // Filter zodat je alleen de taken krijgt waar jouw ID in de toewijzingen lijst staat
+            List<TaakDTO> mijnToegewezenTaken = alleTaken.stream()
+                .filter(taak -> taak.werknemerIds() != null && taak.werknemerIds().contains(mijnId))
+                .collect(Collectors.toList());
+
+            Platform.runLater(() -> vulIn(mijnToegewezenTaken));
         }).start();
     }
 
@@ -133,21 +147,28 @@ public class OwnTaskController extends BorderPane {
         for (TaakDTO taak : taken) {
             LocalDate deadline = parseDeadline(taak.deadline());
             String deadlineTekst = "Deadline: " + (deadline != null
-                    ? deadline.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "—");
+                ? deadline.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "—");
             if (!taak.isAfgewerkt()) {
                 TaakItemController item = new TaakItemController(taak.naam(), deadlineTekst);
+
+                // Zorg ervoor dat werknemers het verwijder/vinkje icoontje niet altijd zien
+                if(item.lookup(".taak_delete_btn") != null) item.lookup(".taak_delete_btn").setVisible(false);
+
                 item.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> toonDetails(taak));
+
                 item.setOnVerwijder(() -> {
                     takenFacade.verwijderTaak(taak.id());
                     VBox parent = (VBox) item.getParent();
                     if (parent != null) parent.getChildren().remove(item);
                 });
+
                 item.setOnAfgewerkt(() -> {
                     takenFacade.markeerAfgewerkt(taak.id());
                     VBox parent = (VBox) item.getParent();
                     if (parent != null) parent.getChildren().remove(item);
                     finished_task_container.getChildren().add(new FinishedTaakItem(taak.naam(), "Afgewerkt op " + deadlineTekst));
                 });
+
                 if (deadline == null || deadline.isBefore(vandaag)) {
                     belangrijk_container.getChildren().add(item);
                 } else if (deadline.isEqual(vandaag)) {

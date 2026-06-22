@@ -31,7 +31,7 @@ class TakenFacadeTest {
     @BeforeEach
     void setUp() {
         werknemer = new WerknemerDTO(5, "Peeters", "Piet", "piet@test.be", "0471000000",
-                LocalDate.of(1985, 6, 15), "Werknemer", "actief");
+            LocalDate.of(1985, 6, 15), "Werknemer", "actief");
         Sessie.getInstance().setIngelogdeWerknemer(werknemer);
     }
 
@@ -60,64 +60,73 @@ class TakenFacadeTest {
     @Test
     void maakTaakAan_metGeldigeData_roeptApiAan() {
         LocalDate deadline = LocalDate.now().plusDays(5);
-        when(api.maakTaakAan( "Titel", "Beschrijving", deadline, 1)).thenReturn("ok");
+        // FIX: 2 extra parameters toegevoegd voor uren
+        when(api.maakTaakAan( "Titel", "Beschrijving", deadline, 1, "09:00", "17:00")).thenReturn("ok");
 
-        String result = facade.maakTaakAan("Titel", "Beschrijving", deadline, 1);
+        String result = facade.maakTaakAan("Titel", "Beschrijving", deadline, 1, "09:00", "17:00");
 
         assertEquals("ok", result);
-        verify(api).maakTaakAan( "Titel", "Beschrijving", deadline, 1);
+        verify(api).maakTaakAan( "Titel", "Beschrijving", deadline, 1, "09:00", "17:00");
     }
 
     @Test
     void maakTaakAan_metLegeTitel_gooit_IllegalArgumentException() {
+        // FIX: 2 extra parameters toegevoegd
         assertThrows(IllegalArgumentException.class,
-                () -> facade.maakTaakAan("", "Beschrijving", LocalDate.now().plusDays(1), 1));
+            () -> facade.maakTaakAan("", "Beschrijving", LocalDate.now().plusDays(1), 1, "09:00", "17:00"));
         verifyNoInteractions(api);
     }
 
     @Test
     void maakTaakAan_metNullTitel_gooit_IllegalArgumentException() {
+        // FIX: 2 extra parameters toegevoegd
         assertThrows(IllegalArgumentException.class,
-                () -> facade.maakTaakAan(null, "Beschrijving", LocalDate.now().plusDays(1), 1));
+            () -> facade.maakTaakAan(null, "Beschrijving", LocalDate.now().plusDays(1), 1, "09:00", "17:00"));
         verifyNoInteractions(api);
     }
 
     @Test
     void maakTaakAan_metLegeBeschrijving_gooit_IllegalArgumentException() {
+        // FIX: 2 extra parameters toegevoegd
         assertThrows(IllegalArgumentException.class,
-                () -> facade.maakTaakAan("Titel", "", LocalDate.now().plusDays(1), 1));
+            () -> facade.maakTaakAan("Titel", "", LocalDate.now().plusDays(1), 1, "09:00", "17:00"));
         verifyNoInteractions(api);
     }
 
     @Test
     void maakTaakAan_metNullDeadline_gooit_IllegalArgumentException() {
+        // FIX: 2 extra parameters toegevoegd
         assertThrows(IllegalArgumentException.class,
-                () -> facade.maakTaakAan("Titel", "Beschrijving", null, 1));
+            () -> facade.maakTaakAan("Titel", "Beschrijving", null, 1, "09:00", "17:00"));
         verifyNoInteractions(api);
     }
 
     @Test
     void maakTaakAan_metDeadlineInHetVerleden_gooit_IllegalArgumentException() {
+        // FIX: 2 extra parameters toegevoegd
         assertThrows(IllegalArgumentException.class,
-                () -> facade.maakTaakAan("Titel", "Beschrijving", LocalDate.now().minusDays(1), 1));
+            () -> facade.maakTaakAan("Titel", "Beschrijving", LocalDate.now().minusDays(1), 1, "09:00", "17:00"));
         verifyNoInteractions(api);
     }
 
     @Test
     void maakTaakAan_metOngeldigSiteId_gooit_IllegalArgumentException() {
+        // FIX: 2 extra parameters toegevoegd
         assertThrows(IllegalArgumentException.class,
-                () -> facade.maakTaakAan("Titel", "Beschrijving", LocalDate.now().plusDays(1), 0));
+            () -> facade.maakTaakAan("Titel", "Beschrijving", LocalDate.now().plusDays(1), 0, "09:00", "17:00"));
         verifyNoInteractions(api);
     }
 
     @Test
-    void wijsTaakToe_roeptApiAan() {
-        when(api.wijsTaakToe(10, 5)).thenReturn("ok");
+    void updateTaakToewijzingen_roeptApiAan() {
+        List<Integer> werknemerIds = List.of(5);
 
-        String result = facade.wijsTaakToe(10, 5);
+        when(api.updateTaakToewijzingen(10, werknemerIds)).thenReturn("ok");
+
+        String result = facade.updateTaakToewijzingen(10, werknemerIds);
 
         assertEquals("ok", result);
-        verify(api).wijsTaakToe(10, 5);
+        verify(api).updateTaakToewijzingen(10, werknemerIds);
     }
 
     @Test

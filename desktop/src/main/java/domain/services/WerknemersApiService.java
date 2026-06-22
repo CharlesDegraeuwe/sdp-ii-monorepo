@@ -61,7 +61,7 @@ public class WerknemersApiService extends ApiService {
     // ====================================================================
     public WerknemerDTO zoekOpEmail(String email) {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/email/" + email)
+            HttpRequest request = authenticatedRequest(BASE_URL + "/user?email=" + email)
                 .GET()
                 .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -102,7 +102,7 @@ public class WerknemersApiService extends ApiService {
     // ====================================================================
     public WerknemerDTO zoekOpId(int id) {
         try {
-            HttpRequest request = authenticatedRequest(BASE_URL + "/" + id)
+            HttpRequest request = authenticatedRequest(BASE_URL + "/user?id=" + id)
                 .GET()
                 .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -162,4 +162,17 @@ public class WerknemersApiService extends ApiService {
         }
     }
 
+    public boolean verwijderWerknemer(int werknemerId) {
+        try {
+            HttpRequest request = authenticatedRequest(BASE_URL + "/" + werknemerId)
+                .DELETE()
+                .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode() == 200 || response.statusCode() == 204;
+        } catch (Exception e) {
+            throw new RuntimeException("Fout bij verwijderen van werknemer", e);
+        }
+    }
 }

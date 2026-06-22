@@ -15,9 +15,11 @@ import java.util.Random;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -397,20 +399,19 @@ public class WerknemerService {
     }
 
     private String buildEmailHtml(String code) {
-        return
-"""
-<div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 40px; height: 100vh">
-    <img src="https://i.ibb.co/ksS3Wh05/logo-dark.png" alt="logo" style="height: 50px; margin-bottom: 20px;" />
-    <hr style="border: 1px solid #eee;" />
-    <div style="margin-top: 20px;">
-        <h1 style="font-size: 24px; font-weight: bold;">Login code voor Delaware Suite</h1>
-        <p style="color: #555;">Dit is je unieke logincode. Deze blijft 10 minuten geldig, deel dit met niemand.</p>
-        <span style="display: inline-block; background: #f4f4f5; border-radius: 12px; padding: 12px 20px; font-size: 28px; font-weight: bold; letter-spacing: 4px;">
-            %s
-        </span>
-    </div>
-</div>
-"""
+        return """
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 40px; height: 100vh">
+            <img src="https://i.ibb.co/ksS3Wh05/logo-dark.png" alt="logo" style="height: 50px; margin-bottom: 20px;" />
+            <hr style="border: 1px solid #eee;" />
+            <div style="margin-top: 20px;">
+                <h1 style="font-size: 24px; font-weight: bold;">Login code voor Delaware Suite</h1>
+                <p style="color: #555;">Dit is je unieke logincode. Deze blijft 10 minuten geldig, deel dit met niemand.</p>
+                <span style="display: inline-block; background: #f4f4f5; border-radius: 12px; padding: 12px 20px; font-size: 28px; font-weight: bold; letter-spacing: 4px;">
+                    %s
+                </span>
+            </div>
+        </div>
+        """
                 .formatted(code);
     }
 
@@ -441,5 +442,16 @@ public class WerknemerService {
         } catch (Exception e) {
             System.err.println("Gefaald om audit-log op te slaan: " + e.getMessage());
         }
+    }
+
+    public void verwijderWerknemer(int id) {
+        // Check eerst of de werknemer wel bestaat
+        if (!werknemerRepository.existsById(id)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Werknemer met ID " + id + " niet gevonden.");
+        }
+
+        // Verwijder de werknemer
+        werknemerRepository.deleteById(id);
     }
 }

@@ -2,6 +2,7 @@ package hogent.sdp2.backend.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,4 +31,15 @@ public class Taken {
 
     @Column(name = "Deadline", nullable = false)
     private LocalDate deadline;
+
+    // Deze mogen nu leeg (null) zijn voor je oude taken
+    @Column(name = "startuur")
+    private LocalTime startuur;
+
+    @Column(name = "einduur")
+    private LocalTime einduur;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Site_ID")
+    private Site site;
 }
