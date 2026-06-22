@@ -447,7 +447,8 @@ public class WerknemerService {
     public void verwijderWerknemer(int id) {
         // Check eerst of de werknemer wel bestaat
         if (!werknemerRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Werknemer met ID " + id + " niet gevonden.");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Werknemer met ID " + id + " niet gevonden.");
         }
 
         // Verwijder de werknemer

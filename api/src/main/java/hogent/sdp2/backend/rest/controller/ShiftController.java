@@ -33,13 +33,16 @@ public class ShiftController {
     }
 
     // ZET DEZE TIJDELIJK IN COMMENTAAR OM TE TESTEN
-    // @PreAuthorize("hasAnyAuthority('Admin', 'Manager', 'ADMIN', 'MANAGER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
+    // @PreAuthorize("hasAnyAuthority('Admin', 'Manager', 'ADMIN', 'MANAGER', 'ROLE_ADMIN',
+    // 'ROLE_MANAGER')")
     @PostMapping
     public ShiftResponseDTO maakShift(@RequestBody ShiftAanmakenDTO dto) {
 
         // --- HARDCORE DEBUG LIJNEN ---
         System.out.println("==== DEBUG BACKEND SHIFT AANMAKEN ====");
-        var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        var auth =
+                org.springframework.security.core.context.SecurityContextHolder.getContext()
+                        .getAuthentication();
         if (auth != null) {
             System.out.println("Ingelogde User: " + auth.getName());
             System.out.println("Toegekende Rechten (Authorities): " + auth.getAuthorities());
@@ -56,7 +59,7 @@ public class ShiftController {
     @PreAuthorize("hasAnyAuthority('Admin', 'Manager')")
     @PutMapping("/{shiftId}")
     public ShiftResponseDTO pasAan(
-        @PathVariable Integer shiftId, @RequestBody ShiftAanpassenDTO dto) {
+            @PathVariable Integer shiftId, @RequestBody ShiftAanpassenDTO dto) {
         return shiftService.pasAan(shiftId, dto);
     }
 }

@@ -55,7 +55,8 @@ public class TakenController {
     }
 
     @PutMapping("/{taakId}/toewijzingen")
-    public ResponseEntity<String> updateToewijzingen(@PathVariable Integer taakId, @RequestBody List<Integer> werknemerIds) {
+    public ResponseEntity<String> updateToewijzingen(
+            @PathVariable Integer taakId, @RequestBody List<Integer> werknemerIds) {
         try {
             takenService.updateToewijzingen(taakId, werknemerIds);
             return ResponseEntity.ok("Toewijzingen succesvol bijgewerkt");
@@ -67,10 +68,10 @@ public class TakenController {
     @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PutMapping("/{id}/inplannen")
     public ResponseEntity<String> planTaakIn(
-        @PathVariable int id,
-        @RequestParam String datum,
-        @RequestParam String startuur,
-        @RequestParam String einduur) {
+            @PathVariable int id,
+            @RequestParam String datum,
+            @RequestParam String startuur,
+            @RequestParam String einduur) {
         try {
             takenService.planTaakIn(id, datum, startuur, einduur);
             return ResponseEntity.ok("Taak succesvol ingepland!");
@@ -78,5 +79,4 @@ public class TakenController {
             return ResponseEntity.badRequest().body("Fout: " + e.getMessage());
         }
     }
-
 }

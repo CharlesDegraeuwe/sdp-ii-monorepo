@@ -9,8 +9,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "taakwerknemer")
 public class TaakWerknemer {
-    @EmbeddedId
-    private TaakWerknemerId id = new TaakWerknemerId();
+    @EmbeddedId private TaakWerknemerId id = new TaakWerknemerId();
 
     @MapsId("taakId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

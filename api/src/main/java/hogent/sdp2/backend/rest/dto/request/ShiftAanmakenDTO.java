@@ -1,10 +1,10 @@
 package hogent.sdp2.backend.rest.dto.request;
 
 public record ShiftAanmakenDTO(
-    Integer werknemerId,
-    String startDatum,
-    String eindDatum,
-    String startTijd,
-    String eindTijd,
-    String pauzeStart,
-    String pauzeEind) {}
+        Integer werknemerId,
+        String startDatum,
+        String eindDatum,
+        String startTijd,
+        String eindTijd,
+        String pauzeStart,
+        String pauzeEind) {}

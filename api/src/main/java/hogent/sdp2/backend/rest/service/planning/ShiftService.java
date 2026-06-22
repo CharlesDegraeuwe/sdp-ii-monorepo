@@ -46,19 +46,20 @@ public class ShiftService {
 
     public ShiftResponseDTO maakShift(ShiftAanmakenDTO dto) {
         Werknemer werknemer =
-            werknemerRepository
-                .findById(dto.werknemerId())
-                .orElseThrow(
-                    () ->
-                        new IllegalArgumentException(
-                            "Werknemer niet gevonden: " + dto.werknemerId()));
+                werknemerRepository
+                        .findById(dto.werknemerId())
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "Werknemer niet gevonden: " + dto.werknemerId()));
         Shift shift = new Shift();
         shift.setWerknemer(werknemer);
 
         // =======================================================
         // DE FIX: Koppel automatisch het team aan deze shift!
         // =======================================================
-        List<Teamwerknemer> teamwerknemers = teamwerknemerRepository.findByWerknemerId(werknemer.getId());
+        List<Teamwerknemer> teamwerknemers =
+                teamwerknemerRepository.findByWerknemerId(werknemer.getId());
         if (!teamwerknemers.isEmpty()) {
             shift.setTeam(teamwerknemers.get(0).getTeam());
         }
@@ -80,8 +81,13 @@ public class ShiftService {
     }
 
     public ShiftResponseDTO pasAan(Integer shiftId, ShiftAanpassenDTO dto) {
-        Shift shift = shiftRepository.findById(shiftId)
-            .orElseThrow(() -> new IllegalArgumentException("Shift niet gevonden: " + shiftId));
+        Shift shift =
+                shiftRepository
+                        .findById(shiftId)
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "Shift niet gevonden: " + shiftId));
 
         shift.setStartDatum(LocalDate.parse(dto.startDatum()));
         shift.setEindDatum(LocalDate.parse(dto.eindDatum()));

@@ -97,7 +97,14 @@ class TakenServiceTest {
     @Test
     void maakTaakAan_slaatTaakOp() {
         TaakAanmakenDTO dto =
-            new TaakAanmakenDTO(1, "Nieuwe taak", "Omschrijving", LocalDate.of(2025, 6, 1), 1, "09:00", "17:00");
+                new TaakAanmakenDTO(
+                        1,
+                        "Nieuwe taak",
+                        "Omschrijving",
+                        LocalDate.of(2025, 6, 1),
+                        1,
+                        "09:00",
+                        "17:00");
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
 
         // DE FIX 3: Vertel de site mock dat hij de dummy site moet teruggeven
@@ -114,12 +121,13 @@ class TakenServiceTest {
     @Test
     void maakTaakAan_gooidExceptionBijOnbekendeWerknemer() {
         TaakAanmakenDTO dto =
-            new TaakAanmakenDTO(999, "Taak", "Omschrijving", LocalDate.of(2025, 6, 1), 1, "09:00", "17:00");
+                new TaakAanmakenDTO(
+                        999, "Taak", "Omschrijving", LocalDate.of(2025, 6, 1), 1, "09:00", "17:00");
         when(werknemerRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> takenService.maakTaakAan(dto))
-            .isInstanceOf(RuntimeException.class)
-            .hasMessageContaining("Werknemer niet gevonden");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Werknemer niet gevonden");
     }
 
     @Test
@@ -138,8 +146,8 @@ class TakenServiceTest {
         when(takenRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> takenService.markeerAfgewerkt(999))
-            .isInstanceOf(RuntimeException.class)
-            .hasMessageContaining("Taak niet gevonden");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Taak niet gevonden");
     }
 
     @Test
@@ -176,8 +184,8 @@ class TakenServiceTest {
         when(takenRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> takenService.wijsTaakToe(999, 1))
-            .isInstanceOf(RuntimeException.class)
-            .hasMessageContaining("Taak niet gevonden");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Taak niet gevonden");
     }
 
     @Test
@@ -186,8 +194,8 @@ class TakenServiceTest {
         when(werknemerRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> takenService.wijsTaakToe(10, 999))
-            .isInstanceOf(RuntimeException.class)
-            .hasMessageContaining("Werknemer niet gevonden");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Werknemer niet gevonden");
     }
 
     @Test
@@ -205,8 +213,8 @@ class TakenServiceTest {
         when(takenRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> takenService.verwijderTaak(999))
-            .isInstanceOf(RuntimeException.class)
-            .hasMessageContaining("Taak niet gevonden");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Taak niet gevonden");
     }
 
     @Test
@@ -215,7 +223,7 @@ class TakenServiceTest {
         when(sessieService.isAdminOfManager()).thenReturn(true);
 
         assertThatNoException()
-            .isThrownBy(() -> takenService.assertEigenaarVanTaak(10, sessieService));
+                .isThrownBy(() -> takenService.assertEigenaarVanTaak(10, sessieService));
 
         verify(takenRepository, never()).findById(any());
     }
@@ -228,7 +236,7 @@ class TakenServiceTest {
         when(takenRepository.findById(10)).thenReturn(Optional.of(taak));
 
         assertThatThrownBy(() -> takenService.assertEigenaarVanTaak(10, sessieService))
-            .isInstanceOf(AccessDeniedException.class);
+                .isInstanceOf(AccessDeniedException.class);
     }
 
     @Test
@@ -239,6 +247,6 @@ class TakenServiceTest {
         when(takenRepository.findById(10)).thenReturn(Optional.of(taak));
 
         assertThatNoException()
-            .isThrownBy(() -> takenService.assertEigenaarVanTaak(10, sessieService));
+                .isThrownBy(() -> takenService.assertEigenaarVanTaak(10, sessieService));
     }
 }

@@ -10,7 +10,6 @@ import hogent.sdp2.backend.rest.dto.request.TaakAanmakenDTO;
 import hogent.sdp2.backend.rest.dto.request.TaakResponseDTO;
 import hogent.sdp2.backend.rest.dto.response.WerknemerResponseDTO;
 import hogent.sdp2.backend.rest.repository.*;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +37,9 @@ public class TakenService {
     @Transactional
     public String maakTaakAan(TaakAanmakenDTO dto) {
         Werknemer werknemer =
-            werknemerRepository
-                .findById(dto.werknemerId())
-                .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
+                werknemerRepository
+                        .findById(dto.werknemerId())
+                        .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
 
         Taken taak = new Taken();
         taak.setWerknemer(werknemer); // De maker / eigenaar van de taak
@@ -58,8 +57,10 @@ public class TakenService {
 
         // <-- HIER WORDT DE SITE GEKOPPELD AAN DE TAAK
         if (dto.siteId() > 0) {
-            Site site = siteRepository.findById(dto.siteId())
-                .orElseThrow(() -> new RuntimeException("Site niet gevonden"));
+            Site site =
+                    siteRepository
+                            .findById(dto.siteId())
+                            .orElseThrow(() -> new RuntimeException("Site niet gevonden"));
             taak.setSite(site);
         }
 
@@ -70,9 +71,9 @@ public class TakenService {
     @Transactional
     public String markeerAfgewerkt(int taakId) {
         Taken taak =
-            takenRepository
-                .findById(taakId)
-                .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
+                takenRepository
+                        .findById(taakId)
+                        .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
         taak.setAfgewerkt("ja");
         takenRepository.save(taak);
         return "Taak gemarkeerd als afgewerkt";
@@ -85,30 +86,30 @@ public class TakenService {
     @Transactional
     public String wijsTaakToe(int taakId, int werknemerId) {
         Taken taak =
-            takenRepository
-                .findById(taakId)
-                .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
+                takenRepository
+                        .findById(taakId)
+                        .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
         Werknemer werknemer =
-            werknemerRepository
-                .findById(werknemerId)
-                .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
+                werknemerRepository
+                        .findById(werknemerId)
+                        .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
 
         taak.setWerknemer(werknemer);
         takenRepository.save(taak);
         return "Taak '"
-            + taak.getTitel()
-            + "' toegewezen aan "
-            + werknemer.getVoornaam()
-            + " "
-            + werknemer.getNaam();
+                + taak.getTitel()
+                + "' toegewezen aan "
+                + werknemer.getVoornaam()
+                + " "
+                + werknemer.getNaam();
     }
 
     @Transactional
     public String verwijderTaak(int taakId) {
         Taken taak =
-            takenRepository
-                .findById(taakId)
-                .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
+                takenRepository
+                        .findById(taakId)
+                        .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
         takenRepository.delete(taak);
         return "Taak '" + taak.getTitel() + "' succesvol verwijderd";
     }
@@ -116,9 +117,9 @@ public class TakenService {
     public void assertEigenaarVanTaak(int taakId, SessieService sessieService) {
         if (sessieService.isAdminOfManager()) return;
         Taken taak =
-            takenRepository
-                .findById(taakId)
-                .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
+                takenRepository
+                        .findById(taakId)
+                        .orElseThrow(() -> new RuntimeException("Taak niet gevonden"));
         if (!taak.getWerknemer().getId().equals(sessieService.getIngelogdeWerknemerId())) {
             throw new AccessDeniedException("Je kunt alleen je eigen taken als afgewerkt markeren");
         }
@@ -132,29 +133,35 @@ public class TakenService {
 
         Integer siteId = taak.getSite() != null ? taak.getSite().getId() : null;
 
-        String locatieNaam = taak.getSite() != null ? taak.getSite().getNaam() : "Onbekende locatie";
+        String locatieNaam =
+                taak.getSite() != null ? taak.getSite().getNaam() : "Onbekende locatie";
 
-        List<Integer> werknemerIds = taakWerknemerRepository.findByIdTaakId(taak.getId())
-            .stream()
-            .map(tw -> tw.getWerknemer().getId())
-            .toList();
+        List<Integer> werknemerIds =
+                taakWerknemerRepository.findByIdTaakId(taak.getId()).stream()
+                        .map(tw -> tw.getWerknemer().getId())
+                        .toList();
 
         return new TaakResponseDTO(
-            taak.getId(),
-            new WerknemerResponseDTO(
-                w.getId(), w.getNaam(), w.getVoornaam(), w.getEmail(),
-                w.getTelefoonnummer(), w.getGeboortedatum(), w.getRol(), w.getStatus()),
-            taak.getTitel(),
-            taak.getBeschrijving(),
-            taak.getAfgewerkt(),
-            taak.getDeadline(),
-            teamId,
-            siteId,
-            locatieNaam,
-            werknemerIds,
-            taak.getStartuur() != null ? taak.getStartuur().toString() : null,
-            taak.getEinduur() != null ? taak.getEinduur().toString() : null
-        );
+                taak.getId(),
+                new WerknemerResponseDTO(
+                        w.getId(),
+                        w.getNaam(),
+                        w.getVoornaam(),
+                        w.getEmail(),
+                        w.getTelefoonnummer(),
+                        w.getGeboortedatum(),
+                        w.getRol(),
+                        w.getStatus()),
+                taak.getTitel(),
+                taak.getBeschrijving(),
+                taak.getAfgewerkt(),
+                taak.getDeadline(),
+                teamId,
+                siteId,
+                locatieNaam,
+                werknemerIds,
+                taak.getStartuur() != null ? taak.getStartuur().toString() : null,
+                taak.getEinduur() != null ? taak.getEinduur().toString() : null);
     }
 
     @Transactional
@@ -176,10 +183,21 @@ public class TakenService {
 
     @Transactional
     public void planTaakIn(int taakId, String datum, String startuur, String einduur) {
-        Taken taak = takenRepository.findById(taakId)
-            .orElseThrow(() -> new IllegalArgumentException("Taak niet gevonden: " + taakId));
+        Taken taak =
+                takenRepository
+                        .findById(taakId)
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "Taak niet gevonden: " + taakId));
 
-        System.out.println("-> DEBUG: Taak " + taakId + " verplaatsen van " + taak.getDeadline() + " naar " + datum);
+        System.out.println(
+                "-> DEBUG: Taak "
+                        + taakId
+                        + " verplaatsen van "
+                        + taak.getDeadline()
+                        + " naar "
+                        + datum);
 
         taak.setDeadline(java.time.LocalDate.parse(datum));
 
@@ -189,6 +207,7 @@ public class TakenService {
 
         takenRepository.save(taak);
 
-        System.out.println("-> DEBUG: Taak " + taakId + " is succesvol vastgepind op " + datum + "!");
+        System.out.println(
+                "-> DEBUG: Taak " + taakId + " is succesvol vastgepind op " + datum + "!");
     }
 }
