@@ -1,11 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/tasks.css">
-    <BorderPane fx:id="page_container" VBox.vgrow="ALWAYS"/>
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="task-page-root">
+
+    <top>
+        <VBox spacing="16">
+            <padding><Insets top="16" right="0" bottom="16" left="0"/></padding>
+            <HBox styleClass="form-card" spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 12 16;">
+                <Label text="Filters:" styleClass="field-group-label"/>
+                <ComboBox fx:id="filterLocatie" promptText="Alle locaties" styleClass="modern-input" prefWidth="160"/>
+                <ComboBox fx:id="filterTeam" promptText="Alle teams" styleClass="modern-input" prefWidth="160"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <CheckBox fx:id="checkToegewezen" text="Verberg reeds toegewezen taken" styleClass="filter-checkbox"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <HBox spacing="24">
+            <padding><Insets top="0" right="0" bottom="20" left="0"/></padding>
+
+            <VBox styleClass="form-card" HBox.hgrow="ALWAYS" spacing="12" style="-fx-padding: 16;">
+                <Label text="OPENSTAANDE TAKEN" styleClass="field-group-label"/>
+                <Separator styleClass="form-separator"/>
+                <ScrollPane styleClass="modern-scroll-pane" fitToWidth="true" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="takenLijstContainer" spacing="8"/>
+                </ScrollPane>
+            </VBox>
+
+            <VBox fx:id="rechterPaneel" styleClass="form-card" prefWidth="400" minWidth="350" spacing="20" style="-fx-padding: 24;">
+
+                <VBox fx:id="stateLeeg" alignment="CENTER" spacing="12" VBox.vgrow="ALWAYS">
+                    <FontIcon iconLiteral="ion4-ios-paper" iconSize="48" iconColor="#cbd5e1"/>
+                    <Label text="Selecteer een taak in de lijst om de details te bekijken of direct toe te wijzen." styleClass="field-sub-label" wrapText="true" alignment="CENTER"/>
+                </VBox>
+
+                <VBox fx:id="stateDetail" spacing="16" visible="false" managed="false">
+                    <VBox spacing="4">
+                        <Label fx:id="detailTitel" text="Taak Titel" styleClass="card_title" wrapText="true"/>
+                        <Label fx:id="detailTijden" text="Datum &amp; Tijd" styleClass="task-due-text"/>
+                        <Label fx:id="detailLocatie" text="Locatie A" styleClass="task-location-link"/>
+                    </VBox>
+
+                    <Separator styleClass="form-separator"/>
+
+                    <VBox spacing="8">
+                        <Label text="SPECIFICATIES" styleClass="field-group-label"/>
+                        <Label fx:id="detailSpecificaties" text="Hier komt de beschrijving..." styleClass="field-sub-label" wrapText="true"/>
+                    </VBox>
+
+                    <Region VBox.vgrow="ALWAYS" minHeight="20"/>
+
+                    <VBox style="-fx-background-color: #f8fafc; -fx-background-radius: 8; -fx-padding: 16;" spacing="12">
+                        <Label text="TOEGEWEZEN AAN" styleClass="field-group-label"/>
+
+                        <ScrollPane styleClass="modern-scroll-pane" fitToWidth="true" prefHeight="85" maxHeight="85" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" style="-fx-background: transparent; -fx-background-color: transparent;">
+                            <content>
+                                <VBox fx:id="toegewezenLijst" spacing="6">
+                                    <Label text="Laden..." style="-fx-text-fill: #64748b; -fx-font-style: italic;"/>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+
+                        <Button fx:id="btnBeheerToewijzingen" text="Nieuwe werknemers toewijzen" styleClass="create-task-btn" maxWidth="Infinity" style="-fx-margin-top: 8px;"/>
+                        <Label fx:id="toewijsFeedback" visible="false" managed="false" wrapText="true"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </HBox>
+    </center>
 </fx:root>

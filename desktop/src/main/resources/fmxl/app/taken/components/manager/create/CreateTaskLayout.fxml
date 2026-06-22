@@ -1,67 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
-<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/tasks.css"
-         xmlns="http://javafx.com/javafx">
 
-    <?import javafx.scene.layout.*?>
-    <?import javafx.scene.control.*?>
-    <?import javafx.geometry.Insets?>
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml" styleClass="modal-card" spacing="16" maxHeight="-Infinity" stylesheets="@/css/tasks.css">
+    <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
 
-    <center>
-        <VBox spacing="16" maxWidth="400" alignment="TOP_LEFT">
-            <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-
-            <Label text="Creëer taken:" styleClass="card_subtitle"/>
-
-            <VBox styleClass="card" spacing="16">
-                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-
-                <!-- Description -->
-                <Label text="Beschrijving:" styleClass="section-label"/>
-                <TextField fx:id="nameField" promptText="name" styleClass="task-input"/>
-                <TextArea fx:id="specField" promptText="specificaties" prefRowCount="4" styleClass="task-input-area"/>
-
-                <!-- Due date + Location row -->
-                <HBox spacing="16">
-                    <VBox spacing="6" HBox.hgrow="ALWAYS">
-                        <Label text="Eind datum:" styleClass="section-label"/>
-                        <TextField fx:id="dueDateField" promptText="dd-mm-jjjj" styleClass="task-input"/>
-                    </VBox>
-                    <VBox spacing="6" HBox.hgrow="ALWAYS">
-                        <Label text="Locatie:" styleClass="section-label"/>
-                        <ComboBox fx:id="locationPicker" styleClass="picker" maxWidth="Infinity"/>
-                    </VBox>
-                </HBox>
-
-                <HBox spacing="16">
-                    <VBox spacing="8" HBox.hgrow="ALWAYS">
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <Label text="Hele dag" styleClass="task-name"/>
-                            <ToggleButton fx:id="wholeDayToggle" styleClass="toggle-switch"/>
-                        </HBox>
-                        <Label text="of" styleClass="task-due-text"/>
-                        <HBox spacing="4" alignment="CENTER_LEFT">
-                            <TextField fx:id="hourField" promptText="00" prefColumnCount="2" styleClass="task-input-small"/>
-                            <Label text=":" styleClass="task-name"/>
-                            <TextField fx:id="minuteField" promptText="00" prefColumnCount="2" styleClass="task-input-small"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="6" HBox.hgrow="ALWAYS">
-                        <Label text="Duur" styleClass="section-label"/>
-                        <TextField fx:id="durationField" promptText="uu:mm" styleClass="task-input"/>
-                    </VBox>
-                </HBox>
-
-                <Button fx:id="createButton" text="Creëer Taak" styleClass="create-task-btn" maxWidth="Infinity"/>
-                <Label fx:id="feedbackLabel" visible="false" wrapText="true"/>
-            </VBox>
+    <HBox alignment="CENTER_LEFT">
+        <VBox spacing="2">
+            <Label text="Nieuwe taak aanmaken" styleClass="card_title" style="-fx-font-size: 18px;"/>
+            <Label text="Plan de taak in en koppel een locatie." styleClass="page-subtitle"/>
         </VBox>
-    </center>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="cancelButton" text="✕" styleClass="close-icon-btn"/>
+    </HBox>
+
+    <Separator styleClass="form-separator"/>
+
+    <VBox spacing="6">
+        <Label text="TAAKOMSCHRIJVING" styleClass="field-group-label"/>
+        <TextField fx:id="nameField" promptText="Bv. Inspectie machine C" styleClass="modern-input"/>
+    </VBox>
+
+    <VBox spacing="6">
+        <Label text="SPECIFICATIES" styleClass="field-group-label"/>
+        <TextArea fx:id="specField" promptText="Extra opmerkingen..." prefRowCount="2" styleClass="modern-input-area" wrapText="true"/>
+    </VBox>
+
+    <VBox spacing="6">
+        <Label text="LOCATIE" styleClass="field-group-label"/>
+        <ComboBox fx:id="locationPicker" promptText="Kies site..." maxWidth="Infinity" styleClass="modern-combo-box"/>
+    </VBox>
+
+    <GridPane hgap="16" vgap="12">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50"/>
+            <ColumnConstraints percentWidth="50"/>
+        </columnConstraints>
+
+        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label text="Startdatum" styleClass="field-sub-label"/>
+            <DatePicker fx:id="startDatePicker" maxWidth="Infinity" styleClass="modern-date-picker"/>
+        </VBox>
+        <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label text="Startuur" styleClass="field-sub-label"/>
+            <HBox spacing="4" alignment="CENTER_LEFT">
+                <ComboBox fx:id="startHourPicker" styleClass="modern-combo-box" prefWidth="100"/>
+                <Label text=":" style="-fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                <ComboBox fx:id="startMinutePicker" styleClass="modern-combo-box" prefWidth="100"/>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label text="Deadline (Einddatum)" styleClass="field-sub-label"/>
+            <DatePicker fx:id="dueDatePicker" maxWidth="Infinity" styleClass="modern-date-picker"/>
+        </VBox>
+        <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="Einduur" styleClass="field-sub-label"/>
+            <HBox spacing="4" alignment="CENTER_LEFT">
+                <ComboBox fx:id="endHourPicker" styleClass="modern-combo-box" prefWidth="100"/>
+                <Label text=":" style="-fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                <ComboBox fx:id="endMinutePicker" styleClass="modern-combo-box" prefWidth="100"/>
+            </HBox>
+        </VBox>
+    </GridPane>
+
+    <VBox spacing="10" alignment="CENTER">
+        <VBox.margin><Insets top="8"/></VBox.margin>
+        <Button fx:id="createButton" text="Taak Aanmaken" styleClass="create-task-btn" maxWidth="Infinity"/>
+        <Label fx:id="feedbackLabel" visible="false" managed="false" wrapText="true"/>
+    </VBox>
+
 </fx:root>

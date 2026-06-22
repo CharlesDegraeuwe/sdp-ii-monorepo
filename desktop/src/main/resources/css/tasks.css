@@ -1,452 +1,415 @@
+/* =========================================
+   ALGEMENE LAYOUT & CONTAINERS
+   ========================================= */
 .task_root {
-    -fx-max-width: 850;
-}
-.filter-container {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 30;
-    -fx-padding: 6 6 6 6;
-    -fx-spacing: 2;
+  -fx-max-width: 850;
 }
 
-.filter-knop {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-radius: 20;
-    -fx-background-radius: 20;
-    -fx-padding: 6 16 6 16;
-    -fx-font-size: 13px;
-    -fx-cursor: hand;
-    -fx-font-weight: bold;
+.task-page-root {
+  -fx-background-color: transparent;
 }
 
-.filter-knop:hover {
-    -fx-background-color: #F6F6F6;
+/* De witte vlakken met zachte schaduw */
+.card, .form-card {
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 12;
+  -fx-border-radius: 12;
+  -fx-effect: dropshadow(three-pass-box, rgba(15, 23, 42, 0.05), 15, 0, 0, 4);
 }
 
-.filter-knop-actief {
-    -fx-background-color: #F6F6F6;
-    -fx-border-color: transparent;
-    -fx-border-radius: 20;
-    -fx-background-radius: 20;
-    -fx-padding: 6 16 6 16;
-    -fx-font-size: 13px;
-    -fx-cursor: hand;
-    -fx-text-fill: #1A1A1A;
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 1);
+.form-separator {
+  -fx-opacity: 0.4;
+  -fx-background-color: #cbd5e1;
 }
 
-
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-fit-to-height: true;
+/* =========================================
+   TYPOGRAFIE (Teksten & Titels)
+   ========================================= */
+.page-title {
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #1e293b;
 }
 
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-
-.assign-scroll {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.assign-scroll > .viewport {
-    -fx-background-color: transparent;
-}
-
-.assign-scroll .scroll-bar:vertical {
-    -fx-background-color: #F0F0F0;
-    -fx-background-radius: 999px;
-    -fx-pref-width: 8px;
-}
-
-.assign-scroll .scroll-bar:vertical .track {
-    -fx-background-color: #F0F0F0;
-    -fx-background-radius: 999px;
-}
-
-.assign-scroll .scroll-bar:vertical .thumb {
-    -fx-background-color: #E31B35;
-    -fx-background-radius: 999px;
-}
-
-.assign-scroll .scroll-bar:vertical .increment-button,
-.assign-scroll .scroll-bar:vertical .decrement-button {
-    -fx-pref-height: 0;
-    -fx-min-height: 0;
-    -fx-max-height: 0;
-    -fx-padding: 0;
-}
-
-.assign-scroll .scroll-bar:horizontal {
-    -fx-pref-height: 0;
-    -fx-min-height: 0;
-    -fx-max-height: 0;
-}
-
-.picker {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 30;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
-    -fx-padding: 4 12 4 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
-}
-
-.picker .arrow-button {
-    -fx-background-color: transparent;
-    -fx-padding: 0 0 0 4;
-}
-
-.picker .arrow {
-    -fx-background-color: #E31B35;
-    -fx-scale-x: 0.8;
-    -fx-scale-y: 0.8;
-}
-
-.picker:hover {
-    -fx-background-color: #f9f9f9;
-}
-
-.picker .list-view {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-border-color: #e8e8e8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);
-}
-
-.picker .list-cell {
-    -fx-font-size: 12px;
-    -fx-text-fill: #2c3e50;
-    -fx-padding: 5 14 5 14;
-    -fx-background-color: transparent;
-}
-
-.picker .list-cell:hover {
-    -fx-background-color: #f5f5f5;
-    -fx-background-radius: 8;
-}
-
-.picker .list-cell:selected {
-    -fx-background-color: transparent;
-    -fx-text-fill: #2c3e50;
-    -fx-font-weight: bold;
-}
-
-.card {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 26;
-    -fx-border-radius: 26;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 4);
+.page-subtitle {
+  -fx-font-size: 13px;
+  -fx-text-fill: #64748b;
 }
 
 .card_title {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #1e293b;
 }
 
 .card_subtitle {
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #000000;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #1e293b;
 }
+
 .section-label {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #000000;
+  -fx-font-size: 13px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #334155;
 }
 
-/* Action Buttons */
-.action_btn {
-    -fx-background-color: #F0F0F0;
-    -fx-background-radius: 12;
-    -fx-border-radius: 12;
-    -fx-padding: 10 14 10 14;
-    -fx-cursor: hand;
+/* Titels zachter gemaakt (lichter grijs) */
+.field-group-label {
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #94a3b8;
+  -fx-letter-spacing: 0.5px;
 }
 
-.action_btn:hover {
-    -fx-background-color: #E4E4E4;
-}
-
-.action_label {
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
-}
-
-.action_icon {
-    -fx-icon-color: #E31B35;
-}
-
-.action_icon_red {
-    -fx-icon-color: #E31B35;
-}
-
-
-.see_more_button {
-    -fx-text-fill: #888888;
-    -fx-underline: solid;
-    -fx-border-color: transparent;
-    -fx-padding: 0;
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
-}
-
-.see_more_button:hover {
-    -fx-underline: true;
-}
-
-.task-row {
-    -fx-padding: 6 8 6 8;
-    -fx-spacing: 10;
-    -fx-alignment: CENTER_LEFT;
-}
-
-.task-row:hover {
-    -fx-background-color: #F9F9F9;
-    -fx-background-radius: 8;
-}
-
-.task-circle {
-    -fx-fill: transparent;
-    -fx-stroke: #D0D0D0;
-    -fx-stroke-width: 1.5;
-}
-
-.task-name {
-    -fx-font-size: 13px;
-    -fx-text-fill: #2c3e50;
-}
-
-.task-due-badge {
-    -fx-background-color: #F0F0F0;
-    -fx-background-radius: 8;
-    -fx-padding: 3 8 3 8;
-    -fx-font-size: 10px;
-    -fx-text-fill: #888888;
-}
-
-.task-action-btn {
-    -fx-background-color: #F0F0F0;
-    -fx-background-radius: 6;
-    -fx-padding: 4 8 4 8;
-    -fx-cursor: hand;
-    -fx-min-width: 24;
-    -fx-min-height: 24;
-}
-
-.task-action-btn:hover {
-    -fx-background-color: #E4E4E4;
-}
-
-/* Task detail card */
-.edit-link {
-    -fx-text-fill: #888888;
-    -fx-font-size: 12px;
-    -fx-cursor: hand;
-    -fx-underline: true;
+.field-sub-label {
+  -fx-font-size: 12px;
+  -fx-font-weight: normal;
+  -fx-text-fill: #64748b;
 }
 
 .task-due-text {
-    -fx-font-size: 12px;
-    -fx-text-fill: #888888;
+  -fx-font-size: 12px;
+  -fx-text-fill: #64748b;
 }
 
 .task-location-link {
-    -fx-font-size: 11px;
-    -fx-text-fill: #5B9BD5;
-    -fx-cursor: hand;
+  -fx-font-size: 12px;
+  -fx-text-fill: #E31B35;
+  -fx-font-weight: bold;
 }
 
-.task-input {
-    -fx-background-color: #F6F6F6;
-    -fx-background-radius: 25;
-    -fx-border-color: transparent;
-    -fx-padding: 10 12 10 12;
-    -fx-font-size: 12px;
-    -fx-prompt-text-fill: #AAAAAA;
+.edit-link {
+  -fx-text-fill: #64748b;
+  -fx-font-size: 12px;
+  -fx-cursor: hand;
+  -fx-underline: true;
 }
 
-.task-input-area {
-    -fx-background-color: #F6F6F6;
-    -fx-control-inner-background: #F6F6F6;
-    -fx-background-radius: 25;
-    -fx-border-color: transparent;
-    -fx-padding: 10 12 10 12;
-    -fx-font-size: 12px;
-    -fx-prompt-text-fill: #AAAAAA;
+/* =========================================
+   KNOPPEN & TAB-TOGGLES
+   ========================================= */
+.filter-container {
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 30;
+  -fx-padding: 6;
+  -fx-spacing: 2;
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 2);
 }
 
-.task-section {
-    -fx-padding: 0;
+.filter-knop {
+  -fx-background-color: transparent;
+  -fx-background-radius: 20;
+  -fx-padding: 8 16;
+  -fx-font-size: 13px;
+  -fx-cursor: hand;
+  -fx-font-weight: bold;
+  -fx-text-fill: #64748b;
 }
 
-.task-input-small {
-    -fx-background-color: #F6F6F6;
-    -fx-background-radius: 10;
-    -fx-border-color: transparent;
-    -fx-padding: 8 10 8 10;
-    -fx-font-size: 12px;
-    -fx-prompt-text-fill: #AAAAAA;
-    -fx-max-width: 50;
-    -fx-alignment: CENTER;
+.filter-knop:hover {
+  -fx-background-color: #f1f5f9;
 }
 
-.toggle-switch {
-    -fx-background-color: #D0D0D0;
-    -fx-background-radius: 20;
-    -fx-padding: 3 16 3 4;
-    -fx-min-width: 40;
-    -fx-min-height: 22;
-    -fx-cursor: hand;
-}
-
-.toggle-switch:selected {
-    -fx-background-color: #2c3e50;
-    -fx-padding: 3 4 3 16;
+.filter-knop-actief {
+  -fx-background-color: #f1f5f9;
+  -fx-background-radius: 20;
+  -fx-padding: 8 16;
+  -fx-font-size: 13px;
+  -fx-cursor: hand;
+  -fx-text-fill: #1e293b;
+  -fx-font-weight: bold;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
 }
 
 .create-task-btn {
-    -fx-background-color: #E31B35;
-    -fx-text-fill: white;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 999px;
-    -fx-padding: 10 28 10 28;
-    -fx-cursor: hand;
+  -fx-background-color: #E31B35;
+  -fx-text-fill: white;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-background-radius: 8;
+  -fx-padding: 12 24;
+  -fx-cursor: hand;
 }
 
 .create-task-btn:hover {
-    -fx-background-color: #b6162b;
+  -fx-background-color: #b6162b;
 }
 
-/* Assign task item */
-.assign-task-item {
-    -fx-background-color: #F9F9F9;
-    -fx-background-radius: 10;
-    -fx-padding: 10 12 10 12;
+/* =========================================
+   INVOERVELDEN (Inputs, TextAreas, DatePickers)
+   ========================================= */
+.modern-input, .modern-input-area, .modern-date-picker, .modern-combo-box, .time-combo, .task-input, .task-input-area {
+  -fx-background-color: #f8fafc;
+  -fx-background-radius: 6;
+  -fx-border-color: #cbd5e1;
+  -fx-border-radius: 6;
+  -fx-border-width: 1;
+  -fx-padding: 8 12;
+  -fx-text-fill: #1e293b;
+  -fx-font-size: 13px;
 }
 
-.assign-task-item:hover {
-    -fx-background-color: #F0F0F0;
+.modern-input:focused, .modern-input-area:focused, .modern-date-picker:focused, .modern-combo-box:focused, .time-combo:focused, .task-input:focused, .task-input-area:focused {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #E31B35; /* Jouw rode accentkleur voor focus */
 }
 
-/* Member item */
-.member-item {
-    -fx-background-color: #FAFAFA;
-    -fx-background-radius: 10;
-    -fx-padding: 10 12 10 12;
-    -fx-cursor: hand;
+.modern-input-area, .task-input-area {
+  -fx-padding: 6 10;
 }
 
-.member-item:hover {
-    -fx-background-color: #F0F0F0;
+.modern-date-picker > .arrow-button {
+  -fx-background-color: transparent;
 }
 
+/* Oude filters/pickers naar de moderne stijl getrokken */
+.picker {
+  -fx-background-color: #f8fafc;
+  -fx-background-radius: 6;
+  -fx-border-color: #cbd5e1;
+  -fx-border-radius: 6;
+  -fx-border-width: 1;
+  -fx-padding: 4 12;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #1e293b;
+}
+
+.picker .arrow-button { -fx-background-color: transparent; }
+.picker .arrow { -fx-background-color: #E31B35; -fx-scale-x: 0.8; -fx-scale-y: 0.8; }
+.picker:hover { -fx-background-color: #f1f5f9; }
+
+/* =========================================
+   SCROLL PANES & LIJSTEN
+   ========================================= */
+/* Oude specifieke assign-scroll stijl */
+.assign-scroll {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+.assign-scroll > .viewport {
+  -fx-background-color: transparent;
+}
+.assign-scroll .scroll-bar:vertical {
+  -fx-background-color: transparent;
+  -fx-pref-width: 6px;
+}
+.assign-scroll .scroll-bar:vertical .track {
+  -fx-background-color: transparent;
+}
+.assign-scroll .scroll-bar:vertical .thumb {
+  -fx-background-color: #cbd5e1;
+  -fx-background-radius: 10px;
+}
+.assign-scroll .scroll-bar:horizontal {
+  -fx-pref-height: 0;
+}
+
+/* -----------------------------------------
+   De nieuwe Universele Moderne ScrollPane
+   ----------------------------------------- */
+.modern-scroll-pane {
+  -fx-background-color: transparent;
+  -fx-background-insets: 0;
+  -fx-padding: 0;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+}
+
+.modern-scroll-pane > .viewport {
+  -fx-background-color: transparent;
+}
+
+/* Verberg de track (de lelijke achtergrond van de balk) */
+.modern-scroll-pane .scroll-bar:vertical .track {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+/* De thumb (het zwevende grijze balkje) */
+.modern-scroll-pane .scroll-bar:vertical .thumb {
+  -fx-background-color: #cbd5e1;
+  -fx-background-radius: 10px;
+}
+
+.modern-scroll-pane .scroll-bar:vertical .thumb:hover {
+  -fx-background-color: #94a3b8;
+}
+
+/* Verberg de lelijke pijltjes boven en onder */
+.modern-scroll-pane .scroll-bar:vertical .increment-button,
+.modern-scroll-pane .scroll-bar:vertical .decrement-button {
+  -fx-background-color: transparent;
+  -fx-pref-height: 0px;
+  -fx-padding: 0;
+}
+
+.modern-scroll-pane .scroll-bar:vertical .increment-arrow,
+.modern-scroll-pane .scroll-bar:vertical .decrement-arrow {
+  -fx-shape: " ";
+  -fx-padding: 0;
+}
+
+/* Weg met de blauwe focus ring rond scrollpanes en forms! */
+.modern-scroll-pane:focused,
+.modern-scroll-pane > .viewport:focused,
+.form-card:focused {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-insets: 0;
+}
+
+/* =========================================
+   LIJST ITEMS (Taken & Medewerkers)
+   ========================================= */
 .taak_container {
-    -fx-background-color: rgba(240, 240, 240, 0.48);
-    -fx-background-radius: 999px;
-    -fx-cursor: hand;
-    -fx-padding: 10 5 10 5;
+  -fx-background-color: #f8fafc;
+  -fx-background-radius: 8;
+  -fx-border-color: #e2e8f0;
+  -fx-border-radius: 8;
+  -fx-padding: 10 12;
+  -fx-cursor: hand;
 }
 
-.finshed_container {
-    -fx-background-color: rgba(240, 240, 240, 0.48);
-    -fx-background-radius: 999px;
-    -fx-cursor: hand;
-    -fx-padding: 10 5 10 5;
-}
-
-.taak_delete_btn {
-    -fx-background-color: rgba(240, 240, 240, 0.48);
-    -fx-background-radius: 999px;
-    -fx-cursor: hand;
-}
-
-.taak_delete_btn:hover {
-    -fx-background-color: #E4E4E4;
-}
-
-.taak_delete_icon {
-    -fx-icon-color: #E31B35;
-}
-
-.isSupervisorLabel {
-    -fx-font-size: 10px;
-    -fx-background-color: gray;
-}
-
-.taak_checkbox .box {
-    -fx-background-radius: 999px;
-    -fx-border-radius: 999px;
-    -fx-border-color: #cccccc;
-    -fx-background-color: white;
-    -fx-pref-width: 20;
-    -fx-pref-height: 20;
-}
-
-.taak_checkbox:selected .box {
-    -fx-background-color: white;
-    -fx-border-color: #cccccc;
-}
-
-.taak_checkbox:selected .mark {
-    -fx-background-color: transparent;
-}
-
-.taak_checkbox .mark {
-    -fx-background-color: transparent;
-}
-
-.filter-checkbox {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #888888;
-    -fx-cursor: hand;
-}
-
-.filter-checkbox .box {
-    -fx-background-color: #F0F0F0;
-    -fx-background-radius: 999px;
-    -fx-border-radius: 999px;
-    -fx-border-color: transparent;
-    -fx-pref-width: 18;
-    -fx-pref-height: 18;
-}
-
-.filter-checkbox:selected .box {
-    -fx-background-color: #E31B35;
-    -fx-border-color: transparent;
-}
-
-.filter-checkbox:selected .mark {
-    -fx-background-color: white;
-    -fx-shape: "M 0,4 L 2,7 L 7,0";
-    -fx-scale-x: 0.7;
-    -fx-scale-y: 0.7;
-}
-
-.filter-checkbox .mark {
-    -fx-background-color: transparent;
-}
-
-.filter-checkbox:selected {
-    -fx-text-fill: #E31B35;
-}
-
-.taak_datum {
-    -fx-font-size: 10px;
-    -fx-text-fill: #858585;
+.taak_container:hover {
+  -fx-background-color: #f1f5f9;
 }
 
 .taak_title {
-    -fx-font-size: 12px;
-    -fx-text-fill: #2c3e50;
-    -fx-font-weight: bold;
+  -fx-font-size: 13px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #1e293b;
+}
+
+.taak_datum {
+  -fx-font-size: 11px;
+  -fx-text-fill: #64748b;
+}
+
+/* Vuilbakje */
+.taak_delete_btn {
+  -fx-background-color: #fee2e2;
+  -fx-background-radius: 6;
+  -fx-cursor: hand;
+}
+
+.taak_delete_btn:hover {
+  -fx-background-color: #fca5a5;
+}
+
+.taak_delete_icon {
+  -fx-icon-color: #E31B35;
+}
+
+/* =========================================
+   CHECKBOXES
+   ========================================= */
+.taak_checkbox .box {
+  -fx-background-color: #ffffff;
+  -fx-border-color: #cbd5e1;
+  -fx-border-radius: 4;
+  -fx-background-radius: 4;
+  -fx-pref-width: 18;
+  -fx-pref-height: 18;
+}
+
+.taak_checkbox:selected .box {
+  -fx-background-color: #E31B35;
+  -fx-border-color: #E31B35;
+}
+
+.taak_checkbox:selected .mark {
+  -fx-background-color: white;
+}
+
+.filter-checkbox {
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #64748b;
+  -fx-cursor: hand;
+}
+
+.filter-checkbox .box {
+  -fx-background-color: #f1f5f9;
+  -fx-border-radius: 4;
+  -fx-border-color: #cbd5e1;
+}
+
+.filter-checkbox:selected .box {
+  -fx-background-color: #E31B35;
+  -fx-border-color: #E31B35;
+}
+
+.filter-checkbox:selected .mark {
+  -fx-background-color: white;
+}
+
+.filter-checkbox:selected {
+  -fx-text-fill: #E31B35;
+}
+
+/* =========================================
+   MODALS / POPUPS
+   ========================================= */
+/* Subtiele, zachte waas over de content */
+.modal-overlay {
+  /* 15, 23, 42 is een mooie donkerblauwe/slate kleur, de 0.25 zorgt voor slechts 25% dekking */
+  -fx-background-color: rgba(15, 23, 42, 0.25);
+}
+
+/* De popup houden we lekker strak en compact */
+.modal-card {
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 12;
+  -fx-border-radius: 12;
+  -fx-border-color: #e2e8f0;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 40, 0, 0, 8);
+  -fx-max-width: 600;
+}
+
+.close-icon-btn {
+  -fx-background-color: transparent;
+  -fx-text-fill: #94a3b8;
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-padding: 0 5 0 5;
+}
+
+.close-icon-btn:hover {
+  -fx-text-fill: #E31B35;
+}
+
+.modern-combo-box .list-cell,
+.time-combo .list-cell,
+.modern-date-picker .text-field {
+  -fx-text-fill: #1e293b;
+}
+
+/* Zorgt dat de geselecteerde tekst IN het dichte dropdown-menu donkergrijs is */
+.modern-combo-box > .list-cell,
+.time-combo > .list-cell {
+  -fx-text-fill: #1e293b;
+}
+
+/* ========================================================
+   COMBOBOX GHOST-TEXT FIX (Forceert donkere tekst)
+   ======================================================== */
+/* 1. De geselecteerde tekst in het dichte vakje */
+.combo-box .list-cell {
+  -fx-text-fill: #1e293b;
+}
+
+/* 2. De tekst in het uitklapmenu zelf */
+.combo-box-popup .list-view .list-cell {
+  -fx-text-fill: #1e293b;
+}
+
+/* 3. Zorg voor een duidelijke hover in het menuutje */
+.combo-box-popup .list-view .list-cell:hover,
+.combo-box-popup .list-view .list-cell:filled:selected {
+  -fx-background-color: #f1f5f9;
+  -fx-text-fill: #E31B35; /* Jouw rode kleur als je eroverheen gaat */
 }
