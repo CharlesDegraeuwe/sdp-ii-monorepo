@@ -195,7 +195,7 @@ export function PersonalDayView({
                     Pauze
                   </span>
                   <span className="text-xs font-semibold text-zinc-500">
-                    {pauzeStart} – {pauzeEind}
+                    {pauzeStart} - {pauzeEind}
                   </span>
                 </div>
               </div>
