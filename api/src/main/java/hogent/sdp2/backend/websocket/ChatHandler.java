@@ -11,12 +11,14 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class ChatHandler extends TextWebSocketHandler {
 
     private final ChatService chatService;
+    private final FileStorageService fileStorageService;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -34,12 +36,19 @@ public class ChatHandler extends TextWebSocketHandler {
 
             System.out.println("=== WS RECEIVED === " + incoming.content());
 
+            List<FileStorageService.StoredFile> files = fileStorageService.resolve(userId, incoming.fileIds());
+            boolean isAgentic = !files.isEmpty();
+
             chatService.streamReply(
                     incoming.content(),
                     userId,
                     userRole,
-                    chunk -> send(session, OutGoingMsgDTO.chunk(chunk)),
-                    () -> send(session, OutGoingMsgDTO.done())
+                    files,
+                    chunk -> send(session, OutGoingMsgDTO.chunk(chunk, isAgentic)),
+                    () -> {
+                        fileStorageService.cleanup(userId, incoming.fileIds());
+                        send(session, OutGoingMsgDTO.done());
+                    }
             );
 
         } catch (Exception e) {

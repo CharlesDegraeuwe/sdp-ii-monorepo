@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
+const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
+
+interface FileAttachment {
+  id: string;
+  name: string;
+  mimeType: string;
+  size: number;
+}
+
 interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -11,6 +20,22 @@ interface Message {
 
 type WSStatus = 'connecting' | 'open' | 'closed' | 'error';
 
+async function uploadFiles(
+  files: File[],
+  token: string,
+): Promise<FileAttachment[]> {
+  if (files.length === 0) return [];
+  const formData = new FormData();
+  files.forEach((f) => formData.append('files', f));
+  const res = await fetch(`${BASE}/chat/files`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+  if (!res.ok) throw new Error('File upload failed');
+  return res.json();
+}
+
 export function useChatSocket() {
   const { data: session } = useSession();
   const token = session?.accessToken;
@@ -20,7 +45,7 @@ export function useChatSocket() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [fileList, setFileList] = useState<File[]>([]);
-  const isAgentic = useState<boolean>(false);
+  const [isAgentic, setIsAgentic] = useState<boolean>(false);
   const [status, setStatus] = useState<WSStatus>(
     token ? 'connecting' : 'closed',
   );
@@ -44,6 +69,9 @@ export function useChatSocket() {
         const id = currentAssistantId.current;
 
         if (data.type === 'chunk' && id) {
+          if (data.isAgentic !== undefined && data.isAgentic !== null) {
+            setIsAgentic(data.isAgentic);
+          }
           setMessages((prev) =>
             prev.map((m) =>
               m.id === id ? { ...m, content: m.content + data.content } : m,
@@ -54,6 +82,7 @@ export function useChatSocket() {
         if (data.type === 'done') {
           currentAssistantId.current = null;
           setStreaming(false);
+          setIsAgentic(false);
         }
 
         if (data.type === 'error') {
@@ -85,7 +114,7 @@ export function useChatSocket() {
   }, [token]);
 
   const sendMessage = useCallback(
-    (text: string) => {
+    async (text: string) => {
       const trimmed = text.trim();
       if (!trimmed) return;
       if (wsRef.current?.readyState !== WebSocket.OPEN) {
@@ -102,7 +131,7 @@ export function useChatSocket() {
         role: 'user',
         content: trimmed,
         timestamp: new Date(),
-        files: fileList.length > 0 ? fileList : undefined,
+        files: fileList.length > 0 ? [...fileList] : undefined,
       };
 
       const assistantId = crypto.randomUUID();
@@ -117,9 +146,24 @@ export function useChatSocket() {
       setMessages((prev) => [...prev, userMessage, assistantMessage]);
       setStreaming(true);
 
-      wsRef.current.send(JSON.stringify({ content: trimmed }));
+      try {
+        const attachments = token ? await uploadFiles(fileList, token) : [];
+        const fileIds = attachments.map((a) => a.id);
+        wsRef.current?.send(JSON.stringify({ content: trimmed, fileIds }));
+      } catch (err) {
+        console.error('File upload error:', err);
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantId
+              ? { ...m, content: 'Bestand uploaden mislukt. Probeer opnieuw.' }
+              : m,
+          ),
+        );
+        currentAssistantId.current = null;
+        setStreaming(false);
+      }
     },
-    [streaming, fileList],
+    [streaming, fileList, token],
   );
 
   return {
@@ -131,5 +175,6 @@ export function useChatSocket() {
     status,
     streaming,
     isAgentic,
+    setIsAgentic,
   };
 }

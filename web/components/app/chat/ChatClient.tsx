@@ -40,7 +40,7 @@ const ChatClient = (props: ChatCLientProps) => {
   }, [messages]);
 
   const handleMessage = async (text: string) => {
-    sendMessage(text);
+    await sendMessage(text);
     setInput('');
     setFileList([]);
   };
@@ -56,9 +56,13 @@ const ChatClient = (props: ChatCLientProps) => {
 
   return (
     <FormHelper onSubmit={handleSubmit}>
-      <div className={'relative min-h-0 flex-1 w-full h-full bg-bg-white'}>
+      <div
+        className={
+          'relative min-h-0 flex-1 w-full h-full overflow-hidden bg-bg-white'
+        }
+      >
         <div
-          className={`absolute ${isAgentic ? 'opacity-0' : 'opacity-100 animate-pulse'} transition-opacity duration-250 w-full h-full rounded-3xl overflow-hidden flex items-center justify-center bg-white`}
+          className={`absolute pointer-events-none ${isAgentic ? 'opacity-100 animate-pulse' : 'opacity-0'} transition-opacity duration-250 w-full h-full rounded-3xl overflow-hidden flex items-center justify-center`}
           style={{
             boxShadow: `
             inset 200px 200px 250px -150px #60a5fa,
@@ -69,7 +73,7 @@ const ChatClient = (props: ChatCLientProps) => {
           }}
         />
 
-        <div className="relative z-20 w-full h-full flex items-center justify-center">
+        <div className="relative z-20 w-full h-full flex flex-col overflow-hidden">
           <div className={'absolute top-2 left-1/2 -translate-x-1/2 z-20'}>
             <BaseTooltip content={isOpen ? 'samenvouwen' : 'uitvouwen'}>
               <Button
@@ -80,7 +84,7 @@ const ChatClient = (props: ChatCLientProps) => {
               />
             </BaseTooltip>
           </div>
-          <div className="z-10 flex flex-col items-center justify-center w-full h-full">
+          <div className="z-10 flex flex-col items-center w-full flex-1 min-h-0">
             {!hasMessages && (
               <div
                 className={
@@ -146,16 +150,16 @@ const ChatClient = (props: ChatCLientProps) => {
             )}
 
             {hasMessages && (
-              <div className="w-full h-full flex flex-col items-center justify-between py-6 sm:py-10 px-4">
+              <div className="w-full h-full min-h-0 flex flex-col items-center justify-between py-6 sm:py-10 px-4">
                 <div
                   ref={scrollRef}
-                  className="flex flex-col w-full sm:w-4/5 md:w-3/5 lg:w-2/5 flex-1 overflow-y-auto scroll-hidden pb-10"
+                  className="flex flex-col w-full sm:w-4/5 md:w-3/5 lg:w-2/5 min-h-0 flex-1 overflow-y-auto scroll-hidden pb-10"
                 >
                   {messages.map((message) => (
                     <ChatMessage key={message.id} message={message} />
                   ))}
                 </div>
-                <div className="w-full sm:w-4/5 md:w-3/5 lg:w-2/5 flex flex-col gap-1">
+                <div className="w-full sm:w-4/5 md:w-3/5 lg:w-2/5 flex flex-col gap-1 shrink-0">
                   <ChatInput
                     isReceiving={streaming}
                     autoFocus

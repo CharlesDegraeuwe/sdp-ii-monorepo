@@ -163,6 +163,8 @@ const ChatInput = ({
         <input
           ref={fileInputRef}
           type="file"
+          multiple
+          accept="image/png,image/jpeg,image/gif,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           className="hidden"
           onChange={(e) => {
             if (!maxLength) {
@@ -173,11 +175,13 @@ const ChatInput = ({
         />
         <div className={'absolute z-20 right-0 top-4 flex flex-row px-3'}>
           <Button
+            type="button"
             icon={<FaPlus />}
             variant="ghost"
             onClick={() => fileInputRef.current?.click()}
           />
           <Button
+            type="button"
             disabled={!isUploaded || isReceiving}
             px={'px-0'}
             icon={<LuSend size={14} />}
