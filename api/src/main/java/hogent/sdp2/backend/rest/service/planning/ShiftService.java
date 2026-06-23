@@ -10,7 +10,9 @@ import hogent.sdp2.backend.rest.repository.ShiftRepository;
 import hogent.sdp2.backend.rest.repository.TeamwerknemerRepository;
 import hogent.sdp2.backend.rest.repository.WerknemerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,9 +41,23 @@ public class ShiftService {
                 .toList();
     }
 
+    public List<ShiftResponseDTO> geefShiftenVanWerknemerInBereik(Integer werknemerId, LocalDate van, LocalDate tot) {
+        return shiftRepository.findByWerknemer_Id(werknemerId).stream()
+                .filter(s -> !s.getEindDatum().isBefore(van) && !s.getStartDatum().isAfter(tot))
+                .map(this::mapToDTO)
+                .toList();
+    }
+
     public ShiftResponseDTO maakShift(ShiftAanmakenDTO dto) {
         Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
                 .orElseThrow(() -> new IllegalArgumentException("Werknemer niet gevonden: " + dto.werknemerId()));
+
+        boolean heeftOverlap = shiftRepository.findByWerknemer_Id(dto.werknemerId()).stream()
+                .anyMatch(s -> !s.getEindDatum().isBefore(dto.startDatum()) && !s.getStartDatum().isAfter(dto.eindDatum()));
+        if (heeftOverlap) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Deze werknemer heeft al een shift in deze periode.");
+        }
+
         Shift shift = new Shift();
         shift.setWerknemer(werknemer);
         shift.setStartDatum(dto.startDatum());

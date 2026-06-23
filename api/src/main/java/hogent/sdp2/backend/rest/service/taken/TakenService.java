@@ -38,15 +38,18 @@ public class TakenService {
 
     @Transactional
     public String maakTaakAan(TaakAanmakenDTO dto) {
-        Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
-                .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
-
         Taken taak = new Taken();
-        taak.setWerknemer(werknemer);
+        if (dto.werknemerId() != null) {
+            Werknemer werknemer = werknemerRepository.findById(dto.werknemerId())
+                    .orElseThrow(() -> new RuntimeException("Werknemer niet gevonden"));
+            taak.setWerknemer(werknemer);
+        }
         taak.setTitel(dto.titel());
-        taak.setBeschrijving(dto.beschrijving());
+        taak.setBeschrijving(dto.beschrijving() != null ? dto.beschrijving() : "");
         taak.setAfgewerkt("nee");
         taak.setDeadline(dto.deadline());
+        taak.setStartuur(dto.startuur());
+        taak.setEinduur(dto.einduur());
 
         takenRepository.save(taak);
         return "Taak '" + dto.titel() + "' succesvol aangemaakt";
@@ -98,18 +101,22 @@ public class TakenService {
     private TaakResponseDTO toDTO(Taken taak) {
         Werknemer w = taak.getWerknemer();
 
-        List<Teamwerknemer> teamwerknemers = teamwerknemerRepository.findByWerknemerId(w.getId());
-        log.info("Werknemer {} heeft teams: {}", w.getId(), teamwerknemers);
-        Integer teamId = teamwerknemers.isEmpty() ? null : teamwerknemers.get(0).getTeam().getId();
+        WerknemerResponseDTO werknemerDTO = null;
+        Integer teamId = null;
+        Integer siteId = null;
 
-        List<Integer> siteIds = teamId != null ? siteteamRepository.findSiteIdsByTeamId(teamId) : List.of();
-        log.info("Team {} heeft sites: {}", teamId, siteIds);
-        Integer siteId = siteIds.isEmpty() ? null : siteIds.get(0);
+        if (w != null) {
+            List<Teamwerknemer> teamwerknemers = teamwerknemerRepository.findByWerknemerId(w.getId());
+            teamId = teamwerknemers.isEmpty() ? null : teamwerknemers.get(0).getTeam().getId();
+            List<Integer> siteIds = teamId != null ? siteteamRepository.findSiteIdsByTeamId(teamId) : List.of();
+            siteId = siteIds.isEmpty() ? null : siteIds.get(0);
+            werknemerDTO = new WerknemerResponseDTO(w.getId(), w.getNaam(), w.getVoornaam(), w.getEmail(),
+                    w.getTelefoonnummer(), w.getGeboortedatum(), w.getRol(), w.getStatus());
+        }
 
         return new TaakResponseDTO(
                 taak.getId(),
-                new WerknemerResponseDTO(w.getId(), w.getNaam(), w.getVoornaam(), w.getEmail(),
-                        w.getTelefoonnummer(), w.getGeboortedatum(), w.getRol(), w.getStatus()),
+                werknemerDTO,
                 taak.getTitel(),
                 taak.getBeschrijving(),
                 taak.getAfgewerkt(),

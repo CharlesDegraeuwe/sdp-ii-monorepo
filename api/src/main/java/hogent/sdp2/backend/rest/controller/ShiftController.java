@@ -35,13 +35,22 @@ public class ShiftController {
         return shiftService.geefShiftenVanWerknemerOpDatum(werknemerId, datum);
     }
 
-    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
+    @GetMapping("/werknemer/{werknemerId}/bereik")
+    public List<ShiftResponseDTO> geefShiftenVanWerknemerInBereik(
+            @PathVariable Integer werknemerId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate van,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tot
+    ) {
+        return shiftService.geefShiftenVanWerknemerInBereik(werknemerId, van, tot);
+    }
+
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'Supervisor')")
     @PostMapping
     public ShiftResponseDTO maakShift(@RequestBody ShiftAanmakenDTO dto) {
         return shiftService.maakShift(dto);
     }
 
-    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'Supervisor')")
     @PutMapping("/{shiftId}")
     public ShiftResponseDTO pasAan(
             @PathVariable Integer shiftId,

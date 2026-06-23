@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -16,8 +17,8 @@ public class Taken {
     @Column(name = "Taak_ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Werknemer_ID", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "Werknemer_ID", nullable = true)
     private Werknemer werknemer;
 
     @Column(name = "Titel", nullable = false, length = 45)
@@ -31,5 +32,11 @@ public class Taken {
 
     @Column(name = "Deadline", nullable = false)
     private LocalDate deadline;
+
+    @Column(name = "startuur", nullable = true)
+    private LocalTime startuur;
+
+    @Column(name = "einduur", nullable = true)
+    private LocalTime einduur;
 
 }

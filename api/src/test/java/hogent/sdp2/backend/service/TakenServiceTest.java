@@ -83,7 +83,7 @@ class TakenServiceTest {
 
     @Test
     void maakTaakAan_slaatTaakOp() {
-        TaakAanmakenDTO dto = new TaakAanmakenDTO(1, "Nieuwe taak", "Omschrijving", LocalDate.of(2025, 6, 1));
+        TaakAanmakenDTO dto = new TaakAanmakenDTO(1, "Nieuwe taak", "Omschrijving", LocalDate.of(2025, 6, 1), null, null);
         when(werknemerRepository.findById(1)).thenReturn(Optional.of(werknemer));
         when(takenRepository.save(any(Taken.class))).thenReturn(taak);
 
@@ -95,7 +95,7 @@ class TakenServiceTest {
 
     @Test
     void maakTaakAan_gooidExceptionBijOnbekendeWerknemer() {
-        TaakAanmakenDTO dto = new TaakAanmakenDTO(999, "Taak", "Omschrijving", LocalDate.of(2025, 6, 1));
+        TaakAanmakenDTO dto = new TaakAanmakenDTO(999, "Taak", "Omschrijving", LocalDate.of(2025, 6, 1), null, null);
         when(werknemerRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> takenService.maakTaakAan(dto))

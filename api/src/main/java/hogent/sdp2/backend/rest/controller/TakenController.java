@@ -25,7 +25,7 @@ public class TakenController {
         return takenService.geefTakenVanWerknemer(id);
     }
 
-    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'Supervisor')")
     @PostMapping
     public String maakTaakAan(@RequestBody TaakAanmakenDTO dto) {
         return takenService.maakTaakAan(dto);
