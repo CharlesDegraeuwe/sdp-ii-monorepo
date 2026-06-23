@@ -139,7 +139,7 @@ export function PlannerFilter({
       {hasActive && (
         <button
           type="button"
-          className="h-8 px-3 rounded-full inline-flex items-center text-sm text-zinc-500 hover:bg-zinc-100 transition-colors cursor-pointer"
+          className="h-8 px-3 rounded-full inline-flex items-center text-sm text-zinc-500 hover:bg-gray-300/30 transition-colors cursor-pointer"
           onClick={handleClearAll}
         >
           Wis filters

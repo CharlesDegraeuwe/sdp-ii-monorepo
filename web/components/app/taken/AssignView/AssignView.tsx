@@ -5,27 +5,14 @@ import { Label } from '@/components/design-system/Label';
 import { Button } from '@/components/design-system/Button';
 import { useUser } from '@/providers/UserProvider';
 import { useToast } from '@/providers/ToastProvider';
-import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
+import {
+  HiOutlineClipboardDocumentList,
+  HiOutlineUserGroup,
+} from 'react-icons/hi2';
+import Avatar from '@/components/design-system/Avatar/Avatar';
 import { useTaken } from '@/hooks/useTaken';
 import { useTeams } from '@/hooks/useTeams';
 import { useAssignTaak } from '@/hooks/useAssignTaak';
-
-const memberPalette = [
-  'bg-sky-100',
-  'bg-emerald-100',
-  'bg-amber-100',
-  'bg-rose-100',
-  'bg-violet-100',
-  'bg-orange-100',
-  'bg-teal-100',
-];
-
-const colorForId = (id: string) => {
-  let hash = 0;
-  for (let i = 0; i < id.length; i++)
-    hash = id.charCodeAt(i) + ((hash << 5) - hash);
-  return memberPalette[Math.abs(hash) % memberPalette.length];
-};
 
 export const AssignView = () => {
   const { data: tasks = [] } = useTaken();
@@ -83,9 +70,16 @@ export const AssignView = () => {
 
   return (
     <div
-      className={'w-full grid grid-cols-1 sm:grid-cols-2 gap-5 min-h-96 pt-5'}
+      className={
+        'w-full h-full min-h-full flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5 pt-5'
+      }
     >
-      <Container label={'Niet-toegewezen taken'} padding="0">
+      <Container
+        label={'Niet-toegewezen taken'}
+        padding="0"
+        className={'flex-1 h-full'}
+        flex="flex flex-col"
+      >
         {unassigned.length === 0 ? (
           <div
             className={'w-full h-full flex justify-center items-center pb-12'}
@@ -93,8 +87,8 @@ export const AssignView = () => {
             <Label text={'Geen taken beschikbaar'} variant={'emptystate'} />
           </div>
         ) : (
-          <div className="flex flex-col gap-2 max-h-150 min-h-150 relative pr-1 overflow-x-visible scroll-hidden">
-            <div className="flex flex-col gap-2 h-full pb-10 overflow-y-auto overflow-x-visible scroll-hidden">
+          <div className="flex-1 min-h-0 relative">
+            <div className="absolute inset-0 flex flex-col gap-2 pb-10 pr-1 overflow-y-auto scroll-hidden">
               {unassigned.map((t) => {
                 const active = selectedTaskId === t.id;
                 return (
@@ -124,12 +118,19 @@ export const AssignView = () => {
         )}
       </Container>
 
-      <Container label={'Toewijzing'}>
-        <div className={'flex flex-col gap-5 h-full'}>
-          <div className={'flex flex-col gap-2'}>
+      <Container
+        label={'Toewijzing'}
+        className={'flex-1 h-full'}
+        flex="flex flex-col"
+      >
+        <div className={'flex flex-col gap-5 h-full min-h-0'}>
+          {/* Teams — vaste max hoogte */}
+          <div className={'flex flex-col gap-2 shrink-0'}>
             <Label text={'Teams'} size={'sm'} weight={600} />
             <div
-              className={'flex flex-col gap-2 max-h-40 overflow-y-auto pr-1'}
+              className={
+                'flex flex-col gap-2 max-h-48 overflow-y-auto pr-1 scroll-hidden'
+              }
             >
               {visibleTeams.length === 0 ? (
                 <div className={'w-full py-4 flex items-center justify-center'}>
@@ -142,31 +143,30 @@ export const AssignView = () => {
                 visibleTeams.map((team) => {
                   const active = selectedTeamId === team.id;
                   return (
-                    <button
+                    <div
                       key={team.id}
                       onClick={() => {
                         setSelectedTeamId(team.id);
                         setSelectedMemberId(null);
                       }}
-                      className={`flex flex-row items-center gap-3 px-4 py-2 rounded-full text-sm text-left transition ${
-                        active ? 'bg-zinc-200' : 'bg-zinc-100 hover:bg-zinc-200'
-                      }`}
+                      className="p-0.5"
                     >
-                      <span
-                        className={`w-3.5 h-3.5 rounded-full border ${
-                          active
-                            ? 'bg-zinc-500 border-zinc-500'
-                            : 'border-zinc-300 bg-white'
-                        }`}
-                      />
-                      <span>{team.name}</span>
-                    </button>
+                      <div
+                        className={`px-4 py-2 shadow-sm rounded-full text-sm flex flex-row gap-2 items-center min-h-13 cursor-pointer text-left transition ${active ? 'bg-white ring ring-zinc-50' : 'bg-zinc-100 hover:bg-zinc-200'}`}
+                      >
+                        <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center shrink-0">
+                          <HiOutlineUserGroup className="w-4 h-4 text-zinc-600" />
+                        </div>
+                        <span className="flex-1 truncate">{team.name}</span>
+                      </div>
+                    </div>
                   );
                 })
               )}
             </div>
           </div>
 
+          {/* Teamleden — vult resterende ruimte */}
           <div className={'flex flex-col gap-2 flex-1 min-h-0'}>
             <Label text={'Teamleden'} size={'sm'} weight={600} />
             {!selectedTeamId ? (
@@ -181,36 +181,41 @@ export const AssignView = () => {
                 <Label text={'Geen leden in dit team'} variant={'emptystate'} />
               </div>
             ) : (
-              <div className={'flex flex-col gap-2 overflow-y-auto pr-1'}>
-                {teamMembers.map((m) => {
-                  const active = selectedMemberId === m.id;
-                  const bg = colorForId(m.id);
-                  return (
-                    <button
-                      key={m.id}
-                      onClick={() => setSelectedMemberId(m.id)}
-                      className={`flex flex-row items-center gap-3 px-4 py-2 rounded-full text-sm text-left transition ${bg} ${
-                        active ? 'ring-2 ring-rose-500 shadow-sm' : ''
-                      }`}
-                    >
-                      <span
-                        className={`w-3.5 h-3.5 rounded-full border ${
-                          active
-                            ? 'bg-zinc-700 border-zinc-700'
-                            : 'border-zinc-400 bg-white/60'
-                        }`}
-                      />
-                      <span>
-                        {m.firstName} {m.lastName}
-                      </span>
-                    </button>
-                  );
-                })}
+              <div className={'flex-1 min-h-0 relative'}>
+                <div
+                  className={
+                    'absolute inset-0 flex flex-col gap-2 overflow-y-auto pr-1 scroll-hidden pb-2'
+                  }
+                >
+                  {teamMembers.map((m) => {
+                    const active = selectedMemberId === m.id;
+                    return (
+                      <div
+                        key={m.id}
+                        onClick={() => setSelectedMemberId(m.id)}
+                        className="p-0.5"
+                      >
+                        <div
+                          className={`px-4 py-2 shadow-sm rounded-full text-sm flex flex-row gap-2 items-center min-h-13 cursor-pointer text-left transition ${active ? 'bg-white ring ring-zinc-50' : 'bg-zinc-100 hover:bg-zinc-200'}`}
+                        >
+                          <Avatar
+                            id={Number(m.id)}
+                            displayName={`${m.firstName} ${m.lastName}`}
+                            size={32}
+                          />
+                          <span className="flex-1 truncate">
+                            {m.firstName} {m.lastName}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
 
-          <div className={'mt-auto'}>
+          <div className={'shrink-0'}>
             <Button
               onClick={handleAssign}
               disabled={!selectedTaskId || !selectedMemberId || isPending}

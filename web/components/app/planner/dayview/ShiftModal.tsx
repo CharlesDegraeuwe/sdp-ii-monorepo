@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useToast } from '@/providers/ToastProvider';
 import type { ModalForm } from './helpers';
 
 export function ShiftModal({
@@ -14,6 +15,7 @@ export function ShiftModal({
 }) {
   const [f, setF] = useState(form);
   const [saving, setSaving] = useState(false);
+  const toast = useToast();
 
   const isGeldig = f.startTijd && f.eindTijd && f.startDatum && f.eindDatum;
 
@@ -23,6 +25,8 @@ export function ShiftModal({
     try {
       await onSave(f);
       onClose();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Shift opslaan mislukt');
     } finally {
       setSaving(false);
     }

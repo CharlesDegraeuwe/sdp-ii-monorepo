@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MdEventAvailable, MdLocalHospital } from 'react-icons/md';
+import {
+  MdEventAvailable,
+  MdLocalHospital,
+  MdOutlineAddCircleOutline,
+} from 'react-icons/md';
 import type { Afwezigheid, Shift } from './types';
 import type { WerknemerOptie } from '@/hooks/usePlanningFilters';
 import { DAGEN_KORT } from './constants';
@@ -22,6 +26,8 @@ interface MonthViewProps {
   onNavigeerNaarDag: (datum: Date) => void;
   onVerlofAanvragen: (datum: Date) => void;
   onAfwezigheidMelden: (datum: Date) => void;
+  onShiftAanmaken?: (datum: Date) => void;
+  kanShiftAanmaken?: boolean;
   tab?: 'you' | 'team';
   teamWerknemers?: WerknemerOptie[];
   teamShiften?: Shift[];
@@ -29,12 +35,19 @@ interface MonthViewProps {
   onSelectTeamWerknemer?: (werknemerId: number, datum: Date) => void;
 }
 
+function datumNaarString(datum: Date): string {
+  const j = datum.getFullYear();
+  const m = String(datum.getMonth() + 1).padStart(2, '0');
+  const d = String(datum.getDate()).padStart(2, '0');
+  return `${j}-${m}-${d}`;
+}
+
 function getShiftVoorWerknemer(
   datum: Date,
   werknemerId: number,
   shifts: Shift[],
 ): Shift | undefined {
-  const ds = datum.toISOString().split('T')[0];
+  const ds = datumNaarString(datum);
   return shifts.find(
     (s) =>
       s.werknemerId === werknemerId && s.startDatum <= ds && s.eindDatum >= ds,
@@ -42,10 +55,12 @@ function getShiftVoorWerknemer(
 }
 
 function getShiftVoorDag(datum: Date, shifts: Shift[]): Shift | undefined {
-  const ds = datum.toISOString().split('T')[0];
-  return shifts.find((s) => s.startDatum <= ds && s.eindDatum >= ds);
+  const ds = datumNaarString(datum);
+  return shifts.find(
+    (s) =>
+      s.startDatum.substring(0, 10) <= ds && s.eindDatum.substring(0, 10) >= ds,
+  );
 }
-
 function tijdStr(t: string | null | undefined, fallback: string): string {
   if (!t) return fallback;
   return t.substring(0, 5);
@@ -66,9 +81,10 @@ function afwezigVoorWerknemer(
 ): Afwezigheid | undefined {
   return afwezigheden.find((a) => {
     if (a.werknemerId !== werknemerId) return false;
-    const start = new Date(a.startDatum);
-    const eind = new Date(a.eindDatum);
-    return datum >= start && datum <= eind;
+    const ds = datumNaarString(datum);
+    return (
+      ds >= a.startDatum.substring(0, 10) && ds <= a.eindDatum.substring(0, 10)
+    );
   });
 }
 
@@ -81,6 +97,8 @@ export default function MonthView({
   onNavigeerNaarDag,
   onVerlofAanvragen,
   onAfwezigheidMelden,
+  onShiftAanmaken,
+  kanShiftAanmaken = false,
   tab = 'you',
   teamWerknemers = [],
   teamShiften = [],
@@ -125,7 +143,7 @@ export default function MonthView({
   while (cellen.length % 7 !== 0) cellen.push(null);
 
   return (
-    <div className="flex flex-col gap-1 w-full h-full overflow-x-auto scroll-hidden">
+    <div className="flex flex-col gap-1 w-full h-full scroll-hidden">
       <div className="min-w-[320px] flex flex-col gap-1 h-full">
         <div className="grid grid-cols-7 gap-1">
           {DAGEN_KORT.map((d) => (
@@ -235,7 +253,7 @@ export default function MonthView({
                       })}
                     </div>
                   ) : (
-                    /* PERSONAL MODE: AM/PM blokjes */
+                    /* PERSONAL MODE: shift badge */
                     (() => {
                       const dagAfwezigheid = afwezigheden.filter((a) => {
                         const start = new Date(a.startDatum);
@@ -244,37 +262,31 @@ export default function MonthView({
                       });
                       const isAfwezig = dagAfwezigheid.length > 0;
                       const shift = getShiftVoorDag(datum, eigenShiften);
-                      const blokken = shiftBlokken(shift);
 
                       return (
                         <div className="flex flex-col gap-0.5 mt-0.5">
                           {isAfwezig ? (
                             <span
-                              className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full truncate w-full text-center ${badgeKleur(dagAfwezigheid[0])}`}
+                              className={`text-[9px] font-bold px-1.5 py-0.5 rounded-lg truncate w-full text-center ${badgeKleur(dagAfwezigheid[0])}`}
                             >
                               {afwezigheidLabel(dagAfwezigheid[0])}
                             </span>
                           ) : shift ? (
-                            <>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onNavigeerNaarDag(datum);
-                                }}
-                                className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-700 hover:bg-rose-200 transition-colors text-left truncate"
-                              >
-                                {blokken.am}
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onNavigeerNaarDag(datum);
-                                }}
-                                className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-700 hover:bg-rose-200 transition-colors text-left truncate"
-                              >
-                                {blokken.pm}
-                              </button>
-                            </>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onNavigeerNaarDag(datum);
+                              }}
+                              className="text-left w-full rounded-lg px-1.5 py-1 border border-blue-200/50 bg-blue-50/40 hover:bg-blue-100/50 transition-colors"
+                            >
+                              <span className="text-[8px] font-bold text-zinc-400 uppercase tracking-wide block">
+                                Shift
+                              </span>
+                              <span className="text-[9px] font-semibold text-blue-800 block truncate">
+                                {tijdStr(shift.startTijd, '09:00')}–
+                                {tijdStr(shift.eindTijd, '17:00')}
+                              </span>
+                            </button>
                           ) : null}
                         </div>
                       );

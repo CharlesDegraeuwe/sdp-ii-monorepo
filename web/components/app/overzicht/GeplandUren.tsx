@@ -35,17 +35,9 @@ function genereerDagen(startDatum: Date, aantal: number): Date[] {
   });
 }
 
-type DagInfo = {
-  datum: Date;
-  shift: Shift | null;
-};
+type DagInfo = { datum: Date; shift: Shift | null };
 
-type DagItemProps = {
-  info: DagInfo;
-  onClick: () => void;
-};
-
-function DagItem({ info, onClick }: DagItemProps) {
+function DagItem({ info, onClick }: { info: DagInfo; onClick: () => void }) {
   const { datum, shift } = info;
 
   const dagNaam = datum.toLocaleDateString('nl-BE', { weekday: 'long' });
@@ -64,49 +56,41 @@ function DagItem({ info, onClick }: DagItemProps) {
     shift != null &&
     (startTijd !== STANDAARD_START || eindTijd !== STANDAARD_EIND);
 
-  const borderClass = vandaag
-    ? 'border-zinc-200/50 bg-blue-50/40'
+  const bgClass = vandaag
+    ? 'border-blue-200/50 bg-blue-50/40'
     : festdag
-      ? 'border-zinc-200/50 bg-yellow-200/30'
-      : 'border-zinc-200/50 bg-white/30';
+      ? 'border-yellow-200/50 bg-yellow-50/30'
+      : 'border-gray-300/30 bg-gray-300/20';
 
   return (
     <div
       onClick={onClick}
-      className={`gap-1.5 py-2.5 rounded-2xl border transition-all duration-200 text-left w-full
-        hover:brightness-95 cursor-pointer shadow-lg px-5 justify-between flex flex-row items-center
-        ${borderClass}
-        ${vrij && !shift ? 'opacity-60' : ''}`}
+      className={`flex flex-row items-center justify-between px-3 py-2.5 rounded-2xl border transition-all duration-200 cursor-pointer hover:brightness-95 ${bgClass} ${vrij && !shift ? 'opacity-60' : ''}`}
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-0.5">
         <span
-          className={`text-xs font-bold ${
-            vandaag ? 'text-blue-900' : 'text-zinc-500'
-          }`}
+          className={`text-xs font-semibold ${vandaag ? 'text-blue-800' : 'text-zinc-600'}`}
         >
           {dagNaam}
         </span>
         {vrij && !shift ? (
-          <span className="text-[10px] text-zinc-400 italic">
+          <span className="text-xs text-zinc-400 italic">
             Vrij – {vrijReden(datum)}
           </span>
         ) : (
           <div className="flex items-center gap-1.5">
-            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wide">
+            <span className="text-xs text-zinc-400 uppercase tracking-wide font-semibold">
               Shift
             </span>
             <span
-              className={`text-[11px] font-semibold ${
-                isAfwijkend ? 'text-red-600' : 'text-zinc-600'
-              }`}
+              className={`text-xs font-semibold ${isAfwijkend ? 'text-red-600' : 'text-zinc-600'}`}
             >
               {startTijd} – {eindTijd}
             </span>
           </div>
         )}
       </div>
-
-      <span className="text-[10px] text-zinc-400">{dagNummer}</span>
+      <span className="text-xs text-zinc-400">{dagNummer}</span>
     </div>
   );
 }
@@ -129,7 +113,6 @@ export function GeplandUren() {
     if (!werknemerId) return;
     let cancelled = false;
 
-    // TODO: vervang door één range endpoint /api/shifts/werknemer/{id}?van=...&tot=...
     Promise.all(
       komendeDagen.map((dag) =>
         fetch(
@@ -159,7 +142,7 @@ export function GeplandUren() {
 
   return (
     <Container height={'full flex-1'} label={'Geplande Uren'}>
-      <div className="flex flex-col gap-5 p-2.5 h-full overflow-y-auto scroll-hidden">
+      <div className="flex flex-col gap-2 h-full overflow-y-auto scroll-hidden">
         {dagen.map((info) => (
           <DagItem
             key={info.datum.toISOString()}

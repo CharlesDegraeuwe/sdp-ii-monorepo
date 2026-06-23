@@ -51,11 +51,18 @@ export async function proxyPOST(path: string, body: unknown) {
       method: 'POST',
       body: JSON.stringify(body),
     });
-    if (!res.ok)
+    if (!res.ok) {
+      const text = await res.text();
+      let message = 'backend_error';
+      try {
+        const json = JSON.parse(text);
+        if (json.message) message = json.message;
+      } catch {}
       return NextResponse.json(
-        { error: 'backend_error' },
+        { error: 'backend_error', message },
         { status: res.status },
       );
+    }
     const text = await res.text();
     return safeJsonResponse(text);
   } catch {
@@ -69,11 +76,18 @@ export async function proxyPUT(path: string, body?: unknown) {
       method: 'PUT',
       body: body ? JSON.stringify(body) : undefined,
     });
-    if (!res.ok)
+    if (!res.ok) {
+      const text = await res.text();
+      let message = 'backend_error';
+      try {
+        const json = JSON.parse(text);
+        if (json.message) message = json.message;
+      } catch {}
       return NextResponse.json(
-        { error: 'backend_error' },
+        { error: 'backend_error', message },
         { status: res.status },
       );
+    }
     const text = await res.text();
     return safeJsonResponse(text);
   } catch {

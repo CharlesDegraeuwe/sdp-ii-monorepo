@@ -1,4 +1,4 @@
-.PHONY: init-web init-desktop init-api init-all start-web start-desktop start-api start-all sync-env setup test-web test-api test-desktop test-all lint lint-fix
+.PHONY: init-web init-desktop init-api init-all start-web start-desktop start-api start-all sync-env setup test-web test-api test-desktop test-all lint lint-fix kill-api
 
 # ── Setup ──────────────────────────────────────────────
 setup: env hooks sync-env init-all
@@ -55,6 +55,11 @@ start-all: sync-env
 	@cd desktop && ./mvnw javafx:run 2>&1 | sed 's/^/[desktop] /' &
 	@cd web && bun run dev 2>&1 | sed 's/^/[web] /' &
 	@wait
+
+# ── Kill services ──────────────────────────────────────
+kill-api:
+	@echo "api stoppen (poort 8080)..."
+	@lsof -ti tcp:8080 | xargs kill -9 2>/dev/null && echo "api gestopt" || echo "geen proces op poort 8080"
 
 # ── Tests ──────────────────────────────────────────────
 test-web:

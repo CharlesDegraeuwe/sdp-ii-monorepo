@@ -50,7 +50,7 @@ const TaakClient = () => {
   }
 
   return (
-    <div className={'w-full lg:w-3/4 xl:w-1/2 flex flex-col gap-3'}>
+    <div className={'w-full h-full lg:w-3/4 xl:w-1/2 flex flex-col gap-3'}>
       <div
         className={
           'w-full h-fit flex flex-col sm:flex-row sm:justify-between gap-2'
@@ -69,10 +69,12 @@ const TaakClient = () => {
           />
         )}
       </div>
-      {mode === 'check' && scope === 'taken' && <TakenOverview />}
-      {mode === 'check' && scope === 'afgewerkt' && <FinishedOverview />}
-      {mode === 'assign' && <AssignView />}
-      {mode === 'creëer' && <CreateView />}
+      <div className={'flex-1 min-h-0 h-full'}>
+        {mode === 'check' && scope === 'taken' && <TakenOverview />}
+        {mode === 'check' && scope === 'afgewerkt' && <FinishedOverview />}
+        {mode === 'assign' && <AssignView />}
+        {mode === 'creëer' && <CreateView />}
+      </div>
     </div>
   );
 };

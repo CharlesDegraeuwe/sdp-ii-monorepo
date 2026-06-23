@@ -7,6 +7,13 @@ export {
   vrijReden,
 } from './belgischCalendar';
 
+export function datumNaarString(datum: Date): string {
+  const j = datum.getFullYear();
+  const m = String(datum.getMonth() + 1).padStart(2, '0');
+  const d = String(datum.getDate()).padStart(2, '0');
+  return `${j}-${m}-${d}`;
+}
+
 export function afwezighedenOpDag(
   afwezigheden: Afwezigheid[],
   datum: Date,

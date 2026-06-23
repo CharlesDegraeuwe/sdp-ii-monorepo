@@ -2,12 +2,11 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import NextLink from 'next/link';
+import { BellIcon } from '@phosphor-icons/react';
 import type { Notificatie } from './types';
 import { Container } from '@/components/design-system/Container';
 import Button from '@/components/design-system/Button/Button';
-import Link from '@/components/design-system/Link/Link';
-import Label from '@/components/design-system/Label/Label';
-import { VscBell } from 'react-icons/vsc';
 
 interface NotificatiesWidgetProps {
   notificaties: Notificatie[];
@@ -25,8 +24,8 @@ function formatDatum(d: string) {
   const diffMin = Math.floor((nu.getTime() - datum.getTime()) / 60000);
   const diffUur = Math.floor(diffMin / 60);
   const diffDag = Math.floor(diffUur / 24);
-  if (diffMin < 60) return `${diffMin}m geleden`;
-  if (diffUur < 24) return `${diffUur}u geleden`;
+  if (diffMin < 60) return `${diffMin}m`;
+  if (diffUur < 24) return `${diffUur}u`;
   if (diffDag === 1) return 'gisteren';
   return datum.toLocaleDateString('nl-BE', { day: 'numeric', month: 'short' });
 }
@@ -83,7 +82,7 @@ export function NotificatiesWidget({
   const [bezigIds, setBezigIds] = useState<number[]>([]);
   const [acties, setActies] = useState<Record<number, Actie>>({});
 
-  const ongelezen = notificaties.filter((n) => n.gelezen === 'Nee');
+  const ongelezen = notificaties.filter((n) => n.gelezen === 'Nee').slice(0, 2);
 
   async function voerActieUit(n: Notificatie, type: 'goed' | 'af') {
     if (!n.referentieId) return;
@@ -100,7 +99,7 @@ export function NotificatiesWidget({
       });
       onRefresh?.();
     } catch {
-      // Backend niet bereikbaar: optimistische UI-update
+      // optimistische UI-update
     } finally {
       setActies((prev) => ({
         ...prev,
@@ -111,15 +110,15 @@ export function NotificatiesWidget({
   }
 
   return (
-    <Container label={'Notificaties'} className="">
-      <div className="flex flex-col min-h-full items-center justify-center">
-        {/* Scrollbare lijst */}
-        <div className="flex-1 min-h-0 overflow-y-auto scroll-hiddenflex flex flex-col gap-3 items-center justify-baseline">
+    <Container label="Notificaties">
+      <div className="flex flex-col h-full">
+        <div className="flex-1 min-h-0 overflow-y-auto scroll-hidden flex flex-col gap-2">
           {ongelezen.length === 0 && (
-            <Label
-              text={'Geen ongelezen notificaties'}
-              variant={'emptystate'}
-            />
+            <div className="flex-1 flex items-center justify-center py-6">
+              <p className="text-xs text-zinc-400">
+                Geen ongelezen notificaties
+              </p>
+            </div>
           )}
 
           {ongelezen.map((n) => {
@@ -132,40 +131,40 @@ export function NotificatiesWidget({
             return (
               <div
                 key={n.id}
-                className="flex items-start gap-2 px-2.5 py-2 rounded-xl border border-gray-300/50 bg-white/30 shadow-lg transition-all duration-300"
+                className="flex items-start gap-3 px-3 py-2.5 rounded-2xl border border-gray-300/30 bg-gray-300/20 transition-all duration-200"
               >
                 <div
-                  className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${badge.dot}`}
+                  className={`mt-1 w-2 h-2 rounded-full shrink-0 ${badge.dot}`}
                 />
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="text-[11px] font-bold text-zinc-800 truncate">
+                <div className="flex-1 min-w-0 flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-zinc-800 truncate">
                       {n.titel}
                     </span>
                     {badge.label && (
                       <span
-                        className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0 ${badge.bg}`}
+                        className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${badge.bg}`}
                       >
                         {badge.label}
                       </span>
                     )}
-                    <span className="text-[9px] text-zinc-400 ml-auto flex-shrink-0 whitespace-nowrap">
+                    <span className="text-xs text-zinc-400 ml-auto shrink-0">
                       {formatDatum(n.datum)}
                     </span>
                   </div>
 
-                  <p className="text-[10px] text-zinc-500 line-clamp-1 mb-1.5">
+                  <p className="text-xs text-zinc-500 line-clamp-1">
                     {n.bericht}
                   </p>
 
                   {toonActie &&
                     (actie ? (
                       <span
-                        className={`inline-flex text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                        className={`inline-flex text-xs font-semibold px-2 py-0.5 rounded-full w-fit ${
                           actie === 'goedgekeurd'
                             ? 'bg-emerald-100/80 text-emerald-700'
-                            : 'bg-red-100/80 text-red-600'
+                            : 'bg-red-100/80 text-rose-700'
                         }`}
                       >
                         {actie === 'goedgekeurd'
@@ -173,19 +172,19 @@ export function NotificatiesWidget({
                           : '✗ Afgewezen'}
                       </span>
                     ) : (
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-1.5 mt-0.5">
                         <Button
                           label={bezig ? 'laden...' : 'Goedkeuren'}
                           onClick={() => voerActieUit(n, 'goed')}
                           disabled={bezig}
-                          variant={'approve'}
-                          size={'xs'}
+                          variant="approve"
+                          size="xs"
                         />
                         <Button
                           label={bezig ? 'laden...' : 'Afwijzen'}
                           onClick={() => voerActieUit(n, 'af')}
                           disabled={bezig}
-                          size={'xs'}
+                          size="xs"
                         />
                       </div>
                     ))}
@@ -194,12 +193,14 @@ export function NotificatiesWidget({
             );
           })}
         </div>
-        <Link
-          label={'Bekijk alle notificaties'}
-          icon={<VscBell />}
+
+        <NextLink
           href="/notificaties"
-          className="flex items-center justify-center gap-1 border-t border-gray-300/30 py-2 text-[10px] font-bold text-zinc-400 hover:text-zinc-700 hover:bg-white/20 transition-all duration-200 flex-shrink-0"
-        />
+          className="shrink-0 flex items-center justify-center gap-1.5 border-t border-gray-300/30 pt-3 mt-3 text-xs font-semibold text-zinc-400 hover:text-zinc-700 transition-colors duration-200"
+        >
+          <BellIcon size={13} />
+          Bekijk alle notificaties
+        </NextLink>
       </div>
     </Container>
   );

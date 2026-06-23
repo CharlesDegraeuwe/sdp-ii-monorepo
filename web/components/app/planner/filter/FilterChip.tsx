@@ -71,8 +71,8 @@ export const FilterChip: React.FC<IFilterChipProps> = ({
 
   return (
     <DropdownMenu.Root open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-      <div className="bg-zinc-50 rounded-full border border-zinc-200 inline-flex justify-center items-center overflow-hidden text-sm text-zinc-800">
-        <div className="h-8 px-2 border-r border-zinc-200 flex justify-center items-center gap-2">
+      <div className="bg-gray-300/30 rounded-full border border-gray-300/30 shadow-sm inline-flex justify-center items-center overflow-hidden text-sm text-zinc-800">
+        <div className="h-8 px-2 border-r border-gray-300/30 flex justify-center items-center gap-2">
           {icon && <span className="text-zinc-700 shrink-0">{icon}</span>}
           <span className="font-semibold">{label}</span>
         </div>
@@ -82,25 +82,25 @@ export const FilterChip: React.FC<IFilterChipProps> = ({
             <DropdownMenu.Trigger asChild>
               <button
                 type="button"
-                className="h-8 px-2 border-r border-zinc-200 flex justify-center items-center hover:bg-zinc-100 cursor-pointer transition-colors focus:outline-none"
+                className="h-8 px-2 border-r border-gray-300/30 flex justify-center items-center hover:bg-gray-300/30 transition-colors cursor-pointer focus:outline-none"
               >
                 <span className="text-zinc-500">{connectionWord}</span>
               </button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content
-                className="z-50 bg-white min-w-24 rounded-3xl border border-zinc-200 p-1.5 shadow-lg"
+                className="z-50 bg-white min-w-24 rounded-3xl border border-gray-300/30 p-1.5 shadow-sm"
                 sideOffset={4}
                 align="start"
               >
                 <DropdownMenu.Item
-                  className="flex items-center outline-none cursor-pointer px-4 hover:bg-zinc-100 h-10 rounded-full text-sm"
+                  className="flex items-center outline-none cursor-pointer px-4 hover:bg-gray-300/30 h-10 rounded-full text-sm"
                   onClick={() => onNegationChange(false)}
                 >
                   {hasMultipleValues ? 'is any of' : 'is'}
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
-                  className="flex items-center outline-none cursor-pointer px-4 hover:bg-zinc-100 h-10 rounded-full text-sm"
+                  className="flex items-center outline-none cursor-pointer px-4 hover:bg-gray-300/30 h-10 rounded-full text-sm"
                   onClick={() => onNegationChange(true)}
                 >
                   {hasMultipleValues ? 'is not any of' : 'is not'}
@@ -109,7 +109,7 @@ export const FilterChip: React.FC<IFilterChipProps> = ({
             </DropdownMenu.Portal>
           </DropdownMenu.Root>
         ) : (
-          <div className="h-8 px-2 border-r border-zinc-200 flex justify-center items-center">
+          <div className="h-8 px-2 border-r border-gray-300/30 flex justify-center items-center">
             <span className="text-zinc-500">{connectionWord}</span>
           </div>
         )}
@@ -117,7 +117,7 @@ export const FilterChip: React.FC<IFilterChipProps> = ({
         <DropdownMenu.Trigger asChild>
           <button
             type="button"
-            className="h-8 px-2 border-r border-zinc-200 flex justify-center items-center hover:bg-zinc-100 cursor-pointer transition-colors focus:outline-none"
+            className="h-8 px-2 border-r border-gray-300/30 flex justify-center items-center hover:bg-gray-300/30 transition-colors cursor-pointer focus:outline-none"
           >
             <span>{displayText}</span>
           </button>
@@ -126,7 +126,7 @@ export const FilterChip: React.FC<IFilterChipProps> = ({
         <button
           type="button"
           aria-label={`Verwijder ${label} filter`}
-          className="w-8 h-8 flex justify-center items-center hover:bg-zinc-100 transition-colors cursor-pointer"
+          className="w-8 h-8 flex justify-center items-center hover:bg-gray-300/30 transition-colors cursor-pointer"
           onClick={onDelete}
         >
           <XIcon size={16} />
@@ -135,7 +135,7 @@ export const FilterChip: React.FC<IFilterChipProps> = ({
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="z-50 bg-white min-w-52 rounded-3xl border border-zinc-200 shadow-lg overflow-hidden"
+          className="z-50 bg-white min-w-52 rounded-3xl border border-gray-300/30 shadow-sm overflow-hidden"
           sideOffset={4}
           align="start"
         >
@@ -147,19 +147,19 @@ export const FilterChip: React.FC<IFilterChipProps> = ({
               <DropdownMenu.SubTrigger asChild>
                 <button
                   type="button"
-                  className="p-2 rounded-3xl hover:bg-zinc-100 data-[state=open]:bg-zinc-100 text-zinc-400 hover:text-zinc-600 transition-colors cursor-pointer outline-none"
+                  className="p-2 rounded-3xl hover:bg-gray-300/30 data-[state=open]:bg-gray-300/30 text-zinc-400 hover:text-zinc-600 transition-colors cursor-pointer outline-none"
                 >
                   <DotsThreeIcon size={16} weight="bold" />
                 </button>
               </DropdownMenu.SubTrigger>
               <DropdownMenu.Portal>
                 <DropdownMenu.SubContent
-                  className="z-50 bg-white min-w-36 rounded-3xl border border-zinc-200 p-1.5 shadow-lg"
+                  className="z-50 bg-white min-w-36 rounded-3xl border border-gray-300/30 p-1.5 shadow-sm"
                   sideOffset={4}
                   alignOffset={-4}
                 >
                   <DropdownMenu.Item
-                    className="flex items-center gap-2 outline-none cursor-pointer px-4 hover:bg-zinc-100 data-[highlighted]:bg-zinc-100 h-10 rounded-full text-sm"
+                    className="flex items-center gap-2 outline-none cursor-pointer px-4 hover:bg-gray-300/30 data-[highlighted]:bg-gray-300/30 h-10 rounded-full text-sm"
                     onSelect={() => {
                       onDelete();
                       setIsDropdownOpen(false);

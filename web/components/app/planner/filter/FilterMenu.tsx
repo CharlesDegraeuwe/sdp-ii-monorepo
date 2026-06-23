@@ -56,7 +56,7 @@ export const FilterMenu: React.FC<IFilterMenuProps> = ({
       <DropdownMenu.Trigger asChild>
         <button
           type="button"
-          className="h-8 p-1 rounded-full inline-flex justify-center items-center overflow-hidden text-sm text-zinc-700 transition-colors hover:bg-zinc-100 border border-dashed border-zinc-300 cursor-pointer hover:border-solid select-none"
+          className="h-8 p-1 rounded-full inline-flex justify-center items-center overflow-hidden text-sm text-zinc-700 transition-colors hover:bg-gray-300/30 bg-gray-300/30 border border-gray-300/30 shadow-sm cursor-pointer select-none"
         >
           <div className="w-6 h-6 flex justify-center items-center">
             <PlusIcon size={16} />
@@ -67,7 +67,7 @@ export const FilterMenu: React.FC<IFilterMenuProps> = ({
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           className={cn(
-            'z-50 bg-white min-w-56 rounded-3xl border border-zinc-200 shadow-lg overflow-hidden',
+            'z-50 bg-white min-w-56 rounded-3xl border border-gray-300/30 shadow-sm overflow-hidden',
             showSearch ? 'pb-1.5' : 'py-1.5',
           )}
           sideOffset={4}
@@ -97,7 +97,7 @@ export const FilterMenu: React.FC<IFilterMenuProps> = ({
           {filteredCategories.map((category) => (
             <DropdownMenu.Sub key={category.key}>
               <DropdownMenu.SubTrigger
-                className="flex items-center justify-between w-full mx-1.5 px-3 h-10 text-sm text-zinc-700 rounded-full cursor-pointer hover:bg-zinc-100 outline-none data-[highlighted]:bg-zinc-100 data-[state=open]:bg-zinc-100"
+                className="flex items-center justify-between w-full mx-1.5 px-3 h-10 text-sm text-zinc-700 rounded-full cursor-pointer hover:bg-gray-300/30 outline-none data-[highlighted]:bg-gray-300/30 data-[state=open]:bg-gray-300/30"
                 style={{ width: 'calc(100% - 12px)' }}
               >
                 <div className="flex items-center gap-2">
@@ -111,7 +111,7 @@ export const FilterMenu: React.FC<IFilterMenuProps> = ({
 
               <DropdownMenu.Portal>
                 <DropdownMenu.SubContent
-                  className="z-50 bg-white min-w-48 rounded-3xl border border-zinc-200 shadow-lg overflow-hidden"
+                  className="z-50 bg-white min-w-48 rounded-3xl border border-gray-300/30 shadow-sm overflow-hidden"
                   sideOffset={-4}
                   alignOffset={-46}
                 >

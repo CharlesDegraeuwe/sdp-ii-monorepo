@@ -23,7 +23,7 @@ export const FilterOptionList: React.FC<IFilterOptionListProps> = ({
         return (
           <DropdownMenu.Item
             key={option.value}
-            className="flex items-center justify-between gap-2 mx-0 px-3 h-9 text-sm rounded-full cursor-pointer hover:bg-neutral-100 data-[highlighted]:bg-neutral-100 outline-none"
+            className="flex items-center justify-between gap-2 mx-0 px-3 h-9 text-sm rounded-full cursor-pointer hover:bg-gray-300/30 data-[highlighted]:bg-gray-300/30 outline-none"
             onSelect={(e) => {
               e.preventDefault();
               onToggle(option.value);

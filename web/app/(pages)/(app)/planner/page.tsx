@@ -18,6 +18,7 @@ import type {
 import {
   getPeriodBounds,
   getMaandag,
+  datumNaarString,
   mapTaakVanBackend,
 } from '../../../../components/app/planner/utils';
 import { PlannerAanvraagModal } from '../../../../components/app/planner/PlannerAanvraagModal';
@@ -30,6 +31,10 @@ import {
 } from '../../../../components/app/planner/PlannerToolbar';
 import { type FilterState } from '../../../../components/app/planner/PlannerFilter';
 import { usePlanningFilters } from '@/hooks/usePlanningFilters';
+import {
+  useTakenVoorWerknemer,
+  useInvalidateTakenVoorWerknemer,
+} from '@/hooks/useTakenVoorWerknemer';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080/api';
 
@@ -68,7 +73,8 @@ function PlannerPageInner() {
     return new Date();
   });
   const [afwezigheden, setAfwezigheden] = useState<Afwezigheid[]>([]);
-  const [taken, setTaken] = useState<PlannerTaak[]>([]);
+  const { data: taken = [] } = useTakenVoorWerknemer(eigenId || undefined);
+  const invalidateTaken = useInvalidateTakenVoorWerknemer();
   const [tab, setTab] = useState<Tab>('you');
   const [geselecteerdeDag, setGeselecteerdeDag] = useState<Date | null>(
     new Date(),
@@ -112,10 +118,10 @@ function PlannerPageInner() {
   }, [filter.teamId, laadWerknemersVanTeam, resetTeamWerknemers]);
 
   useEffect(() => {
-    if (tab === 'team' && teams.length > 0) {
+    if (kanShiftAanmaken && teams.length > 0) {
       laadAlleWerknemers(teams);
     }
-  }, [tab, teams, laadAlleWerknemers]);
+  }, [kanShiftAanmaken, teams, laadAlleWerknemers]);
 
   // Auto-selecteer eerste team bij switchen naar teamtab
   useEffect(() => {
@@ -128,6 +134,14 @@ function PlannerPageInner() {
   function handleFilterChange(update: Partial<FilterState>) {
     setFilter((prev) => ({ ...prev, ...update }));
   }
+
+  const gefilterdTeamWerknemers = useMemo(() => {
+    if (tab !== 'team') return [];
+    if (filter.werknemerId !== null) {
+      return teamWerknemers.filter((w) => w.id === filter.werknemerId);
+    }
+    return teamWerknemers;
+  }, [tab, teamWerknemers, filter.werknemerId]);
 
   const filteredAfwezigheden = useMemo(() => {
     if (tab !== 'team') return afwezigheden;
@@ -160,20 +174,20 @@ function PlannerPageInner() {
     let tot: string;
 
     if (view === 'maand') {
-      van = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), 1)
-        .toISOString()
-        .split('T')[0];
-      tot = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth() + 1, 0)
-        .toISOString()
-        .split('T')[0];
+      van = datumNaarString(
+        new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), 1),
+      );
+      tot = datumNaarString(
+        new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth() + 1, 0),
+      );
     } else if (view === 'week') {
       const ma = getMaandag(huidigeDatum);
-      van = ma.toISOString().split('T')[0];
+      van = datumNaarString(ma);
       const zo = new Date(ma);
       zo.setDate(zo.getDate() + 6);
-      tot = zo.toISOString().split('T')[0];
+      tot = datumNaarString(zo);
     } else {
-      van = huidigeDatum.toISOString().split('T')[0];
+      van = datumNaarString(huidigeDatum);
       tot = van;
     }
 
@@ -184,19 +198,6 @@ function PlannerPageInner() {
   }, [user?.id, view, huidigeDatum, shiftenRefresh]);
 
   useEffect(() => {
-    if (!user?.id) return;
-    fetch(`/api/taken/werknemer/${user.id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed');
-        return res.json();
-      })
-      .then((data: Record<string, unknown>[]) =>
-        setTaken(data.map(mapTaakVanBackend)),
-      )
-      .catch(console.error);
-  }, [user?.id]);
-
-  useEffect(() => {
     if (tab !== 'team' || view === 'dag' || teamWerknemers.length === 0) {
       setTeamShiften([]);
       return;
@@ -204,18 +205,18 @@ function PlannerPageInner() {
     let van: string;
     let tot: string;
     if (view === 'maand') {
-      van = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), 1)
-        .toISOString()
-        .split('T')[0];
-      tot = new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth() + 1, 0)
-        .toISOString()
-        .split('T')[0];
+      van = datumNaarString(
+        new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth(), 1),
+      );
+      tot = datumNaarString(
+        new Date(huidigeDatum.getFullYear(), huidigeDatum.getMonth() + 1, 0),
+      );
     } else {
       const ma = getMaandag(huidigeDatum);
-      van = ma.toISOString().split('T')[0];
+      van = datumNaarString(ma);
       const zo = new Date(ma);
       zo.setDate(zo.getDate() + 6);
-      tot = zo.toISOString().split('T')[0];
+      tot = datumNaarString(zo);
     }
     Promise.all(
       teamWerknemers.map((w) =>
@@ -226,7 +227,7 @@ function PlannerPageInner() {
     )
       .then((results) => setTeamShiften(results.flat()))
       .catch(() => setTeamShiften([]));
-  }, [tab, view, huidigeDatum, teamWerknemers]);
+  }, [tab, view, huidigeDatum, teamWerknemers, shiftenRefresh]);
 
   // Fetch taken voor alle teamleden
   useEffect(() => {
@@ -259,16 +260,14 @@ function PlannerPageInner() {
       method: 'PUT',
     });
     if (res.ok) {
-      setTaken((prev) =>
-        prev.map((t) => (t.id === taakId ? { ...t, afgewerkt: true } : t)),
-      );
+      invalidateTaken(eigenId || undefined);
     }
   }
 
   async function handleTaakVerwijder(taakId: number) {
     const res = await fetch(`/api/taken/${taakId}`, { method: 'DELETE' });
     if (res.ok) {
-      setTaken((prev) => prev.filter((t) => t.id !== taakId));
+      invalidateTaken(eigenId || undefined);
     }
   }
 
@@ -350,7 +349,7 @@ function PlannerPageInner() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-4 w-full flex-1 min-h-0">
-            <div className="flex-1 min-w-0 rounded-xl h-full min-h-64 overflow-y-auto scroll-hidden">
+            <div className="flex-1 min-w-0 rounded-xl h-full min-h-64 scroll-hidden">
               {view === 'maand' && (
                 <>
                   <div className="hidden sm:block h-full">
@@ -373,7 +372,7 @@ function PlannerPageInner() {
                         setPlannerModal({ type: 'afwezigheid', datum })
                       }
                       tab={tab}
-                      teamWerknemers={tab === 'team' ? teamWerknemers : []}
+                      teamWerknemers={gefilterdTeamWerknemers}
                       teamShiften={teamShiften}
                       geselecteerdeTeamWerknemer={geselecteerdeTeamWerknemer}
                       onSelectTeamWerknemer={(werknemerId, datum) => {
@@ -406,7 +405,7 @@ function PlannerPageInner() {
                   }}
                   onNavigeerNaarDag={navigeerNaarDag}
                   tab={tab}
-                  teamWerknemers={tab === 'team' ? teamWerknemers : []}
+                  teamWerknemers={tab === 'team' ? gefilterdTeamWerknemers : []}
                   teamShiften={teamShiften}
                   geselecteerdeTeamWerknemer={geselecteerdeTeamWerknemer}
                   onSelectTeamWerknemer={(werknemerId, datum) => {
@@ -433,9 +432,9 @@ function PlannerPageInner() {
               )}
             </div>
 
-            {view !== 'dag' && geselecteerdeDag && (
+            {view !== 'dag' && (
               <DetailPanel
-                geselecteerdeDag={geselecteerdeDag}
+                geselecteerdeDag={geselecteerdeDag ?? new Date()}
                 afwezigheden={
                   tab === 'team' ? filteredAfwezigheden : eigenAfwezigheid
                 }
@@ -445,10 +444,20 @@ function PlannerPageInner() {
                 onAfgewerkt={handleTaakAfgewerkt}
                 onVerwijder={isManager ? handleTaakVerwijder : undefined}
                 tab={tab}
-                teamWerknemers={tab === 'team' ? teamWerknemers : []}
+                teamWerknemers={
+                  tab === 'team'
+                    ? filter.werknemerId != null
+                      ? teamWerknemers.filter(
+                          (w) => w.id === filter.werknemerId,
+                        )
+                      : teamWerknemers
+                    : []
+                }
                 teamShiften={teamShiften}
                 teamTaken={teamTaken}
-                geselecteerdeTeamWerknemer={geselecteerdeTeamWerknemer}
+                geselecteerdeTeamWerknemer={
+                  geselecteerdeTeamWerknemer ?? filter.werknemerId ?? null
+                }
                 onTeamTaakAfgewerkt={(taakId, werknemerId) =>
                   handleTeamTaakAfgewerkt(taakId, werknemerId)
                 }

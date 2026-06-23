@@ -2,6 +2,8 @@
 import { Task, useTaakStore } from '@/stores/taakStore';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
+import { useQueryClient } from '@tanstack/react-query';
+import { TAKEN_KEY } from '@/hooks/useTaken';
 
 const formatDue = (iso: string) => {
   const d = new Date(iso);
@@ -16,6 +18,7 @@ export const TaskListItem = ({ task }: { task: Task }) => {
   const updateTask = useTaakStore((s) => s.updateTask);
   const removeTask = useTaakStore((s) => s.removeTask);
 
+  const queryClient = useQueryClient();
   const active = selectedTaskId === task.id;
 
   const handleFinish = async (checked: boolean) => {
@@ -26,6 +29,7 @@ export const TaskListItem = ({ task }: { task: Task }) => {
     if (checked) {
       try {
         await fetch(`/api/taken/${task.id}/afgewerkt`, { method: 'PUT' });
+        await queryClient.invalidateQueries({ queryKey: TAKEN_KEY });
       } catch (e) {
         updateTask(task.id, { finished: false, finishedAt: undefined });
         console.error(e);

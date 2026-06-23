@@ -5,6 +5,7 @@ import type { WerknemerOptie } from '@/hooks/usePlanningFilters';
 import { DAGEN_KORT, UREN } from './constants';
 import {
   afwezighedenOpDag,
+  datumNaarString,
   getMaandag,
   isVandaag,
   badgeKleur,
@@ -66,7 +67,7 @@ function getShiftVoorWerknemer(
   werknemerId: number,
   shifts: Shift[],
 ): Shift | undefined {
-  const ds = datum.toISOString().split('T')[0];
+  const ds = datumNaarString(datum);
   return shifts.find(
     (s) =>
       s.werknemerId === werknemerId && s.startDatum <= ds && s.eindDatum >= ds,
@@ -74,7 +75,7 @@ function getShiftVoorWerknemer(
 }
 
 function getShiftVoorDag(datum: Date, shifts: Shift[]): Shift | undefined {
-  const ds = datum.toISOString().split('T')[0];
+  const ds = datumNaarString(datum);
   return shifts.find((s) => s.startDatum <= ds && s.eindDatum >= ds);
 }
 
@@ -214,87 +215,193 @@ export default function WeekView({
                       />
                     ))}
 
-                    {/* TEAM MODE: sub-kolommen per lid */}
-                    {isTeam && !vrij && (
-                      <div className="absolute inset-0 flex">
-                        {teamWerknemers.map((w) => {
-                          const wAfwezig = afwezigheden.find((a) => {
-                            if (a.werknemerId !== w.id) return false;
-                            const start = new Date(a.startDatum);
-                            const eind = new Date(a.eindDatum);
-                            return datum >= start && datum <= eind;
-                          });
-                          const wShift = getShiftVoorWerknemer(
-                            datum,
-                            w.id,
-                            teamShiften,
-                          );
-                          const amStart = tijdDecimaal(wShift?.startTijd, 9);
-                          const amEind = tijdDecimaal(wShift?.pauzeStart, 12);
-                          const pmStart = tijdDecimaal(wShift?.pauzeEind, 13);
-                          const pmEind = tijdDecimaal(wShift?.eindTijd, 17);
-                          const isActief = geselecteerdeTeamWerknemer === w.id;
-                          const initials = `${w.voornaam[0]}${w.naam[0]}`;
+                    {/* TEAM MODE */}
+                    {isTeam &&
+                      !vrij &&
+                      (() => {
+                        const enkelvoudig = teamWerknemers.length === 1;
 
-                          return (
-                            <div
-                              key={w.id}
-                              className="flex-1 relative border-l border-zinc-200 first:border-l-0 cursor-pointer"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onSelectTeamWerknemer?.(w.id, datum);
-                              }}
-                            >
-                              {/* Initialen label */}
-                              <div className="absolute top-1 inset-x-0 flex justify-center z-10">
-                                <span
-                                  className={`text-[7px] font-bold px-1 rounded ${isActief ? 'bg-zinc-800 text-white' : 'text-zinc-400'}`}
-                                >
-                                  {initials}
-                                </span>
-                              </div>
+                        return (
+                          <div
+                            className={`absolute inset-0 ${enkelvoudig ? '' : 'flex'}`}
+                          >
+                            {teamWerknemers.map((w) => {
+                              const wAfwezig = afwezigheden.find((a) => {
+                                if (a.werknemerId !== w.id) return false;
+                                const start = new Date(a.startDatum);
+                                const eind = new Date(a.eindDatum);
+                                return datum >= start && datum <= eind;
+                              });
+                              const wShift = getShiftVoorWerknemer(
+                                datum,
+                                w.id,
+                                teamShiften,
+                              );
+                              const amStart = tijdDecimaal(
+                                wShift?.startTijd,
+                                9,
+                              );
+                              const amEind = tijdDecimaal(
+                                wShift?.pauzeStart,
+                                12,
+                              );
+                              const pmStart = tijdDecimaal(
+                                wShift?.pauzeEind,
+                                13,
+                              );
+                              const pmEind = tijdDecimaal(wShift?.eindTijd, 17);
+                              const isActief =
+                                geselecteerdeTeamWerknemer === w.id &&
+                                geselecteerdeDag?.toDateString() ===
+                                  datum.toDateString();
 
-                              {wAfwezig ? (
+                              if (enkelvoudig) {
+                                // Full-width render met naam + tijden
+                                return (
+                                  <div
+                                    key={w.id}
+                                    className="absolute inset-0 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSelectTeamWerknemer?.(w.id, datum);
+                                    }}
+                                  >
+                                    {wAfwezig ? (
+                                      <div
+                                        style={{
+                                          top: 8,
+                                          height:
+                                            (pmEind - amStart) * UUR_HOOGTE,
+                                        }}
+                                        className="absolute left-0.5 right-0.5 rounded-lg flex items-center justify-center pointer-events-none"
+                                      >
+                                        <span
+                                          className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${wAfwezig.type === 'Ziekte' ? 'bg-red-100 text-red-700' : wAfwezig.status === 'In afwachting' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}
+                                        >
+                                          {afwezigheidLabel(wAfwezig)}
+                                        </span>
+                                      </div>
+                                    ) : wShift ? (
+                                      <>
+                                        <div
+                                          style={{
+                                            top: amStart * UUR_HOOGTE,
+                                            height: Math.max(
+                                              4,
+                                              (amEind - amStart) * UUR_HOOGTE -
+                                                1,
+                                            ),
+                                          }}
+                                          className={`absolute left-0.5 right-0.5 rounded-lg px-1.5 py-1 overflow-hidden ${isActief ? 'bg-rose-400' : 'bg-rose-100 border border-rose-200 hover:bg-rose-200'} transition-colors`}
+                                        >
+                                          <span
+                                            className={`text-[9px] font-bold truncate block ${isActief ? 'text-white' : 'text-rose-700'}`}
+                                          >
+                                            {formatTijd(amStart)} –{' '}
+                                            {formatTijd(amEind)}
+                                          </span>
+                                          <span
+                                            className={`text-[8px] truncate block ${isActief ? 'text-white/70' : 'text-rose-500'}`}
+                                          >
+                                            {w.voornaam} {w.naam}
+                                          </span>
+                                        </div>
+                                        <div
+                                          style={{
+                                            top: pmStart * UUR_HOOGTE,
+                                            height: Math.max(
+                                              4,
+                                              (pmEind - pmStart) * UUR_HOOGTE -
+                                                1,
+                                            ),
+                                          }}
+                                          className={`absolute left-0.5 right-0.5 rounded-lg px-1.5 py-1 overflow-hidden ${isActief ? 'bg-rose-400' : 'bg-rose-100 border border-rose-200 hover:bg-rose-200'} transition-colors`}
+                                        >
+                                          <span
+                                            className={`text-[9px] font-bold truncate block ${isActief ? 'text-white' : 'text-rose-700'}`}
+                                          >
+                                            {formatTijd(pmStart)} –{' '}
+                                            {formatTijd(pmEind)}
+                                          </span>
+                                        </div>
+                                      </>
+                                    ) : null}
+                                  </div>
+                                );
+                              }
+
+                              // Sub-kolom render (meerdere leden)
+                              const initials = `${w.voornaam[0]}${w.naam[0]}`;
+                              return (
                                 <div
-                                  style={{
-                                    top: amStart * UUR_HOOGTE,
-                                    height: (pmEind - amStart) * UUR_HOOGTE,
+                                  key={w.id}
+                                  className="flex-1 relative border-l border-zinc-200 first:border-l-0 cursor-pointer"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onSelectTeamWerknemer?.(w.id, datum);
                                   }}
-                                  className="absolute inset-x-0.5 rounded flex items-center justify-center pointer-events-none"
                                 >
-                                  <div
-                                    className={`w-1 h-full rounded-full ${wAfwezig.type === 'Ziekte' ? 'bg-red-300' : wAfwezig.status === 'In afwachting' ? 'bg-amber-300' : 'bg-emerald-300'}`}
-                                  />
+                                  <div className="absolute top-1 inset-x-0 flex justify-center z-10">
+                                    <span
+                                      className={`text-[7px] font-bold px-1 rounded ${isActief ? 'bg-zinc-800 text-white' : 'text-zinc-400'}`}
+                                    >
+                                      {initials}
+                                    </span>
+                                  </div>
+                                  {wAfwezig ? (
+                                    <div
+                                      style={{
+                                        top: amStart * UUR_HOOGTE,
+                                        height: (pmEind - amStart) * UUR_HOOGTE,
+                                      }}
+                                      className="absolute inset-x-0.5 rounded flex items-center justify-center pointer-events-none"
+                                    >
+                                      <div
+                                        className={`w-1 h-full rounded-full ${wAfwezig.type === 'Ziekte' ? 'bg-red-300' : wAfwezig.status === 'In afwachting' ? 'bg-amber-300' : 'bg-emerald-300'}`}
+                                      />
+                                    </div>
+                                  ) : wShift ? (
+                                    <>
+                                      <div
+                                        style={{
+                                          top: amStart * UUR_HOOGTE,
+                                          height: Math.max(
+                                            4,
+                                            (amEind - amStart) * UUR_HOOGTE - 1,
+                                          ),
+                                        }}
+                                        className={`absolute inset-x-0.5 rounded overflow-hidden ${isActief ? 'bg-rose-400' : 'bg-rose-100 hover:bg-rose-200'} transition-colors`}
+                                      >
+                                        <span
+                                          className={`text-[7px] font-bold px-0.5 truncate block ${isActief ? 'text-white' : 'text-rose-700'}`}
+                                        >
+                                          {formatTijd(amStart)}
+                                        </span>
+                                      </div>
+                                      <div
+                                        style={{
+                                          top: pmStart * UUR_HOOGTE,
+                                          height: Math.max(
+                                            4,
+                                            (pmEind - pmStart) * UUR_HOOGTE - 1,
+                                          ),
+                                        }}
+                                        className={`absolute inset-x-0.5 rounded overflow-hidden ${isActief ? 'bg-rose-400' : 'bg-rose-100 hover:bg-rose-200'} transition-colors`}
+                                      >
+                                        <span
+                                          className={`text-[7px] font-bold px-0.5 truncate block ${isActief ? 'text-white' : 'text-rose-700'}`}
+                                        >
+                                          {formatTijd(pmStart)}
+                                        </span>
+                                      </div>
+                                    </>
+                                  ) : null}
                                 </div>
-                              ) : (
-                                <>
-                                  <div
-                                    style={{
-                                      top: amStart * UUR_HOOGTE,
-                                      height: Math.max(
-                                        4,
-                                        (amEind - amStart) * UUR_HOOGTE - 1,
-                                      ),
-                                    }}
-                                    className={`absolute inset-x-0.5 rounded ${isActief ? 'bg-rose-400' : 'bg-rose-100 hover:bg-rose-200'} transition-colors`}
-                                  />
-                                  <div
-                                    style={{
-                                      top: pmStart * UUR_HOOGTE,
-                                      height: Math.max(
-                                        4,
-                                        (pmEind - pmStart) * UUR_HOOGTE - 1,
-                                      ),
-                                    }}
-                                    className={`absolute inset-x-0.5 rounded ${isActief ? 'bg-rose-400' : 'bg-rose-100 hover:bg-rose-200'} transition-colors`}
-                                  />
-                                </>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                              );
+                            })}
+                          </div>
+                        );
+                      })()}
 
                     {/* PERSONAL MODE: eigen shift blokken */}
                     {!isTeam &&
@@ -328,6 +435,7 @@ export default function WeekView({
                             </div>
                           );
                         }
+                        if (!shift) return null;
                         return (
                           <>
                             <button
@@ -345,6 +453,11 @@ export default function WeekView({
                               <span className="text-[9px] font-bold text-rose-700 truncate w-full">
                                 {formatTijd(amStart)} – {formatTijd(amEind)}
                               </span>
+                              {shift.werknemerNaam && (
+                                <span className="text-[8px] text-rose-500 truncate w-full">
+                                  {shift.werknemerNaam}
+                                </span>
+                              )}
                             </button>
                             <button
                               type="button"

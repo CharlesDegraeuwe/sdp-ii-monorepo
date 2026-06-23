@@ -1,36 +1,39 @@
-import { MdOutlineLocationOn } from 'react-icons/md';
+import NextLink from 'next/link';
+import { MapPinIcon, ArrowRightIcon } from '@phosphor-icons/react';
 import { Container } from '@/components/design-system/Container';
-import Link from '@/components/design-system/Link/Link';
 
 export function LocatieInfo() {
   return (
-    <Container label={'Locatie Info'} className="col-span-2 flex-1 min-h-100 ">
-      <div className="relative flex-1 flex flex-col h-full gap-2">
-        <div className="flex items-center gap-2 px-1">
-          <MdOutlineLocationOn size={16} className="text-zinc-500" />
+    <Container label={'Locatie Info'}>
+      <div className="flex flex-col gap-3 h-full">
+        <div className="flex items-center gap-2">
+          <MapPinIcon size={14} className="text-zinc-500 shrink-0" />
           <span className="text-xs font-semibold text-zinc-600">
             Delaware Consulting
           </span>
         </div>
+
         <div className="flex flex-col gap-1.5 flex-1">
-          <div className="flex items-center justify-between px-2.5 py-2 rounded-xl border border-gray-200/40 bg-white/30">
-            <span className="text-xs text-zinc-600">Hoofdkantoor</span>
+          <div className="flex items-center justify-between px-3 py-2 rounded-2xl border border-gray-300/30 bg-gray-300/20">
+            <span className="text-xs text-zinc-500">Hoofdkantoor</span>
             <span className="text-xs font-semibold text-zinc-800">
               Gent, België
             </span>
           </div>
-          <div className="flex items-center justify-between px-2.5 py-2 rounded-xl border border-gray-200/40 bg-white/30">
-            <span className="text-xs text-zinc-600">Teamleden op locatie</span>
+          <div className="flex items-center justify-between px-3 py-2 rounded-2xl border border-gray-300/30 bg-gray-300/20">
+            <span className="text-xs text-zinc-500">Teamleden op locatie</span>
             <span className="text-xs font-semibold text-zinc-800">—</span>
           </div>
-          <div className={'absolute bottom-0 w-full '}>
-            <Link
-              label={'Bekijk kaart'}
-              icon={<MdOutlineLocationOn size={14} />}
-              href="/locaties"
-            />
-          </div>
         </div>
+
+        <NextLink
+          href="/locaties"
+          className="shrink-0 flex items-center justify-center gap-1.5 border-t border-gray-300/30 pt-3 text-xs font-semibold text-zinc-400 hover:text-zinc-700 transition-colors duration-200"
+        >
+          <MapPinIcon size={13} />
+          Bekijk kaart
+          <ArrowRightIcon size={11} className="ml-auto" />
+        </NextLink>
       </div>
     </Container>
   );

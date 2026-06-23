@@ -17,6 +17,7 @@ import type {
 } from '@/hooks/usePlanningFilters';
 import {
   afwezighedenOpDag,
+  datumNaarString,
   isVrij,
   mapTaakVanBackend,
   takenOpDag,
@@ -100,7 +101,7 @@ export default function DayView({
   }, [eigenId, filter, tab, teamWerknemers, alleWerknemers, teams]);
 
   useEffect(() => {
-    const datum = huidigeDatum.toISOString().split('T')[0];
+    const datum = datumNaarString(huidigeDatum);
     const fetches =
       werknemersToLoad.length === 0
         ? Promise.resolve<Shift[]>([])
@@ -153,7 +154,7 @@ export default function DayView({
     );
     const eigenShift =
       eigenShiften.find((s) => {
-        const ds = huidigeDatum.toISOString().split('T')[0];
+        const ds = datumNaarString(huidigeDatum);
         return s.startDatum <= ds && s.eindDatum >= ds;
       }) ?? shifts.find((s) => s.werknemerId === eigenId);
     return (
@@ -214,7 +215,7 @@ export default function DayView({
     : null;
 
   function openCreate(rij: Rij) {
-    const datum = huidigeDatum.toISOString().split('T')[0];
+    const datum = datumNaarString(huidigeDatum);
     setModal({
       shiftId: null,
       werknemerId: rij.werknemerId,
@@ -263,6 +264,13 @@ export default function DayView({
     if (res.ok) {
       const saved: Shift = await res.json();
       setShifts((prev) => [...prev.filter((s) => s.id !== saved.id), saved]);
+    } else {
+      let msg = 'Shift opslaan mislukt';
+      try {
+        const err = await res.json();
+        if (err.message) msg = err.message;
+      } catch {}
+      throw new Error(msg);
     }
   }
 
@@ -344,8 +352,8 @@ export default function DayView({
 
       {/* Task panel voor geselecteerde werknemer */}
       {geselecteerdeRij && (
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <div className="flex items-center justify-between mb-3">
+        <div className="rounded-xl flex-1 border border-zinc-200 bg-white p-4 h-44 flex flex-col min-h-0">
+          <div className="flex items-center justify-between mb-3 shrink-0">
             <span className="text-xs font-bold text-zinc-800">
               Taken van {geselecteerdeRij.label} vandaag
             </span>
@@ -367,7 +375,7 @@ export default function DayView({
               Geen taken voor vandaag.
             </p>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 overflow-y-auto flex-1 min-h-0">
               {werknemerTaken.map((t) => (
                 <div
                   key={t.id}

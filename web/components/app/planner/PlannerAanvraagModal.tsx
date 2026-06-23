@@ -31,7 +31,7 @@ export function PlannerAanvraagModal({
   onClose,
   onSuccess,
 }: PlannerAanvraagModalProps) {
-  const datumStr = datum.toISOString().split('T')[0];
+  const datumStr = `${datum.getFullYear()}-${String(datum.getMonth() + 1).padStart(2, '0')}-${String(datum.getDate()).padStart(2, '0')}`;
   const [startDatum, setStartDatum] = useState(datumStr);
   const [eindDatum, setEindDatum] = useState(datumStr);
   const [verlofType, setVerlofType] = useState(VERLOF_TYPE_OPTIONS[0].value);

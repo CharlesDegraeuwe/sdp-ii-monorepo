@@ -20,7 +20,7 @@ function KalenderGrid({ afwezigheden }: { afwezigheden: Afwezigheid[] }) {
   while (cellen.length % 7 !== 0) cellen.push(null);
 
   return (
-    <div className="flex flex-col gap-1 p-2.5 h-full">
+    <div className="flex flex-col gap-1 p-2.5 h-full min-h-0">
       <span className="text-xs font-bold text-zinc-500 capitalize mb-1">
         {MAANDEN[vandaag.getMonth()]} {vandaag.getFullYear()}
       </span>
@@ -28,13 +28,13 @@ function KalenderGrid({ afwezigheden }: { afwezigheden: Afwezigheid[] }) {
         {DAGEN_KORT.map((d) => (
           <div
             key={d}
-            className="text-center text-[9px] font-bold text-zinc-400 uppercase py-0.5 flex items-center justify-center"
+            className="text-center text-[10px] font-semibold text-zinc-400 uppercase py-0.5 flex items-center justify-center"
           >
             {d}
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-0.5 flex-1">
+      <div className="grid grid-cols-7 gap-0.5 flex-1 min-h-0 [grid-auto-rows:1fr]">
         {cellen.map((datum, i) => {
           if (!datum) return <div key={i} />;
           const opDag = afwezighedenOpDag(afwezigheden, datum);

@@ -11,6 +11,7 @@ import { TAKEN_KEY } from '@/hooks/useTaken';
 import type { TeamOptie, WerknemerMetTeam } from '@/hooks/usePlanningFilters';
 import { STANDAARD_TIJDEN, toBackendTime } from './dayview/helpers';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
+import { useToast } from '@/providers/ToastProvider';
 
 type Stap = 1 | 2 | 3;
 type WieKeuze = 'eigen' | 'teamlid';
@@ -43,7 +44,8 @@ export function ShiftAanmakenModal({
   const { data: alleTaken = [] } = useTaken();
   const queryClient = useQueryClient();
 
-  const vandaag = huidigeDatum.toISOString().split('T')[0];
+  const d = huidigeDatum;
+  const vandaag = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
   const [stap, setStap] = useState<Stap>(1);
   const [wieKeuze, setWieKeuze] = useState<WieKeuze>('eigen');
@@ -76,7 +78,7 @@ export function ShiftAanmakenModal({
     new Set(),
   );
   const [bezig, setBezig] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const toast = useToast();
 
   const werknemerId = wieKeuze === 'eigen' ? eigenId : geselecteerdeWerknemerId;
   const geselecteerdeWerknemer = werknemers.find(
@@ -110,20 +112,13 @@ export function ShiftAanmakenModal({
   async function handleAanmaken(metTaken: boolean) {
     if (!werknemerId || !kanNaarStap3) return;
     setBezig(true);
-    setError(null);
 
     try {
-      const teamId =
-        wieKeuze === 'eigen'
-          ? (werknemers.find((w) => w.id === eigenId)?.teamId ?? null)
-          : (geselecteerdeWerknemer?.teamId ?? geselecteerdeTeamId ?? null);
-
       const res = await fetch('/api/shifts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           werknemerId,
-          teamId,
           startDatum,
           eindDatum,
           startTijd: toBackendTime(startTijd),
@@ -132,7 +127,14 @@ export function ShiftAanmakenModal({
           pauzeEind: pauzeEind ? toBackendTime(pauzeEind) : null,
         }),
       });
-      if (!res.ok) throw new Error('Shift aanmaken mislukt');
+      if (!res.ok) {
+        let msg = 'Shift aanmaken mislukt';
+        try {
+          const err = await res.json();
+          if (err.message) msg = err.message;
+        } catch {}
+        throw new Error(msg);
+      }
 
       if (metTaken && geselecteerdeTaken.size > 0) {
         await Promise.all(
@@ -150,7 +152,7 @@ export function ShiftAanmakenModal({
       onSuccess(werknemerId);
       onClose();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Er ging iets mis');
+      toast.error(e instanceof Error ? e.message : 'Er ging iets mis');
     } finally {
       setBezig(false);
     }
@@ -161,7 +163,7 @@ export function ShiftAanmakenModal({
 
   return (
     <Modal onClose={onClose}>
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-4 flex flex-col overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-2xl w-[480px] flex flex-col">
         {/* Header */}
         <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-zinc-100">
           <div>
@@ -424,7 +426,6 @@ export function ShiftAanmakenModal({
                 })}
               </div>
             )}
-            {error && <p className="text-xs text-red-500">{error}</p>}
           </div>
         )}
 

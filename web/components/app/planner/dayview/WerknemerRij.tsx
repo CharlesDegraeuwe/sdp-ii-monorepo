@@ -8,7 +8,6 @@ import {
   ROW_H,
   NAAM_B,
   TIMELINE_W,
-  STANDAARD_TIJDEN,
   HOUR_LABELS,
   type Rij,
 } from './helpers';
@@ -123,20 +122,18 @@ export function WerknemerRij({
             )}
           </button>
         ) : (
-          <ShiftBlok
-            shift={{
-              id: -1,
-              werknemerId: rij.werknemerId,
-              werknemerNaam: rij.label,
-              startDatum: '',
-              eindDatum: '',
-              ...STANDAARD_TIJDEN,
-            }}
-            isDefault={true}
-            isAfwezig={afwezig.length > 0}
-            isManager={isManager}
-            onEdit={onCreate}
-          />
+          <button
+            className={`absolute inset-0 flex items-center px-4 ${isManager ? 'group cursor-pointer' : 'cursor-default'}`}
+            onClick={isManager ? onCreate : undefined}
+            disabled={!isManager}
+          >
+            <span className="text-[10px] text-zinc-300 italic">Geen shift</span>
+            {isManager && (
+              <span className="ml-auto text-[10px] text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                + Shift
+              </span>
+            )}
+          </button>
         )}
 
         {huidigUurX !== null && huidigUurX >= 0 && huidigUurX <= TIMELINE_W && (
