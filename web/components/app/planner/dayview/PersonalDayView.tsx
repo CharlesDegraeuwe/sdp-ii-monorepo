@@ -7,7 +7,7 @@ import {
   MdSearch,
 } from 'react-icons/md';
 import type { Afwezigheid, PlannerTaak, Shift } from '../types';
-import { takenOpDag, afwezigheidLabel, isVrij, vrijReden } from '../utils';
+import { afwezigheidLabel, isVrij, vrijReden } from '../utils';
 import { Container } from '@/components/design-system/Container';
 
 function TaakRegel({
@@ -97,12 +97,9 @@ export function PersonalDayView({
   const pauzeStart = eigenShift?.pauzeStart?.substring(0, 5) ?? '12:00';
   const pauzeEind = eigenShift?.pauzeEind?.substring(0, 5) ?? '13:00';
 
-  const allesTaken = takenOpDag(taken, datum);
   const gefilterd = filter.trim()
-    ? allesTaken.filter((t) =>
-        t.naam.toLowerCase().includes(filter.toLowerCase()),
-      )
-    : allesTaken;
+    ? taken.filter((t) => t.naam.toLowerCase().includes(filter.toLowerCase()))
+    : taken;
   const todoTaken = gefilterd.filter((t) => !t.afgewerkt);
   const doneTaken = gefilterd.filter((t) => t.afgewerkt);
 
@@ -282,7 +279,7 @@ export function PersonalDayView({
                     </div>
                   )}
 
-                  {allesTaken.length === 0 && (
+                  {taken.length === 0 && (
                     <p className="text-xs text-zinc-400 italic px-1">
                       Geen taken gepland voor deze dag.
                     </p>
